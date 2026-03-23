@@ -1,0 +1,13 @@
+id: reigh-bg-v17-titled-thin
+file: inputs/reigh-bg-v17-titled-thin.png
+type: image
+dimensions: 2752x1536
+description: The image displays a textured surface of a planet characterized by several
+  dark circular formations and wispy atmospheric patterns. The title "REIGH" is prominently
+  placed in the upper left corner.
+generation_prompt: Add 'REIGH' in the top-left corner in a thin, modern sans-serif
+  font, white with very low opacity (about 30%), large but understated. Keep everything
+  else exactly the same.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-combined.png

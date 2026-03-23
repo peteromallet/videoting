@@ -1,0 +1,13 @@
+id: reigh-bg-v17-titled-italic
+file: inputs/reigh-bg-v17-titled-italic.png
+type: image
+dimensions: 2752x1536
+description: The image displays a planet with a textured surface featuring several
+  dark circular areas and a hazy, ethereal atmosphere. The word "REIGH" is prominently
+  displayed in the upper left corner.
+generation_prompt: Add 'REIGH' in the top-left corner, small and minimal, in a classic
+  serif italic font. Warm gold color with a very subtle glow behind it. Keep everything
+  else exactly the same.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-combined.png

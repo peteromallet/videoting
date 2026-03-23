@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "types": ["react", "react-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../shared/*"],
+      "react": ["./node_modules/@types/react/index.d.ts"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime.d.ts"],
+      "react-dom": ["./node_modules/@types/react-dom/index.d.ts"],
+      "remotion": ["./node_modules/remotion"]
+    },
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "esModuleInterop": true
+  },
+  "include": ["src"]
+}

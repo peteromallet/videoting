@@ -1,0 +1,17 @@
+id: reigh-earth-v8-drone
+file: inputs/reigh-earth-v8-drone.png
+type: image
+dimensions: 2752x1536
+description: The image shows a bird's-eye view of a landscape featuring several large,
+  circular lakes illuminated by surrounding lights. The top left corner displays the
+  text "REIGH" in a stylized font against a starry background.
+generation_prompt: Change the camera angle to a low drone-level view, about 80 degrees
+  from horizontal - almost eye level but slightly above. Looking across the island
+  from one edge. The crater lakes should loom large in the foreground and middle distance.
+  City lights glow around the lake shores and along roads. You can see the palette-shaped
+  coastline curving away into the distance. Dark ocean beyond. Night sky with stars
+  above the horizon. Keep the REIGH text in the top-left. Cinematic, atmospheric haze
+  in the distance.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth-v7.png

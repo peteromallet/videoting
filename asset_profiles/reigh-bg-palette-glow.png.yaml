@@ -1,0 +1,13 @@
+id: reigh-bg-palette-glow
+file: inputs/reigh-bg-palette-glow.png
+type: image
+dimensions: 2752x1536
+description: The image features a golden artist's palette with multiple paint wells,
+  illuminated with a glow against a dark green background. There are no UI elements
+  or actions occurring; it solely displays the palette design.
+generation_prompt: Dark moody background, deep dark green (#0A3327) to black gradient.
+  A massive gold (#E0B84A) painter's palette silhouette fills the frame, slightly
+  off-center to the right, with soft golden glow and light rays emanating from it.
+  5 circular cutout holes in the palette. Cinematic lighting, film grain, elegant
+  and minimal. No text.
+generation_mode: generate

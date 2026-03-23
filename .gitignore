@@ -1,0 +1,25 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.DS_Store
+.thumbs/
+output/
+inputs/
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.sw?
+
+# Remotion
+remotion/public/inputs
+remotion/public/output
+remotion/public/timeline.json
+remotion/public/asset-registry.json
+
+# Megaplan artifacts
+.megaplan/

@@ -1,0 +1,13 @@
+id: reigh-bg-subtle-v2
+file: inputs/reigh-bg-subtle-v2.png
+type: image
+dimensions: 2752x1536
+description: The image features a dark background with a stylized palette shape in
+  the center. The palette has several cutouts and appears illuminated against the
+  dark backdrop.
+generation_prompt: Very dark, nearly black background with an extremely faint, barely
+  visible gold (#E0B84A) painter's palette watermark in the center. The palette should
+  be at maybe 10-15% opacity, almost like a ghost image. Deep dark green-black (#050F0A)
+  base color. Very subtle, the palette should only be noticeable if you look carefully.
+  Minimal, cinematic, dark vignette edges. No text.
+generation_mode: generate

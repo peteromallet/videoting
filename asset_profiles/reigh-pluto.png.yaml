@@ -1,0 +1,15 @@
+id: reigh-pluto
+file: inputs/reigh-pluto.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a planet's surface characterized by icy terrain and
+  multiple large craters, set against a dark space backdrop. The title "REIGH" is
+  prominently displayed in the upper left corner.
+generation_prompt: Transform the surface to look like Pluto - icy pale blue-white
+  and grey frozen nitrogen plains. The circular paint well holes become dark impact
+  basins like Pluto's craters. The golden wisps become subtle ice ridges and frozen
+  terrain texture. Keep the REIGH text, the diagonal composition, a cold blue-white
+  atmospheric horizon glow, and the same layout.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-titled-dust.png

@@ -1,0 +1,13 @@
+id: reigh-bg-v17-titled-dust
+file: inputs/reigh-bg-v17-titled-dust.png
+type: image
+dimensions: 2752x1536
+description: The image features a planetary surface characterized by six dark circular
+  depressions surrounded by a hazy, swirling atmosphere. The title "REIGH" appears
+  in a stylized font in the upper left corner.
+generation_prompt: Add 'REIGH' in the top-left corner in an elegant serif font, rendered
+  as faint golden particle dust matching the palette's style - the letters themselves
+  are made of the same gold particles. Keep everything else exactly the same.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-combined.png

@@ -1,0 +1,15 @@
+id: reigh-bg-v10-huge
+file: inputs/reigh-bg-v10-huge.png
+type: image
+dimensions: 2752x1536
+description: The image features a dark cosmic backdrop with a glowing horizon, partially
+  illuminated by celestial bodies that appear as large circular forms. There are also
+  scattered dots of light resembling stars, creating a sense of depth and space.
+generation_prompt: Scale up the golden particle dust palette shape so it takes over
+  the entire frame - 200% of the screen, heavily cropped at all edges. The palette
+  outline and paint holes should extend beyond every border. Keep the warm golden
+  horizon glow at the bottom and the dark space background. Same particle dust style,
+  same subtlety, just much bigger.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v9-horizon.png

@@ -1,0 +1,11 @@
+id: bg-radial-glow
+file: inputs/bg-radial-glow.png
+type: image
+dimensions: 1376x768
+description: The image is a dark gradient with a subtle light source in the center,
+  creating a soft glow effect against a deep blue-black background. There are no visible
+  UI elements or actions occurring.
+generation_prompt: Dark cinematic background, soft radial light in center fading to
+  black edges, deep blue and indigo tones, subtle film grain texture, moody atmospheric,
+  16:9 aspect ratio, no text no objects
+generation_mode: generate

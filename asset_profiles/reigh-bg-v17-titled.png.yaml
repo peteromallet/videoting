@@ -1,0 +1,13 @@
+id: reigh-bg-v17-titled
+file: inputs/reigh-bg-v17-titled.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a celestial body with a textured surface featuring
+  several dark circular formations, set against a black starry background. The title
+  "REIGH" is prominently displayed in gold at the top left corner.
+generation_prompt: Add the text 'REIGH' in the top-left corner. The text should be
+  in a elegant serif font (like Playfair Display), gold colored (#E0B84A), medium
+  sized, with subtle glow. Keep everything else exactly the same.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-combined.png

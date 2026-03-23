@@ -1,0 +1,17 @@
+id: reigh-earth-drone-mid
+file: inputs/reigh-earth-drone-mid.png
+type: image
+dimensions: 2752x1536
+description: The image features an aerial view of a fictional island shaped like a
+  painter's palette, with several large lakes and illuminated pathways connecting
+  various areas. The title "REIGH" is prominently displayed in the upper left corner,
+  suggesting a theme related to the island or concept.
+generation_prompt: Aerial view from about 45 degrees, looking down at the palette-shaped
+  island from above and to the side. The full palette shape with thumb hole and all
+  4 circular crater lakes clearly visible. City lights glowing gold around the lakes
+  and along connecting roads. Dark ocean surrounding the island. Starry night sky.
+  Atmospheric perspective making distant parts hazier. REIGH in gold serif top-left.
+  Cinematic.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth-v7.png

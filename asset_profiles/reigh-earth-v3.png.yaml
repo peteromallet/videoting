@@ -1,0 +1,16 @@
+id: reigh-earth-v3
+file: inputs/reigh-earth-v3.png
+type: image
+dimensions: 2752x1536
+description: The image features a stylized depiction of Earth resembling a painter's
+  palette, with circular cutouts showing bright flashes of light representing cities
+  and stars. The title "REIGH" is prominently displayed in gold at the top left corner.
+generation_prompt: A painter's palette shape floating in deep space, seen from orbit
+  at a diagonal angle from top-right to bottom-left. The palette has the classic kidney/bean
+  shape with a thumb hole cutout and 4 circular paint well holes. The surface is textured
+  like Earth at night - dark continents with golden city lights clustered around the
+  paint wells and along the edges, dark blue oceans filling the paint wells. A thin
+  warm atmospheric glow along the horizon edge. The silhouette is CLEARLY a painter's
+  palette, not a sphere. REIGH written in elegant gold serif text in the top-left
+  corner. Deep black space background with stars. Cinematic.
+generation_mode: generate

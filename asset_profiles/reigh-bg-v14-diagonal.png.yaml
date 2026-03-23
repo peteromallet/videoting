@@ -1,0 +1,18 @@
+id: reigh-bg-v14-diagonal
+file: inputs/reigh-bg-v14-diagonal.png
+type: image
+dimensions: 2752x1536
+description: The image shows a close-up view of a planet's surface with a textured
+  atmosphere, illuminated from one side, against a backdrop of deep space filled with
+  stars. The planet features dark, cloud-like formations and varying surface markings,
+  creating a dramatic celestial scene.
+generation_prompt: Deep space, black background. A massive curved surface sweeps diagonally
+  from the top-right corner down to the bottom-left, like a planet seen from orbit
+  at an angle. The surface is made of very faint, wispy golden particle dust on dark
+  green-black. Along the curved edge is a thin soft golden atmospheric glow. On the
+  surface are 4-5 subtle circular darker areas - not sharp craters, just soft round
+  dark patches where the particle dust thins out, like weather systems or seas seen
+  from space. The surface should be barely there, more suggestion than solid - transparent,
+  ghostly, like looking through thin golden smoke. 70% of the frame is pure black
+  space. Very dark, very subtle. No text.
+generation_mode: generate

@@ -1,0 +1,14 @@
+id: reigh-bg-huge-palette
+file: inputs/reigh-bg-huge-palette.png
+type: image
+dimensions: 2752x1536
+description: The image shows a close-up view of a metallic surface with several circular
+  cutouts. The lighting is dim, creating shadows around the circles, and the texture
+  of the metal appears worn and scratched.
+generation_prompt: Extremely dark, nearly black background (#050F0A). A MASSIVE gold
+  (#E0B84A) painter's palette silhouette that is way bigger than the frame - cropped
+  by the edges, extending beyond all sides. Only the center portion of the palette
+  is visible, like you're zoomed way in. The palette is very faint, maybe 8-12% opacity,
+  like an embossed texture or watermark. 4 large circular cutout holes visible. Dark
+  vignette. No text. Cinematic, moody.
+generation_mode: generate

@@ -1,0 +1,17 @@
+id: reigh-bg-v6-nebula
+file: inputs/reigh-bg-v6-nebula.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a cosmic scene featuring a swirling, golden spiral
+  of stardust with several dark circular voids positioned within it. The background
+  is filled with stars and the Milky Way, creating a vast outer space ambiance.
+generation_prompt: Dissolve the palette planet into abstract golden particle streams
+  and dust clouds. Remove the solid surface and clear outline - instead have loose
+  curved trails of gold particles sweeping across the dark space, only vaguely hinting
+  at a palette shape. Keep a soft warm glow along the lower edge like a distant horizon.
+  The circular holes should become subtle dark gaps in the particle flow, not obvious
+  craters. Much more abstract and atmospheric, like looking at a nebula that happens
+  to have a familiar shape.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v4-orbital.png

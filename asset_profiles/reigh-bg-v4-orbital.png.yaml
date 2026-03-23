@@ -1,0 +1,15 @@
+id: reigh-bg-v4-orbital
+file: inputs/reigh-bg-v4-orbital.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a stylized celestial body glowing with golden light,
+  featuring a series of circular patterns that resemble craters or depressions. The
+  background consists of a starry sky, contributing to a cosmic atmosphere.
+generation_prompt: Nearly black background from deep space. A gigantic golden painter's
+  palette silhouette takes up about 200% of the frame, heavily cropped, rendered as
+  fine golden particle dust tracing the outline and paint holes - like a constellation
+  or nebula seen from orbit. The palette curves like a planet's horizon, with a thin
+  golden atmospheric glow along the edge. Stars and space dust in the background.
+  Dark, cinematic, the palette shape should feel like looking down at a celestial
+  body from space. No text.
+generation_mode: generate

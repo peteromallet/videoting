@@ -1,0 +1,19 @@
+id: reigh-bg-v18-cities
+file: inputs/reigh-bg-v18-cities.png
+type: image
+dimensions: 2752x1536
+description: The image shows a detailed view of Earth from space, highlighting regions
+  around Turkey, the Middle East, and parts of Europe at night. The illuminated areas
+  indicate urban regions, with large bodies of water visible such as the Black Sea
+  and the Mediterranean Sea.
+generation_prompt: Make this look like Earth at night seen from orbit. The golden
+  wisps should become city lights - clusters of tiny warm golden lights along coastlines
+  and around the edges of the dark circular voids. The circular holes are dark oceans
+  or seas with city lights glowing around their shores. The surface between them has
+  scattered dim city light clusters connected by faint light trails like highways.
+  The atmospheric horizon glow stays warm gold. Deep black space in the top-left corner
+  with a few stars. Keep the same diagonal composition and scale but make it feel
+  like a real nighttime Earth observation photo from the ISS.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-combined.png

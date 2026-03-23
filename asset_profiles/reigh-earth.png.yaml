@@ -1,0 +1,14 @@
+id: reigh-earth
+file: inputs/reigh-earth.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a view of a planet from space, highlighting several
+  large, blue bodies of water with glowing city lights visible around their edges.
+  The word "REIGH" is prominently displayed in the top left corner in a stylized font.
+generation_prompt: Transform the surface texture to look like Earth at night seen
+  from orbit - the golden wisps become city lights along coastlines and around the
+  dark circular voids which become oceans. Keep the REIGH text, the diagonal composition,
+  the horizon glow, and the paint well holes in the same positions.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-titled-dust.png

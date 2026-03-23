@@ -1,0 +1,17 @@
+id: reigh-earth-v6
+file: inputs/reigh-earth-v6.png
+type: image
+dimensions: 2752x1536
+description: The image shows a stylized aerial view of an island with multiple circular
+  bodies of water, illuminated by city lights winding around them. The word "REIGH"
+  is prominently displayed in gold at the top left corner.
+generation_prompt: Satellite photo from orbit at night, looking down at an angle at
+  a fictional island on dark ocean. The island coastline is organic and natural but
+  vaguely resembles a painter's palette shape - curved, with an indentation. On the
+  island are 4-5 circular dark lakes where paint wells would be, with golden city
+  lights clustered densely around their shores. Scattered towns and roads glowing
+  gold connecting them. Dark ocean surrounds the island. Thin atmospheric haze on
+  the horizon. Viewed at a diagonal angle from top-right to bottom-left. REIGH in
+  elegant gold serif text top-left corner. Photorealistic NASA style. Deep black space
+  above.
+generation_mode: generate

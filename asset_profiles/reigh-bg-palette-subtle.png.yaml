@@ -1,0 +1,13 @@
+id: reigh-bg-palette-subtle
+file: inputs/reigh-bg-palette-subtle.png
+type: image
+dimensions: 2752x1536
+description: The image features a painter's palette silhouette against a dark, textured
+  background. Golden particles appear to float around the palette, creating a shimmering
+  effect.
+generation_prompt: Abstract dark green (#0A3327) background with a huge faded gold
+  (#E0B84A) artist paint palette watermark taking up most of the frame, very subtle
+  and low opacity like an embossed texture. The palette has 4 circular paint dot cutouts.
+  Particle dust floating in golden light. Cinematic, moody, dark edges vignette. No
+  text.
+generation_mode: generate

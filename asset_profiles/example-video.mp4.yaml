@@ -1,0 +1,18 @@
+id: example-video
+file: inputs/example-video.mp4
+type: video
+duration_s: 5.367
+resolution: 720x544
+fps: 30.0
+visual_segments:
+- start: 0.0
+  end: 3.0
+  description: The image shows a small green plant with two leaves growing from a
+    cracked, dark surface under a night sky filled with stars and a bright full moon.
+    The overall scene is predominantly dark, emphasizing the plant in the center.
+- start: 3.0
+  end: 5.367
+  description: The image features a stylized illustration of a single green plant
+    sprouting from a golden, patterned soil surface, set against a bright blue sky
+    with a shining sun and a few clouds. The background shows rolling hills, adding
+    depth to the scene.

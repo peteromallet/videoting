@@ -1,0 +1,16 @@
+id: reigh-earth-v2
+file: inputs/reigh-earth-v2.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a planet with multiple large, circular depressions
+  filled with water, illuminated by city lights along their edges. The planet has
+  a starry sky in the background, and the title "REIGH" is displayed in the upper
+  left corner.
+generation_prompt: Make the planet shape more like a painter's palette - it should
+  have the distinctive curved indentation on the right side where the thumb hole would
+  be, and the overall silhouette should be more oval/kidney-shaped like an artist's
+  palette rather than a perfect sphere. Keep the Earth at night texture with city
+  lights and blue oceans, keep the REIGH text, keep the diagonal composition.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth.png

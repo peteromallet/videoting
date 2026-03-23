@@ -1,0 +1,18 @@
+id: reigh-earth-v4
+file: inputs/reigh-earth-v4.png
+type: image
+dimensions: 2752x1536
+description: The image shows a satellite view of a landmass illuminated by city lights
+  against a dark background of space, with the word "REIGH" prominently displayed
+  in gold at the top left corner. The landmass appears to represent a fictional or
+  stylized version of Earth, with distinct outlines of water bodies and varying brightness
+  indicating urban areas.
+generation_prompt: Earth seen from space at night, diagonal angle from top-right to
+  bottom-left. The coastline and continent edges naturally form the shape of a painter's
+  palette - the landmass itself is palette-shaped, with the ocean visible through
+  the thumb hole and paint well areas. City lights glow gold along the coasts and
+  inland. The continent's natural border IS the palette outline - it should look like
+  a real satellite photo where the land just happens to be shaped like a palette.
+  Atmospheric horizon glow. REIGH in gold serif text top-left corner. Deep black space.
+  Photorealistic ISS photography style.
+generation_mode: generate

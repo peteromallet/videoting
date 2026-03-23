@@ -1,0 +1,16 @@
+id: reigh-bg-v5-orbital-subtle
+file: inputs/reigh-bg-v5-orbital-subtle.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a dark space scene with a large, glowing, oval-shaped
+  structure resembling a cosmic object, dotted with bright spots of light that suggest
+  stars or galaxies. Surrounding this structure is a starry background, emphasizing
+  the vastness of space.
+generation_prompt: Make this much darker and more subtle. Reduce the golden glow to
+  about 15-20% brightness. Break up the solid palette surface into scattered particle
+  dust - more implied than explicit. Keep the curved horizon composition but make
+  it feel like a vague suggestion rather than a literal planet. The paint holes should
+  be barely visible dark voids. Deep space darkness should dominate.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v4-orbital.png

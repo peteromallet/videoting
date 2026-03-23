@@ -1,0 +1,16 @@
+id: reigh-mars
+file: inputs/reigh-mars.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a view of a planet resembling Mars, featuring several
+  circular depressions on its surface. The title "REIGH" is prominently displayed
+  in the upper left corner, suggesting a potential sci-fi theme or title related to
+  the content.
+generation_prompt: Transform the surface to look like Mars - dusty red-orange terrain
+  with dark iron oxide valleys. The circular paint well holes become massive dark
+  volcanic craters like Olympus Mons calderas. The golden wisps become rusty dust
+  storms and terrain ridges. Keep the REIGH text, the diagonal composition, a thin
+  reddish atmospheric horizon glow, and the same layout.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-titled-dust.png

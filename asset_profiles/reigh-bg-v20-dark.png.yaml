@@ -1,0 +1,17 @@
+id: reigh-bg-v20-dark
+file: inputs/reigh-bg-v20-dark.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a dark, celestial scene featuring a planet with five
+  circular formations on its surface that are illuminated by a faint glow, suggesting
+  a ring-like structure. The background is filled with stars, emphasizing the vastness
+  of space.
+generation_prompt: Make this much much darker - reduce all the golden light to about
+  20% of current brightness. The city light clusters should become very faint scattered
+  gold particles, barely visible. The horizon glow should be extremely dim, just a
+  slight warm tint. The overall image should be 90% black with only the faintest suggestion
+  of the palette shape and lights. It should feel like staring into near-darkness
+  and only barely making out a shape.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v19-palette-cities.png

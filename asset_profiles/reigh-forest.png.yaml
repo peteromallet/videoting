@@ -1,0 +1,15 @@
+id: reigh-forest
+file: inputs/reigh-forest.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a planet covered in dense green vegetation, with several
+  circular water bodies visible on its surface. The word "REIGH" is prominently displayed
+  in a stylized font in the upper left corner.
+generation_prompt: Transform the surface to look like a lush forest planet seen from
+  orbit - deep greens and dark emerald canopy texture replacing the gold wisps. The
+  circular paint well holes become dark lakes surrounded by dense forest. Keep the
+  REIGH text, the diagonal composition, a green-tinged atmospheric horizon glow, and
+  the same layout.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-titled-dust.png

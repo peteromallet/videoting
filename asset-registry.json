@@ -1,0 +1,294 @@
+{
+  "assets": {
+    "bg-dark-abstract": {
+      "type": "image",
+      "resolution": "1376x768",
+      "file": "inputs/bg-dark-abstract.png"
+    },
+    "demo-one": {
+      "type": "video+audio",
+      "resolution": "1280x720",
+      "fps": 59.94,
+      "duration": 97.081,
+      "file": "inputs/demo-one.mp4"
+    },
+    "demo-two": {
+      "type": "video+audio",
+      "resolution": "1280x720",
+      "fps": 29.97,
+      "duration": 45.099,
+      "file": "inputs/demo-two.mp4"
+    },
+    "example-video": {
+      "type": "video",
+      "resolution": "720x544",
+      "fps": 30.0,
+      "duration": 5.367,
+      "file": "inputs/example-video.mp4"
+    },
+    "example-image1": {
+      "type": "image",
+      "resolution": "1184x880",
+      "file": "inputs/example-image1.jpg"
+    },
+    "example-image2": {
+      "type": "image",
+      "resolution": "1184x880",
+      "file": "inputs/example-image2.jpg"
+    },
+    "input": {
+      "type": "audio",
+      "duration": 98.456,
+      "file": "inputs/audio.MP3"
+    },
+    "output-composition": {
+      "type": "video",
+      "resolution": "1920x1080",
+      "fps": 25.0,
+      "duration": 6.36,
+      "file": "inputs/output_composition.webm"
+    },
+    "venn-diagram": {
+      "type": "video",
+      "resolution": "1920x1080",
+      "fps": 30.0,
+      "duration": 5.0,
+      "file": "inputs/venn_diagram_video.webm"
+    },
+    "screenshot-2026-03-08-at-20-12-28": {
+      "type": "image",
+      "resolution": "1917x929",
+      "file": "inputs/Screenshot 2026-03-08 at 20.12.28.png"
+    },
+    "reigh-bg-palette": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-palette.png"
+    },
+    "reigh-bg-palette-glow": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-palette-glow.png"
+    },
+    "reigh-bg-palette-subtle": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-palette-subtle.png"
+    },
+    "reigh-bg-subtle-v2": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-subtle-v2.png"
+    },
+    "reigh-bg-huge-palette": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-huge-palette.png"
+    },
+    "reigh-bg-v3-whisper": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v3-whisper.png"
+    },
+    "reigh-bg-v3-glow": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v3-glow.png"
+    },
+    "reigh-bg-v3-particles": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v3-particles.png"
+    },
+    "reigh-bg-v4-orbital": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v4-orbital.png"
+    },
+    "reigh-bg-v5-ambient": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v5-ambient.png"
+    },
+    "reigh-bg-v5-orbital-subtle": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v5-orbital-subtle.png"
+    },
+    "reigh-bg-v6-nebula": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v6-nebula.png"
+    },
+    "reigh-bg-v7-space": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v7-space.png"
+    },
+    "reigh-bg-v8-hint": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v8-hint.png"
+    },
+    "reigh-bg-v9-horizon": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v9-horizon.png"
+    },
+    "reigh-bg-v10-huge": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v10-huge.png"
+    },
+    "reigh-bg-v11-rotated": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v11-rotated.png"
+    },
+    "reigh-bg-v12-final": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v12-final.png"
+    },
+    "reigh-bg-v13-planet": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v13-planet.png"
+    },
+    "reigh-bg-v14-diagonal": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v14-diagonal.png"
+    },
+    "reigh-bg-v15-diag-palette": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v15-diag-palette.png"
+    },
+    "reigh-bg-v16-rotated": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v16-rotated.png"
+    },
+    "reigh-bg-v17-combined": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v17-combined.png"
+    },
+    "reigh-bg-v18-cities": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v18-cities.png"
+    },
+    "reigh-bg-v19-palette-cities": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v19-palette-cities.png"
+    },
+    "reigh-bg-v20-dark": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v20-dark.png"
+    },
+    "reigh-bg-v17-titled": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v17-titled.png"
+    },
+    "reigh-bg-v17-titled-thin": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v17-titled-thin.png"
+    },
+    "reigh-bg-v17-titled-italic": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v17-titled-italic.png"
+    },
+    "reigh-bg-v17-titled-dust": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-bg-v17-titled-dust.png"
+    },
+    "reigh-alien": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-alien.png"
+    },
+    "reigh-forest": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-forest.png"
+    },
+    "reigh-earth": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth.png"
+    },
+    "reigh-mars": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-mars.png"
+    },
+    "reigh-pluto": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-pluto.png"
+    },
+    "reigh-earth-v2": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v2.png"
+    },
+    "reigh-earth-v3": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v3.png"
+    },
+    "reigh-earth-v4": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v4.png"
+    },
+    "reigh-earth-v5": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v5.png"
+    },
+    "reigh-earth-v6": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v6.png"
+    },
+    "reigh-earth-v7": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v7.png"
+    },
+    "reigh-earth-v8-drone": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v8-drone.png"
+    },
+    "reigh-earth-drone-low": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-drone-low.png"
+    },
+    "reigh-earth-drone-sealevel": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-drone-sealevel.png"
+    },
+    "reigh-earth-drone-mid": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-drone-mid.png"
+    },
+    "reigh-earth-v8-dots": {
+      "type": "image",
+      "resolution": "2752x1536",
+      "file": "inputs/reigh-earth-v8-dots.png"
+    }
+  }
+}

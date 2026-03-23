@@ -1,0 +1,16 @@
+id: reigh-bg-v13-planet
+file: inputs/reigh-bg-v13-planet.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a planet-like surface featuring several large circular
+  depressions, resembling craters, and is set against a starry background. The lighting
+  highlights the curved edge of the planet and the textures of its surface.
+generation_prompt: View from orbit looking down at a planet's curved horizon at the
+  bottom of the frame. The planet surface is made of extremely faint golden particle
+  dust in dark green-black. Scattered across the surface are 4-5 large perfectly circular
+  dark voids - like the paint wells on an artist's palette, but they look like massive
+  craters or dark seas on the planet surface. The horizon has a thin warm golden atmospheric
+  glow. Above is deep black space with faint stars. The overall shape IS the palette
+  - the planet's horizon IS the palette's curved edge - but it just looks like a beautiful
+  alien planet. Very dark, subtle, cinematic. No text.
+generation_mode: generate

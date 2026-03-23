@@ -1,0 +1,14 @@
+id: reigh-bg-v3-particles
+file: inputs/reigh-bg-v3-particles.png
+type: image
+dimensions: 2752x1536
+description: The image features a dark background with ethereal, glowing shapes resembling
+  abstract rings or bubbles, surrounded by faint, sparkling particles. The overall
+  aesthetic suggests a cosmic or otherworldly theme, emphasizing contrast against
+  the dark backdrop.
+generation_prompt: Nearly black (#0A0A0A) background with very dark green tint. A
+  gigantic golden painter's palette silhouette takes up about 200% of the frame, heavily
+  cropped. The palette is rendered as fine golden particle dust or constellation-like
+  dots tracing the outline and paint holes. Extremely subtle, ethereal, barely visible
+  against the dark background. No text.
+generation_mode: generate

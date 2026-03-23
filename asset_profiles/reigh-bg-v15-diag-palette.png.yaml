@@ -1,0 +1,16 @@
+id: reigh-bg-v15-diag-palette
+file: inputs/reigh-bg-v15-diag-palette.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a surreal, golden representation of a painter's palette
+  floating in a starry galaxy. The palette features several circular openings and
+  is surrounded by cosmic swirls and distant stars, creating an ethereal space scene.
+generation_prompt: Deep space, black background. A giant painter's palette shape made
+  of faint golden particle dust, positioned diagonally from top-right to bottom-left.
+  The palette is enormous, extending beyond the frame edges. It's tilted so the thumb
+  hole is toward the bottom-left and the paint wells are toward the upper-right. The
+  palette edge has a thin soft golden atmospheric glow like a planet's atmosphere.
+  The 4 circular paint well holes are clearly visible as dark round voids in the golden
+  dust. The palette surface is wispy and translucent, made of particles not solid
+  material. Dark green-black space behind. Very subtle, dark, cinematic. No text.
+generation_mode: generate

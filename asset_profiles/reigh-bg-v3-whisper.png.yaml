@@ -1,0 +1,13 @@
+id: reigh-bg-v3-whisper
+file: inputs/reigh-bg-v3-whisper.png
+type: image
+dimensions: 2752x1536
+description: The image features a dark background with a stylized artistic palette
+  design in the foreground. The palette has several circular indentations outlined
+  in gold, creating a sleek and modern aesthetic.
+generation_prompt: Very dark green-black (#060E09) background. An enormous gold (#E0B84A)
+  artist paint palette silhouette bleeding off all edges of the frame, zoomed in so
+  only the middle section with 3-4 circular cutout holes is visible. Extremely faint,
+  about 5% opacity, like a barely-there embossed watermark. Smooth, clean, no texture
+  or grain. Cinematic dark vignette. No text.
+generation_mode: generate

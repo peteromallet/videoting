@@ -1,0 +1,1062 @@
+id: demo-one
+file: inputs/demo-one.mp4
+type: video+audio
+duration_s: 97.081
+resolution: 1280x720
+fps: 59.94
+silence_regions:
+- start: 84.973
+  end: 85.283
+- start: 93.767
+  end: 94.249
+- start: 94.349
+  end: 97.081
+transcript:
+  words:
+  - start: 8.96
+    end: 10.36
+    word: Pomp
+  - start: 10.36
+    end: 10.36
+    word: and
+  - start: 10.36
+    end: 10.4
+    word: Circumstance
+  - start: 48.14
+    end: 48.34
+    word: Pomp
+  - start: 48.34
+    end: 48.36
+    word: and
+  - start: 48.36
+    end: 48.46
+    word: Circumstance
+  - start: 74.26
+    end: 75.66
+    word: Pomp
+  - start: 75.66
+    end: 75.66
+    word: and
+  - start: 75.66
+    end: 75.66
+    word: Circumstance
+  - start: 75.66
+    end: 75.66
+    word: Pomp
+  - start: 75.66
+    end: 75.66
+    word: and
+  - start: 75.66
+    end: 80.0
+    word: Circumstance
+  - start: 95.3
+    end: 95.38
+    word: Pomp
+  - start: 95.38
+    end: 95.4
+    word: and
+  - start: 95.4
+    end: 95.44
+    word: Circumstance
+  segments:
+  - start: 8.96
+    end: 10.4
+    text: '["Pomp and Circumstance"]'
+  - start: 48.14
+    end: 48.46
+    text: '["Pomp and Circumstance"]'
+  - start: 74.26
+    end: 75.66
+    text: '["Pomp and Circumstance"]'
+  - start: 75.66
+    end: 80.0
+    text: '["Pomp and Circumstance"]'
+  - start: 95.3
+    end: 95.44
+    text: '["Pomp and Circumstance"]'
+visual_segments:
+- start: 0.0
+  end: 2.653
+  description: The image shows a user interface for an application, likely related
+    to image processing or editing, with sections for selecting a model ("bukowski_man")
+    and prompts. There are two images displayed, presumably undergoing transformation,
+    alongside settings for batch strength, updates, and advanced settings options.
+- start: 2.653
+  end: 2.97
+  description: The screen displays a development environment with a code editor on
+    the right, showing Python code related to a character pipeline. On the left, a
+    web interface is visible with options for generating images, including prompts,
+    guidance scale, and batch settings, along with a preview of images at the bottom.
+- start: 2.97
+  end: 3.0
+  description: The screen displays a web interface for generating image variants,
+    featuring a preview of a character sitting on a bus. It includes input fields
+    for batch strength, guidance scale, and options to generate new variants, along
+    with visible code in a terminal window on the side.
+- start: 3.0
+  end: 3.02
+  description: The screen displays a web interface for an application running on localhost.
+    It features a user interface for generating image variants, with options for batch
+    strength, advanced settings, and a preview of an image depicting a man on a bus.
+    The right side shows code in a text editor, likely related to the application's
+    functionality.
+- start: 3.02
+  end: 3.12
+  description: The screen shows a coding interface, likely in Visual Studio Code,
+    with an open file containing Python code. On the left, a web browser displays
+    a localhost page with settings for an AI model, including options like batch strength,
+    guidance scale, and a section for prompts related to generating images. Below,
+    a terminal output shows a log of executed commands and results from the application.
+- start: 3.12
+  end: 3.153
+  description: The screen displays a web application with a user interface for generating
+    images based on prompts. It shows a preview of a man sitting on a bus, options
+    for adjusting parameters like batch strength and guidance scale, and code snippets
+    in the adjacent console.
+- start: 3.153
+  end: 3.287
+  description: The screen displays a development environment with code visible on
+    the left side and a web interface on the right. The web interface appears to involve
+    settings for generating images, including parameters like "Batch strength," "Guidance
+    scale," and options for running a character pipeline. The terminal below shows
+    output logs related to the coding activity.
+- start: 3.287
+  end: 3.337
+  description: The screen shows a web browser displaying the Streamlit website with
+    information about building and sharing data apps. In the background, there is
+    a code editor window open, displaying Python code, alongside a terminal output
+    showing a series of logs or error messages.
+- start: 3.337
+  end: 3.387
+  description: The screen shows a programming environment with an open file named
+    `app.py` on the right, displaying lines of Python code related to a project. On
+    the left, there's a web browser window with the Replicate webpage showing a user
+    profile (peter942) and a list of recent predictions, alongside a terminal at the
+    bottom showing output and logs.
+- start: 3.387
+  end: 3.537
+  description: The image displays a screen with various UI elements, including a web
+    page titled "Bandoco" on the left side, displaying recent predictions and a user
+    profile labeled "peter942." The center features a CSV editor showing a table with
+    data columns such as index number, name, and primary images, while the right side
+    shows a snippet of code with a dark-themed interface, indicating coding or programming
+    activity.
+- start: 3.537
+  end: 4.555
+  description: The screen displays a coding environment with a Python script visible
+    on the right side, showing functions and code related to a project named "alvid-tool."
+    On the left, there are UI elements for GitHub, including a list of issues and
+    project settings, along with a web browser open to a webpage for "replicate.com"
+    showing user details and recent predictions.
+- start: 4.555
+  end: 4.905
+  description: The screen displays a web interface for a project named "Banodoco,"
+    featuring menus on the left for project management options. The main area shows
+    an image transformation interface with prompts for image editing, including positive
+    and negative prompts, and a button labeled "Trigger transformation." On the right,
+    there is a code snippet related to the project's backend processing.
+- start: 4.905
+  end: 6.0
+  description: The screen displays a user interface for an application with options
+    for "App Settings," "Project Settings," and various image processing features
+    like "Frame Styling" and "Image Editing." On the right, a CSV file is visible,
+    showing a list of models and prompts related to artistic rendering, with a specific
+    focus on a model named "bukowski_man."
+- start: 6.0
+  end: 9.0
+  description: 'The screen displays a user interface for a model selection tool, showcasing
+    an image titled "Image #1," which appears to depict a painting of a man sitting
+    on a bus. On the left, there are options related to the model, prompt details,
+    batch strength, and a section for generating image variants.'
+- start: 9.0
+  end: 11.278
+  description: The screen displays a web application interface for image editing,
+    labeled "Banodoco." It features options for selecting a project, a draw tool with
+    options for shapes and lines, and sliders for stroke width. A partially visible
+    image of a person sitting on a bus is shown, with black segments over parts of
+    the image, indicating areas for editing. Below, there are fields for a prompt
+    and a negative prompt regarding the image.
+- start: 11.278
+  end: 11.495
+  description: The image shows a coding environment open in a text editor, likely
+    Visual Studio Code, with segments of Python code displayed on the right. On the
+    left, a web interface is visible, which includes options for a project related
+    to "Restyle Frames," with fields for model selection, prompts, and batch settings.
+- start: 11.495
+  end: 11.812
+  description: The screen displays a web interface titled "Banodoc" showing two images
+    with various options related to frame styling and model prompts. On the left,
+    there's a prompt input labeled "bukowski_man" and options for generating image
+    variants, while the right side features a console window indicating a coding environment,
+    displaying an error message related to the application.
+- start: 11.812
+  end: 12.0
+  description: The screen displays a web interface for a project titled "Bandoc" with
+    a section for Restyle Frames. It shows options to input a model ("bukowski_man"),
+    a prompt, and settings related to batch processing, alongside an image that appears
+    to depict a scene on a bus. The page includes various UI elements like sliders,
+    dropdowns, and buttons for adjusting settings and running the model.
+- start: 12.0
+  end: 15.0
+  description: The screen displays a user interface for an application called "Bandooc,"
+    featuring various settings for a model named "bukowski_man" and options to generate
+    image variants. An image of a man sitting on a bus is shown, alongside options
+    to manage variants and display previous prompt details.
+- start: 15.0
+  end: 18.0
+  description: 'The screen displays a user interface for an application titled "Bandocq,"
+    with options for project settings and model adjustments on the left side. The
+    main content area shows an image labeled "Image #4" with several variant options,
+    alongside a preview of an artistic rendering of a person seated on a bus.'
+- start: 18.0
+  end: 21.0
+  description: The screen displays a user interface for an application called "Bandoc,"
+    where a model labeled "bukowski_man" is shown with a prompt about a painting.
+    Below, there is an image of a person sitting on a bus, alongside UI elements for
+    adjusting batch strength and settings for updating frames.
+- start: 21.0
+  end: 22.256
+  description: 'The screen shows a user interface for a project called "Bandooic,"
+    displaying a frame-styling tool. Two images, labeled "Image #9" and "Image #10,"
+    are visible along with options for generating variants and adjusting parameters
+    like batch strength and updates.'
+- start: 22.256
+  end: 24.0
+  description: The screen displays a user interface for a CSV editor, showing a model
+    setup with options like "Model" and "Prompt," along with a batch processing section.
+    On the right, a CSV table lists timing data with columns for index number, frame
+    time, frame number, primary images, and alternative images.
+- start: 24.0
+  end: 24.057
+  description: The screen displays a web interface with two main sections. On the
+    left, there's a model setup for image processing with settings such as "Model,"
+    "Prompt," and options for run character pipeline, while the right side shows a
+    chat interface suggesting Python code for creating a GIF from image URLs.
+- start: 24.057
+  end: 24.107
+  description: The screen displays a coding environment with Visual Studio Code on
+    the right, showing Python code, and a web interface on the left featuring options
+    for a project titled "Banodooo." The web UI includes settings for model selection,
+    prompts, batch strength, and other advanced options related to image processing,
+    along with a terminal showing output messages.
+- start: 24.107
+  end: 24.157
+  description: The screen shows a split view with a web application interface on the
+    left featuring a form for image processing, specifically with options for a "bukowski_man"
+    model and parameters like batch strength and update settings. On the right, there's
+    a code snippet in a chat interface that demonstrates how to create a GIF using
+    Python and the imageio library, along with a list of URLs for image files.
+- start: 24.157
+  end: 26.56
+  description: The screen displays a coding environment with multiple windows open,
+    including a code editor showing Python code. On the left, a web interface features
+    a model selection for "bukowski_man" with options for batch strength and image
+    updates, while a preview of an image is visible in the center.
+- start: 26.56
+  end: 26.693
+  description: 'The screen displays a software interface with two main sections: on
+    the left, a project settings menu for a model called "bukowski_man," including
+    options for batch strength and updating images; on the right, a code snippet demonstrating
+    how to create a GIF from image URLs using the `imageio` library in Python. An
+    image appears in the top left, and there are UI elements related to image variants
+    and frame styling below it.'
+- start: 26.693
+  end: 26.894
+  description: The screen displays a web application interface for a project called
+    "Banodoco," featuring options for model selection, prompt entry, and settings
+    for image processing. The right side shows a code editor with Python code, while
+    the left side presents an image preview and variant options related to a painting
+    of a man.
+- start: 26.894
+  end: 26.96
+  description: 'The screen displays a web interface with a project titled "Banodoo,"
+    showing options for frame styling and a section labeled "Image #14," which contains
+    image editing features. On the right side, there is a coding snippet that demonstrates
+    how to create a GIF from a list of image URLs using the `imageio` library in Python.'
+- start: 26.96
+  end: 27.0
+  description: 'The screen displays a user interface for an application called "Banodocs,"
+    featuring options for model training and image manipulation. On the left, there
+    are settings for adjusting model parameters, while the right side shows Python
+    code, indicating a code editor session, and a preview of an image labeled "Image
+    #14" with multiple variants.'
+- start: 27.0
+  end: 28.312
+  description: The screen displays a user interface for a web application, showing
+    options to adjust parameters like model selection and batch strength on the left
+    side, while a preview of a modified image is visible on the right. Below the image
+    preview, there are settings for variants and options to run the model, alongside
+    code snippets visible in a programming environment on the right side of the screen.
+- start: 28.312
+  end: 29.429
+  description: The screen shows a user interface for a project titled "Banodoo," where
+    an image is being processed with options for model selection and prompt input
+    on the left. The main content area displays a painted image of a man sitting on
+    a bus, with details about variants and a prompt below.
+- start: 29.429
+  end: 30.0
+  description: The screen displays a web application interface titled "Bandodoo,"
+    showing options for "Restyle Frames" and various settings for an image processing
+    task. An image of a man appears alongside prompts for model selection and batch
+    strength settings, revealing that three variants are available for the uploaded
+    image.
+- start: 30.0
+  end: 30.53
+  description: 'The screen displays a user interface for a project titled "Banoodoo,"
+    featuring sections for model selection, prompt input, and options for generating
+    image variants. An image labeled "Image #12" is shown, with controls to hide or
+    reveal it, and a prompt for creating artwork inspired by the "bukowski_man" model.
+    The right side showcases code or logs related to the application''s functionality.'
+- start: 30.53
+  end: 30.881
+  description: The screen displays a web interface for an application called "Banodoo."
+    On the left, options for project settings and image styling are visible, while
+    the right side shows a video frame of a person sitting on a bus, with available
+    options for generating variants of the image.
+- start: 30.881
+  end: 31.031
+  description: The screen displays a coding environment on the right with a script
+    open in a text editor, and on the left, a web page showing a discussion forum
+    post titled "How to increase the width of web page" on Streamlit. The forum post
+    includes a question about adjusting the width of a `number_input` component and
+    a response providing a solution involving the use of `st.set_page_config(layout='wide')`.
+- start: 31.031
+  end: 31.131
+  description: The screen displays a webpage from the Streamlit forum, specifically
+    a discussion on how to increase the width of a web page. It features user comments,
+    code snippets, and a solution provided by a user named Marisa_Smith regarding
+    the use of `st.set_page_config(layout='wide')` to adjust the layout in a Streamlit
+    application.
+- start: 31.131
+  end: 31.231
+  description: The frame displays a development environment on the right, showing
+    Python code in a file named `app.py`, while the left side shows a web browser
+    window with a Streamlit error message indicating that `st.set_page_config()` can
+    only be called once per script. Below the error, a traceback reveals the file
+    path and line numbers where the error occurred.
+- start: 31.231
+  end: 31.315
+  description: The screen shows an error message from a Streamlit application, indicating
+    a `StreamlitAPIException` related to the `set_page_config()` function. The traceback
+    points to issues in the `app.py` file, specifically indicating that this function
+    can only be called once per app.
+- start: 31.315
+  end: 31.481
+  description: The image shows a coding environment on the right side, displaying
+    Python code in a file named `app.py`, while the left side features a web browser
+    with a Streamlit app running on localhost. An error message appears at the top
+    of the browser, indicating that `set_page_config()` must be called first in the
+    Streamlit script.
+- start: 31.481
+  end: 31.832
+  description: The screen displays a web browser with a blank page loaded on "localhost:8501,"
+    indicating a local server. The interface includes a menu bar at the top with standard
+    options and there are multiple tabs open, including one labeled "Streamlit Docs."
+- start: 31.832
+  end: 31.932
+  description: The screen displays a web application interface for a project called
+    "Banodoco," showing options for selecting a model and prompt for image processing,
+    specifically mentioning "bukowski_man." On the right, there is a code editor (likely
+    VS Code) with Python code related to streamlit for generating images, including
+    imports and function definitions.
+- start: 31.932
+  end: 32.583
+  description: The screen displays a user interface for a project called "Banodoco,"
+    with options on the left for selecting projects, models, and settings. There is
+    an image of a young man on a bus, accompanied by options to generate variants
+    and adjust parameters like batch strength, while the right side shows code snippets
+    related to the project.
+- start: 32.583
+  end: 33.0
+  description: The screen displays a web interface for the "Banodoco" application,
+    showing various project options on the left side, including "Frame Styling" and
+    "Restyle Frames" selections. On the right side, there's an image preview with
+    options for generating variants and a section for entering a model prompt related
+    to "bukowski_man." The code editor on the right shows Python code, likely related
+    to the app's backend functionality.
+- start: 33.0
+  end: 34.618
+  description: The screen displays a web application called "Banodoco" with a sidebar
+    menu featuring options like "App Settings," "New Project," and "Frame Styling."
+    The main content shows an image alongside its variants for a model called "bukowski_man,"
+    with options to generate more variants and a code editor window visible on the
+    right.
+- start: 34.618
+  end: 34.885
+  description: The screen displays the Google homepage with a search bar at the top
+    and various app icons below, such as Instagram and Facebook. On the right side,
+    there is a code editor showing a Python script along with syntax highlighted code
+    and some debugging information.
+- start: 34.885
+  end: 35.202
+  description: The screen shows the documentation for the `st.download_button` function
+    from the Streamlit library, detailing its parameters and usage. The left side
+    includes a function signature and parameter descriptions, while the right displays
+    code snippets related to its implementation.
+- start: 35.202
+  end: 35.502
+  description: 'The screen displays a web interface for an image processing tool,
+    showing a highlighted image with several variants available, labeled as Image
+    #10 and Image #11. UI elements include prompt inputs, batch settings, and options
+    for generating image variants, along with a preview of a man sitting on a bus.'
+- start: 35.502
+  end: 35.836
+  description: The screen displays a local development environment running a project
+    named "Banodoco." On the left side, there is a menu with options like "New Project"
+    and "Frame Styling," while the right side shows a traceback error message related
+    to an OS error.
+- start: 35.836
+  end: 35.919
+  description: The screen displays a development environment with a web application
+    titled "Banodoco" on the left and a code editor on the right. An error message
+    related to a Python script execution is highlighted in pink, indicating an issue
+    with the frame styling functionality. The left panel includes various project
+    options, while the right panel shows lines of code and a terminal at the bottom.
+- start: 35.919
+  end: 36.0
+  description: 'The screen displays a web application named "Banodoco" with a sidebar
+    for project selection and options for various tasks like "Frame Styling" and "Image
+    Editing." On the right side, there are two images labeled "Image #0" and "Image
+    #1," both showing a person, along with a prompt for styling and options to restyle
+    frames, while the left side shows the code editor with Python code related to
+    the project.'
+- start: 36.0
+  end: 36.236
+  description: The screen displays a web application titled "Banodoco" on the left,
+    featuring a project selection menu with options like "New Project" and "Frame
+    Styling." On the right, an error message appears, indicating an issue with a URI,
+    along with a traceback showing relevant file paths and code snippets in a code
+    editor, suggesting a coding or execution error is being debugged.
+- start: 36.236
+  end: 36.336
+  description: 'The screen displays a web app interface titled "Banodoco," featuring
+    a selection menu on the left for project options like "New Project," "Frame Styling,"
+    and "Video Rendering." In the main section, there is an error message stating
+    "OSError: Cannot understand given URI," along with a traceback of the error details.'
+- start: 36.336
+  end: 36.603
+  description: 'The screen displays a development environment with a web application
+    named "Banodoco" on the left and code in a text editor on the right. An error
+    message relating to "OSerror: Cannot understand given URI" is shown in the application,
+    along with a traceback detailing the source of the error in the code.'
+- start: 36.603
+  end: 36.67
+  description: The image shows a computer screen split into two sections. On the left,
+    a web browser window is open displaying the site "Bandocel," but the content is
+    mostly blank. On the right, a code editor window displays programming code, likely
+    related to a project, with a terminal window showing a command line output beneath.
+- start: 36.67
+  end: 36.687
+  description: The frame shows a close-up of a young man with curly hair, seated in
+    a bus. The background features other passengers and a view of the street through
+    the bus windows. On the screen, UI elements include a web browser with multiple
+    tabs open, and code snippets visible in a coding interface on the right side.
+- start: 36.687
+  end: 36.837
+  description: The screen displays a video frame of a young man sitting inside a bus,
+    with a focused expression. To the right, code is visible in a code editor, with
+    various programming elements and a terminal window showing execution results.
+- start: 36.837
+  end: 37.104
+  description: The screen shows a web interface titled "Banodoco," featuring a project
+    selection dropdown and several options like "App Settings" and "Frame Styling."
+    Below that, there is an error message in a pink box indicating a programming issue
+    with the phrase "Cannot understand grow" along with a traceback of the error.
+- start: 37.104
+  end: 37.17
+  description: The screen shows a coding environment with an open file containing
+    Python code on the right and a chat interface on the left displaying an error
+    message related to an OS error. The error traceback indicates issues with understanding
+    a given URL and lists various code file paths associated with the error.
+- start: 37.17
+  end: 37.287
+  description: The image shows a computer screen with a web browser open, displaying
+    an error message related to the "imagetio" Python library, indicating it cannot
+    understand a given URL. On the right side, there is a code editor with Python
+    code visible, suggesting the user is working on a Python project.
+- start: 37.287
+  end: 37.354
+  description: 'The screen shows a split view: on the left, a web browser window open
+    to ChatGPT with error messages related to a Python script, and on the right, a
+    code editor displaying Python code, likely for an app related to GIF generation.
+    The editor includes functions and error handling regarding image processing, while
+    the browser suggests potential issues with the `imageio` library.'
+- start: 37.354
+  end: 37.404
+  description: The image displays a programming environment with a code editor on
+    the right and a web browser on the left. The browser shows an OpenAI chat interface,
+    where error messages related to a Python script using the "ingest.io" library
+    are being discussed, while the code editor features a Python script focused on
+    generating a GIF preview.
+- start: 37.404
+  end: 37.571
+  description: The screen displays an open web browser window with a chat interface
+    on the left and a coding environment on the right. The chat interaction includes
+    an error message related to the Python `imageio` library, providing guidance on
+    resolving the issue encountered when reading an image. The coding interface shows
+    Python code, likely related to image processing.
+- start: 37.571
+  end: 37.621
+  description: The screen displays a programming environment with an editor showing
+    Python code on the right side and a web browser on the left, featuring an error
+    message related to the "imageio" library. The code appears to involve reading
+    images from a file or URL, and there’s a terminal window open at the bottom, suggesting
+    ongoing programming or debugging activity.
+- start: 37.621
+  end: 37.688
+  description: The screen displays a webpage with a chat interface, likely for a coding
+    help platform, showing an error message related to the `imageio` library in Python.
+    To the right, there is a code editor window featuring lines of Python code, along
+    with a terminal output section displaying error messages.
+- start: 37.688
+  end: 37.788
+  description: The screenshot shows a web interface of a chat application, likely
+    for coding assistance. The content includes an error message related to the `imagine`
+    library in Python, with error traceback details and code examples for reading
+    images from a file and a URL. The sidebar contains options for different chat
+    interactions.
+- start: 37.788
+  end: 37.821
+  description: The screen displays a web browser opened to a chat interface, showing
+    an error message related to the `imageio` library in Python. There are code snippets
+    provided for reading images from both a file path and a URL, along with a sidebar
+    containing navigation elements for other chat options.
+- start: 37.821
+  end: 37.988
+  description: The screen displays a coding environment with a text editor on the
+    right showing Python code, particularly focusing on image processing using the
+    `imageio` library. On the left, a web browser is open, displaying an OpenAI chat
+    window discussing an error related to reading images from URLs or file paths,
+    along with suggested solutions.
+- start: 37.988
+  end: 38.121
+  description: The image displays a computer screen with an open web browser showing
+    a chat interface, likely with an AI chatbot, discussing an error related to the
+    `imagio` library in Python. There are snippets of Python code provided as solutions
+    to the error, and a terminal window on the right side showing code or log output.
+- start: 38.121
+  end: 38.155
+  description: The screen displays a coding environment with Visual Studio Code open
+    on the right side, showing Python code that deals with reading images using the
+    `imageio` library and creating a GIF. On the left, the ChatGPT interface is visible,
+    providing code suggestions and error messages related to image handling.
+- start: 38.155
+  end: 38.338
+  description: The image shows a split-screen view with a web browser on the left
+    displaying a chat interface, where a discussion about Python code for reading
+    images using the `imageio` library is ongoing. On the right, a code editor is
+    open, with snippets of Python code related to image processing and an error message
+    displayed at the bottom.
+- start: 38.338
+  end: 38.438
+  description: 'The screen shows a coding interface with a split view: on the left,
+    there''s a web browser displaying a chat conversation about Python code, and on
+    the right, a code editor with Python scripts that include image processing functions
+    using the `imageio` library. The terminal at the bottom displays error messages
+    related to the code execution.'
+- start: 38.438
+  end: 38.488
+  description: The image shows a coding environment with a split screen. On the left,
+    a chat interface displays questions and error messages related to Python code,
+    while on the right, a code editor is open with Python code snippets, including
+    a list of image URLs and functions for processing images.
+- start: 38.488
+  end: 38.589
+  description: The screen displays a coding environment with a text editor showing
+    Python code on the right side and a chat interface on the left. The chat includes
+    discussions about image URLs and code modifications, while the terminal at the
+    bottom shows error messages related to the code.
+- start: 38.589
+  end: 38.855
+  description: The image displays a split screen with a chat interface on the left
+    showing a conversation about a coding issue related to image URLs and an error
+    message. On the right, there is a code editor showing Python code, potentially
+    related to handling a list of image URLs.
+- start: 38.855
+  end: 39.0
+  description: The screen shows a split display with a web browser on the left, featuring
+    a conversation about image URLs and a Python code snippet for creating a GIF from
+    those URLs. On the right, an integrated development environment (IDE) is open,
+    displaying Python code related to project settings and image processing functions.
+- start: 39.0
+  end: 39.823
+  description: The screen displays a code editor on the right, where Python code is
+    being written, including a function definition for creating a GIF from image URLs.
+    On the left, a web browser is open with a chat interface showing a conversation
+    about converting image URLs to a GIF, along with example code provided in the
+    chat.
+- start: 39.823
+  end: 39.856
+  description: The screen displays a web application interface for "Banodoco," featuring
+    a section titled "Frame Styling" with options to select projects and models. An
+    image of a man sitting on a bus is shown along with a button to generate variants,
+    and a code editor is open beside the browser window displaying Python code related
+    to the application.
+- start: 39.856
+  end: 41.008
+  description: The screen displays a coding environment with a side panel featuring
+    a list of chat messages, while the main area showcases Python code for creating
+    a GIF from a list of image URLs using the `imageio` library. The terminal area
+    at the bottom shows an error message related to the code execution.
+- start: 41.008
+  end: 41.341
+  description: The screen displays a split view featuring a Spotify application on
+    the left showing the song "Heart-Shaped Box" by Ramin Djawadi, and a coding environment
+    on the right with Python code related to creating GIF previews and image handling
+    using the `imageio` library. The top portion shows a web browser with the OpenAI
+    ChatGPT interface open.
+- start: 41.341
+  end: 42.0
+  description: The image shows a split screen with an open web browser on the left,
+    displaying a chat interface with code snippets for creating GIFs using the `imageio`
+    library. On the right, there is an Integrated Development Environment (IDE) showing
+    Python code related to creating GIF previews and managing project settings.
+- start: 42.0
+  end: 42.109
+  description: The screen displays a coding interface with a code editor on the right
+    showing Python code for creating GIF previews from image URLs. The left side shows
+    a browser window open to a chat interface, highlighting a discussion about using
+    the `imageio` and `requests` libraries to build a GIF with specified frames per
+    second.
+- start: 42.109
+  end: 42.426
+  description: The image shows a web application interface titled "Banodoco" with
+    options on the left sidebar, including project settings and frame styling. On
+    the right, there is Python code related to function definitions for creating GIF
+    previews, alongside an error traceback indicating an OS error about an unrecognized
+    input.
+- start: 42.426
+  end: 42.809
+  description: The screen displays a user interface from a project called "Banodoco,"
+    featuring options to select projects and settings on the left side. In the main
+    area, there is a frame titled "Frame Styling" showing a video still of a person
+    in a bus, with options to download a GIF and view variants beneath the image.
+- start: 42.809
+  end: 44.361
+  description: The screen displays a web application interface titled "Banodoco" with
+    various project options on the left, including settings for "Frame Styling." On
+    the right, there is a code editor showing Python code related to GIF creation,
+    along with a preview of a video frame featuring a person seated on a bus. The
+    interface includes a prompt and options to download a GIF, adjust batch strength,
+    and reveal image details.
+- start: 44.361
+  end: 45.0
+  description: The screen shows a web interface for a project called "Bandocado,"
+    with options for Frame Styling and Restyle Frames on the left sidebar. A video
+    frame is displayed in the center, depicting a man aboard a bus, while the right
+    side features Python code, possibly related to the functionality of the application.
+- start: 45.0
+  end: 45.379
+  description: The screen displays a web interface for CSS Fonts, showing options
+    for font selection, including "Arial" and "Helvetica," alongside settings for
+    line height and CSS output code. On the right, there's code in a development environment,
+    likely related to handling images or frames, with visible Python syntax and comments.
+- start: 45.379
+  end: 46.83
+  description: The screen displays a tutorial or error message related to a Python
+    script, specifically an OS error regarding a missing font file "arial.ttf." On
+    the right side, there is a snippet of Python code in a code editor, showing functions
+    for handling GIF creation and font management. The browser window on the left
+    shows a chat interface, likely a chatbot or coding assistant.
+- start: 46.83
+  end: 47.514
+  description: The screen displays a combination of application windows, including
+    a chat interface, a file explorer, and image metadata. The chat interface shows
+    a conversation about linking to an online font, while the file explorer reveals
+    folders and files related to various projects. An image of a woman is also visible
+    in the metadata view.
+- start: 47.514
+  end: 47.547
+  description: The screen displays a web browser in Incognito mode, showing a message
+    stating "You've gone Incognito" along with privacy information about browsing.
+    On the right, there is a folder view containing various image files and a display
+    of text in the Arial font, showcasing uppercase and lowercase letters along with
+    numbers.
+- start: 47.547
+  end: 47.614
+  description: The image shows a browser window in incognito mode displaying a download
+    in progress message at the center. On the right side, there is a file explorer
+    showing various image and video files, and at the bottom, several application
+    icons are visible, including Spotify and Zoom.
+- start: 47.614
+  end: 48.0
+  description: 'The screen shows a coding environment with two main panels: the left
+    displays a web browser with a chat interface referencing online font usage in
+    Python, and the right shows a code editor with Python code that appears to handle
+    GIF creation using images and a font. The terminal output at the bottom indicates
+    some errors related to the code execution.'
+- start: 48.0
+  end: 48.532
+  description: The screen displays a coding environment with a split view. On the
+    left, a web browser shows a chat interface with code snippets, while the right
+    side features a code editor displaying Python code related to image processing
+    and font handling. The terminal at the bottom shows error messages and command
+    outputs.
+- start: 48.532
+  end: 49.433
+  description: The screen displays a web application interface titled "Frame Styling,"
+    with a sidebar menu allowing users to select projects and settings. On the right,
+    there is a Python code editor showing a function relevant to creating GIF previews,
+    with various code elements highlighted.
+- start: 49.433
+  end: 49.6
+  description: 'The screen displays multiple components: on the left, a Finder window
+    shows files in the Downloads folder, including a font file named "arial (1).ttf."
+    In the center, a document previews the Arial font, showcasing uppercase and lowercase
+    letters along with numbers. On the right, a web browser window shows an XML error
+    message indicating a missing style information.'
+- start: 49.6
+  end: 50.3
+  description: The screen shows a coding interface with a terminal and a code editor
+    on the right. On the left, there is a browser window displaying a conversation
+    in a chat interface, discussing an error message related to font file formats
+    in Python’s PIL library.
+- start: 50.3
+  end: 51.0
+  description: The screen displays a web application called "Banodoco," with a sidebar
+    listing project options such as "New Project" and "Frame Styling." An error message
+    indicates an `OSError` related to an unknown file format, with a traceback detailing
+    the error's origins in the Python code on the right side.
+- start: 51.0
+  end: 52.119
+  description: The screen displays a web application interface for a project called
+    "Banodoco," showing options for frame styling and image processing. On the left,
+    multiple project settings and model options are visible, while the right side
+    features code snippets and application functionality related to generating a GIF
+    preview from an image.
+- start: 52.119
+  end: 54.0
+  description: The screen displays a web application for a project called "Banodoco"
+    with options for project management on the left side and a section titled "Frame
+    Styling" on the right featuring a video frame. Below the frame, there are options
+    to create GIFs of current variants and a section for prompts and settings related
+    to generating an image based on the model "bukowski_man." On the right, there
+    is a code editor showing a Python script related to GIF creation.
+- start: 54.0
+  end: 55.606
+  description: The screen displays a web application interface for a project named
+    "nirvana_test" in Banodoco, featuring options like "App Settings," "New Project,"
+    and "Key Frame Selection." In the main content area, there is an image preview
+    of a man on a bus, with surrounding UI elements for adjusting model parameters
+    and a prompt editor.
+- start: 55.606
+  end: 56.106
+  description: The screen displays a web interface for a project called "Banodoco,"
+    showcasing an image editing tool with two images side by side. The left panel
+    features options for project settings and model selection, while the right panel
+    shows a prompt for transforming an image with specified styles and negative prompts,
+    along with a button labeled "Trigger Transformations."
+- start: 56.106
+  end: 56.189
+  description: The screen displays a web application interface titled "Banodoco" on
+    the left, featuring project selection options and a "Frame Styling" section with
+    images and their variant counts. On the right, a code editor is open, showing
+    Python code related to creating a GIF from images with various settings and functions.
+- start: 56.189
+  end: 57.0
+  description: The screen displays a user interface for a software project named "Banodoco,"
+    specifically in the "Frame Styling" section. On the left side, there are options
+    for project settings and model selection, while the right side shows an image
+    editing interface with prompts for transformations and a preview of edited images
+    related to a painting in a bus setting.
+- start: 57.0
+  end: 57.007
+  description: The screen displays a coding environment on the left with code related
+    to an image editing application, including functions and variables. On the right,
+    there is a user interface for an image editing tool, allowing the selection and
+    editing of images, complete with a drawing tool and settings for prompts.
+- start: 57.007
+  end: 57.174
+  description: The image displays a coding interface on the left, showing Python code
+    in a text editor, while the right side features an image editing UI with tools
+    for manipulation and a preview of a person in a background. Below the editing
+    area, there are options for prompts and transformations.
+- start: 57.174
+  end: 60.0
+  description: The screen displays a web application interface for image editing,
+    featuring an image of a man seated in a bus and UI elements to select options
+    like model settings, prompts, and image editing tools. There are also options
+    for downloading a GIF and viewing image variants, along with active drawing tools
+    and prompts for restyling the frames.
+- start: 60.0
+  end: 63.0
+  description: The image displays a user interface from a software application, showing
+    options for project management and image editing. On the left, there are settings
+    for a project titled "nirvana_test," while the right side features an image editing
+    section where an image of a man is being edited, with options to apply prompts
+    and trigger transformations.
+- start: 63.0
+  end: 65.849
+  description: The image shows a web application interface for a frame editing tool,
+    displaying two sections side by side. On the left, there are settings for image
+    editing, including model selection, prompts, and parameters; on the right, a preview
+    of the edited image alongside input prompts for transformation is visible.
+- start: 65.849
+  end: 66.0
+  description: The screen displays a web interface with two main sections. On the
+    left, there are input fields for image editing parameters, including prompts and
+    settings, while the right side shows a transformed image being modified with a
+    background change featuring autumn foliage.
+- start: 66.0
+  end: 66.366
+  description: The screen displays a web interface for the Banodoco application, featuring
+    two panels side by side. The left panel includes image editing tools and parameters
+    for a project, while the right panel shows a user editing an image with a figure
+    sitting on a bus, surrounded by editing options and controls.
+- start: 66.366
+  end: 69.0
+  description: The screen displays a user interface from a software application, showing
+    a side-by-side view with an image editing or generation tool. On the left, there
+    are options for adjusting settings like batch strength, guidance scale, and prompts,
+    while the right side features an image preview with various variants available
+    for promotion.
+- start: 69.0
+  end: 69.886
+  description: The image shows a split-screen UI with two instances of an application.
+    On the left, there is a section for image editing with options like "Batch strength,"
+    "Guidance scale," and various settings for negative prompts. On the right, an
+    image editing interface displays a photo of a man with a prompt input area and
+    drawing tools at the top.
+- start: 69.886
+  end: 69.92
+  description: The screen displays a split interface featuring a Spotify window showing
+    the song "Heart-Shaped Box (Orchestral)" with various related songs and playlists
+    on the left. On the right, there is a drawing tool application with options for
+    creating shapes, alongside a portrait image that is being edited based on prompts
+    for transformation.
+- start: 69.92
+  end: 71.388
+  description: The screen shows a user interface for a platform called Banodoco, which
+    includes options for frame styling and image variant generation. On the left side,
+    there are controls for creating GIFs and managing batch settings, while on the
+    right side, a highlighted image is displayed alongside input fields for prompts
+    and drawing tools.
+- start: 71.388
+  end: 72.0
+  description: The screen displays a coding environment on the left, likely using
+    Visual Studio Code, with Python code related to image processing or video handling.
+    On the right, there is a user interface for selecting an image to edit, including
+    options for prompts and a "Trigger Transformation" button, where a semi-transparent
+    image of a person is shown alongside controls for drawing and editing shapes.
+- start: 72.0
+  end: 72.089
+  description: The screen shows a coding interface on the left with Python code related
+    to image processing, including settings for image variant processing and API integration.
+    On the right, there is an image editing interface with drawing tools and a displayed
+    image of a person, which is partially obscured by black boxes, indicating areas
+    for editing.
+- start: 72.089
+  end: 72.155
+  description: 'The screen displays a web interface with two sections: on the left,
+    an image editing tool showing a side-by-side preview of an edited image and its
+    mask; on the right, a drawing tool for making shapes and a section for inputting
+    text prompts related to the image transformation. Below, there are options to
+    share, download, or delete the image, and a console window is visible, indicating
+    some coding activity.'
+- start: 72.155
+  end: 72.356
+  description: The image shows a coding environment with a dark-themed code editor
+    on the left and a user interface for an image editing application on the right.
+    The image editing UI includes options for selecting and editing an image, along
+    with a prompt input field for text descriptions and buttons for actions like "Trigger
+    Transformation."
+- start: 72.356
+  end: 75.0
+  description: The frame displays a user interface for an image editing application,
+    featuring two images of a man—one in the center and another on the left side highlighted
+    as the main variant. The right side shows options for drawing and editing, along
+    with prompts for generating variations and negative prompts for image transformation.
+- start: 75.0
+  end: 75.375
+  description: The image displays a dual-screen interface of an application, showing
+    a user interacting with a model training platform. On the left, there are UI elements
+    for adjusting settings like batch strength and prompts, while the right side shows
+    options for generating image variants and transforming an image based on prompts
+    related to winter scenes.
+- start: 75.375
+  end: 76.159
+  description: 'The screen displays a user interface for an image editing application,
+    likely named "Banodoco." It shows two images side by side: one with a man in a
+    bus, and the other featuring an edited version of this image with additional artistic
+    effects, alongside various settings and options for generating image variants.'
+- start: 76.159
+  end: 76.209
+  description: The screen displays a split interface featuring a Spotify window on
+    the left showing song search results for "Heart-Shaped Box" by Nirvana, including
+    options to play songs and view artist information. On the right, there is an image
+    editing tool allowing manipulation of an image, with prompts for drawing shapes
+    and applying effects, and a preview of the edited image showing a portrait of
+    a person.
+- start: 76.209
+  end: 78.0
+  description: The screen displays a digital interface for image editing, with one
+    side showing a partially obscured image of a man in a bus and the other side featuring
+    options for selecting projects, drawing tools, and editing prompts. The user interface
+    includes sliders, prompts for guidance scale, and options to reveal or hide images,
+    indicating interaction with an image editing tool.
+- start: 78.0
+  end: 79.413
+  description: 'The frame displays a user interface from a software application, with
+    two sections: one for "Frame Styling" showing an image with a stylized portrait
+    and a download option, and the other for "Image Editing," featuring tools for
+    making shapes and editing an image. The left column contains settings like guidance
+    scale and batch strength, while the right column indicates a drawing tool for
+    editing purposes.'
+- start: 79.413
+  end: 79.73
+  description: The screen shows a web interface for an application called Banodoco,
+    featuring input fields for prompts and parameters related to image generation.
+    On the right, there is a preview of an edited image of a person with a snowy background,
+    while the left side contains options for project settings and various actions
+    like drawing and image editing.
+- start: 79.73
+  end: 80.547
+  description: The screen displays a user interface for an image editing application
+    featuring two sections. On the left, there's an editor for frame styling with
+    a preview image of a person in a bus, while the right side presents options for
+    prompts and image transformations, including a prompt for a snowy day scene with
+    a bus in the background.
+- start: 80.547
+  end: 80.764
+  description: 'The screen displays a user interface featuring two sections: on the
+    left, a model for frame styling is showcased with options like batch strength
+    and negative prompts, along with an image preview; on the right, there''s a workspace
+    for image editing with tools for drawing and a prompt for creating content involving
+    a snowy day and a bus background. Both sections are part of a software application,
+    likely for image processing or animation.'
+- start: 80.764
+  end: 81.0
+  description: The screen displays a user interface for a project management tool
+    named Banodoco, featuring options for frame styling and image editing. A central
+    image shows a man on a bus surrounded by autumn scenery, while UI elements on
+    the left include settings like batch strength, guidance scale, and options for
+    managing the project.
+- start: 81.0
+  end: 82.416
+  description: The screen displays a web interface with two side-by-side panels. The
+    left panel shows an application for frame styling with options for prompt settings,
+    including a main image of a person on public transport. The right panel has a
+    transformation prompt related to an outdoor scene and a modified image rendering
+    of the same person in a snow-covered background with a bus visible.
+- start: 82.416
+  end: 82.749
+  description: The screen displays a web application interface showcasing an image
+    editing tool with options for "Frame Styling" and various settings on the left.
+    The right side features a visual workspace where a processed image is shown alongside
+    tools for drawing and adjusting prompts, indicating active image manipulation.
+- start: 82.749
+  end: 83.533
+  description: 'The screen displays a user interface for an image processing tool,
+    with several images labeled as "Image #12" and "Image #13," each featuring options
+    for revealing or hiding them. On the right side, there are settings for image
+    editing, including prompts for generating variations and parameters like batch
+    strength and guidance scale.'
+- start: 83.533
+  end: 84.0
+  description: The screen displays a user interface for an image processing application,
+    featuring options like "Frame Styling" and various settings such as "Batch strength,"
+    "Guidance scale," and "Seed." On the left, there's an image of a young man seated
+    in a bus, while the right side shows a transformed version of the same image with
+    a different background and prompt details for editing.
+- start: 84.0
+  end: 86.503
+  description: The screen displays a software interface with two main sections. On
+    the left, there's a frame styling tool showing an image of a person, options for
+    batch settings, and a download GIF button, while the right side shows options
+    for image transformations and settings related to prompts and negative prompts.
+- start: 86.503
+  end: 87.0
+  description: 'The screen displays a user interface for image editing software, with
+    two images side by side. On the left, one image is labeled "Image #13" and another
+    "Image #14," with options to hide or reveal them, while the right side shows a
+    transformation prompt and options for image edits, including a button to promote
+    the last image.'
+- start: 87.0
+  end: 87.037
+  description: The screen displays a user interface with various sections showing
+    an image editing tool, including settings for image generation such as prompts
+    and guidance scales. On the right, there is a preview of a portrait image, while
+    additional parameters and options for configuring image processing are listed
+    on the left.
+- start: 87.037
+  end: 88.772
+  description: The screen displays a browser window with a user interface for a project
+    named "Banodoco," showing various UI elements such as project settings, prompts,
+    and image editing options. The left side contains input fields for prompts and
+    settings, while the right side shows an image being processed, with a button labeled
+    "Trigger Transformation."
+- start: 88.772
+  end: 90.0
+  description: The screen displays a user interface for an application with sections
+    labeled "Project Settings," "Train Model," and "Restyle Frames," featuring dropdown
+    menus and sliders for options like "Batch strength" and "Update From/To." A popup
+    message prompts the user about a file modification with options to keep or discard
+    changes, while multiple images are visible, indicating available variants for
+    processing.
+- start: 90.0
+  end: 93.0
+  description: 'The screen displays a user interface with two sections: on the left,
+    a "Frame Styling" tool with options for settings like guidance scale, steps, and
+    an option to create a GIF; on the right, a dashboard from Replicate showing recent
+    predictions and usage statistics. The left section features images being processed,
+    while the right lists recent model predictions with details such as ID and status.'
+- start: 93.0
+  end: 94.027
+  description: The screen displays a user interface for a project called "Banodoco,"
+    where various settings for a model named "bukowski_man" are shown. On the left
+    side, options like "Frame Styling" and "Image Editing" are available, while the
+    right side shows recent predictions and usage statistics for a user named "peter942"
+    on the Replicate platform.
+- start: 94.027
+  end: 94.127
+  description: The screen displays a coding environment with a script visible in a
+    dark-themed code editor, along with an interface for a project management tool
+    on the left side. On the right, a dashboard shows recent predictions related to
+    a model, detailing sources, statuses, and run times.
+- start: 94.127
+  end: 94.978
+  description: 'The screen displays a web interface with an image labeled "Image #1,"
+    indicating that there are 17 variants available. There are options to hide or
+    reveal the image, and a video playback area is visible, suggesting that this is
+    part of a demonstration or presentation.'
+- start: 94.978
+  end: 95.362
+  description: The screen displays a code editor with a snippet of Python code on
+    the left side, possibly using Visual Studio Code. On the right side, there is
+    a photo of a dog, and several UI elements are visible, including a web browser,
+    an application titled "Banodos," and various tabs open at the top.
+- start: 95.362
+  end: 95.529
+  description: The image displays a computer screen with several open applications.
+    Central to the view is a pre-drawn image of a young man with curly hair, visible
+    in a PDF viewer, while a browser window on the left shows a page titled "Banodco"
+    listing variants of images, and other UI elements like a file directory and text
+    documents are also present.
+- start: 95.529
+  end: 95.579
+  description: The screen displays a collage of software application windows, including
+    a web browser showing a webpage labeled "Banodco" with image variants. A central
+    image of a young man appears distorted, and there are several files and folders
+    visible in the Finder sidebar on the left side.
+- start: 95.579
+  end: 96.0
+  description: The screen displays a photo editing interface with a central image
+    of a young man sitting inside a vehicle. Surrounding the main image are thumbnail
+    previews of similar images on the left, while the right side shows text documents
+    and some code snippets.
+- start: 96.0
+  end: 96.263
+  description: The screen displays a digital image of a young man with curly hair,
+    set against an orange backdrop, likely from a café. On the left, there are smaller
+    thumbnail images, and there are UI elements from a preview or editing application
+    in use, with visible file names and a toolbar at the top.
+- start: 96.263
+  end: 97.081
+  description: 'The screen displays a web interface with two images of a person seated
+    on a bus. Below the images, there is a label indicating "Image #6" with text stating
+    "11 variants available" and options to hide or reveal the image. The browser tabs
+    above show various URLs related to a project called "Bandoc."'
+visual_summaries:
+  0.00-8.10: The video clip showcases a web interface for an image processing application
+    featuring model selection, prompts, batch strength settings, and a preview of
+    generated images, alongside a coding environment displaying related Python code.

@@ -1,0 +1,16 @@
+id: reigh-bg-v17-combined
+file: inputs/reigh-bg-v17-combined.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a close-up view of a planet's surface featuring several
+  dark circular formations, possibly indicating craters, surrounded by swirling gaseous
+  textures. The background is black, showcasing distant stars scattered throughout
+  space.
+generation_prompt: Add 4 circular dark voids scattered across the planet surface to
+  make it look like a painter's palette - the paint well holes. They should be subtle,
+  made of the same wispy particle dust style, just darker circular areas. Keep everything
+  else the same - the diagonal angle, the atmospheric glow, the soft golden smoke
+  texture.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v14-diagonal.png

@@ -1,0 +1,46 @@
+{
+  "output": {
+    "resolution": "1280x720",
+    "fps": 30,
+    "file": "output/render.mp4",
+    "background": "reigh-bg-v17-titled-dust",
+    "background_scale": 0.95
+  },
+  "clips": [
+    {
+      "id": "clip-1",
+      "at": 6.91,
+      "track": "video",
+      "asset": "venn-diagram",
+      "from": 0,
+      "to": 4.73,
+      "speed": 1.06
+    },
+    {
+      "id": "clip-2",
+      "at": 11.37,
+      "track": "video",
+      "asset": "demo-one",
+      "from": 0,
+      "to": 4.97,
+      "volume": 0
+    },
+    {
+      "id": "clip-3",
+      "at": 19.81,
+      "track": "video",
+      "asset": "demo-two",
+      "from": 5,
+      "to": 10.16,
+      "volume": 0
+    },
+    {
+      "id": "clip-4",
+      "at": 4.84,
+      "track": "audio",
+      "asset": "input",
+      "from": 0,
+      "to": 113.77
+    }
+  ]
+}

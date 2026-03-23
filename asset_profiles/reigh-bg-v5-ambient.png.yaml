@@ -1,0 +1,14 @@
+id: reigh-bg-v5-ambient
+file: inputs/reigh-bg-v5-ambient.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a dark background filled with shimmering golden particles
+  scattered throughout, creating a cosmic or starry effect. Swirling patterns of light
+  are present, enhancing the ethereal quality of the scene.
+generation_prompt: Very dark, nearly black background. Fine golden particle dust loosely
+  tracing an oversized painter's palette shape that extends well beyond the frame
+  edges. A soft, dim golden atmospheric haze along the lower third - not a planet,
+  just a gentle warm glow suggesting a horizon. The palette shape is abstract and
+  broken up, more implied than explicit. Scattered gold dust particles like distant
+  stars. Very dark, very subtle, understated. No text.
+generation_mode: generate

@@ -1,0 +1,1234 @@
+id: input
+file: inputs/input.MP3
+type: audio
+duration_s: 98.456
+silence_regions:
+- start: 41.059
+  end: 41.375
+- start: 53.577
+  end: 53.899
+- start: 57.843
+  end: 58.181
+- start: 58.899
+  end: 59.325
+- start: 67.645
+  end: 68.197
+- start: 87.291
+  end: 87.657
+- start: 90.173
+  end: 90.499
+- start: 92.558
+  end: 92.92
+- start: 95.436
+  end: 95.776
+- start: 96.923
+  end: 97.644
+- start: 97.735
+  end: 98.332
+transcript:
+  words:
+  - start: 0.48
+    end: 0.92
+    word: Three
+  - start: 0.92
+    end: 1.18
+    word: years
+  - start: 1.18
+    end: 1.42
+    word: ago
+  - start: 1.62
+    end: 1.64
+    word: I
+  - start: 1.64
+    end: 1.86
+    word: became
+  - start: 1.86
+    end: 2.24
+    word: obsessed
+  - start: 2.24
+    end: 2.66
+    word: with
+  - start: 2.66
+    end: 2.68
+    word: using
+  - start: 2.68
+    end: 3.0
+    word: anchor
+  - start: 3.0
+    end: 3.28
+    word: images
+  - start: 3.28
+    end: 3.52
+    word: to
+  - start: 3.52
+    end: 3.76
+    word: drive
+  - start: 3.76
+    end: 4.02
+    word: video
+  - start: 4.02
+    end: 4.48
+    word: generation
+  - start: 5.14
+    end: 5.14
+    word: I
+  - start: 5.14
+    end: 5.22
+    word: felt
+  - start: 5.22
+    end: 5.38
+    word: like
+  - start: 5.38
+    end: 5.52
+    word: the
+  - start: 5.52
+    end: 5.68
+    word: right
+  - start: 5.68
+    end: 5.96
+    word: balance
+  - start: 5.96
+    end: 6.36
+    word: between
+  - start: 6.36
+    end: 6.72
+    word: creative
+  - start: 6.72
+    end: 7.14
+    word: control
+  - start: 7.14
+    end: 7.36
+    word: and
+  - start: 7.36
+    end: 7.82
+    word: the
+  - start: 7.82
+    end: 7.82
+    word: magic
+  - start: 7.82
+    end: 8.38
+    word: that
+  - start: 8.38
+    end: 8.62
+    word: these
+  - start: 8.62
+    end: 8.84
+    word: models
+  - start: 8.84
+    end: 9.1
+    word: can
+  - start: 9.1
+    end: 9.3
+    word: do
+  - start: 9.64
+    end: 9.72
+    word: So
+  - start: 9.72
+    end: 9.94
+    word: I
+  - start: 9.94
+    end: 9.96
+    word: built
+  - start: 9.96
+    end: 10.28
+    word: a
+  - start: 10.28
+    end: 10.46
+    word: tool
+  - start: 10.46
+    end: 10.98
+    word: and
+  - start: 10.98
+    end: 11.32
+    word: made
+  - start: 11.32
+    end: 11.74
+    word: a
+  - start: 11.74
+    end: 11.74
+    word: video
+  - start: 11.74
+    end: 12.1
+    word: for
+  - start: 12.1
+    end: 12.36
+    word: a
+  - start: 12.36
+    end: 12.36
+    word: poem
+  - start: 12.36
+    end: 12.58
+    word: I
+  - start: 12.58
+    end: 12.58
+    word: will
+  - start: 12.58
+    end: 12.78
+    word: be
+  - start: 12.78
+    end: 12.9
+    word: using
+  - start: 12.9
+    end: 13.14
+    word: it
+  - start: 13.36
+    end: 13.7
+    word: This
+  - start: 13.7
+    end: 13.92
+    word: was
+  - start: 13.92
+    end: 14.16
+    word: pre
+  - start: 14.16
+    end: 14.3
+    word: video
+  - start: 14.3
+    end: 14.6
+    word: model
+  - start: 14.68
+    end: 14.84
+    word: so
+  - start: 14.84
+    end: 14.92
+    word: I
+  - start: 14.92
+    end: 14.98
+    word: was
+  - start: 14.98
+    end: 15.16
+    word: using
+  - start: 15.16
+    end: 15.46
+    word: Google
+  - start: 15.46
+    end: 15.72
+    word: Film
+  - start: 15.88
+    end: 16.06
+    word: The
+  - start: 16.06
+    end: 16.18
+    word: result
+  - start: 16.18
+    end: 16.52
+    word: was
+  - start: 16.52
+    end: 16.86
+    word: pretty
+  - start: 16.86
+    end: 17.16
+    word: bad
+  - start: 17.74
+    end: 18.18
+    word: Last
+  - start: 18.18
+    end: 18.36
+    word: year
+  - start: 18.38
+    end: 18.54
+    word: I
+  - start: 18.54
+    end: 18.68
+    word: built
+  - start: 18.68
+    end: 19.08
+    word: another
+  - start: 19.08
+    end: 19.44
+    word: tool
+  - start: 19.44
+    end: 19.9
+    word: using
+  - start: 19.9
+    end: 20.42
+    word: AnimateDiff
+  - start: 20.96
+    end: 21.12
+    word: Doe
+  - start: 21.26
+    end: 21.58
+    word: and
+  - start: 21.58
+    end: 21.72
+    word: I
+  - start: 21.72
+    end: 21.82
+    word: made
+  - start: 21.82
+    end: 22.0
+    word: a
+  - start: 22.0
+    end: 22.16
+    word: new
+  - start: 22.16
+    end: 22.32
+    word: version
+  - start: 22.32
+    end: 22.56
+    word: of
+  - start: 22.56
+    end: 22.86
+    word: that
+  - start: 22.86
+    end: 22.86
+    word: video
+  - start: 23.14
+    end: 23.44
+    word: Again
+  - start: 23.46
+    end: 23.82
+    word: not
+  - start: 23.82
+    end: 24.02
+    word: great
+  - start: 24.36
+    end: 24.66
+    word: You're
+  - start: 24.66
+    end: 24.88
+    word: probably
+  - start: 24.88
+    end: 25.08
+    word: thinking
+  - start: 25.08
+    end: 25.34
+    word: I
+  - start: 25.34
+    end: 25.5
+    word: should
+  - start: 25.5
+    end: 25.68
+    word: have
+  - start: 25.68
+    end: 25.84
+    word: given
+  - start: 25.84
+    end: 26.0
+    word: up
+  - start: 26.0
+    end: 26.2
+    word: those
+  - start: 26.2
+    end: 26.38
+    word: points
+  - start: 26.46
+    end: 26.66
+    word: but
+  - start: 26.66
+    end: 26.96
+    word: 'no'
+  - start: 27.0
+    end: 27.16
+    word: I'm
+  - start: 27.16
+    end: 27.32
+    word: back
+  - start: 27.32
+    end: 27.5
+    word: for
+  - start: 27.5
+    end: 27.62
+    word: a
+  - start: 27.62
+    end: 27.64
+    word: third
+  - start: 27.64
+    end: 27.98
+    word: time
+  - start: 27.98
+    end: 28.54
+    word: This
+  - start: 28.54
+    end: 28.82
+    word: tool
+  - start: 28.82
+    end: 29.08
+    word: is
+  - start: 29.08
+    end: 29.38
+    word: called
+  - start: 29.38
+    end: 29.52
+    word: Ray
+  - start: 29.68
+    end: 30.22
+    word: and
+  - start: 30.22
+    end: 30.34
+    word: it's
+  - start: 30.34
+    end: 30.6
+    word: a
+  - start: 30.6
+    end: 30.6
+    word: free
+  - start: 30.6
+    end: 30.8
+    word: and
+  - start: 30.8
+    end: 31.06
+    word: open
+  - start: 31.06
+    end: 31.16
+    word: source
+  - start: 31.16
+    end: 31.46
+    word: tool
+  - start: 31.46
+    end: 31.8
+    word: focused
+  - start: 31.8
+    end: 32.1
+    word: just
+  - start: 32.1
+    end: 32.28
+    word: 'on'
+  - start: 32.28
+    end: 32.46
+    word: this
+  - start: 32.46
+    end: 32.62
+    word: mode
+  - start: 32.62
+    end: 33.16
+    word: of
+  - start: 33.16
+    end: 33.16
+    word: creation
+  - start: 33.94
+    end: 33.96
+    word: Rather
+  - start: 33.96
+    end: 34.18
+    word: than
+  - start: 34.18
+    end: 34.34
+    word: just
+  - start: 34.34
+    end: 34.58
+    word: listing
+  - start: 34.58
+    end: 34.74
+    word: out
+  - start: 34.74
+    end: 34.92
+    word: all
+  - start: 34.92
+    end: 34.92
+    word: the
+  - start: 34.92
+    end: 35.12
+    word: features
+  - start: 35.24
+    end: 35.32
+    word: let
+  - start: 35.32
+    end: 35.4
+    word: me
+  - start: 35.4
+    end: 35.52
+    word: show
+  - start: 35.52
+    end: 35.64
+    word: you
+  - start: 35.64
+    end: 35.92
+    word: what
+  - start: 35.92
+    end: 35.92
+    word: it's
+  - start: 35.92
+    end: 36.06
+    word: like
+  - start: 36.06
+    end: 36.4
+    word: to
+  - start: 36.4
+    end: 36.72
+    word: create
+  - start: 36.72
+    end: 37.0
+    word: a
+  - start: 37.0
+    end: 37.06
+    word: shot
+  - start: 37.96
+    end: 38.36
+    word: This
+  - start: 38.36
+    end: 38.6
+    word: video
+  - start: 38.6
+    end: 38.86
+    word: is
+  - start: 38.86
+    end: 39.02
+    word: based
+  - start: 39.02
+    end: 39.22
+    word: in
+  - start: 39.22
+    end: 39.6
+    word: North
+  - start: 39.6
+    end: 39.82
+    word: Carolina
+  - start: 39.82
+    end: 40.06
+    word: in
+  - start: 40.06
+    end: 40.28
+    word: the
+  - start: 40.28
+    end: 41.0
+    word: 1940s
+  - start: 41.18
+    end: 41.48
+    word: so
+  - start: 41.48
+    end: 41.68
+    word: I
+  - start: 41.68
+    end: 41.72
+    word: wanted
+  - start: 41.72
+    end: 41.86
+    word: to
+  - start: 41.86
+    end: 41.96
+    word: use
+  - start: 41.96
+    end: 42.1
+    word: a
+  - start: 42.1
+    end: 42.32
+    word: Norman
+  - start: 42.32
+    end: 42.6
+    word: Rockwell
+  - start: 42.6
+    end: 42.96
+    word: style
+  - start: 43.4
+    end: 43.58
+    word: It
+  - start: 43.58
+    end: 43.76
+    word: starts
+  - start: 43.76
+    end: 43.92
+    word: 'on'
+  - start: 43.92
+    end: 44.24
+    word: a
+  - start: 44.24
+    end: 44.26
+    word: bus
+  - start: 44.62
+    end: 44.76
+    word: so
+  - start: 44.76
+    end: 45.12
+    word: inside
+  - start: 45.12
+    end: 45.26
+    word: Ray
+  - start: 45.42
+    end: 45.52
+    word: I
+  - start: 45.52
+    end: 45.74
+    word: used
+  - start: 45.74
+    end: 45.92
+    word: the
+  - start: 45.92
+    end: 46.34
+    word: InStyle
+  - start: 46.46
+    end: 46.8
+    word: a
+  - start: 46.8
+    end: 46.92
+    word: Quinelli
+  - start: 46.92
+    end: 47.18
+    word: Laura
+  - start: 47.18
+    end: 47.66
+    word: I
+  - start: 47.66
+    end: 47.66
+    word: trained
+  - start: 47.84
+    end: 48.18
+    word: to
+  - start: 48.18
+    end: 48.3
+    word: generate
+  - start: 48.3
+    end: 48.6
+    word: a
+  - start: 48.6
+    end: 48.6
+    word: bunch
+  - start: 48.6
+    end: 48.74
+    word: of
+  - start: 48.74
+    end: 48.98
+    word: different
+  - start: 48.98
+    end: 49.18
+    word: buses
+  - start: 49.42
+    end: 49.82
+    word: I
+  - start: 49.82
+    end: 49.88
+    word: wanted
+  - start: 49.88
+    end: 50.14
+    word: it
+  - start: 50.14
+    end: 50.32
+    word: to
+  - start: 50.32
+    end: 50.32
+    word: feel
+  - start: 50.32
+    end: 50.44
+    word: like
+  - start: 50.44
+    end: 50.62
+    word: a
+  - start: 50.62
+    end: 50.9
+    word: quiet
+  - start: 50.9
+    end: 51.2
+    word: rural
+  - start: 51.2
+    end: 51.58
+    word: road
+  - start: 51.84
+    end: 52.06
+    word: just
+  - start: 52.06
+    end: 52.2
+    word: 'on'
+  - start: 52.2
+    end: 52.44
+    word: the
+  - start: 52.44
+    end: 52.5
+    word: cusp
+  - start: 52.5
+    end: 52.66
+    word: of
+  - start: 52.66
+    end: 52.76
+    word: the
+  - start: 52.76
+    end: 53.02
+    word: first
+  - start: 53.02
+    end: 53.16
+    word: snow
+  - start: 53.16
+    end: 53.36
+    word: of
+  - start: 53.36
+    end: 53.44
+    word: the
+  - start: 53.44
+    end: 53.56
+    word: year
+  - start: 53.56
+    end: 54.3
+    word: So
+  - start: 54.3
+    end: 54.48
+    word: I
+  - start: 54.48
+    end: 54.76
+    word: generated
+  - start: 54.76
+    end: 54.98
+    word: a
+  - start: 54.98
+    end: 55.0
+    word: bunch
+  - start: 55.0
+    end: 55.18
+    word: of
+  - start: 55.18
+    end: 55.52
+    word: environments
+  - start: 55.52
+    end: 55.82
+    word: using
+  - start: 55.82
+    end: 56.16
+    word: my
+  - start: 56.16
+    end: 56.5
+    word: InSubject
+  - start: 56.5
+    end: 56.68
+    word: Laura
+  - start: 56.68
+    end: 56.86
+    word: to
+  - start: 56.86
+    end: 56.98
+    word: keep
+  - start: 56.98
+    end: 57.18
+    word: the
+  - start: 57.18
+    end: 57.22
+    word: bus
+  - start: 57.22
+    end: 57.76
+    word: consistent
+  - start: 57.96
+    end: 58.3
+    word: This
+  - start: 58.3
+    end: 58.42
+    word: one
+  - start: 58.42
+    end: 58.6
+    word: looked
+  - start: 58.6
+    end: 58.88
+    word: good
+  - start: 59.36
+    end: 59.48
+    word: From
+  - start: 59.48
+    end: 59.74
+    word: there
+  - start: 59.86
+    end: 60.02
+    word: I
+  - start: 60.02
+    end: 60.42
+    word: just
+  - start: 60.42
+    end: 60.42
+    word: needed
+  - start: 60.42
+    end: 60.6
+    word: the
+  - start: 60.6
+    end: 60.9
+    word: right
+  - start: 60.9
+    end: 61.04
+    word: angle
+  - start: 61.3
+    end: 61.36
+    word: The
+  - start: 61.36
+    end: 61.56
+    word: song
+  - start: 61.56
+    end: 61.8
+    word: starts
+  - start: 61.8
+    end: 62.14
+    word: slowly
+  - start: 62.22
+    end: 62.32
+    word: so
+  - start: 62.32
+    end: 62.56
+    word: I
+  - start: 62.56
+    end: 62.56
+    word: thought
+  - start: 62.56
+    end: 62.62
+    word: it
+  - start: 62.62
+    end: 62.78
+    word: would
+  - start: 62.78
+    end: 62.8
+    word: be
+  - start: 62.8
+    end: 63.0
+    word: cool
+  - start: 63.0
+    end: 63.1
+    word: to
+  - start: 63.1
+    end: 63.18
+    word: have
+  - start: 63.18
+    end: 63.3
+    word: it
+  - start: 63.3
+    end: 63.56
+    word: driving
+  - start: 63.56
+    end: 63.8
+    word: up
+  - start: 63.92
+    end: 64.32
+    word: and
+  - start: 64.32
+    end: 64.72
+    word: then
+  - start: 64.72
+    end: 64.82
+    word: zooming
+  - start: 64.82
+    end: 65.04
+    word: in
+  - start: 65.04
+    end: 65.18
+    word: 'on'
+  - start: 65.18
+    end: 65.34
+    word: the
+  - start: 65.34
+    end: 65.5
+    word: front
+  - start: 65.5
+    end: 65.88
+    word: of
+  - start: 65.88
+    end: 65.88
+    word: the
+  - start: 65.88
+    end: 65.88
+    word: bus
+  - start: 65.88
+    end: 66.54
+    word: once
+  - start: 66.54
+    end: 66.82
+    word: the
+  - start: 66.82
+    end: 67.04
+    word: music
+  - start: 67.04
+    end: 67.58
+    word: really
+  - start: 67.58
+    end: 67.58
+    word: hits
+  - start: 68.26
+    end: 68.46
+    word: Inside
+  - start: 68.46
+    end: 68.8
+    word: the
+  - start: 68.8
+    end: 68.84
+    word: bus
+  - start: 68.96
+    end: 69.24
+    word: I
+  - start: 69.24
+    end: 69.28
+    word: wanted
+  - start: 69.28
+    end: 69.66
+    word: every
+  - start: 69.66
+    end: 69.9
+    word: detail
+  - start: 69.9
+    end: 70.24
+    word: to
+  - start: 70.24
+    end: 70.24
+    word: feel
+  - start: 70.24
+    end: 70.42
+    word: as
+  - start: 70.42
+    end: 70.56
+    word: close
+  - start: 70.56
+    end: 70.88
+    word: as
+  - start: 70.88
+    end: 71.0
+    word: possible
+  - start: 71.0
+    end: 71.2
+    word: to
+  - start: 71.2
+    end: 71.3
+    word: what
+  - start: 71.3
+    end: 71.42
+    word: it
+  - start: 71.42
+    end: 71.72
+    word: actually
+  - start: 71.72
+    end: 71.84
+    word: would
+  - start: 71.84
+    end: 71.96
+    word: have
+  - start: 71.96
+    end: 72.56
+    word: looked
+  - start: 72.56
+    end: 72.96
+    word: and
+  - start: 72.96
+    end: 72.96
+    word: felt
+  - start: 72.96
+    end: 73.24
+    word: like
+  - start: 73.8
+    end: 74.2
+    word: I
+  - start: 74.2
+    end: 74.36
+    word: saw
+  - start: 74.36
+    end: 74.6
+    word: someone
+  - start: 74.6
+    end: 74.84
+    word: sitting
+  - start: 74.84
+    end: 75.06
+    word: there
+  - start: 75.06
+    end: 75.22
+    word: who
+  - start: 75.22
+    end: 75.36
+    word: looked
+  - start: 75.36
+    end: 75.48
+    word: like
+  - start: 75.48
+    end: 75.68
+    word: they
+  - start: 75.68
+    end: 75.68
+    word: could
+  - start: 75.68
+    end: 75.72
+    word: be
+  - start: 75.72
+    end: 75.94
+    word: my
+  - start: 75.94
+    end: 76.1
+    word: main
+  - start: 76.1
+    end: 76.4
+    word: character
+  - start: 76.56
+    end: 76.74
+    word: so
+  - start: 76.74
+    end: 76.88
+    word: I
+  - start: 76.88
+    end: 76.94
+    word: zoomed
+  - start: 76.94
+    end: 77.08
+    word: in
+  - start: 77.08
+    end: 77.3
+    word: 'on'
+  - start: 77.3
+    end: 77.34
+    word: him
+  - start: 77.94
+    end: 78.16
+    word: I
+  - start: 78.16
+    end: 78.36
+    word: then
+  - start: 78.36
+    end: 78.54
+    word: went
+  - start: 78.54
+    end: 78.82
+    word: outside
+  - start: 78.82
+    end: 79.28
+    word: the
+  - start: 79.28
+    end: 79.28
+    word: window
+  - start: 79.38
+    end: 79.84
+    word: and
+  - start: 79.84
+    end: 80.18
+    word: now
+  - start: 80.18
+    end: 80.26
+    word: it
+  - start: 80.26
+    end: 80.3
+    word: was
+  - start: 80.3
+    end: 80.48
+    word: time
+  - start: 80.48
+    end: 80.84
+    word: to
+  - start: 80.84
+    end: 80.84
+    word: animate
+  - start: 80.84
+    end: 81.06
+    word: these
+  - start: 81.06
+    end: 81.34
+    word: images
+  - start: 81.34
+    end: 82.14
+    word: The
+  - start: 82.14
+    end: 82.36
+    word: first
+  - start: 82.36
+    end: 82.76
+    word: few
+  - start: 82.76
+    end: 82.76
+    word: shots
+  - start: 82.76
+    end: 83.08
+    word: animated
+  - start: 83.08
+    end: 83.4
+    word: really
+  - start: 83.4
+    end: 83.66
+    word: well
+  - start: 83.66
+    end: 83.9
+    word: out
+  - start: 83.9
+    end: 83.9
+    word: of
+  - start: 83.9
+    end: 84.24
+    word: the
+  - start: 84.24
+    end: 84.26
+    word: box
+  - start: 84.84
+    end: 84.92
+    word: but
+  - start: 84.92
+    end: 85.08
+    word: for
+  - start: 85.08
+    end: 85.2
+    word: the
+  - start: 85.2
+    end: 85.44
+    word: next
+  - start: 85.44
+    end: 85.74
+    word: shots
+  - start: 85.92
+    end: 85.92
+    word: I
+  - start: 85.92
+    end: 86.1
+    word: needed
+  - start: 86.1
+    end: 86.54
+    word: to
+  - start: 86.54
+    end: 86.54
+    word: guide
+  - start: 86.54
+    end: 86.74
+    word: the
+  - start: 86.74
+    end: 86.9
+    word: camera
+  - start: 86.9
+    end: 87.24
+    word: motion
+  - start: 87.7
+    end: 87.8
+    word: So
+  - start: 87.8
+    end: 87.96
+    word: I
+  - start: 87.96
+    end: 88.08
+    word: used
+  - start: 88.08
+    end: 88.8
+    word: Unity3C
+  - start: 88.82
+    end: 88.92
+    word: which
+  - start: 88.92
+    end: 89.12
+    word: is
+  - start: 89.12
+    end: 89.26
+    word: built
+  - start: 89.26
+    end: 89.5
+    word: into
+  - start: 89.5
+    end: 89.6
+    word: Ray
+  - start: 89.6
+    end: 89.8
+    word: for
+  - start: 89.8
+    end: 90.14
+    word: one
+  - start: 90.52
+    end: 90.88
+    word: to
+  - start: 90.88
+    end: 91.28
+    word: record
+  - start: 91.28
+    end: 91.7
+    word: and
+  - start: 91.7
+    end: 91.84
+    word: steer
+  - start: 91.84
+    end: 92.06
+    word: the
+  - start: 92.06
+    end: 92.4
+    word: animation
+  - start: 92.92
+    end: 93.14
+    word: I
+  - start: 93.14
+    end: 93.24
+    word: stitched
+  - start: 93.24
+    end: 93.42
+    word: them
+  - start: 93.42
+    end: 93.56
+    word: all
+  - start: 93.56
+    end: 93.68
+    word: together
+  - start: 93.68
+    end: 93.96
+    word: using
+  - start: 93.96
+    end: 94.42
+    word: Face
+  - start: 94.42
+    end: 95.16
+    word: inside
+  - start: 95.16
+    end: 95.38
+    word: Ray
+  - start: 95.48
+    end: 96.08
+    word: and
+  - start: 96.08
+    end: 96.42
+    word: here's
+  - start: 96.42
+    end: 96.62
+    word: the
+  - start: 96.62
+    end: 96.84
+    word: result
+  segments:
+  - start: 0.48
+    end: 4.48
+    text: Three years ago, I became obsessed with using anchor images to drive video
+      generation.
+  - start: 5.14
+    end: 9.3
+    text: I felt like the right balance between creative control and the magic that
+      these models can do.
+  - start: 9.64
+    end: 13.14
+    text: So I built a tool and made a video for a poem I will be using it.
+  - start: 13.36
+    end: 17.16
+    text: This was pre-video model, so I was using Google Film. The result was pretty
+      bad.
+  - start: 17.74
+    end: 22.86
+    text: Last year, I built another tool using AnimateDiff, Doe, and I made a new
+      version of that video.
+  - start: 23.14
+    end: 27.98
+    text: Again, not great. You're probably thinking I should have given up those
+      points, but no, I'm back for a third time.
+  - start: 27.98
+    end: 33.16
+    text: This tool is called Ray, and it's a free and open-source tool focused just
+      on this mode of creation.
+  - start: 33.94
+    end: 37.06
+    text: Rather than just listing out all the features, let me show you what it's
+      like to create a shot.
+  - start: 37.96
+    end: 42.96
+    text: This video is based in North Carolina in the 1940s, so I wanted to use a
+      Norman Rockwell style.
+  - start: 43.4
+    end: 49.18
+    text: It starts on a bus, so inside Ray, I used the InStyle, a Quinelli Laura
+      I trained, to generate a bunch of different buses.
+  - start: 49.42
+    end: 53.56
+    text: I wanted it to feel like a quiet rural road, just on the cusp of the first
+      snow of the year.
+  - start: 53.56
+    end: 58.88
+    text: So I generated a bunch of environments using my InSubject Laura to keep
+      the bus consistent. This one looked good.
+  - start: 59.36
+    end: 63.8
+    text: From there, I just needed the right angle. The song starts slowly, so I
+      thought it would be cool to have it driving up
+  - start: 63.92
+    end: 67.58
+    text: and then zooming in on the front of the bus once the music really hits.
+  - start: 68.26
+    end: 73.24
+    text: Inside the bus, I wanted every detail to feel as close as possible to what
+      it actually would have looked and felt like.
+  - start: 73.8
+    end: 77.34
+    text: I saw someone sitting there who looked like they could be my main character,
+      so I zoomed in on him.
+  - start: 77.94
+    end: 81.34
+    text: I then went outside the window, and now it was time to animate these images.
+  - start: 81.34
+    end: 87.24
+    text: The first few shots animated really well out of the box, but for the next
+      shots, I needed to guide the camera motion.
+  - start: 87.7
+    end: 92.4
+    text: So I used Unity3C, which is built into Ray for one, to record and steer
+      the animation.
+  - start: 92.92
+    end: 96.84
+    text: I stitched them all together using Face inside Ray, and here's the result.

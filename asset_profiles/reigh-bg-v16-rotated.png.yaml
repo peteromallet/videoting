@@ -1,0 +1,14 @@
+id: reigh-bg-v16-rotated
+file: inputs/reigh-bg-v16-rotated.png
+type: image
+dimensions: 2752x1536
+description: The image displays a dark, abstract background featuring a glowing, nebulous
+  outline resembling an artist's palette. Two circular areas are visible, likely representing
+  paint wells, with a shimmering effect suggesting dust or particles around the edges.
+generation_prompt: Rotate the entire composition so the palette sweeps diagonally
+  from the top-right corner to the bottom-left corner. Add a thin warm golden atmospheric
+  glow along the palette's curved outer edge. Keep the same particle dust style, same
+  darkness level, same subtlety. Just change the angle and add the edge glow.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v3-particles.png

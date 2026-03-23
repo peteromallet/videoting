@@ -1,0 +1,13 @@
+id: reigh-bg-palette
+file: inputs/reigh-bg-palette.png
+type: image
+dimensions: 2752x1536
+description: The image features a minimalistic design of a painter's palette, illuminated
+  in a soft glow against a dark green background. The palette has five circular indentations
+  for paint and a distinctive shape, resembling a traditional artist's palette.
+generation_prompt: A cinematic dark green (#0A3327) background with a very large,
+  subtle, semi-transparent gold (#E0B84A) painter's palette icon centered in the frame.
+  The palette is a classic artist's paint palette silhouette with 4 circular paint
+  dots cut out, rendered as a glowing watermark. Moody, elegant, minimal. Dark green
+  to black gradient edges. The palette should fill about 70% of the frame.
+generation_mode: generate

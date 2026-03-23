@@ -1,0 +1,15 @@
+id: reigh-bg-v7-space
+file: inputs/reigh-bg-v7-space.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a dark sky filled with numerous stars, with faint,
+  wispy streaks of light creating a flowing pattern across the upper portion. The
+  lower section shows a gradient that fades into a brighter hue, suggesting a horizon.
+generation_prompt: Deep space darkness. Faint golden particle dust streams curving
+  gently across the frame like orbital debris or a distant nebula. A soft warm golden
+  atmospheric glow along the bottom edge suggesting a far-off horizon. Scattered tiny
+  gold particles like stars throughout. Very dark, very minimal - 80% of the image
+  is near-black space. The gold elements are dim and wispy, not bright or solid. Abstract,
+  cinematic, contemplative. Dark green-black tones in the shadows. No recognizable
+  shapes, just abstract flowing golden dust in darkness. No text.
+generation_mode: generate

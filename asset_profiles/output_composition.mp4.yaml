@@ -1,0 +1,52 @@
+id: output_composition
+file: inputs/output_composition.mp4
+type: video
+duration_s: 6.36
+resolution: 1920x1080
+fps: 25.0
+visual_segments:
+- start: 0.0
+  end: 1.0
+  description: The image is completely black, with no visible content, UI elements,
+    or actions occurring. It appears to be an empty frame from a video.
+- start: 1.0
+  end: 2.0
+  description: The image consists of two panels depicting the growth of a plant. The
+    top panel shows a single green sprout against a starry night sky with a moon,
+    while the bottom panel features the same plant thriving in sunlight on a bright
+    day, surrounded by a landscape of tilled soil.
+- start: 2.0
+  end: 3.0
+  description: 'The image features three panels depicting a plant growing in different
+    times of day: night with a full moon, daytime with a bright sun, and another night
+    scene with stars. The background consists of textured ground and sky elements
+    suitable for each time setting, enhancing the plant''s growth stages.'
+- start: 3.0
+  end: 4.0
+  description: 'The image features three panels displaying a plant growing in different
+    lighting scenarios: a night scene with a full moon, a daytime scene with bright
+    sunlight, and a clear sky. The backgrounds consist of textured ground that resembles
+    fields, enhancing the focus on the plant''s growth through various times of the
+    day.'
+- start: 4.0
+  end: 5.0
+  description: The image displays three panels featuring a green plant growing in
+    a cracked landscape. The top panel shows the plant at night under a moonlit sky,
+    the middle panel depicts it during the day with a bright sun, and the bottom panel
+    transitions between the two settings.
+- start: 5.0
+  end: 6.0
+  description: The image displays three panels featuring a plant growing in a cracked
+    field. The left panel shows a nighttime scene with a moon, while the middle and
+    right panels depict the same plant under a sunny sky, with the right panel highlighted
+    by a prominent sun and clouds.
+- start: 6.0
+  end: 6.36
+  description: 'The image features three illustrations of a plant''s growth in different
+    settings: the top left shows a plant under a night sky with a moon, the middle
+    section depicts the plant in daylight with a sun, and the right highlights the
+    plant’s details in a sunlit environment. Each illustration depicts the same plant
+    on a textured field with varying lighting conditions.'
+visual_summary: The video illustrates the growth stages of a plant through three panels
+  showcasing the same plant under a night sky with a moon, in full daylight with a
+  bright sun, and in various textured field settings.

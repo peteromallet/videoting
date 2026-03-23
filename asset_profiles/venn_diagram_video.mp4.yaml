@@ -1,0 +1,43 @@
+id: venn_diagram_video
+file: inputs/venn_diagram_video.mp4
+type: video+audio
+duration_s: 5.0
+resolution: 1920x1080
+fps: 30.0
+silence_regions:
+- start: 0.0
+  end: 0.305
+- start: 0.495
+  end: 1.205
+- start: 1.395
+  end: 2.103
+- start: 2.894
+  end: 5.016
+transcript:
+  words:
+  - start: 0.0
+    end: 0.52
+    word: Beep
+  - start: 1.3
+    end: 1.46
+    word: Beep
+  - start: 2.18
+    end: 2.38
+    word: Beep
+  segments:
+  - start: 0.0
+    end: 2.38
+    text: Beep. Beep. Beep.
+visual_segments:
+- start: 0.0
+  end: 3.0
+  description: The frame displays a simple Venn diagram consisting of two overlapping
+    circles. Each circle contains labeled sections that illustrate the relationship
+    between two distinct sets, with a focus on the area of overlap. The background
+    appears to be solid, enhancing the visibility of the diagram.
+- start: 3.0
+  end: 5.0
+  description: The image displays a Venn diagram with two overlapping circles labeled
+    "Creative Control" (blue) and "Model Creativity" (red). In the intersection of
+    the circles, there is an upward arrow pointing to "Using Anchor Images," indicating
+    a concept related to balancing creativity and control in a modeling context.

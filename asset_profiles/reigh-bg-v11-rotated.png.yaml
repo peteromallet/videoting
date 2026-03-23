@@ -1,0 +1,16 @@
+id: reigh-bg-v11-rotated
+file: inputs/reigh-bg-v11-rotated.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a cosmic scene with a glowing, abstract shape resembling
+  a palette, featuring dark circular voids within it. The background is dimly lit,
+  emphasizing the ethereal glow of the shape against a subtly starry expanse.
+generation_prompt: rotate the golden particle dust palette shape about 45 degrees
+  clockwise so its bottom edge aligns with and blends smoothly into the warm golden
+  horizon glow at the bottom. The palette's curved edge should merge naturally with
+  the horizon line, becoming one continuous shape. The paint holes should be in the
+  upper portion of the frame. Keep the dark space background and subtle particle dust
+  style.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v10-huge.png

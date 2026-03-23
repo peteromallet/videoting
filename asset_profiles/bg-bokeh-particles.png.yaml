@@ -1,0 +1,11 @@
+id: bg-bokeh-particles
+file: inputs/bg-bokeh-particles.png
+type: image
+dimensions: 1376x768
+description: The image displays a dark background with various circular bokeh effects
+  in shades of blue and purple. The blurred circles create a soft, dreamy atmosphere
+  without any recognizable shapes or text.
+generation_prompt: Dark minimal background, scattered soft bokeh light particles on
+  deep black, hints of blue and purple, cinematic depth of field, elegant and modern,
+  16:9, no text
+generation_mode: generate

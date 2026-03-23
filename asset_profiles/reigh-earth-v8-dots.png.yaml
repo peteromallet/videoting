@@ -1,0 +1,14 @@
+id: reigh-earth-v8-dots
+file: inputs/reigh-earth-v8-dots.png
+type: image
+dimensions: 2752x1536
+description: The image shows an aerial view of a landmass featuring several large,
+  circular lakes illuminated by city lights at night. The word "REIGH" appears at
+  the top in a stylized font.
+generation_prompt: Make the lakes more circular and evenly spaced like the paint wells
+  on an artist's palette. They should be rounder, more uniform in size, and arranged
+  in the classic palette dot pattern - a curved line of 4 circles. Keep everything
+  else the same - the low drone angle, city lights, coastline, night sky, REIGH text.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth-v8-drone.png

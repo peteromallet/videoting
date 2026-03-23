@@ -1,0 +1,15 @@
+id: reigh-earth-drone-sealevel
+file: inputs/reigh-earth-drone-sealevel.png
+type: image
+dimensions: 2752x1536
+description: The image shows a panoramic nighttime view of several circular lakes
+  surrounded by illuminated pathways and buildings, set against a starry sky. The
+  word "REIGH" is prominently displayed in gold at the top left corner.
+generation_prompt: Dramatic low angle, almost at sea level, looking up across the
+  palette-shaped island. A large crater lake dominates the foreground with city lights
+  reflecting in its dark water. The palette coastline curves away on both sides. More
+  crater lakes visible in the middle distance with glowing cities between them. Moody
+  night sky with stars above. REIGH in gold serif top-left. Cinematic, atmospheric.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth-v7.png

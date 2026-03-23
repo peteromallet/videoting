@@ -1,0 +1,35 @@
+{
+  "name": "announcement-video-remotion",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "setup-public": "./setup-public.sh",
+    "postinstall": "./setup-public.sh",
+    "server": "node server.mjs",
+    "dev": "sh -c 'npm run setup-public && npm run server & server=$!; trap \"kill $server\" EXIT INT TERM; npx remotion studio'",
+    "studio": "npm run setup-public && npx remotion studio",
+    "render": "npm run render:timeline",
+    "render:timeline": "npm run setup-public && npx remotion render Timeline ../output/render.mp4",
+    "render:composition": "npm run setup-public && npx remotion render CompositionVideo --codec=vp8 --image-format=png --output=../inputs/output_composition.webm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@remotion/cli": "^4.0.434",
+    "@remotion/player": "^4.0.434",
+    "@remotion/studio": "^4.0.434",
+    "@remotion/tailwind": "^4.0.434",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "remotion": "^4.0.434"
+  },
+  "devDependencies": {
+    "@remotion/renderer": "^4.0.434",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
+  }
+}

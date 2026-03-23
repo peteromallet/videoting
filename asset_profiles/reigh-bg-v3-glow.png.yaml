@@ -1,0 +1,14 @@
+id: reigh-bg-v3-glow
+file: inputs/reigh-bg-v3-glow.png
+type: image
+dimensions: 2752x1536
+description: The image features a dark background with a luminous circular shape,
+  accompanied by several smaller glowing orbs arranged in a curved line. The overall
+  composition suggests a celestial or abstract theme, with subtle textures and gradients
+  enhancing the visual effect.
+generation_prompt: Dark moody background, deep blackish-green (#080F0B). Oversized
+  gold (#D4A73A) painter's palette shape filling 150% of the frame, cut off at edges.
+  Rendered as a soft gradient glow rather than solid - like light shining through
+  a palette-shaped stencil. Very dim, atmospheric. The circular paint holes glow slightly
+  brighter. No text. Cinematic.
+generation_mode: generate

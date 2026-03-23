@@ -1,0 +1,14 @@
+id: reigh-bg-v9-horizon
+file: inputs/reigh-bg-v9-horizon.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a dark space scene featuring a faintly illuminated
+  horizon and abstract shapes, which appear to be glowing dust or gas formations.
+  The background is predominantly black, enhancing the luminous elements.
+generation_prompt: edit this to add a soft warm golden atmospheric glow along the
+  bottom edge, like looking at a distant horizon from orbit. Keep everything else
+  the same - the dark background, the golden particle dust palette shape. Just add
+  that subtle horizon glow at the bottom.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v3-particles.png

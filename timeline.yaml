@@ -1,0 +1,90 @@
+output:
+  resolution: 1280x720
+  fps: 30
+  file: output/render.mp4
+  background: reigh-bg-v17-titled-dust
+  background_scale: 0.95
+asset_map:
+  bg-dark-abstract: inputs/bg-dark-abstract.png
+  demo-one: inputs/demo-one.mp4
+  demo-two: inputs/demo-two.mp4
+  example-video: inputs/example-video.mp4
+  example-image1: inputs/example-image1.jpg
+  example-image2: inputs/example-image2.jpg
+  input: inputs/audio.MP3
+  output-composition: inputs/output_composition.webm
+  venn-diagram: inputs/venn_diagram_video.webm
+  screenshot-2026-03-08-at-20-12-28: inputs/Screenshot 2026-03-08 at 20.12.28.png
+  reigh-bg-palette: inputs/reigh-bg-palette.png
+  reigh-bg-palette-glow: inputs/reigh-bg-palette-glow.png
+  reigh-bg-palette-subtle: inputs/reigh-bg-palette-subtle.png
+  reigh-bg-subtle-v2: inputs/reigh-bg-subtle-v2.png
+  reigh-bg-huge-palette: inputs/reigh-bg-huge-palette.png
+  reigh-bg-v3-whisper: inputs/reigh-bg-v3-whisper.png
+  reigh-bg-v3-glow: inputs/reigh-bg-v3-glow.png
+  reigh-bg-v3-particles: inputs/reigh-bg-v3-particles.png
+  reigh-bg-v4-orbital: inputs/reigh-bg-v4-orbital.png
+  reigh-bg-v5-ambient: inputs/reigh-bg-v5-ambient.png
+  reigh-bg-v5-orbital-subtle: inputs/reigh-bg-v5-orbital-subtle.png
+  reigh-bg-v6-nebula: inputs/reigh-bg-v6-nebula.png
+  reigh-bg-v7-space: inputs/reigh-bg-v7-space.png
+  reigh-bg-v8-hint: inputs/reigh-bg-v8-hint.png
+  reigh-bg-v9-horizon: inputs/reigh-bg-v9-horizon.png
+  reigh-bg-v10-huge: inputs/reigh-bg-v10-huge.png
+  reigh-bg-v11-rotated: inputs/reigh-bg-v11-rotated.png
+  reigh-bg-v12-final: inputs/reigh-bg-v12-final.png
+  reigh-bg-v13-planet: inputs/reigh-bg-v13-planet.png
+  reigh-bg-v14-diagonal: inputs/reigh-bg-v14-diagonal.png
+  reigh-bg-v15-diag-palette: inputs/reigh-bg-v15-diag-palette.png
+  reigh-bg-v16-rotated: inputs/reigh-bg-v16-rotated.png
+  reigh-bg-v17-combined: inputs/reigh-bg-v17-combined.png
+  reigh-bg-v18-cities: inputs/reigh-bg-v18-cities.png
+  reigh-bg-v19-palette-cities: inputs/reigh-bg-v19-palette-cities.png
+  reigh-bg-v20-dark: inputs/reigh-bg-v20-dark.png
+  reigh-bg-v17-titled: inputs/reigh-bg-v17-titled.png
+  reigh-bg-v17-titled-thin: inputs/reigh-bg-v17-titled-thin.png
+  reigh-bg-v17-titled-italic: inputs/reigh-bg-v17-titled-italic.png
+  reigh-bg-v17-titled-dust: inputs/reigh-bg-v17-titled-dust.png
+  reigh-alien: inputs/reigh-alien.png
+  reigh-forest: inputs/reigh-forest.png
+  reigh-earth: inputs/reigh-earth.png
+  reigh-mars: inputs/reigh-mars.png
+  reigh-pluto: inputs/reigh-pluto.png
+  reigh-earth-v2: inputs/reigh-earth-v2.png
+  reigh-earth-v3: inputs/reigh-earth-v3.png
+  reigh-earth-v4: inputs/reigh-earth-v4.png
+  reigh-earth-v5: inputs/reigh-earth-v5.png
+  reigh-earth-v6: inputs/reigh-earth-v6.png
+  reigh-earth-v7: inputs/reigh-earth-v7.png
+  reigh-earth-v8-drone: inputs/reigh-earth-v8-drone.png
+  reigh-earth-drone-low: inputs/reigh-earth-drone-low.png
+  reigh-earth-drone-sealevel: inputs/reigh-earth-drone-sealevel.png
+  reigh-earth-drone-mid: inputs/reigh-earth-drone-mid.png
+  reigh-earth-v8-dots: inputs/reigh-earth-v8-dots.png
+clips:
+  - at: 0
+    track: video
+    asset: output-composition
+    from: 0
+    to: 6.91
+  - at: 6.91
+    track: video
+    asset: venn-diagram
+    from: 0
+    to: 4.73
+    speed: 1.06
+  - at: 11.37
+    track: video
+    asset: demo-one
+    from: 0
+    to: 4.97
+  - at: 19.97
+    track: video
+    asset: demo-two
+    from: 5
+    to: 10.16
+  - at: 4.84
+    track: audio
+    asset: input
+    from: 0
+    to: 113.77

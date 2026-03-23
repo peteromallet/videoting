@@ -1,0 +1,17 @@
+id: reigh-bg-v12-final
+file: inputs/reigh-bg-v12-final.png
+type: image
+dimensions: 2752x1536
+description: The image shows a large, abstract, golden structure resembling a porous
+  asteroid or cloud formation in space, featuring multiple circular openings. The
+  background consists of a starry night sky with distant galaxies and a planet visible
+  at the bottom, illuminated by a gentle gradient of light.
+generation_prompt: Deep space, nearly black background. An enormous painter's palette
+  shape made of faint golden particle dust, rotated clockwise about 40 degrees. The
+  palette is 200% of the frame size so it's cropped at all edges - only a portion
+  is visible. The bottom curved edge of the palette seamlessly merges into a warm
+  golden atmospheric horizon glow along the bottom of the frame, so the palette and
+  horizon become one continuous form. Paint dot holes are large dark voids scattered
+  across the upper and middle portions. The particle dust is subtle, wispy, dim gold
+  against the darkness. Dark green-black tones in shadows. Cinematic. No text.
+generation_mode: generate

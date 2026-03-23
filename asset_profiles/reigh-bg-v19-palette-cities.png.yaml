@@ -1,0 +1,18 @@
+id: reigh-bg-v19-palette-cities
+file: inputs/reigh-bg-v19-palette-cities.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a planet with a dark surface illuminated by glowing
+  circular patterns resembling rings or craters. These glowing elements are surrounded
+  by a sparkling effect, set against the backdrop of space with stars visible.
+generation_prompt: Keep the exact same palette shape with the circular paint well
+  holes, but change the surface texture. Instead of golden wisps, the surface should
+  be mostly dark with tiny clusters of warm golden city lights concentrated around
+  the rims of the circular holes and along the outer curved edge. The dark areas between
+  are like unlit land. A warm golden sunrise glow on the horizon edge. Deep black
+  space with stars in the top-left. It should still clearly be a painter's palette
+  shape, but rendered as if it were a dark planet with city lights seen from orbit
+  at night.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-bg-v17-combined.png

@@ -1,0 +1,16 @@
+id: reigh-earth-drone-low
+file: inputs/reigh-earth-drone-low.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a stylized aerial view of an island shaped like a large
+  emblem, featuring multiple circular bodies of water and illuminated pathways. The
+  background shows a starry sky with a distant celestial body, and the word "REIGH"
+  is prominently displayed at the top.
+generation_prompt: Low drone angle, about 30 degrees above the surface, looking across
+  the palette-shaped island from the thumb hole end. The classic palette silhouette
+  with thumb hole and 4 circular crater lakes must be clearly visible. City lights
+  glow around lake shores and roads. Dark ocean beyond the coastline. Night sky with
+  stars and atmospheric haze on horizon. REIGH in gold serif top-left. Cinematic.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth-v7.png

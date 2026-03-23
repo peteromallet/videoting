@@ -1,0 +1,11 @@
+id: bg-dark-abstract
+file: inputs/bg-dark-abstract.png
+type: image
+dimensions: 1376x768
+description: The image features a dark background with a geometric pattern of interlocking
+  triangles, creating a grid-like appearance. The color gradient transitions from
+  deep navy at the top to a subtle purple hue at the bottom.
+generation_prompt: Dark abstract gradient background, deep navy blue to dark purple,
+  subtle geometric grid pattern, minimal, cinematic, 16:9, clean modern tech aesthetic,
+  no text
+generation_mode: generate

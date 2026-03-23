@@ -1,0 +1,18 @@
+id: reigh-earth-v7
+file: inputs/reigh-earth-v7.png
+type: image
+dimensions: 2752x1536
+description: The image depicts an aerial view of an island shaped like a stylized
+  skull, featuring several large circular lakes and intricate networks of lights,
+  possibly representing roads or pathways. The word "REIGH" is prominently displayed
+  in the top left corner.
+generation_prompt: Make the overall shape of the landmass clearly look like a painter's
+  palette - the coastline should form the classic palette silhouette with a thumb
+  hole indentation and curved edges. The dark circular areas should be lakes on the
+  island rather than ocean holes in a sphere. Add city lights around the lake shores
+  and along roads connecting them. It should look like a fictional palette-shaped
+  island seen from orbit at night, not a planet. Keep the REIGH text, the diagonal
+  angle, and the atmospheric glow.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth.png

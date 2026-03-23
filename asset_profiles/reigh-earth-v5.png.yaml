@@ -1,0 +1,17 @@
+id: reigh-earth-v5
+file: inputs/reigh-earth-v5.png
+type: image
+dimensions: 2752x1536
+description: The image shows a satellite view of Earth at night, highlighting illuminated
+  areas in Europe and parts of Asia. The word "REIGH" is displayed in a stylized font
+  at the top left corner.
+generation_prompt: Make the coastline edges much more natural and organic - jagged,
+  irregular, with peninsulas, inlets, and islands breaking up the outline. It should
+  look like a real continent that just happens to vaguely resemble a palette shape,
+  not a cookie-cutter palette. Add more cloud cover partially obscuring the edges.
+  The paint well areas should have scattered islands in them rather than being perfectly
+  empty circles. Keep the city lights, REIGH text, diagonal angle, and atmospheric
+  glow.
+generation_mode: edit
+generation_source_images:
+- inputs/reigh-earth-v4.png

@@ -1,0 +1,17 @@
+id: reigh-bg-v8-hint
+file: inputs/reigh-bg-v8-hint.png
+type: image
+dimensions: 2752x1536
+description: The image depicts a dark cosmic scene with a view of space filled with
+  stars, where faint golden trails create an abstract design reminiscent of a nebula
+  or cosmic structure. In the foreground, a planet's surface is visible, partially
+  illuminated against the dark backdrop of the universe.
+generation_prompt: Deep space darkness, dark green-black. Faint golden particle dust
+  streams curving gently across the frame. A soft warm golden atmospheric glow along
+  the bottom edge suggesting a horizon seen from orbit. The particle streams loosely
+  follow the contour of a painter's palette - a curved edge sweeping across the frame
+  with a few circular voids where paint dots would be, but it's very abstract and
+  broken up, like a half-remembered shape in a nebula. You'd only notice the palette
+  shape if you were looking for it. 80% near-black space, gold elements are dim and
+  wispy. Cinematic, dark green-black shadows. No text.
+generation_mode: generate
