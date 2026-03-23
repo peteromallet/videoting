@@ -1,19 +1,23 @@
 import type { TimelineAction, TimelineEffect as EditorTimelineEffect, TimelineRow } from "@xzdarcy/timeline-engine";
 import { getClipSourceDuration, getConfigSignature } from "@shared/config-utils";
+import { migrateToFlatTracks } from "@shared/migrate";
 import { TIMELINE_CLIP_FIELDS, validateSerializedConfig } from "@shared/serialize";
 import type {
   AssetRegistry,
+  ClipType,
   ResolvedAssetRegistryEntry,
   ResolvedTimelineConfig,
   TimelineClip,
   TimelineConfig,
   TimelineOutput,
-  TimelineTrack,
+  TrackDefinition,
+  TrackKind,
 } from "@shared/types";
 
 export interface ClipMeta {
-  asset: string;
-  track: TimelineTrack;
+  asset?: string;
+  track: string;
+  clipType?: ClipType;
   from?: number;
   to?: number;
   speed?: number;
@@ -24,6 +28,11 @@ export interface ClipMeta {
   width?: number;
   height?: number;
   opacity?: number;
+  text?: TimelineClip["text"];
+  entrance?: TimelineClip["entrance"];
+  exit?: TimelineClip["exit"];
+  continuous?: TimelineClip["continuous"];
+  transition?: TimelineClip["transition"];
   effects?: TimelineClip["effects"];
 }
 
@@ -33,7 +42,7 @@ export interface TranscriptSegment {
   text: string;
 }
 
-export type ClipOrderMap = Record<TimelineTrack, string[]>;
+export type ClipOrderMap = Record<string, string[]>;
 
 export interface TimelineData {
   config: TimelineConfig;
@@ -44,11 +53,10 @@ export interface TimelineData {
   effects: Record<string, EditorTimelineEffect>;
   assetMap: Record<string, string>;
   output: TimelineOutput;
+  tracks: TrackDefinition[];
   clipOrder: ClipOrderMap;
   signature: string;
 }
-
-const TRACKS: TimelineTrack[] = ["video", "audio", "overlay"];
 
 const ASSET_COLORS: Record<string, string> = {
   "output-composition": "#e06c75",
@@ -77,6 +85,7 @@ const getDefaultClipMeta = (clip: TimelineClip): ClipMeta => {
   return {
     asset: clip.asset,
     track: clip.track,
+    clipType: clip.clipType,
     from: clip.from,
     to: clip.to,
     speed: clip.speed,
@@ -87,6 +96,11 @@ const getDefaultClipMeta = (clip: TimelineClip): ClipMeta => {
     width: clip.width,
     height: clip.height,
     opacity: clip.opacity,
+    text: clip.text,
+    entrance: clip.entrance,
+    exit: clip.exit,
+    continuous: clip.continuous,
+    transition: clip.transition,
     effects: clip.effects,
   };
 };
@@ -119,6 +133,7 @@ export const resolveTimelineConfig = (
   config: TimelineConfig,
   registry: AssetRegistry,
 ): ResolvedTimelineConfig => {
+  const migratedConfig = migrateToFlatTracks(config);
   const resolvedRegistry: Record<string, ResolvedAssetRegistryEntry> = {};
   for (const [assetId, entry] of Object.entries(registry.assets ?? {})) {
     resolvedRegistry[assetId] = {
@@ -127,7 +142,14 @@ export const resolveTimelineConfig = (
     };
   }
 
-  const clips = config.clips.map((clip) => {
+  const clips = migratedConfig.clips.map((clip) => {
+    if (!clip.asset) {
+      return {
+        ...clip,
+        assetEntry: undefined,
+      };
+    }
+
     const assetEntry = resolvedRegistry[clip.asset];
     if (!assetEntry) {
       throw new Error(`Clip '${clip.id}' references missing asset '${clip.asset}'`);
@@ -140,7 +162,8 @@ export const resolveTimelineConfig = (
   });
 
   return {
-    output: { ...config.output },
+    output: { ...migratedConfig.output },
+    tracks: migratedConfig.tracks ?? [],
     clips,
     registry: resolvedRegistry,
   };
@@ -149,19 +172,20 @@ export const resolveTimelineConfig = (
 export const configToRows = (
   config: TimelineConfig,
 ): Pick<TimelineData, "rows" | "meta" | "effects" | "clipOrder"> => {
-  const clipOrder: ClipOrderMap = {
-    video: [],
-    audio: [],
-    overlay: [],
-  };
+  const migratedConfig = migrateToFlatTracks(config);
+  const clipOrder: ClipOrderMap = Object.fromEntries(
+    (migratedConfig.tracks ?? []).map((track) => [track.id, []]),
+  );
   const effects: Record<string, EditorTimelineEffect> = {};
   const meta: Record<string, ClipMeta> = {};
-  const videoActions: TimelineAction[] = [];
-  const overlayActions: TimelineAction[] = [];
-  const audioRowsByAsset = new Map<string, TimelineAction[]>();
-  const audioAssetOrder: string[] = [];
+  const rowsByTrack = new Map<string, TimelineAction[]>();
 
-  for (const clip of config.clips) {
+  for (const track of migratedConfig.tracks ?? []) {
+    rowsByTrack.set(track.id, []);
+  }
+
+  for (const clip of migratedConfig.clips) {
+    clipOrder[clip.track] ??= [];
     clipOrder[clip.track].push(clip.id);
     effects[effectIdForClip(clip.id)] = { id: effectIdForClip(clip.id) };
     meta[clip.id] = getDefaultClipMeta(clip);
@@ -173,36 +197,14 @@ export const configToRows = (
       effectId: effectIdForClip(clip.id),
     };
 
-    if (clip.track === "video") {
-      videoActions.push(action);
-      continue;
-    }
-
-    if (clip.track === "overlay") {
-      overlayActions.push(action);
-      continue;
-    }
-
-    if (!audioRowsByAsset.has(clip.asset)) {
-      audioRowsByAsset.set(clip.asset, []);
-      audioAssetOrder.push(clip.asset);
-    }
-    audioRowsByAsset.get(clip.asset)?.push(action);
+    rowsByTrack.get(clip.track)?.push(action);
   }
 
-  const audioRows: TimelineRow[] = audioAssetOrder.map((assetId, index) => {
-    return {
-      id: `row-audio-${index}`,
-      actions: audioRowsByAsset.get(assetId) ?? [],
-    };
-  });
-
   return {
-    rows: [
-      { id: "row-video", actions: videoActions },
-      ...audioRows,
-      { id: "row-overlay", actions: overlayActions },
-    ],
+    rows: (migratedConfig.tracks ?? []).map((track) => ({
+      id: track.id,
+      actions: rowsByTrack.get(track.id) ?? [],
+    })),
     meta,
     effects,
     clipOrder,
@@ -214,13 +216,10 @@ export const rowsToConfig = (
   meta: Record<string, ClipMeta>,
   output: TimelineOutput,
   clipOrder: ClipOrderMap,
+  tracks: TrackDefinition[],
 ): TimelineConfig => {
   const actionMap = new Map<string, TimelineAction>();
-  const trackActionIds: Record<TimelineTrack, string[]> = {
-    video: [],
-    audio: [],
-    overlay: [],
-  };
+  const trackActionIds: Record<string, string[]> = Object.fromEntries(tracks.map((track) => [track.id, []]));
 
   for (const row of rows) {
     for (const action of row.actions) {
@@ -230,19 +229,18 @@ export const rowsToConfig = (
       }
 
       actionMap.set(action.id, action);
-      trackActionIds[clipMeta.track].push(action.id);
+      trackActionIds[row.id] ??= [];
+      trackActionIds[row.id].push(action.id);
     }
   }
 
   const clips: TimelineClip[] = [];
-  for (const track of TRACKS) {
-    const baseOrder = clipOrder[track].filter((clipId) => {
-      return actionMap.has(clipId) && meta[clipId]?.track === track;
+  for (const track of tracks) {
+    const baseOrder = (clipOrder[track.id] ?? []).filter((clipId) => {
+      return actionMap.has(clipId);
     });
-    const appendedIds = trackActionIds[track].filter((clipId) => !baseOrder.includes(clipId));
+    const appendedIds = (trackActionIds[track.id] ?? []).filter((clipId) => !baseOrder.includes(clipId));
 
-    // Preserve the original clip array order per track. Overlay stacking depends
-    // on array order, so saving must not sort by start time.
     for (const clipId of [...baseOrder, ...appendedIds]) {
       const action = actionMap.get(clipId);
       const clipMeta = meta[clipId];
@@ -253,7 +251,8 @@ export const rowsToConfig = (
       const nextClip: Partial<TimelineClip> = {
         id: clipId,
         at: round(action.start),
-        track: clipMeta.track,
+        track: track.id,
+        clipType: clipMeta.clipType,
         asset: clipMeta.asset,
         from: clipMeta.from,
         to: clipMeta.to,
@@ -265,6 +264,11 @@ export const rowsToConfig = (
         width: clipMeta.width,
         height: clipMeta.height,
         opacity: clipMeta.opacity,
+        text: clipMeta.text,
+        entrance: clipMeta.entrance,
+        exit: clipMeta.exit,
+        continuous: clipMeta.continuous,
+        transition: clipMeta.transition,
         effects: clipMeta.effects,
       };
 
@@ -284,8 +288,10 @@ export const rowsToConfig = (
         id: nextClip.id,
         at: nextClip.at,
         track: nextClip.track,
-        asset: nextClip.asset,
       };
+      if (nextClip.asset !== undefined) {
+        serializedClip.asset = nextClip.asset;
+      }
 
       for (const field of TIMELINE_CLIP_FIELDS) {
         if (field in serializedClip) {
@@ -304,6 +310,7 @@ export const rowsToConfig = (
 
   const config: TimelineConfig = {
     output: { ...output },
+    tracks: tracks.map((track) => ({ ...track })),
     clips,
   };
   validateSerializedConfig(config);
@@ -314,18 +321,20 @@ export const buildTimelineData = (
   config: TimelineConfig,
   registry: AssetRegistry,
 ): TimelineData => {
-  const resolvedConfig = resolveTimelineConfig(config, registry);
-  const rowData = configToRows(config);
+  const migratedConfig = migrateToFlatTracks(config);
+  const resolvedConfig = resolveTimelineConfig(migratedConfig, registry);
+  const rowData = configToRows(migratedConfig);
 
   return {
-    config,
+    config: migratedConfig,
     registry,
     resolvedConfig,
     rows: rowData.rows,
     meta: rowData.meta,
     effects: rowData.effects,
     assetMap: buildAssetMap(registry),
-    output: { ...config.output },
+    output: { ...migratedConfig.output },
+    tracks: migratedConfig.tracks ?? [],
     clipOrder: rowData.clipOrder,
     signature: getConfigSignature(resolvedConfig),
   };
@@ -367,17 +376,17 @@ export function getSourceTime(clip: { from: number; start: number; speed: number
   return clip.from + (time - clip.start) * clip.speed;
 }
 
-export function inferTrackType(filePath: string): TimelineTrack {
+export function inferTrackType(filePath: string): TrackKind {
   const ext = filePath.slice(filePath.lastIndexOf(".")).toLowerCase();
   if ([".mp4", ".webm", ".mov"].includes(ext)) {
-    return "video";
+    return "visual";
   }
 
   if ([".mp3", ".wav", ".aac", ".m4a"].includes(ext)) {
     return "audio";
   }
 
-  return "overlay";
+  return "visual";
 }
 
 export function getNextClipId(meta: Record<string, ClipMeta>): string {

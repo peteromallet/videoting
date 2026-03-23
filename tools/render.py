@@ -21,6 +21,10 @@ from common import (
     ASSET_REGISTRY,
     ROOT,
     TIMELINE_JSON,
+    clip_timeline_duration,
+    get_audio_tracks,
+    get_track_by_id,
+    get_visual_tracks,
     load_asset_registry,
     load_timeline,
     resolve_asset_path,
@@ -50,21 +54,6 @@ def clip_src_duration(clip: dict[str, Any]) -> float:
     return float(clip.get("to", 0.0)) - float(clip.get("from", 0.0))
 
 
-def clip_timeline_duration(clip: dict[str, Any]) -> float:
-    return clip_src_duration(clip) / float(clip.get("speed", 1.0))
-
-
-def extract_effect_value(clip: dict[str, Any], effect_name: str) -> float | None:
-    effects = clip.get("effects", [])
-    if isinstance(effects, dict):
-        value = effects.get(effect_name)
-        return None if value is None else float(value)
-    for effect in effects:
-        if effect_name in effect:
-            return float(effect[effect_name])
-    return None
-
-
 def build_atempo_chain(speed: float) -> str:
     if speed <= 0:
         raise ValueError("Audio speed must be > 0")
@@ -91,20 +80,13 @@ def build_ffmpeg_command(
     out_cfg = timeline.get("output", {})
     width, height = parse_resolution(out_cfg.get("resolution", "1280x720"))
     fps = out_cfg.get("fps", 30)
-
-    all_clips = timeline.get("clips", [])
-    video_clips = sorted(
-        [clip for clip in all_clips if clip.get("track") == "video"],
-        key=lambda clip: float(clip["at"]),
+    tracks = timeline.get("tracks", [])
+    total_duration = max(
+        (float(clip.get("at", 0.0)) + clip_timeline_duration(clip) for clip in timeline.get("clips", [])),
+        default=1.0,
     )
-    audio_clips = sorted(
-        [clip for clip in all_clips if clip.get("track") == "audio"],
-        key=lambda clip: float(clip["at"]),
-    )
-    overlay_clips = sorted(
-        [clip for clip in all_clips if clip.get("track") == "overlay"],
-        key=lambda clip: float(clip["at"]),
-    )
+    visual_tracks = get_visual_tracks(timeline)
+    audio_tracks = get_audio_tracks(timeline)
 
     input_files: list[Path] = []
     file_to_idx: dict[str, int] = {}
@@ -116,204 +98,179 @@ def build_ffmpeg_command(
             input_files.append(path)
         return file_to_idx[key]
 
-    for clip in video_clips + audio_clips + overlay_clips:
-        get_input_idx(resolve_asset(clip["asset"], registry))
-
-    background_asset = out_cfg.get("background")
-    if background_asset:
-        get_input_idx(resolve_asset(background_asset, registry))
+    for clip in timeline.get("clips", []):
+        asset_id = clip.get("asset")
+        if asset_id:
+            get_input_idx(resolve_asset(asset_id, registry))
 
     filters: list[str] = []
-    has_bg = bool(background_asset)
-    gap_color = "black@0.0" if has_bg else "black"
-    pad_color = "black@0.0" if has_bg else "black"
-    rgba_suffix = ",format=rgba" if has_bg else ""
+    filters.append(f"color=c=black:s={width}x{height}:r={fps}:d={total_duration}[vbase0]")
+    current_video_label = "vbase0"
+    visual_index = 0
 
-    v_seg_labels: list[str] = []
-    cursor_v = 0.0
+    def extract_fade_in(clip: dict[str, Any]) -> float | None:
+        entrance = clip.get("entrance")
+        if isinstance(entrance, dict) and entrance.get("type") == "fade":
+            return float(entrance.get("duration", 0))
+        return None
 
-    for index, clip in enumerate(video_clips):
-        path = resolve_asset(clip["asset"], registry)
-        input_idx = get_input_idx(path)
-        at = float(clip["at"])
-        src_start = float(clip.get("from", 0.0))
-        src_dur = clip_src_duration(clip)
-        speed = float(clip.get("speed", 1.0))
-        tl_dur = clip_timeline_duration(clip)
-        is_image = path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}
+    def extract_fade_out(clip: dict[str, Any]) -> float | None:
+        exit_effect = clip.get("exit")
+        if isinstance(exit_effect, dict) and exit_effect.get("type") == "fade-out":
+            return float(exit_effect.get("duration", 0))
+        return None
 
-        if at > cursor_v + 0.01:
-            gap = round(at - cursor_v, 3)
-            pad_label = f"vblack{index}"
-            filters.append(
-                f"color=c={gap_color}:s={width}x{height}:r={fps}:d={gap}{rgba_suffix}[{pad_label}]"
-            )
-            v_seg_labels.append(f"[{pad_label}]")
-            cursor_v = at
+    def warn_for_unsupported_effects(clip: dict[str, Any]) -> None:
+        entrance = clip.get("entrance", {})
+        exit_effect = clip.get("exit", {})
+        continuous = clip.get("continuous", {})
+        if entrance and entrance.get("type") not in (None, "fade"):
+            print(f"Warning: ffmpeg engine only supports fade entrance; ignoring {entrance.get('type')} on {clip.get('id')}", file=sys.stderr)
+        if exit_effect and exit_effect.get("type") not in (None, "fade-out"):
+            print(f"Warning: ffmpeg engine only supports fade exit; ignoring {exit_effect.get('type')} on {clip.get('id')}", file=sys.stderr)
+        if continuous:
+            print(f"Warning: ffmpeg engine does not support continuous effect {continuous.get('type')} on {clip.get('id')}", file=sys.stderr)
+        if clip.get("transition"):
+            print(f"Warning: ffmpeg engine ignores transition {clip['transition'].get('type')} on {clip.get('id')}", file=sys.stderr)
 
-        label = f"vc{index}"
-        fade_in = extract_effect_value(clip, "fade_in")
-        fade_out = extract_effect_value(clip, "fade_out")
-        pts = f"(PTS-STARTPTS)/{speed}" if speed != 1.0 else "PTS-STARTPTS"
+    for track in visual_tracks:
+        track_id = track["id"]
+        track_clips = sorted(
+            [clip for clip in timeline.get("clips", []) if clip.get("track") == track_id],
+            key=lambda clip: float(clip.get("at", 0.0)),
+        )
 
-        if is_image:
-            filter_expr = (
-                f"[{input_idx}:v]"
-                f"scale={width}:{height}:force_original_aspect_ratio=decrease,"
-                f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color={pad_color},"
-                f"setsar=1,"
-                f"trim=duration={src_dur},"
-                f"setpts={pts}"
-                f"{rgba_suffix}"
-            )
-        else:
-            filter_expr = (
-                f"[{input_idx}:v]"
-                f"trim=start={src_start}:end={src_start + src_dur},"
-                f"setpts={pts},"
-                f"scale={width}:{height}:force_original_aspect_ratio=decrease,"
-                f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color={pad_color},"
-                f"setsar=1,"
-                f"fps={fps}"
-                f"{rgba_suffix}"
-            )
+        for clip in track_clips:
+            if clip.get("clipType") == "text":
+                print(f"Warning: ffmpeg engine skips text clip {clip.get('id')}; use Remotion for text rendering.", file=sys.stderr)
+                continue
+            if not clip.get("asset"):
+                continue
 
-        if fade_in is not None:
-            filter_expr += f",fade=t=in:st=0:d={fade_in}"
-        if fade_out is not None:
-            filter_expr += f",fade=t=out:st={tl_dur - fade_out}:d={fade_out}"
+            warn_for_unsupported_effects(clip)
 
-        filter_expr += f"[{label}]"
-        filters.append(filter_expr)
-        v_seg_labels.append(f"[{label}]")
-        cursor_v = round(at + tl_dur, 3)
-
-    final_video_label: str | None
-    if not v_seg_labels:
-        final_video_label = None
-    elif len(v_seg_labels) == 1:
-        filters.append(f"{v_seg_labels[0]}null[vfinal]")
-        final_video_label = "vfinal"
-    else:
-        filters.append(f"{''.join(v_seg_labels)}concat=n={len(v_seg_labels)}:v=1:a=0[vfinal]")
-        final_video_label = "vfinal"
-
-    if final_video_label and overlay_clips:
-        current_label = final_video_label
-        for index, clip in enumerate(overlay_clips):
-            path = resolve_asset(clip["asset"], registry)
-            input_idx = get_input_idx(path)
-            at = float(clip["at"])
-            ov_dur = clip_timeline_duration(clip)
-            ov_w = int(clip.get("width", 320))
-            ov_h = int(clip.get("height", 240))
-            ov_x = int(clip.get("x", 0))
-            ov_y = int(clip.get("y", 0))
-            opacity = float(clip.get("opacity", 1.0))
-
-            ov_label = f"ovs{index}"
-            scale_filter = f"[{input_idx}:v]scale={ov_w}:{ov_h}"
-            if opacity < 1.0:
-                scale_filter += f",format=rgba,colorchannelmixer=aa={opacity}"
-            scale_filter += f"[{ov_label}]"
-            filters.append(scale_filter)
-
-            out_label = f"vov{index}"
-            end_t = round(at + ov_dur, 3)
-            filters.append(
-                f"[{current_label}][{ov_label}]"
-                f"overlay=x={ov_x}:y={ov_y}:enable='between(t,{at},{end_t})'[{out_label}]"
-            )
-            current_label = out_label
-
-        final_video_label = current_label
-
-    audio_layers: dict[str, list[dict[str, Any]]] = {}
-    for clip in audio_clips:
-        audio_layers.setdefault(clip["asset"], []).append(clip)
-
-    layer_labels: list[str] = []
-
-    for layer_idx, layer_clips in enumerate(audio_layers.values()):
-        seg_labels: list[str] = []
-        cursor_a = 0.0
-
-        for index, clip in enumerate(layer_clips):
-            path = resolve_asset(clip["asset"], registry)
-            input_idx = get_input_idx(path)
-            at = float(clip["at"])
+            asset_path = resolve_asset(clip["asset"], registry)
+            input_idx = get_input_idx(asset_path)
+            at = float(clip.get("at", 0.0))
             src_start = float(clip.get("from", 0.0))
             src_dur = clip_src_duration(clip)
             tl_dur = clip_timeline_duration(clip)
             speed = float(clip.get("speed", 1.0))
-            is_image = path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}
+            fit = str(track.get("fit", "contain"))
+            track_scale = float(track.get("scale", 1.0) or 1.0)
+            target_opacity = float(track.get("opacity", 1.0) or 1.0) * float(clip.get("opacity", 1.0) or 1.0)
+            is_image = asset_path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}
+
+            if track.get("blendMode") not in (None, "normal"):
+                print(f"Warning: ffmpeg engine ignores blend mode {track.get('blendMode')} on {track_id}", file=sys.stderr)
+
+            label = f"vclip{visual_index}"
+            visual_index += 1
+            filters_chain: list[str] = []
+
+            if is_image:
+                filters_chain.append(f"[{input_idx}:v]")
+                if fit == "manual":
+                    filters_chain.append(f"scale={int(clip.get('width', 320))}:{int(clip.get('height', 240))}")
+                elif fit == "cover":
+                    filters_chain.append(f"scale={width}:{height}:force_original_aspect_ratio=increase")
+                    filters_chain.append(f"crop={width}:{height}")
+                else:
+                    scaled_width = int(width * track_scale) if track_id != "V1" else width
+                    scaled_height = int(height * track_scale) if track_id != "V1" else height
+                    filters_chain.append(f"scale={scaled_width}:{scaled_height}:force_original_aspect_ratio=decrease")
+                    filters_chain.append(f"pad={scaled_width}:{scaled_height}:(ow-iw)/2:(oh-ih)/2:color=black@0.0")
+                    if track_id != "V1":
+                        filters_chain.append(f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black@0.0")
+                filters_chain.append("setsar=1")
+                filters_chain.append(f"trim=duration={src_dur}")
+                filters_chain.append("setpts=PTS-STARTPTS")
+            else:
+                filters_chain.append(f"[{input_idx}:v]")
+                filters_chain.append(f"trim=start={src_start}:end={src_start + src_dur}")
+                pts = f"(PTS-STARTPTS)/{speed}" if speed != 1.0 else "PTS-STARTPTS"
+                filters_chain.append(f"setpts={pts}")
+                if fit == "manual":
+                    filters_chain.append(f"scale={int(clip.get('width', 320))}:{int(clip.get('height', 240))}")
+                elif fit == "cover":
+                    filters_chain.append(f"scale={width}:{height}:force_original_aspect_ratio=increase")
+                    filters_chain.append(f"crop={width}:{height}")
+                else:
+                    scaled_width = int(width * track_scale) if track_id != "V1" else width
+                    scaled_height = int(height * track_scale) if track_id != "V1" else height
+                    filters_chain.append(f"scale={scaled_width}:{scaled_height}:force_original_aspect_ratio=decrease")
+                    filters_chain.append(f"pad={scaled_width}:{scaled_height}:(ow-iw)/2:(oh-ih)/2:color=black@0.0")
+                    if track_id != "V1":
+                        filters_chain.append(f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2:color=black@0.0")
+                filters_chain.append("setsar=1")
+                filters_chain.append(f"fps={fps}")
+
+            filters_chain.append("format=rgba")
+            if target_opacity < 1.0:
+                filters_chain.append(f"colorchannelmixer=aa={target_opacity}")
+
+            fade_in = extract_fade_in(clip)
+            fade_out = extract_fade_out(clip)
+            if fade_in:
+                filters_chain.append(f"fade=t=in:st=0:d={fade_in}:alpha=1")
+            if fade_out:
+                filters_chain.append(f"fade=t=out:st={max(0, tl_dur - fade_out)}:d={fade_out}:alpha=1")
+
+            filters_chain.append(f"setpts=PTS+{at}/TB")
+            filters.append(",".join(filters_chain) + f"[{label}]")
+
+            out_label = f"vbase{visual_index}"
+            overlay_x = int(clip.get("x", 0)) if fit == "manual" else 0
+            overlay_y = int(clip.get("y", 0)) if fit == "manual" else 0
+            filters.append(f"[{current_video_label}][{label}]overlay=x={overlay_x}:y={overlay_y}:eof_action=pass[{out_label}]")
+            current_video_label = out_label
+
+    final_video_label: str | None = current_video_label
+
+    audio_labels: list[str] = []
+    audio_index = 0
+    for track in audio_tracks:
+        track_clips = sorted(
+            [clip for clip in timeline.get("clips", []) if clip.get("track") == track["id"]],
+            key=lambda clip: float(clip.get("at", 0.0)),
+        )
+        for clip in track_clips:
+            if clip.get("clipType") == "text":
+                continue
+            asset_id = clip.get("asset")
+            if not asset_id:
+                continue
+            asset_path = resolve_asset(asset_id, registry)
+            if asset_path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}:
+                continue
+
+            input_idx = get_input_idx(asset_path)
+            src_start = float(clip.get("from", 0.0))
+            src_dur = clip_src_duration(clip)
+            speed = float(clip.get("speed", 1.0))
+            at_ms = int(float(clip.get("at", 0.0)) * 1000)
             volume = float(clip.get("volume", 1.0))
 
-            if at > cursor_a + 0.01:
-                gap = round(at - cursor_a, 3)
-                sil_label = f"asil{layer_idx}_{index}"
-                filters.append(
-                    f"aevalsrc=0:channel_layout=stereo:sample_rate=44100:duration={gap}[{sil_label}]"
-                )
-                seg_labels.append(f"[{sil_label}]")
-                cursor_a = at
+            label = f"audio{audio_index}"
+            audio_index += 1
+            filter_expr = (
+                f"[{input_idx}:a]"
+                f"atrim=start={src_start}:end={src_start + src_dur},"
+                "asetpts=PTS-STARTPTS"
+            )
+            atempo_chain = build_atempo_chain(speed)
+            if atempo_chain:
+                filter_expr += f",{atempo_chain}"
+            if volume != 1.0:
+                filter_expr += f",volume={volume}"
+            filter_expr += f",adelay={at_ms}|{at_ms}[{label}]"
+            filters.append(filter_expr)
+            audio_labels.append(f"[{label}]")
 
-            label = f"ac{layer_idx}_{index}"
-            if is_image:
-                filters.append(
-                    f"aevalsrc=0:channel_layout=stereo:sample_rate=44100:duration={tl_dur}[{label}]"
-                )
-            else:
-                filter_expr = (
-                    f"[{input_idx}:a]"
-                    f"atrim=start={src_start}:end={src_start + src_dur},"
-                    f"asetpts=PTS-STARTPTS"
-                )
-                atempo_chain = build_atempo_chain(speed)
-                if atempo_chain:
-                    filter_expr += f",{atempo_chain}"
-                if volume != 1.0:
-                    filter_expr += f",volume={volume}"
-                filter_expr += f"[{label}]"
-                filters.append(filter_expr)
-
-            seg_labels.append(f"[{label}]")
-            cursor_a = round(at + tl_dur, 3)
-
-        if not seg_labels:
-            continue
-        layer_label = f"alayer{layer_idx}"
-        if len(seg_labels) == 1:
-            filters.append(f"{seg_labels[0]}anull[{layer_label}]")
-        else:
-            filters.append(f"{''.join(seg_labels)}concat=n={len(seg_labels)}:v=0:a=1[{layer_label}]")
-        layer_labels.append(f"[{layer_label}]")
-
-    final_audio_label: str | None
-    if not layer_labels:
-        final_audio_label = None
-    elif len(layer_labels) == 1:
-        filters.append(f"{layer_labels[0]}anull[afinal]")
+    final_audio_label: str | None = None
+    if audio_labels:
         final_audio_label = "afinal"
-    else:
-        filters.append(
-            f"{''.join(layer_labels)}amix=inputs={len(layer_labels)}:duration=longest:normalize=0[afinal]"
-        )
-        final_audio_label = "afinal"
-
-    bg_scale = float(out_cfg.get("background_scale", 0.95))
-    if background_asset and final_video_label:
-        bg_path = resolve_asset(background_asset, registry)
-        bg_input = get_input_idx(bg_path)
-        scale_w = int(width * bg_scale)
-        scale_h = int(height * bg_scale)
-        pad_x = (width - scale_w) // 2
-        pad_y = (height - scale_h) // 2
-
-        filters.append(f"[{bg_input}:v]scale={width}:{height},setsar=1[bg]")
-        filters.append(f"[{final_video_label}]scale={scale_w}:{scale_h}[vscaled]")
-        filters.append(f"[bg][vscaled]overlay=x={pad_x}:y={pad_y}:shortest=1[vwithbg]")
-        final_video_label = "vwithbg"
+        filters.append(f"{''.join(audio_labels)}amix=inputs={len(audio_labels)}:duration=longest:normalize=0[{final_audio_label}]")
 
     cmd = ["ffmpeg", "-y"]
     for input_file in input_files:

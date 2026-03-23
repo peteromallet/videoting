@@ -1,6 +1,8 @@
 import type { FC } from "react";
 import { canSplitClipAtTime, getClipEndSeconds, isClipMuted, isHoldClip } from "@shared/editor-utils";
-import type { ResolvedTimelineClip, TimelineClip } from "@shared/types";
+import { continuousEffectTypes, entranceEffectTypes, exitEffectTypes } from "@shared/effects";
+import { transitionTypes } from "@shared/transitions";
+import type { ResolvedTimelineClip, TrackDefinition } from "@shared/types";
 import type { ClipMeta } from "./timeline-data";
 
 type NumberFieldProps = {
@@ -36,53 +38,37 @@ const NumberField: FC<NumberFieldProps> = ({ disabled, label, max, min, onChange
   );
 };
 
-const getEffectValue = (effects: TimelineClip["effects"], key: "fade_in" | "fade_out"): number | undefined => {
-  if (!effects) {
-    return undefined;
-  }
-
-  if (Array.isArray(effects)) {
-    const effect = effects.find((entry) => typeof entry[key] === "number");
-    return effect?.[key];
-  }
-
-  return typeof effects[key] === "number" ? effects[key] : undefined;
+type SelectFieldProps = {
+  label: string;
+  value?: string;
+  options: string[];
+  onChange: (value?: string) => void;
 };
 
-const setEffectValue = (
-  effects: TimelineClip["effects"],
-  key: "fade_in" | "fade_out",
-  value?: number,
-): TimelineClip["effects"] | undefined => {
-  const normalizedValue = value && value > 0 ? value : undefined;
-
-  if (Array.isArray(effects)) {
-    const next = effects.map((entry) => ({ ...entry }));
-    const index = next.findIndex((entry) => key in entry);
-    if (normalizedValue === undefined) {
-      if (index >= 0) {
-        next.splice(index, 1);
-      }
-    } else if (index >= 0) {
-      next[index][key] = normalizedValue;
-    } else {
-      next.push({ [key]: normalizedValue });
-    }
-    return next.length > 0 ? next : undefined;
-  }
-
-  const record = { ...(effects && !Array.isArray(effects) ? effects : {}) };
-  if (normalizedValue === undefined) {
-    delete record[key];
-  } else {
-    record[key] = normalizedValue;
-  }
-
-  return Object.keys(record).length > 0 ? record : undefined;
+const SelectField: FC<SelectFieldProps> = ({ label, onChange, options, value }) => {
+  return (
+    <label className="clip-panel-field">
+      <span className="clip-panel-label">{label}</span>
+      <select
+        className="clip-panel-input"
+        value={value ?? ""}
+        onChange={(event) => onChange(event.currentTarget.value || undefined)}
+      >
+        <option value="">None</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 };
 
 type ClipPanelProps = {
   clip: ResolvedTimelineClip | null;
+  track: TrackDefinition | null;
+  hasPredecessor: boolean;
   onChange: (patch: Partial<ClipMeta> & { at?: number }) => void;
   onClose: () => void;
   onSplit: () => void;
@@ -92,6 +78,8 @@ type ClipPanelProps = {
 
 export const ClipPanel: FC<ClipPanelProps> = ({
   clip,
+  track,
+  hasPredecessor,
   onChange,
   onClose,
   onSplit,
@@ -106,8 +94,17 @@ export const ClipPanel: FC<ClipPanelProps> = ({
   const clipEnd = getClipEndSeconds(clip);
   const muted = isClipMuted(clip);
   const canSplit = canSplitClipAtTime(clip, playheadSeconds);
-  const fadeIn = getEffectValue(clip.effects, "fade_in");
-  const fadeOut = getEffectValue(clip.effects, "fade_out");
+  const isTextClip = clip.clipType === "text";
+  const supportsPositioning = track?.kind === "visual" && (track.fit === "manual" || isTextClip);
+  const textValue = {
+    content: clip.text?.content ?? "",
+    fontFamily: clip.text?.fontFamily,
+    fontSize: clip.text?.fontSize,
+    color: clip.text?.color,
+    align: clip.text?.align,
+    bold: clip.text?.bold,
+    italic: clip.text?.italic,
+  };
 
   return (
     <div className="clip-panel">
@@ -115,7 +112,7 @@ export const ClipPanel: FC<ClipPanelProps> = ({
         <div>
           <strong>{clip.id}</strong>
           <div className="clip-panel-subtitle">
-            {clip.asset} · {clip.track} · {clip.assetEntry.type ?? "asset"}
+            {clip.asset ?? "text"} · {clip.track} · {clip.clipType ?? "media"}
           </div>
         </div>
         <button className="clip-panel-close" type="button" onClick={onClose}>
@@ -136,7 +133,7 @@ export const ClipPanel: FC<ClipPanelProps> = ({
           <NumberField
             label="To"
             min={0}
-            max={clip.assetEntry.duration}
+            max={clip.assetEntry?.duration}
             step={0.1}
             value={clip.to}
             onChange={(value) => onChange({ to: value })}
@@ -158,11 +155,76 @@ export const ClipPanel: FC<ClipPanelProps> = ({
       </div>
 
       <div className="clip-panel-grid">
-        <NumberField label="Fade In" min={0} step={0.1} value={fadeIn} onChange={(value) => onChange({ effects: setEffectValue(clip.effects, "fade_in", value) })} />
-        <NumberField label="Fade Out" min={0} step={0.1} value={fadeOut} onChange={(value) => onChange({ effects: setEffectValue(clip.effects, "fade_out", value) })} />
+        <SelectField
+          label="Entrance"
+          value={clip.entrance?.type}
+          options={entranceEffectTypes}
+          onChange={(value) => onChange({ entrance: value ? { type: value, duration: clip.entrance?.duration ?? 0.5 } : undefined })}
+        />
+        <NumberField
+          label="In Dur"
+          min={0.1}
+          max={2}
+          step={0.1}
+          value={clip.entrance?.duration}
+          onChange={(value) => onChange({ entrance: clip.entrance ? { ...clip.entrance, duration: value } : undefined })}
+        />
       </div>
 
-      {clip.track === "overlay" ? (
+      <div className="clip-panel-grid">
+        <SelectField
+          label="Exit"
+          value={clip.exit?.type}
+          options={exitEffectTypes}
+          onChange={(value) => onChange({ exit: value ? { type: value, duration: clip.exit?.duration ?? 0.5 } : undefined })}
+        />
+        <NumberField
+          label="Out Dur"
+          min={0.1}
+          max={2}
+          step={0.1}
+          value={clip.exit?.duration}
+          onChange={(value) => onChange({ exit: clip.exit ? { ...clip.exit, duration: value } : undefined })}
+        />
+      </div>
+
+      <div className="clip-panel-grid">
+        <SelectField
+          label="Continuous"
+          value={clip.continuous?.type}
+          options={continuousEffectTypes}
+          onChange={(value) => onChange({ continuous: value ? { type: value, intensity: clip.continuous?.intensity ?? 0.5 } : undefined })}
+        />
+        <NumberField
+          label="Intensity"
+          min={0}
+          max={1}
+          step={0.1}
+          value={clip.continuous?.intensity ?? 0.5}
+          onChange={(value) => onChange({ continuous: clip.continuous ? { ...clip.continuous, intensity: value } : undefined })}
+        />
+      </div>
+
+      {hasPredecessor ? (
+        <div className="clip-panel-grid">
+          <SelectField
+            label="Transition"
+            value={clip.transition?.type}
+            options={transitionTypes}
+            onChange={(value) => onChange({ transition: value ? { type: value, duration: clip.transition?.duration ?? 0.5 } : undefined })}
+          />
+          <NumberField
+            label="Trans Dur"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={clip.transition?.duration}
+            onChange={(value) => onChange({ transition: clip.transition ? { ...clip.transition, duration: value } : undefined })}
+          />
+        </div>
+      ) : null}
+
+      {supportsPositioning ? (
         <>
           <div className="clip-panel-grid">
             <NumberField label="X" step={1} value={clip.x} onChange={(value) => onChange({ x: value })} />
@@ -173,6 +235,73 @@ export const ClipPanel: FC<ClipPanelProps> = ({
             <NumberField label="Height" min={20} step={1} value={clip.height} onChange={(value) => onChange({ height: value })} />
           </div>
           <NumberField label="Opacity" min={0} max={1} step={0.1} value={clip.opacity ?? 1} onChange={(value) => onChange({ opacity: value })} />
+        </>
+      ) : null}
+
+      {isTextClip ? (
+        <>
+          <label className="clip-panel-field">
+            <span className="clip-panel-label">Content</span>
+            <textarea
+              className="clip-panel-input clip-panel-textarea"
+              value={textValue.content}
+              onChange={(event) => onChange({ text: { ...textValue, content: event.currentTarget.value } })}
+            />
+          </label>
+          <div className="clip-panel-grid">
+            <label className="clip-panel-field">
+              <span className="clip-panel-label">Font</span>
+              <input
+                className="clip-panel-input"
+                type="text"
+                value={textValue.fontFamily ?? ""}
+                onChange={(event) => onChange({ text: { ...textValue, fontFamily: event.currentTarget.value } })}
+              />
+            </label>
+            <NumberField
+              label="Size"
+              min={12}
+              max={200}
+              step={1}
+              value={textValue.fontSize ?? 64}
+              onChange={(value) => onChange({ text: { ...textValue, fontSize: value } })}
+            />
+          </div>
+          <div className="clip-panel-grid">
+            <label className="clip-panel-field">
+              <span className="clip-panel-label">Color</span>
+              <input
+                className="clip-panel-input"
+                type="color"
+                value={textValue.color ?? "#ffffff"}
+                onChange={(event) => onChange({ text: { ...textValue, color: event.currentTarget.value } })}
+              />
+            </label>
+            <SelectField
+              label="Align"
+              value={textValue.align}
+              options={["left", "center", "right"]}
+              onChange={(value) => onChange({ text: { ...textValue, align: (value ?? "center") as "left" | "center" | "right" } })}
+            />
+          </div>
+          <div className="clip-panel-grid">
+            <label className="clip-panel-field clip-panel-toggle">
+              <span className="clip-panel-label">Bold</span>
+              <input
+                type="checkbox"
+                checked={textValue.bold ?? false}
+                onChange={(event) => onChange({ text: { ...textValue, bold: event.currentTarget.checked } })}
+              />
+            </label>
+            <label className="clip-panel-field clip-panel-toggle">
+              <span className="clip-panel-label">Italic</span>
+              <input
+                type="checkbox"
+                checked={textValue.italic ?? false}
+                onChange={(event) => onChange({ text: { ...textValue, italic: event.currentTarget.checked } })}
+              />
+            </label>
+          </div>
         </>
       ) : null}
 

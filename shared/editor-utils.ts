@@ -1,9 +1,7 @@
 import { getClipTimelineDuration } from "@shared/config-utils";
-import type { ResolvedTimelineClip, ResolvedTimelineConfig, TimelineTrack } from "@shared/types";
+import type { ResolvedTimelineClip, ResolvedTimelineConfig, TrackDefinition, TrackKind } from "@shared/types";
 
 const SPLIT_EPSILON = 0.0001;
-
-export const TRACK_ORDER: TimelineTrack[] = ["video", "audio", "overlay"];
 
 export const roundTimelineValue = (value: number, digits = 4): number => {
   const factor = 10 ** digits;
@@ -12,6 +10,94 @@ export const roundTimelineValue = (value: number, digits = 4): number => {
 
 export const clampValue = (value: number, min: number, max: number): number => {
   return Math.min(Math.max(value, min), max);
+};
+
+const getTrackIndex = (tracks: TrackDefinition[], prefix: "V" | "A"): number => {
+  return tracks.reduce((maxIndex, track) => {
+    const match = track.id.match(new RegExp(`^${prefix}(\\d+)$`));
+    return match ? Math.max(maxIndex, Number(match[1])) : maxIndex;
+  }, 0);
+};
+
+export const getVisualTracks = (config: Pick<ResolvedTimelineConfig, "tracks">): TrackDefinition[] => {
+  return config.tracks.filter((track) => track.kind === "visual");
+};
+
+export const getAudioTracks = (config: Pick<ResolvedTimelineConfig, "tracks">): TrackDefinition[] => {
+  return config.tracks.filter((track) => track.kind === "audio");
+};
+
+export const getTrackById = (
+  config: Pick<ResolvedTimelineConfig, "tracks">,
+  trackId: string,
+): TrackDefinition | null => {
+  return config.tracks.find((track) => track.id === trackId) ?? null;
+};
+
+export const addTrack = (
+  config: ResolvedTimelineConfig,
+  kind: TrackKind,
+  index?: number,
+): ResolvedTimelineConfig => {
+  const prefix = kind === "visual" ? "V" : "A";
+  const nextNumber = getTrackIndex(config.tracks, prefix) + 1;
+  const nextTrack: TrackDefinition = {
+    id: `${prefix}${nextNumber}`,
+    kind,
+    label: `${prefix}${nextNumber}`,
+    scale: 1,
+    fit: kind === "visual" ? "manual" : "contain",
+    opacity: 1,
+    blendMode: "normal",
+  };
+
+  const nextTracks = [...config.tracks];
+  if (index === undefined || index < 0 || index > nextTracks.length) {
+    nextTracks.push(nextTrack);
+  } else {
+    nextTracks.splice(index, 0, nextTrack);
+  }
+
+  return {
+    ...config,
+    tracks: nextTracks,
+  };
+};
+
+export const removeTrack = (
+  config: ResolvedTimelineConfig,
+  trackId: string,
+): ResolvedTimelineConfig => {
+  const clips = config.clips.filter((clip) => clip.track !== trackId);
+  return {
+    ...config,
+    tracks: config.tracks.filter((track) => track.id !== trackId),
+    clips,
+  };
+};
+
+export const reorderTracks = (
+  config: ResolvedTimelineConfig,
+  fromIndex: number,
+  toIndex: number,
+): ResolvedTimelineConfig => {
+  if (
+    fromIndex < 0
+    || fromIndex >= config.tracks.length
+    || toIndex < 0
+    || toIndex >= config.tracks.length
+    || fromIndex === toIndex
+  ) {
+    return config;
+  }
+
+  const nextTracks = [...config.tracks];
+  const [track] = nextTracks.splice(fromIndex, 1);
+  nextTracks.splice(toIndex, 0, track);
+  return {
+    ...config,
+    tracks: nextTracks,
+  };
 };
 
 export const isHoldClip = (clip: ResolvedTimelineClip): boolean => {

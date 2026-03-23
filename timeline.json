@@ -6,38 +6,121 @@
     "background": "reigh-bg-v17-titled-dust",
     "background_scale": 0.95
   },
+  "tracks": [
+    {
+      "id": "V1",
+      "kind": "visual",
+      "label": "V1",
+      "scale": 1,
+      "fit": "cover",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V2",
+      "kind": "visual",
+      "label": "V2",
+      "scale": 0.95,
+      "fit": "contain",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V3",
+      "kind": "visual",
+      "label": "V3",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "A1",
+      "kind": "audio",
+      "label": "A1",
+      "scale": 1,
+      "fit": "contain",
+      "opacity": 1,
+      "blendMode": "normal"
+    }
+  ],
   "clips": [
+    {
+      "id": "clip-background",
+      "at": 0,
+      "track": "V1",
+      "clipType": "hold",
+      "asset": "reigh-bg-v17-titled-dust",
+      "hold": 118.61,
+      "opacity": 1
+    },
     {
       "id": "clip-1",
       "at": 6.91,
-      "track": "video",
+      "track": "V2",
+      "clipType": "media",
       "asset": "venn-diagram",
       "from": 0,
       "to": 4.73,
-      "speed": 1.06
+      "speed": 1.06,
+      "entrance": {
+        "type": "zoom-spin",
+        "duration": 0.6
+      },
+      "exit": {
+        "type": "zoom-out",
+        "duration": 0.5
+      },
+      "continuous": {
+        "type": "ken-burns",
+        "intensity": 0.55
+      }
     },
     {
       "id": "clip-2",
       "at": 11.37,
-      "track": "video",
+      "track": "V2",
+      "clipType": "media",
       "asset": "demo-one",
       "from": 0,
       "to": 4.97,
-      "volume": 0
+      "volume": 0,
+      "entrance": {
+        "type": "slide-right",
+        "duration": 0.6
+      },
+      "exit": {
+        "type": "slide-down",
+        "duration": 0.5
+      },
+      "continuous": {
+        "type": "glitch",
+        "intensity": 0.45
+      }
     },
     {
       "id": "clip-3",
       "at": 19.81,
-      "track": "video",
+      "track": "V2",
+      "clipType": "media",
       "asset": "demo-two",
       "from": 5,
       "to": 10.16,
-      "volume": 0
+      "volume": 0,
+      "entrance": {
+        "type": "pulse",
+        "duration": 0.5
+      },
+      "exit": {
+        "type": "flip",
+        "duration": 0.6
+      }
     },
     {
       "id": "clip-4",
       "at": 4.84,
-      "track": "audio",
+      "track": "A1",
+      "clipType": "media",
       "asset": "input",
       "from": 0,
       "to": 113.77

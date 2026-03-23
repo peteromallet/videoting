@@ -32,11 +32,23 @@ function isMediaFile(file: File): boolean {
   return ACCEPTED_EXTENSIONS.includes(ext)
 }
 
+function getAssetPreviewType(path: string): 'video' | 'audio' | 'image' {
+  const ext = path.slice(path.lastIndexOf('.')).toLowerCase()
+  if (['.mp4', '.webm', '.mov'].includes(ext)) return 'video'
+  if (['.mp3', '.wav', '.aac', '.m4a'].includes(ext)) return 'audio'
+  return 'image'
+}
+
 export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: AssetPanelProps) {
   const [showAll, setShowAll] = useState(false)
   const [showHidden, setShowHidden] = useState(false)
   const [hidden, setHidden] = useState(loadHidden)
-  const [hoveredAsset, setHoveredAsset] = useState<{ key: string; path: string; trackType: string } | null>(null)
+  const [hoveredAsset, setHoveredAsset] = useState<{
+    key: string
+    path: string
+    assetKind: string
+    previewType: 'video' | 'audio' | 'image'
+  } | null>(null)
   const [fileDragOver, setFileDragOver] = useState(false)
   const [uploading, setUploading] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -47,7 +59,7 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
     for (const row of rows) {
       for (const action of row.actions) {
         const m = meta[action.id]
-        if (m) used.add(m.asset)
+        if (m?.asset) used.add(m.asset)
       }
     }
     return used
@@ -60,7 +72,8 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
       .map(([key, path]) => ({
         key,
         path,
-        trackType: inferTrackType(path),
+        assetKind: inferTrackType(path),
+        previewType: getAssetPreviewType(path),
         isHidden: hidden.has(key),
       }))
   }, [assetMap, backgroundAsset, showAll, usedAssets, hidden])
@@ -83,7 +96,7 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
 
   // When hovered asset changes to a video, play it
   useEffect(() => {
-    if (hoveredAsset?.trackType === 'video' && videoRef.current) {
+    if (hoveredAsset?.previewType === 'video' && videoRef.current) {
       videoRef.current.currentTime = 0
       videoRef.current.play().catch(() => {})
     }
@@ -97,9 +110,9 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
 
   const typeBadgeClass = (t: string) => `asset-type-badge asset-type-${t}`
 
-  const onDragStart = (e: React.DragEvent, key: string, trackType: string) => {
+  const onDragStart = (e: React.DragEvent, key: string, assetKind: string) => {
     e.dataTransfer.setData('asset-key', key)
-    e.dataTransfer.setData('track-type', trackType)
+    e.dataTransfer.setData('asset-kind', assetKind)
     e.dataTransfer.effectAllowed = 'copy'
   }
 
@@ -192,18 +205,18 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
         {assets.length === 0 && !fileDragOver && !uploading && (
           <div className="asset-empty">No unused assets</div>
         )}
-        {assets.map(({ key, path, trackType, isHidden }) => (
+        {assets.map(({ key, path, assetKind, previewType, isHidden }) => (
           <div
             key={key}
             className={`asset-item${hoveredAsset?.key === key ? ' asset-item-active' : ''}${isHidden ? ' asset-item-hidden' : ''}`}
             draggable={!isHidden}
-            onDragStart={(e) => onDragStart(e, key, trackType)}
-            onMouseEnter={() => setHoveredAsset({ key, path, trackType })}
+            onDragStart={(e) => onDragStart(e, key, assetKind)}
+            onMouseEnter={() => setHoveredAsset({ key, path, previewType, assetKind })}
             onMouseLeave={() => setHoveredAsset(null)}
             style={{ borderLeftColor: getAssetColor(key) }}
           >
             <span className="asset-name">{key}</span>
-            <span className={typeBadgeClass(trackType)}>{typeLabel(trackType)}</span>
+            <span className={typeBadgeClass(previewType)}>{typeLabel(previewType)}</span>
             <button
               className="asset-hide-btn"
               onClick={(e) => { e.stopPropagation(); toggleHide(key) }}
@@ -240,7 +253,7 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
       )}
       {hoveredAsset && !fileDragOver && (
         <div className="asset-preview">
-          {hoveredAsset.trackType === 'video' && (
+          {hoveredAsset.previewType === 'video' && (
             <video
               ref={videoRef}
               src={`/media/${hoveredAsset.path}`}
@@ -250,14 +263,14 @@ export default function AssetPanel({ assetMap, rows, meta, backgroundAsset }: As
               playsInline
             />
           )}
-          {hoveredAsset.trackType === 'overlay' && (
+          {hoveredAsset.previewType === 'image' && (
             <img
               src={`/media/thumb/${hoveredAsset.path}`}
               className="asset-preview-media"
               alt={hoveredAsset.key}
             />
           )}
-          {hoveredAsset.trackType === 'audio' && (
+          {hoveredAsset.previewType === 'audio' && (
             <div className="asset-preview-audio">
               <span className="asset-preview-audio-icon">♫</span>
               <span className="asset-preview-audio-name">{hoveredAsset.key}</span>

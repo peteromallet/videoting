@@ -1,9 +1,10 @@
-import type { ResolvedTimelineConfig, TimelineClip, TimelineConfig } from "@shared/types";
+import type { ResolvedTimelineConfig, TimelineClip, TimelineConfig, TrackDefinition } from "@shared/types";
 
 export const TIMELINE_CLIP_FIELDS = [
   "id",
   "at",
   "track",
+  "clipType",
   "asset",
   "from",
   "to",
@@ -15,18 +16,35 @@ export const TIMELINE_CLIP_FIELDS = [
   "width",
   "height",
   "opacity",
+  "text",
+  "entrance",
+  "exit",
+  "continuous",
+  "transition",
   "effects",
 ] as const;
 
 export type TimelineClipField = (typeof TIMELINE_CLIP_FIELDS)[number];
+export const TRACK_DEFINITION_FIELDS = [
+  "id",
+  "kind",
+  "label",
+  "scale",
+  "fit",
+  "opacity",
+  "blendMode",
+] as const;
+export type TrackDefinitionField = (typeof TRACK_DEFINITION_FIELDS)[number];
 
 export const serializeClipForDisk = (clip: ResolvedTimelineConfig["clips"][number]): TimelineClip => {
   const serializedClip: Partial<Record<TimelineClipField, TimelineClip[TimelineClipField]>> = {
     id: clip.id,
     at: clip.at,
     track: clip.track,
-    asset: clip.asset,
   };
+  if (clip.asset !== undefined) {
+    serializedClip.asset = clip.asset;
+  }
 
   for (const field of TIMELINE_CLIP_FIELDS) {
     if (field in serializedClip) {
@@ -42,9 +60,31 @@ export const serializeClipForDisk = (clip: ResolvedTimelineConfig["clips"][numbe
   return serializedClip as TimelineClip;
 };
 
+export const serializeTrackForDisk = (track: TrackDefinition): TrackDefinition => {
+  const serializedTrack: Partial<Record<TrackDefinitionField, TrackDefinition[TrackDefinitionField]>> = {
+    id: track.id,
+    kind: track.kind,
+    label: track.label,
+  };
+
+  for (const field of TRACK_DEFINITION_FIELDS) {
+    if (field in serializedTrack) {
+      continue;
+    }
+
+    const value = track[field];
+    if (value !== undefined) {
+      serializedTrack[field] = value;
+    }
+  }
+
+  return serializedTrack as TrackDefinition;
+};
+
 export const validateSerializedConfig = (config: TimelineConfig): void => {
   const topLevelKeys = Object.keys(config).sort();
-  if (topLevelKeys.join(",") !== "clips,output") {
+  const topLevelShape = topLevelKeys.join(",");
+  if (topLevelShape !== "clips,output" && topLevelShape !== "clips,output,tracks") {
     throw new Error(`Serialized timeline has unexpected top-level keys: ${topLevelKeys.join(", ")}`);
   }
 
@@ -55,11 +95,20 @@ export const validateSerializedConfig = (config: TimelineConfig): void => {
       throw new Error(`Serialized clip '${clip.id}' has unexpected keys: ${invalidClipKeys.join(", ")}`);
     }
   }
+
+  const allowedTrackKeys = new Set<string>(TRACK_DEFINITION_FIELDS);
+  for (const track of config.tracks ?? []) {
+    const invalidTrackKeys = Object.keys(track).filter((key) => !allowedTrackKeys.has(key));
+    if (invalidTrackKeys.length > 0) {
+      throw new Error(`Serialized track '${track.id}' has unexpected keys: ${invalidTrackKeys.join(", ")}`);
+    }
+  }
 };
 
 export const serializeForDisk = (resolved: ResolvedTimelineConfig): TimelineConfig => {
   const serialized: TimelineConfig = {
     output: { ...resolved.output },
+    tracks: resolved.tracks.map(serializeTrackForDisk),
     clips: resolved.clips.map(serializeClipForDisk),
   };
 

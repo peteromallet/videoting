@@ -4,7 +4,7 @@ Generate a human/agent-readable view of the current timeline.
 
 Usage:
     python3 tools/view.py                    # full view (all keyframe descriptions)
-    python3 tools/view.py --summary          # compact view with API-summarised visuals
+    python3 tools/view.py --summary          # compact view with one-line visuals
     python3 tools/view.py --at 10.5         # snapshot at a specific timestamp
 """
 
@@ -15,8 +15,10 @@ from pathlib import Path
 from common import (
     ASSET_REGISTRY,
     TIMELINE_JSON,
-    get_openai_client,
+    get_audio_tracks,
     get_profile_path,
+    get_track_by_id,
+    get_visual_tracks,
     load_asset_registry,
     load_profile,
     load_timeline,
@@ -28,20 +30,7 @@ from common import (
 # ── visual summarisation ──────────────────────────────────────────────────────
 
 def _call_llm_summary(descriptions: list[str]) -> str:
-    client = get_openai_client()
-    if not client:
-        return descriptions[0] if descriptions else "(no description)"
-    bullets = "\n".join(f"- {d}" for d in descriptions)
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        max_tokens=80,
-        messages=[{"role": "user", "content":
-            "Summarise what's shown in this video clip in one concise sentence. "
-            "Focus on the main on-screen content (UI, action, subject). No fluff.\n\n"
-            f"Frame descriptions:\n{bullets}"
-        }],
-    )
-    return response.choices[0].message.content.strip()
+    return descriptions[0] if descriptions else "(no description)"
 
 
 def get_visual_summary(asset_id: str, src_s: float, src_e: float) -> str:
@@ -70,7 +59,6 @@ def get_visual_summary(asset_id: str, src_s: float, src_e: float) -> str:
     if not segs:
         return "(no visual description)"
 
-    print(f"  [summarising {asset_id} {src_s:.1f}s–{src_e:.1f}s via API…]", file=sys.stderr)
     summary = _call_llm_summary([s["description"] for s in segs])
 
     if "visual_summaries" not in profile:
@@ -160,14 +148,8 @@ def visual_in_range(profile: dict, start: float, end: float) -> list[dict]:
 
 # ── timeline computation ──────────────────────────────────────────────────────
 
-def compute_timeline_positions(timeline: dict) -> tuple[list[dict], list[dict]]:
-    """
-    Returns (video_clips, audio_clips), each clip enriched with:
-      timeline_start, timeline_end, source_start, source_end
-    """
-    video_clips: list[dict] = []
-    audio_clips: list[dict] = []
-
+def enrich_clips(timeline: dict) -> list[dict]:
+    enriched: list[dict] = []
     for clip in timeline.get("clips", []):
         c = dict(clip)
         at = float(c["at"])
@@ -186,14 +168,31 @@ def compute_timeline_positions(timeline: dict) -> tuple[list[dict], list[dict]]:
         c["source_start"]   = src_start
         c["source_end"]     = src_end
         c["speed"]          = speed
+        c["track_label"]    = get_track_by_id(timeline, c.get("track", ""))["label"] if get_track_by_id(timeline, c.get("track", "")) else c.get("track", "?")
+        enriched.append(c)
 
-        if c.get("track") == "audio":
+    return enriched
+
+
+def compute_timeline_positions(timeline: dict) -> tuple[list[dict], list[dict]]:
+    """
+    Returns (visual_clips, audio_clips), each clip enriched with:
+      timeline_start, timeline_end, source_start, source_end
+    """
+    visual_track_ids = {track["id"] for track in get_visual_tracks(timeline)}
+    audio_track_ids = {track["id"] for track in get_audio_tracks(timeline)}
+
+    visual_clips: list[dict] = []
+    audio_clips: list[dict] = []
+
+    for c in enrich_clips(timeline):
+        if c.get("track") in audio_track_ids:
             audio_clips.append(c)
-        else:
-            video_clips.append(c)
+        elif c.get("track") in visual_track_ids:
+            visual_clips.append(c)
 
     return (
-        sorted(video_clips, key=lambda c: c["timeline_start"]),
+        sorted(visual_clips, key=lambda c: (c["track"], c["timeline_start"])),
         sorted(audio_clips, key=lambda c: c["timeline_start"]),
     )
 
@@ -226,6 +225,8 @@ def find_issues(video_clips: list[dict], audio_clips: list[dict]) -> list[str]:
 
     # Cut quality
     for clip in video_clips:
+        if clip.get("clipType") == "text" or not clip.get("asset"):
+            continue
         profile = load_profile(clip["asset"])
         if not profile or "transcript" not in profile:
             continue
@@ -245,13 +246,16 @@ def find_issues(video_clips: list[dict], audio_clips: list[dict]) -> list[str]:
 # ── main view rendering ───────────────────────────────────────────────────────
 
 def render_view(timeline: dict, at: float | None = None, summary: bool = False) -> str:
-    video_clips, audio_clips = compute_timeline_positions(timeline)
+    visual_clips, audio_clips = compute_timeline_positions(timeline)
+    clips_by_track: dict[str, list[dict]] = {}
+    for clip in visual_clips + audio_clips:
+        clips_by_track.setdefault(clip["track"], []).append(clip)
 
-    if not video_clips and not audio_clips:
+    if not visual_clips and not audio_clips:
         return "Timeline is empty."
 
     total_duration = max(
-        (c["timeline_end"] for c in video_clips + audio_clips), default=0.0
+        (c["timeline_end"] for c in visual_clips + audio_clips), default=0.0
     )
     out_cfg = timeline.get("output", {})
     resolution = out_cfg.get("resolution", "?")
@@ -266,15 +270,29 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
         lines.append(f"\nSNAPSHOT @ {fmt_t(at)} ({at:.3f}s)")
         lines.append("─" * 70)
 
-        active_v = [c for c in video_clips if c["timeline_start"] <= at < c["timeline_end"]]
+        active_v = [c for c in visual_clips if c["timeline_start"] <= at < c["timeline_end"]]
         active_a = [c for c in audio_clips if c["timeline_start"] <= at < c["timeline_end"]]
 
         if active_v:
             for clip in active_v:
                 src_t = clip["source_start"] + (at - clip["timeline_start"])
+                label = clip.get("asset") or clip.get("text", {}).get("content", "(text)")
+                prefix = "TEXT" if clip.get("clipType") == "text" else clip["track_label"]
+                lines.append(f"  {prefix:<6} {label}  tl:{clip['timeline_start']:.2f}s–{clip['timeline_end']:.2f}s")
+                if clip.get("transition"):
+                    lines.append(f"    Transition: {clip['transition']['type']} ({clip['transition']['duration']:.2f}s)")
+                if clip.get("entrance") or clip.get("exit") or clip.get("continuous"):
+                    lines.append(
+                        "    Effects:"
+                        f" in={clip.get('entrance', {}).get('type', '-')}"
+                        f" out={clip.get('exit', {}).get('type', '-')}"
+                        f" loop={clip.get('continuous', {}).get('type', '-')}"
+                    )
+                if clip.get("clipType") == "text":
+                    continue
+
                 profile = load_profile(clip["asset"])
-                lines.append(f"  VIDEO  {clip['asset']}  src:{src_t:.2f}s")
-                if profile:
+                if profile and clip.get("asset"):
                     for seg in visual_in_range(profile, src_t - 0.1, src_t + 0.1):
                         lines.append(f"    Visual: \"{seg['description']}\"")
         else:
@@ -283,9 +301,9 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
         if active_a:
             for clip in active_a:
                 src_t = clip["source_start"] + (at - clip["timeline_start"])
-                profile = load_profile(clip["asset"])
+                profile = load_profile(clip["asset"]) if clip.get("asset") else None
                 vol_str = f"  vol:{clip.get('volume', 1.0)}" if float(clip.get("volume", 1.0)) != 1.0 else ""
-                lines.append(f"  AUDIO  {clip['asset']}  src:{src_t:.2f}s{vol_str}")
+                lines.append(f"  {clip['track_label']}  {clip.get('asset', '(no asset)')}  src:{src_t:.2f}s{vol_str}")
                 if profile:
                     word_range = transcript_in_range(profile, max(0, src_t - 2), src_t + 2)
                     if word_range:
@@ -297,7 +315,7 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
 
     # Full view: walk through time segments defined by clip boundaries
     boundaries: set[float] = set()
-    for c in video_clips + audio_clips:
+    for c in visual_clips + audio_clips:
         boundaries.add(c["timeline_start"])
         boundaries.add(c["timeline_end"])
     sorted_boundaries = sorted(boundaries)
@@ -310,7 +328,7 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
         def _clip_sort_key(c):
             return (c["timeline_start"], -(c["timeline_end"] - c["timeline_start"]))
 
-        active_v = sorted([c for c in video_clips if c["timeline_start"] <= mid < c["timeline_end"]], key=_clip_sort_key)
+        active_v = sorted([c for c in visual_clips if c["timeline_start"] <= mid < c["timeline_end"]], key=_clip_sort_key)
         active_a = sorted([c for c in audio_clips if c["timeline_start"] <= mid < c["timeline_end"]], key=_clip_sort_key)
 
         if not active_v and not active_a:
@@ -319,16 +337,38 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
         dur = seg_end - seg_start
         lines.append(f"\n[{fmt_t(seg_start)} → {fmt_t(seg_end)}]  ({dur:.2f}s)")
 
-        # Video clips
+        # Visual clips
         for clip in active_v:
+            label = clip.get("asset") or clip.get("text", {}).get("content", "(text)")
+            transition = clip.get("transition")
+            effects = []
+            if clip.get("entrance"):
+                effects.append(f"in:{clip['entrance']['type']}")
+            if clip.get("exit"):
+                effects.append(f"out:{clip['exit']['type']}")
+            if clip.get("continuous"):
+                effects.append(f"loop:{clip['continuous']['type']}")
+
+            if clip.get("clipType") == "text":
+                lines.append(f"  {clip['track_label']}  TEXT  \"{_wrap(label, 56)}\"")
+                if effects:
+                    lines.append(f"    effects: {', '.join(effects)}")
+                if transition:
+                    lines.append(f"    transition: {transition['type']} ({transition['duration']:.2f}s)")
+                continue
+
             src_s = clip["source_start"] + (seg_start - clip["timeline_start"])
             src_e = clip["source_start"] + (seg_end   - clip["timeline_start"])
-            profile = load_profile(clip["asset"])
+            profile = load_profile(clip["asset"]) if clip.get("asset") else None
 
             speed_str = f"  [{clip['speed']:.2f}x]" if clip.get("speed", 1.0) != 1.0 else ""
-            lines.append(f"  VIDEO  {clip['asset']}  [src: {src_s:.2f}s → {src_e:.2f}s]{speed_str}")
+            lines.append(f"  {clip['track_label']}  {label}  [src: {src_s:.2f}s → {src_e:.2f}s]{speed_str}")
+            if effects:
+                lines.append(f"    effects: {', '.join(effects)}")
+            if transition:
+                lines.append(f"    transition: {transition['type']} ({transition['duration']:.2f}s)")
 
-            if profile:
+            if profile and clip.get("asset"):
                 if summary:
                     vis = get_visual_summary(clip["asset"], src_s, src_e)
                     lines.append(f"    \"{vis}\"")
@@ -346,10 +386,10 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
         for clip in active_a:
             src_s = clip["source_start"] + (seg_start - clip["timeline_start"])
             src_e = clip["source_start"] + (seg_end   - clip["timeline_start"])
-            profile = load_profile(clip["asset"])
+            profile = load_profile(clip["asset"]) if clip.get("asset") else None
             vol_str = f"  vol:{clip.get('volume', 1.0)}" if float(clip.get("volume", 1.0)) != 1.0 else ""
 
-            lines.append(f"  AUDIO  {clip['asset']}  [src: {src_s:.2f}s → {src_e:.2f}s]{vol_str}")
+            lines.append(f"  {clip['track_label']}  {clip.get('asset', '(no asset)')}  [src: {src_s:.2f}s → {src_e:.2f}s]{vol_str}")
 
             if profile:
                 # Pre-roll silence only worth flagging if gap is noticeable (>0.5s)
@@ -375,7 +415,7 @@ def render_view(timeline: dict, at: float | None = None, summary: bool = False) 
         lines.append("─" * 70)
 
     # Issues summary
-    issues = find_issues(video_clips, audio_clips)
+    issues = find_issues(visual_clips, audio_clips)
     lines.append("")
     if issues:
         lines.append("ISSUES:")
@@ -409,7 +449,7 @@ def add_arguments(parser: argparse.ArgumentParser):
     parser.add_argument("--at", type=float, default=None,
                         help="Show snapshot at this timestamp (seconds)")
     parser.add_argument("--summary", "-s", action="store_true",
-                        help="Compact view: one summarised visual per clip (cached via API)")
+                        help="Compact view: one summarised visual per clip")
     parser.add_argument("--timeline", default=str(TIMELINE_JSON),
                         help="Path to timeline.json")
     parser.add_argument("--asset-registry", default=str(ASSET_REGISTRY),
@@ -431,7 +471,8 @@ def run(args: argparse.Namespace):
     registry = load_asset_registry(registry_path)
 
     for clip in timeline.get("clips", []):
-        resolve_asset_path(clip["asset"], registry=registry)
+        if clip.get("asset"):
+            resolve_asset_path(clip["asset"], registry=registry)
 
     background = timeline.get("output", {}).get("background")
     if background:

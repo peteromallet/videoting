@@ -1,3 +1,4 @@
+import { migrateToFlatTracks } from "@shared/migrate";
 import { staticFile } from "remotion";
 import type {
   AssetRegistry,
@@ -17,7 +18,8 @@ export type {
   TimelineConfig,
   TimelineEffect,
   TimelineOutput,
-  TimelineTrack,
+  TrackDefinition,
+  TrackKind,
 } from "@shared/types";
 
 export {
@@ -71,6 +73,7 @@ export const loadTimelineConfig = async (): Promise<ResolvedTimelineConfig> => {
     fetchJson<TimelineConfig>("timeline.json"),
     fetchJson<AssetRegistry>("asset-registry.json"),
   ]);
+  const migratedTimeline = migrateToFlatTracks(timeline);
 
   const resolvedRegistry: Record<string, ResolvedAssetRegistryEntry> = {};
   for (const [assetId, entry] of Object.entries(registry.assets ?? {})) {
@@ -80,7 +83,14 @@ export const loadTimelineConfig = async (): Promise<ResolvedTimelineConfig> => {
     };
   }
 
-  const clips = timeline.clips.map((clip) => {
+  const clips = migratedTimeline.clips.map((clip) => {
+    if (!clip.asset) {
+      return {
+        ...clip,
+        assetEntry: undefined,
+      };
+    }
+
     const assetEntry = resolvedRegistry[clip.asset];
     if (!assetEntry) {
       throw new Error(`Clip '${clip.id}' references missing asset '${clip.asset}'`);
@@ -93,7 +103,8 @@ export const loadTimelineConfig = async (): Promise<ResolvedTimelineConfig> => {
   });
 
   return {
-    output: timeline.output,
+    output: migratedTimeline.output,
+    tracks: migratedTimeline.tracks ?? [],
     clips,
     registry: resolvedRegistry,
   };

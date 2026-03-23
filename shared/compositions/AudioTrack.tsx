@@ -4,6 +4,7 @@ import { getClipDurationInFrames, secondsToFrames } from "@shared/config-utils";
 import type { ResolvedTimelineClip } from "@shared/types";
 
 export const AudioTrack: FC<{
+  trackId: string;
   clips: ResolvedTimelineClip[];
   fps: number;
 }> = ({ clips, fps }) => {
@@ -15,12 +16,14 @@ export const AudioTrack: FC<{
           from={secondsToFrames(clip.at, fps)}
           durationInFrames={getClipDurationInFrames(clip, fps)}
         >
-          <Audio
-            src={clip.assetEntry.src}
-            startFrom={secondsToFrames(clip.from ?? 0, fps)}
-            playbackRate={clip.speed ?? 1}
-            volume={clip.volume ?? 1}
-          />
+          {clip.assetEntry ? (
+            <Audio
+              src={clip.assetEntry.src}
+              startFrom={secondsToFrames(clip.from ?? 0, fps)}
+              playbackRate={clip.speed ?? 1}
+              volume={clip.volume ?? 1}
+            />
+          ) : null}
         </Sequence>
       ))}
     </>

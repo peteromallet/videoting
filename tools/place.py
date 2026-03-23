@@ -12,7 +12,7 @@ Usage:
 import argparse
 import sys
 
-from common import TIMELINE_JSON, load_profile, load_timeline, save_timeline
+from common import TIMELINE_JSON, get_asset_entry, load_asset_registry, load_profile, load_timeline, save_timeline
 
 
 # ── helpers ──────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ def resolve_at_word(timeline: dict, phrase: str, index: int = 0) -> float:
     # Find the audio clip on the timeline
     audio_clip = None
     for clip in timeline.get("clips", []):
-        if clip.get("track") == "audio":
+        if str(clip.get("track", "")).startswith("A"):
             audio_clip = clip
             break
 
@@ -96,8 +96,8 @@ def resolve_at_word(timeline: dict, phrase: str, index: int = 0) -> float:
 
 def find_conflicts(clips: list[dict], moved_clip: dict) -> list[dict]:
     """Find overlaps and gaps between adjacent clips on the same track."""
-    track = moved_clip.get("track", "video")
-    track_clips = [c for c in clips if c.get("track", "video") == track]
+    track = moved_clip.get("track", "V2")
+    track_clips = [c for c in clips if c.get("track", "V2") == track]
     track_clips.sort(key=lambda c: float(c["at"]))
 
     conflicts = []
@@ -212,6 +212,7 @@ def apply_fix(clip: dict, fix: dict):
 def add_arguments(parser: argparse.ArgumentParser):
     parser.add_argument("--clip", required=True, help="Asset ID of clip to move")
     parser.add_argument("--at", type=float, default=None, help="Target timeline position (seconds)")
+    parser.add_argument("--track", default=None, help="Target track ID (for example: V2, V3, A1)")
     parser.add_argument("--at-word", default=None, help="Word/phrase in audio transcript to align to")
     parser.add_argument("--at-word-index", type=int, default=0,
                         help="Which occurrence if phrase appears multiple times (default: 0)")
@@ -227,6 +228,7 @@ def run(args: argparse.Namespace):
 
     timeline = load_timeline(TIMELINE_JSON)
     clips = timeline.get("clips", [])
+    registry = load_asset_registry()
 
     # 1. Find the clip
     target = None
@@ -252,7 +254,13 @@ def run(args: argparse.Namespace):
     else:
         new_at = args.at
 
-    track = target.get("track", "video")
+    if args.track:
+        target["track"] = args.track
+    elif not target.get("track"):
+        asset_type = str(get_asset_entry(target["asset"], registry=registry).get("type", "video"))
+        target["track"] = "A1" if asset_type == "audio" else "V2"
+
+    track = target.get("track", "V2")
     old_at = float(target["at"])
 
     print(f"PLACE: Moving '{args.clip}' on {track} track\n")

@@ -5,7 +5,8 @@ import type { ClipMeta } from "./timeline-data";
 
 interface ActiveOverlay {
   actionId: string;
-  asset: string;
+  label: string;
+  track: string;
   x: number;
   y: number;
   width: number;
@@ -18,7 +19,7 @@ interface Props {
   meta: Record<string, ClipMeta>;
   currentTime: number;
   playerContainerRef: RefObject<HTMLDivElement | null>;
-  backgroundScale: number;
+  trackScaleMap: Record<string, number>;
   compositionWidth: number;
   compositionHeight: number;
   onOverlayChange: (actionId: string, patch: Partial<ClipMeta>) => void;
@@ -30,10 +31,6 @@ type OverlayLayout = {
   top: number;
   width: number;
   height: number;
-  offsetX: number;
-  offsetY: number;
-  scaleX: number;
-  scaleY: number;
 };
 
 export default function OverlayEditor({
@@ -41,7 +38,7 @@ export default function OverlayEditor({
   meta,
   currentTime,
   playerContainerRef,
-  backgroundScale,
+  trackScaleMap,
   compositionWidth,
   compositionHeight,
   onOverlayChange,
@@ -61,35 +58,55 @@ export default function OverlayEditor({
   const layoutRef = useRef<OverlayLayout | null>(null);
 
   const activeOverlays = useMemo(() => {
-    const overlayRow = rows.find((row) => row.id === "row-overlay");
-    if (!overlayRow) {
-      return [];
-    }
-
     const overlays: ActiveOverlay[] = [];
-    for (const action of overlayRow.actions) {
-      if (currentTime < action.start || currentTime >= action.end) {
+    for (const row of rows) {
+      if (!row.id.startsWith("V")) {
         continue;
       }
 
-      const clipMeta = meta[action.id];
-      if (!clipMeta || clipMeta.track !== "overlay") {
-        continue;
-      }
+      for (const action of row.actions) {
+        if (currentTime < action.start || currentTime >= action.end) {
+          continue;
+        }
 
-      overlays.push({
-        actionId: action.id,
-        asset: clipMeta.asset,
-        x: clipMeta.x ?? 0,
-        y: clipMeta.y ?? 0,
-        width: clipMeta.width ?? 320,
-        height: clipMeta.height ?? 240,
-        opacity: clipMeta.opacity ?? 1,
-      });
+        const clipMeta = meta[action.id];
+        if (!clipMeta || clipMeta.track !== row.id) {
+          continue;
+        }
+
+        const isPositioned = clipMeta.clipType === "text" || typeof clipMeta.x === "number" || typeof clipMeta.y === "number";
+        if (!isPositioned) {
+          continue;
+        }
+
+        overlays.push({
+          actionId: action.id,
+          label: clipMeta.asset ?? clipMeta.text?.content ?? action.id,
+          track: row.id,
+          x: clipMeta.x ?? 0,
+          y: clipMeta.y ?? 0,
+          width: clipMeta.width ?? 320,
+          height: clipMeta.height ?? 240,
+          opacity: clipMeta.opacity ?? 1,
+        });
+      }
     }
 
     return overlays;
   }, [currentTime, meta, rows]);
+
+  const getTrackProjection = useCallback((trackId: string, currentLayout: OverlayLayout) => {
+    const trackScale = trackScaleMap[trackId] ?? 1;
+    const scaledWidth = currentLayout.width * trackScale;
+    const scaledHeight = currentLayout.height * trackScale;
+
+    return {
+      offsetX: (currentLayout.width - scaledWidth) / 2,
+      offsetY: (currentLayout.height - scaledHeight) / 2,
+      scaleX: (currentLayout.width / compositionWidth) * trackScale,
+      scaleY: (currentLayout.height / compositionHeight) * trackScale,
+    };
+  }, [compositionHeight, compositionWidth, trackScaleMap]);
 
   const computeLayout = useCallback((): OverlayLayout | null => {
     const player = playerContainerRef.current;
@@ -104,20 +121,14 @@ export default function OverlayEditor({
 
     const rect = player.getBoundingClientRect();
     const parentRect = parent.getBoundingClientRect();
-    const scaledWidth = rect.width * backgroundScale;
-    const scaledHeight = rect.height * backgroundScale;
 
     return {
       left: rect.left - parentRect.left,
       top: rect.top - parentRect.top,
       width: rect.width,
       height: rect.height,
-      offsetX: (rect.width - scaledWidth) / 2,
-      offsetY: (rect.height - scaledHeight) / 2,
-      scaleX: (rect.width / compositionWidth) * backgroundScale,
-      scaleY: (rect.height / compositionHeight) * backgroundScale,
     };
-  }, [backgroundScale, compositionHeight, compositionWidth, playerContainerRef]);
+  }, [playerContainerRef]);
 
   useEffect(() => {
     const updateLayout = () => {
@@ -175,8 +186,9 @@ export default function OverlayEditor({
         return;
       }
 
-      const dx = (event.clientX - state.startMouseX) / currentLayout.scaleX;
-      const dy = (event.clientY - state.startMouseY) / currentLayout.scaleY;
+      const projection = getTrackProjection(meta[state.actionId]?.track ?? "V2", currentLayout);
+      const dx = (event.clientX - state.startMouseX) / projection.scaleX;
+      const dy = (event.clientY - state.startMouseY) / projection.scaleY;
 
       if (state.mode === "move") {
         onOverlayChange(state.actionId, {
@@ -227,7 +239,7 @@ export default function OverlayEditor({
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [onOverlayChange]);
+  }, [getTrackProjection, meta, onOverlayChange]);
 
   if (activeOverlays.length === 0 || !layout) {
     return null;
@@ -243,11 +255,12 @@ export default function OverlayEditor({
     <div className="overlay-editor" style={containerStyle} onClick={() => setSelected(null)}>
       {activeOverlays.map((overlay) => {
         const isSelected = selected === overlay.actionId;
+        const projection = getTrackProjection(overlay.track, layout);
         const style: React.CSSProperties = {
-          left: layout.offsetX + overlay.x * layout.scaleX,
-          top: layout.offsetY + overlay.y * layout.scaleY,
-          width: overlay.width * layout.scaleX,
-          height: overlay.height * layout.scaleY,
+          left: projection.offsetX + overlay.x * projection.scaleX,
+          top: projection.offsetY + overlay.y * projection.scaleY,
+          width: overlay.width * projection.scaleX,
+          height: overlay.height * projection.scaleY,
         };
 
         return (
@@ -261,7 +274,7 @@ export default function OverlayEditor({
               setSelected(overlay.actionId);
             }}
           >
-            <span className="overlay-label">{overlay.asset}</span>
+            <span className="overlay-label">{overlay.label}</span>
             {isSelected ? (
               <>
                 <div className="overlay-handle nw" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-nw")} />
