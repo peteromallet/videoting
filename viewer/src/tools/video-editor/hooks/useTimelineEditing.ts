@@ -86,6 +86,30 @@ export function useTimelineEditing({
   uploadAsset,
   invalidateAssetRegistry,
 }: UseTimelineEditingArgs): UseTimelineEditingResult {
+  // Shared drop position calculation — used by indicator, file drop, and asset drop
+  const getDropPosition = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    const wrapper = event.currentTarget;
+    const editArea = wrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
+    const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+    const rect = (editArea ?? wrapper).getBoundingClientRect();
+    const scrollLeft = grid?.scrollLeft ?? 0;
+    const pixelsPerSecond = scaleWidth / scale;
+    const dropX = event.clientX - rect.left;
+    const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
+
+    const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
+    const rowIndex = rowElements.findIndex((el) => {
+      const r = el.getBoundingClientRect();
+      return event.clientY >= r.top && event.clientY <= r.bottom;
+    });
+    const rowElement = rowElements[rowIndex];
+    const rowRect = rowElement?.getBoundingClientRect();
+    const trackId = rowIndex >= 0 ? dataRef.current?.rows[rowIndex]?.id : undefined;
+    const trackName = dataRef.current?.tracks[rowIndex]?.label ?? dataRef.current?.tracks[rowIndex]?.id ?? "";
+
+    return { time, rowIndex, rowRect, trackId, trackName, pixelsPerSecond, wrapperRect: wrapper.getBoundingClientRect() };
+  }, [dataRef, scale, scaleWidth]);
+
   const clearActionDragState = useCallback((clipId: string) => {
     delete actionDragStateRef.current[clipId];
   }, [actionDragStateRef]);
@@ -308,30 +332,17 @@ export function useTimelineEditing({
     event.stopPropagation();
     event.currentTarget.dataset.dragOver = "true";
 
-    // Show drop position indicator
-    const wrapper = event.currentTarget;
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const relX = event.clientX - wrapperRect.left;
-
-    // Find target row
-    const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-    const targetRowIndex = rowElements.findIndex((el) => {
-      const r = el.getBoundingClientRect();
-      return event.clientY >= r.top && event.clientY <= r.bottom;
-    });
-    const targetRow = rowElements[targetRowIndex];
-
-    // Calculate time
-    const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
-    const scrollLeft = grid?.scrollLeft ?? 0;
-    const pixelsPerSecond = scaleWidth / scale;
-    const time = Math.max(0, (relX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
-
-    // Get target row position for the highlight
-    const rowRect = targetRow?.getBoundingClientRect();
+    // Use shared position calculation
+    const { time, rowRect, trackName, wrapperRect, pixelsPerSecond } = getDropPosition(event);
     const rowTop = rowRect?.top ?? wrapperRect.top;
     const rowHeight = rowRect?.height ?? 36;
-    const trackName = dataRef.current?.tracks[targetRowIndex]?.label ?? dataRef.current?.tracks[targetRowIndex]?.id ?? "";
+
+    // Calculate where the clip's left edge would be on screen
+    const editArea = event.currentTarget.querySelector<HTMLElement>(".timeline-editor-edit-area");
+    const grid = event.currentTarget.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+    const editRect = (editArea ?? event.currentTarget).getBoundingClientRect();
+    const scrollLeft = grid?.scrollLeft ?? 0;
+    const clipScreenLeft = editRect.left + TIMELINE_START_LEFT + time * pixelsPerSecond - scrollLeft;
 
     // Create or update the drop indicator (fixed on body)
     let indicator = document.querySelector<HTMLElement>("[data-drop-indicator]");
@@ -341,18 +352,17 @@ export function useTimelineEditing({
       document.body.appendChild(indicator);
     }
 
-    // Show a highlighted row area + a clip ghost centered on cursor
-    const ghostWidth = 80;
-    const ghostLeft = event.clientX - ghostWidth / 2;
-    const lineX = event.clientX;
+    // Show indicator at the exact position where the clip will land
+    const defaultDur = 5;
+    const ghostWidth = defaultDur * pixelsPerSecond;
     indicator.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;`;
     indicator.innerHTML = `
       <div style="position:fixed;left:${wrapperRect.left}px;top:${rowTop}px;width:${wrapperRect.width}px;height:${rowHeight}px;background:rgba(137,180,250,0.08);border:1px solid rgba(137,180,250,0.3);border-radius:4px;pointer-events:none;"></div>
-      <div style="position:fixed;left:${lineX}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
-      <div style="position:fixed;left:${ghostLeft}px;top:${rowTop + 4}px;width:${ghostWidth}px;height:${rowHeight - 8}px;background:rgba(137,180,250,0.18);border:1px dashed rgba(137,180,250,0.5);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;">
+      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
+      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop + 2}px;width:${Math.min(ghostWidth, wrapperRect.right - clipScreenLeft)}px;height:${rowHeight - 4}px;background:rgba(137,180,250,0.15);border:1px dashed rgba(137,180,250,0.4);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;">
         <span style="font-size:9px;font-weight:600;color:rgba(137,180,250,0.9);">${time.toFixed(1)}s</span>
       </div>
-      <div style="position:fixed;left:${ghostLeft}px;top:${rowTop - 18}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
+      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop - 16}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
     `;
   }, [dataRef, scale, scaleWidth]);
 
@@ -373,19 +383,7 @@ export function useTimelineEditing({
     // Handle external file drops
     const files = Array.from(event.dataTransfer.files);
     if (files.length > 0 && dataRef.current) {
-      const editArea = event.currentTarget.querySelector<HTMLElement>(".timeline-editor-edit-area");
-      const grid = event.currentTarget.querySelector<HTMLElement>(".ReactVirtualized__Grid");
-      const rect = (editArea ?? event.currentTarget).getBoundingClientRect();
-      const scrollLeft = grid?.scrollLeft ?? event.currentTarget.scrollLeft;
-      const pixelsPerSecond = scaleWidth / scale;
-      const dropX = event.clientX - rect.left;
-      const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
-
-      const rowElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-      const rowIndex = rowElements.findIndex((rowElement) => {
-        const rowRect = rowElement.getBoundingClientRect();
-        return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
-      });
+      const { time, rowIndex } = getDropPosition(event);
 
       const defaultClipDuration = 5; // seconds — used for offset calculation
       let timeOffset = 0;
@@ -462,19 +460,7 @@ export function useTimelineEditing({
       return;
     }
 
-    const editArea2 = event.currentTarget.querySelector<HTMLElement>(".timeline-editor-edit-area");
-    const grid2 = event.currentTarget.querySelector<HTMLElement>(".ReactVirtualized__Grid");
-    const rect = (editArea2 ?? event.currentTarget).getBoundingClientRect();
-    const scrollLeft = grid2?.scrollLeft ?? event.currentTarget.scrollLeft;
-    const pixelsPerSecond = scaleWidth / scale;
-    const dropX = event.clientX - rect.left;
-    const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
-
-    const rowElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-    const rowIndex = rowElements.findIndex((rowElement) => {
-      const rowRect = rowElement.getBoundingClientRect();
-      return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
-    });
+    const { time, rowIndex } = getDropPosition(event);
     const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
     const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, assetKind || "visual", selectedTrackId);
     handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);

@@ -175,6 +175,18 @@
       "opacity": 1
     },
     {
+      "id": "clip-51",
+      "at": 5.84,
+      "track": "V1",
+      "asset": "02-a-few-small-candles-scattered-across-a-dim-stone-floor-1",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
       "id": "clip-0",
       "at": 0,
       "track": "V2",
