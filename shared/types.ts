@@ -90,10 +90,16 @@ export type TimelineOutput = {
   background_scale?: number | null;
 };
 
+export type CustomEffectEntry = {
+  code: string;
+  category?: "entrance" | "exit" | "continuous";
+};
+
 export type TimelineConfig = {
   output: TimelineOutput;
   clips: TimelineClip[];
   tracks?: TrackDefinition[];
+  customEffects?: Record<string, CustomEffectEntry>;
 };
 
 export type AssetRegistryEntry = {

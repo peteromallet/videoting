@@ -72,6 +72,11 @@ export const getConfigSignature = (config: ResolvedTimelineConfig): string => {
 
 export type UrlResolver = (file: string) => string;
 
+/**
+ * Returns true if the given string is an absolute remote URL (http:// or https://).
+ */
+export const isRemoteUrl = (url: string): boolean => /^https?:\/\//.test(url);
+
 export const resolveTimelineConfig = (
   config: TimelineConfig,
   registry: AssetRegistry,
@@ -82,7 +87,7 @@ export const resolveTimelineConfig = (
   for (const [assetId, entry] of Object.entries(registry.assets ?? {})) {
     resolvedRegistry[assetId] = {
       ...entry,
-      src: resolveUrl(entry.file),
+      src: isRemoteUrl(entry.file) ? entry.file : resolveUrl(entry.file),
     };
   }
 

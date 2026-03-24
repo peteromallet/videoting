@@ -61,7 +61,7 @@ const VisualAsset: FC<VisualClipProps> = ({ clip, track, fps }) => {
   const isRendering = getRemotionEnvironment().isRendering;
 
   if (isImage) {
-    return <Img src={clip.assetEntry.src} style={sharedStyle} />;
+    return <Img src={clip.assetEntry.src} style={sharedStyle} crossOrigin="anonymous" />;
   }
 
   if (isRendering) {
@@ -74,6 +74,7 @@ const VisualAsset: FC<VisualClipProps> = ({ clip, track, fps }) => {
         muted={clipVolume <= 0}
         style={sharedStyle}
         transparent
+        crossOrigin="anonymous"
       />
     );
   }
@@ -86,6 +87,7 @@ const VisualAsset: FC<VisualClipProps> = ({ clip, track, fps }) => {
       volume={clipVolume}
       muted={clipVolume <= 0}
       style={sharedStyle}
+      crossOrigin="anonymous"
     />
   );
 };

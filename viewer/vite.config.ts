@@ -431,6 +431,7 @@ export default defineConfig({
       "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime.js"),
       remotion: path.resolve(__dirname, "node_modules/remotion"),
       "@remotion/player": path.resolve(__dirname, "node_modules/@remotion/player"),
+      sucrase: path.resolve(__dirname, "node_modules/sucrase"),
     },
   },
   server: {

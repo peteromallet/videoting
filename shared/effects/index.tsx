@@ -1,10 +1,11 @@
 import { secondsToFrames } from "@shared/config-utils";
 import type { ResolvedTimelineClip } from "@shared/types";
 import type { FC, ReactNode } from "react";
-import { BounceEntrance, FadeEntrance, FlipEntrance, PulseEntrance, SlideDownEntrance, SlideLeftEntrance, SlideRightEntrance, SlideUpEntrance, ZoomInEntrance, ZoomSpinEntrance } from "./entrances";
+import { BounceEntrance, FadeEntrance, FlipEntrance, MeteoriteEntrance, PulseEntrance, SlideDownEntrance, SlideLeftEntrance, SlideRightEntrance, SlideUpEntrance, ZoomInEntrance, ZoomSpinEntrance } from "./entrances";
 import { DriftEffect, FloatEffect, GlitchEffect, KenBurnsEffect, SlowZoomEffect } from "./continuous";
 import type { EffectComponentProps } from "./entrances";
 import { DissolveExit, FadeOutExit, FlipExit, ShrinkExit, SlideDownExit, ZoomOutExit } from "./exits";
+import { DynamicEffectRegistry } from "./dynamic-registry";
 
 export type ClipEffectComponent = FC<EffectComponentProps>;
 
@@ -19,6 +20,7 @@ export const entranceEffects: Record<string, ClipEffectComponent> = {
   fade: FadeEntrance,
   flip: FlipEntrance,
   bounce: BounceEntrance,
+  meteorite: MeteoriteEntrance,
 };
 
 export const exitEffects: Record<string, ClipEffectComponent> = {
@@ -42,6 +44,50 @@ export const entranceEffectTypes = Object.keys(entranceEffects);
 export const exitEffectTypes = Object.keys(exitEffects);
 export const continuousEffectTypes = Object.keys(continuousEffects);
 
+// Merge all built-in effects into a single registry for the dynamic fallback path
+const allBuiltInEffects: Record<string, ClipEffectComponent> = {
+  ...entranceEffects,
+  ...exitEffects,
+  ...continuousEffects,
+};
+
+// Module-level singleton registry. Initialized with all built-in effects.
+// Dynamic effects can be registered at runtime via getEffectRegistry().register().
+let _effectRegistry: DynamicEffectRegistry | null = null;
+
+export function getEffectRegistry(): DynamicEffectRegistry {
+  if (!_effectRegistry) {
+    _effectRegistry = new DynamicEffectRegistry(allBuiltInEffects);
+  }
+  return _effectRegistry;
+}
+
+/**
+ * Strip the "custom:" prefix from an effect type name, if present.
+ * Custom effects use "custom:effect-name" in clip definitions to disambiguate
+ * from built-in effects.
+ */
+const resolveEffectName = (type: string): string => {
+  return type.startsWith("custom:") ? type.slice(7) : type;
+};
+
+/**
+ * Look up an effect component by name, checking both built-in maps
+ * and the dynamic registry.
+ */
+const lookupEffect = (
+  builtInMap: Record<string, ClipEffectComponent>,
+  type: string,
+): ClipEffectComponent | null => {
+  const name = resolveEffectName(type);
+  // Built-in map first (fast path)
+  if (builtInMap[name]) {
+    return builtInMap[name];
+  }
+  // Fall back to dynamic registry
+  return getEffectRegistry().get(name) ?? null;
+};
+
 export const wrapWithClipEffects = (
   content: ReactNode,
   clip: ResolvedTimelineClip,
@@ -50,7 +96,7 @@ export const wrapWithClipEffects = (
 ): ReactNode => {
   let wrapped = content;
 
-  const continuous = clip.continuous ? continuousEffects[clip.continuous.type] : null;
+  const continuous = clip.continuous ? lookupEffect(continuousEffects, clip.continuous.type) : null;
   if (continuous) {
     const Continuous = continuous;
     wrapped = (
@@ -63,7 +109,7 @@ export const wrapWithClipEffects = (
     );
   }
 
-  const entrance = clip.entrance ? entranceEffects[clip.entrance.type] : null;
+  const entrance = clip.entrance ? lookupEffect(entranceEffects, clip.entrance.type) : null;
   if (entrance) {
     const Entrance = entrance;
     wrapped = (
@@ -76,7 +122,7 @@ export const wrapWithClipEffects = (
     );
   }
 
-  const exit = clip.exit ? exitEffects[clip.exit.type] : null;
+  const exit = clip.exit ? lookupEffect(exitEffects, clip.exit.type) : null;
   if (exit) {
     const Exit = exit;
     wrapped = (

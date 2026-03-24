@@ -4,7 +4,7 @@ import type { TimelineRow } from "@xzdarcy/timeline-engine";
 import { getConfigSignature, parseResolution } from "@shared/config-utils";
 import { getTrackById } from "@shared/editor-utils";
 import { serializeForDisk } from "@shared/serialize";
-import type { TrackDefinition } from "@shared/types";
+import type { TimelineConfig, TrackDefinition } from "@shared/types";
 import {
   buildTrackClipOrder,
   SCALE_SECONDS,
@@ -14,13 +14,14 @@ import {
   configToRows,
   resolveTimelineConfig,
   rowsToConfig,
-  loadTimelineJson,
+  loadTimelineJsonFromProvider,
   type ClipMeta,
   type ClipOrderMap,
   type TimelineData,
 } from "@/tools/video-editor/lib/timeline-data";
-import { loadAssetRegistry, saveTimelineConfig, uploadAssetFile } from "@/tools/video-editor/lib/timeline-api";
+import { uploadAssetFile } from "@/tools/video-editor/lib/timeline-api";
 import { useEditorSettings } from "@/tools/video-editor/settings/useEditorSettings";
+import { useDataProvider } from "@/tools/video-editor/contexts/DataProviderContext";
 
 export type SaveStatus = "saved" | "saving" | "dirty" | "error";
 export type RenderStatus = "idle" | "rendering" | "done" | "error";
@@ -120,6 +121,7 @@ export interface UseTimelineDataResult {
 
 export function useTimelineData(): UseTimelineDataResult {
   const queryClient = useQueryClient();
+  const provider = useDataProvider();
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedSignature = useRef("");
   const editSeqRef = useRef(0);
@@ -151,18 +153,18 @@ export function useTimelineData(): UseTimelineDataResult {
 
   const timelineQuery = useQuery({
     queryKey: ["timeline-data"],
-    queryFn: loadTimelineJson,
+    queryFn: () => loadTimelineJsonFromProvider(provider),
     refetchInterval: 1000,
   });
 
   const assetRegistryQuery = useQuery({
     queryKey: ["asset-registry"],
-    queryFn: loadAssetRegistry,
+    queryFn: () => provider.loadAssetRegistry(),
     refetchInterval: 2000,
   });
 
   const saveMutation = useMutation({
-    mutationFn: saveTimelineConfig,
+    mutationFn: (config: TimelineConfig) => provider.saveTimeline(config),
     onError: () => {
       setSaveStatus("error");
       const current = dataRef.current;
@@ -178,8 +180,8 @@ export function useTimelineData(): UseTimelineDataResult {
     meta: Record<string, ClipMeta>,
     clipOrder: ClipOrderMap,
   ): TimelineData => {
-    const config = rowsToConfig(rows, meta, current.output, clipOrder, current.tracks);
-    const resolvedConfig = resolveTimelineConfig(config, current.registry);
+    const config = rowsToConfig(rows, meta, current.output, clipOrder, current.tracks, current.config.customEffects);
+    const resolvedConfig = resolveTimelineConfig(config, current.registry, (file) => provider.resolveAssetUrl(file));
     const rowData = configToRows(config);
 
     return {
@@ -194,7 +196,7 @@ export function useTimelineData(): UseTimelineDataResult {
       output: { ...config.output },
       signature: getConfigSignature(resolvedConfig),
     };
-  }, []);
+  }, [provider]);
 
   const saveTimeline = useCallback(async (nextData: TimelineData, seq: number) => {
     setSaveStatus("saving");
@@ -299,12 +301,12 @@ export function useTimelineData(): UseTimelineDataResult {
       return;
     }
 
-    const nextData = buildTimelineData(serializeForDisk(nextResolvedConfig), current.registry);
+    const nextData = buildTimelineData(serializeForDisk(nextResolvedConfig), current.registry, (file) => provider.resolveAssetUrl(file));
     commitData(nextData, {
       selectedClipId: options?.selectedClipId,
       selectedTrackId: options?.selectedTrackId,
     });
-  }, [commitData]);
+  }, [commitData, provider]);
 
   // Use a ref for commitData to avoid the polling effect re-firing
   // when commitData's identity changes due to dependency cascades.
@@ -357,7 +359,7 @@ export function useTimelineData(): UseTimelineDataResult {
       return;
     }
 
-    const nextData = buildTimelineData(current.config, registry);
+    const nextData = buildTimelineData(current.config, registry, (file) => provider.resolveAssetUrl(file));
     if (nextData.signature === current.signature && Object.keys(nextData.assetMap).length === Object.keys(current.assetMap).length) {
       return;
     }
@@ -454,12 +456,16 @@ export function useTimelineData(): UseTimelineDataResult {
   }, [setPreferences]);
 
   const uploadFiles = useCallback(async (files: File[]) => {
-    await Promise.all(files.map(uploadAssetFile));
+    if (provider.uploadAsset) {
+      await Promise.all(files.map((file) => provider.uploadAsset!(file)));
+    } else {
+      await Promise.all(files.map(uploadAssetFile));
+    }
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ["timeline-data"] }),
       queryClient.invalidateQueries({ queryKey: ["asset-registry"] }),
     ]);
-  }, [queryClient]);
+  }, [queryClient, provider]);
 
   const startRender = useCallback(async () => {
     if (renderStatus === "rendering") {

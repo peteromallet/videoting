@@ -22,6 +22,7 @@ export const AudioTrack: FC<{
               startFrom={secondsToFrames(clip.from ?? 0, fps)}
               playbackRate={clip.speed ?? 1}
               volume={clip.volume ?? 1}
+              crossOrigin="anonymous"
             />
           ) : null}
         </Sequence>

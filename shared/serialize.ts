@@ -81,11 +81,13 @@ export const serializeTrackForDisk = (track: TrackDefinition): TrackDefinition =
   return serializedTrack as TrackDefinition;
 };
 
+const ALLOWED_TOP_LEVEL_KEYS = new Set(["output", "clips", "tracks", "customEffects"]);
+
 export const validateSerializedConfig = (config: TimelineConfig): void => {
-  const topLevelKeys = Object.keys(config).sort();
-  const topLevelShape = topLevelKeys.join(",");
-  if (topLevelShape !== "clips,output" && topLevelShape !== "clips,output,tracks") {
-    throw new Error(`Serialized timeline has unexpected top-level keys: ${topLevelKeys.join(", ")}`);
+  const topLevelKeys = Object.keys(config);
+  const unexpectedKeys = topLevelKeys.filter((key) => !ALLOWED_TOP_LEVEL_KEYS.has(key));
+  if (unexpectedKeys.length > 0) {
+    throw new Error(`Serialized timeline has unexpected top-level keys: ${unexpectedKeys.join(", ")}`);
   }
 
   const allowedClipKeys = new Set<string>(TIMELINE_CLIP_FIELDS);
@@ -105,12 +107,16 @@ export const validateSerializedConfig = (config: TimelineConfig): void => {
   }
 };
 
-export const serializeForDisk = (resolved: ResolvedTimelineConfig): TimelineConfig => {
+export const serializeForDisk = (resolved: ResolvedTimelineConfig, customEffects?: TimelineConfig["customEffects"]): TimelineConfig => {
   const serialized: TimelineConfig = {
     output: { ...resolved.output },
     tracks: resolved.tracks.map(serializeTrackForDisk),
     clips: resolved.clips.map(serializeClipForDisk),
   };
+
+  if (customEffects && Object.keys(customEffects).length > 0) {
+    serialized.customEffects = customEffects;
+  }
 
   validateSerializedConfig(serialized);
   return serialized;

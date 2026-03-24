@@ -96,3 +96,72 @@ export const BounceEntrance: FC<EffectComponentProps> = ({ children, effectFrame
   const translateY = interpolate(progress, [0, 0.6, 0.8, 1], [120, -20, 10, 0]);
   return <AbsoluteFill style={withTransform(`translateY(${translateY}px)`, progress)}>{children}</AbsoluteFill>;
 };
+
+export const MeteoriteEntrance: FC<EffectComponentProps> = ({ children, effectFrames }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const dur = effectFrames ?? 24;
+
+  // Two-phase: fast approach (0→0.7) then spring impact (0.7→1)
+  const approach = interpolate(frame, [0, dur * 0.35], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const impact = spring({ frame: Math.max(0, frame - dur * 0.35), fps, durationInFrames: dur * 0.65, config: { damping: 8, stiffness: 250, mass: 0.6 } });
+  const phase = approach < 1 ? approach : 1;
+  const settled = approach >= 1 ? impact : 0;
+
+  // Fly in from top-right — fast, aggressive
+  const translateX = interpolate(phase, [0, 1], [600, 0]);
+  const translateY = interpolate(phase, [0, 1], [-500, 0]);
+  const rotate = interpolate(phase, [0, 1], [-35, 0]);
+  const preImpactScale = interpolate(phase, [0, 1], [0.15, 1]);
+
+  // Impact bounce — overshoot then settle
+  const bounceScale = settled > 0 ? interpolate(settled, [0, 1], [1.2, 1]) : 1;
+  const finalScale = preImpactScale * bounceScale;
+
+  // Screen shake on impact
+  const shakeIntensity = interpolate(settled, [0, 0.15, 0.5, 1], [0, 12, 4, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const shakeX = shakeIntensity * Math.sin(frame * 47);
+  const shakeY = shakeIntensity * Math.cos(frame * 31);
+
+  // Bright flash on impact
+  const flashOpacity = interpolate(settled, [0, 0.08, 0.3], [0, 0.9, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // Radial shockwave glow
+  const glowSize = interpolate(settled, [0, 0.5], [20, 80], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const glowOpacity = interpolate(settled, [0, 0.1, 0.6], [0, 0.7, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // Brightness surge
+  const brightness = interpolate(settled, [0, 0.1, 0.4], [1, 1.8, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  const opacity = interpolate(phase, [0, 0.15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  return (
+    <AbsoluteFill style={{ transform: `translate(${shakeX}px, ${shakeY}px)` }}>
+      {/* White flash on impact */}
+      <AbsoluteFill
+        style={{
+          background: `rgba(255, 240, 200, ${flashOpacity})`,
+          pointerEvents: "none",
+          zIndex: 10,
+        }}
+      />
+      {/* Radial shockwave */}
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(circle at 50% 50%, rgba(255, 160, 40, ${glowOpacity}) 0%, rgba(255, 100, 20, ${glowOpacity * 0.5}) ${glowSize * 0.5}%, transparent ${glowSize}%)`,
+          pointerEvents: "none",
+          zIndex: 5,
+        }}
+      />
+      <AbsoluteFill
+        style={{
+          transform: `translate(${translateX}px, ${translateY}px) rotate(${rotate}deg) scale(${finalScale})`,
+          opacity,
+          filter: `brightness(${brightness})`,
+        }}
+      >
+        {children}
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};

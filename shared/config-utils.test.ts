@@ -8,6 +8,7 @@ import {
   parseResolution,
   getEffectValue,
   resolveTimelineConfig,
+  isRemoteUrl,
 } from "./config-utils";
 import type { AssetRegistry, ResolvedTimelineClip, ResolvedTimelineConfig, TimelineConfig } from "./types";
 
@@ -191,5 +192,51 @@ describe("resolveTimelineConfig", () => {
     expect(resolved.output.resolution).toBe("1280x720");
     expect(resolved.tracks).toHaveLength(2);
     expect(resolved.tracks[0].id).toBe("V1");
+  });
+
+  it("passes through remote URLs without calling the resolver", () => {
+    const remoteRegistry: AssetRegistry = {
+      assets: {
+        "my-video": { file: "https://cdn.example.com/video.mp4", type: "video/mp4", duration: 30 },
+        "my-audio": { file: "inputs/audio.mp3", type: "audio/mpeg", duration: 60 },
+      },
+    };
+    const resolver = (file: string) => `/local/${file}`;
+    const resolved = resolveTimelineConfig(makeConfig(), remoteRegistry, resolver);
+    // Remote URL passed through as-is
+    expect(resolved.clips[0].assetEntry!.src).toBe("https://cdn.example.com/video.mp4");
+    // Local file still uses the resolver
+    expect(resolved.clips[1].assetEntry!.src).toBe("/local/inputs/audio.mp3");
+  });
+
+  it("passes through http URLs without calling the resolver", () => {
+    const remoteRegistry: AssetRegistry = {
+      assets: {
+        "my-video": { file: "http://cdn.example.com/video.mp4", type: "video/mp4", duration: 30 },
+        "my-audio": { file: "inputs/audio.mp3", type: "audio/mpeg", duration: 60 },
+      },
+    };
+    const resolver = (file: string) => `/local/${file}`;
+    const resolved = resolveTimelineConfig(makeConfig(), remoteRegistry, resolver);
+    expect(resolved.clips[0].assetEntry!.src).toBe("http://cdn.example.com/video.mp4");
+  });
+});
+
+describe("isRemoteUrl", () => {
+  it("returns true for https URLs", () => {
+    expect(isRemoteUrl("https://cdn.example.com/video.mp4")).toBe(true);
+  });
+
+  it("returns true for http URLs", () => {
+    expect(isRemoteUrl("http://cdn.example.com/video.mp4")).toBe(true);
+  });
+
+  it("returns false for local paths", () => {
+    expect(isRemoteUrl("inputs/video.mp4")).toBe(false);
+    expect(isRemoteUrl("/inputs/video.mp4")).toBe(false);
+  });
+
+  it("returns false for empty string", () => {
+    expect(isRemoteUrl("")).toBe(false);
   });
 });

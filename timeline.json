@@ -34,15 +34,6 @@
       "kind": "audio",
       "label": "Audio",
       "opacity": 1
-    },
-    {
-      "id": "V4",
-      "kind": "visual",
-      "label": "V4",
-      "scale": 1,
-      "fit": "manual",
-      "opacity": 1,
-      "blendMode": "normal"
     }
   ],
   "clips": [
@@ -52,105 +43,60 @@
       "track": "V1",
       "asset": "reigh-bg-v17-titled-dust",
       "clipType": "hold",
-      "hold": 120,
-      "x": 3,
-      "y": 11,
-      "width": 1280,
-      "height": 720
+      "hold": 120
     },
     {
-      "id": "clip-5",
+      "id": "clip-0",
       "at": 0,
-      "track": "V1",
-      "clipType": "text",
-      "hold": 4,
-      "x": 157,
-      "y": 357,
-      "width": 920,
-      "height": 180,
-      "opacity": 1,
-      "text": {
-        "content": "fsdfdsa",
-        "fontFamily": "Georgia, serif",
-        "fontSize": 64,
-        "color": "#ffffff",
-        "align": "center",
-        "bold": true,
-        "italic": false
-      }
+      "track": "V2",
+      "asset": "output-composition",
+      "clipType": "media",
+      "from": 0,
+      "to": 6.91,
+      "volume": 0
+    },
+    {
+      "id": "clip-1",
+      "at": 6.91,
+      "track": "V2",
+      "asset": "venn-diagram",
+      "clipType": "media",
+      "from": 0,
+      "to": 4.73,
+      "speed": 1.06,
+      "volume": 0
     },
     {
       "id": "clip-2",
-      "at": 19.13,
+      "at": 11.37,
       "track": "V2",
       "asset": "demo-one",
       "clipType": "media",
       "from": 0,
       "to": 4.97,
-      "volume": 0,
-      "x": -44,
-      "y": 22,
-      "width": 1280,
-      "height": 720
-    },
-    {
-      "id": "clip-6",
-      "at": 5.97,
-      "track": "V2",
-      "clipType": "text",
-      "hold": 4,
-      "x": 129,
-      "y": 311,
-      "width": 1034,
-      "height": 169,
-      "opacity": 1,
-      "text": {
-        "content": "fdfdsa2ffds",
-        "fontFamily": "Georgia, serif",
-        "fontSize": 64,
-        "color": "#ffffff",
-        "align": "center",
-        "bold": true,
-        "italic": false
-      }
-    },
-    {
-      "id": "clip-7",
-      "at": 26.94,
-      "track": "V2",
-      "clipType": "text",
-      "hold": 4,
-      "x": 168,
-      "y": 253,
-      "width": 920,
-      "height": 180,
-      "opacity": 1,
-      "text": {
-        "content": "12312321",
-        "fontFamily": "Georgia, serif",
-        "fontSize": 64,
-        "color": "#ffffff",
-        "align": "center",
-        "bold": true,
-        "italic": false
-      }
+      "volume": 0
     },
     {
       "id": "clip-3",
-      "at": 23.98,
-      "track": "V3",
+      "at": 19.97,
+      "track": "V2",
       "asset": "demo-two",
       "clipType": "media",
-      "from": 2,
-      "to": 5.21,
-      "x": 32,
-      "y": 18,
-      "width": 1216,
-      "height": 684
+      "from": 5,
+      "to": 10.16,
+      "volume": 0,
+      "entrance": {
+        "type": "meteorite",
+        "duration": 0.8
+      },
+      "exit": {
+        "type": "fade-out",
+        "duration": 0.4
+      }
     },
     {
       "id": "clip-4",
-      "at": 0,
+      "at": 4.84,
       "track": "A1",
       "asset": "input",
       "clipType": "media",

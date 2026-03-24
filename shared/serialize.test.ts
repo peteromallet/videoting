@@ -70,6 +70,15 @@ describe("validateSerializedConfig", () => {
     expect(() => validateSerializedConfig(config)).not.toThrow();
   });
 
+  it("accepts config with customEffects key", () => {
+    const config: TimelineConfig = {
+      output: { resolution: "1280x720", fps: 30, file: "out.mp4" },
+      clips: [{ id: "c", at: 0, track: "V1", asset: "x", from: 0, to: 5 }],
+      customEffects: { "sparkle": { code: "exports.default = () => null;", category: "entrance" } },
+    };
+    expect(() => validateSerializedConfig(config)).not.toThrow();
+  });
+
   it("throws for unexpected top-level keys", () => {
     const bad = { output: {}, clips: [], tracks: [], extra: true } as unknown as TimelineConfig;
     expect(() => validateSerializedConfig(bad)).toThrow("unexpected top-level keys");
@@ -90,6 +99,26 @@ describe("validateSerializedConfig", () => {
       clips: [],
     };
     expect(() => validateSerializedConfig(config)).toThrow("unexpected keys");
+  });
+});
+
+describe("serializeForDisk with customEffects", () => {
+  it("preserves customEffects when provided", () => {
+    const customEffects = {
+      sparkle: { code: "exports.default = () => null;", category: "entrance" as const },
+    };
+    const serialized = serializeForDisk(makeConfig(), customEffects);
+    expect(serialized.customEffects).toEqual(customEffects);
+  });
+
+  it("omits customEffects when empty", () => {
+    const serialized = serializeForDisk(makeConfig(), {});
+    expect(serialized.customEffects).toBeUndefined();
+  });
+
+  it("omits customEffects when undefined", () => {
+    const serialized = serializeForDisk(makeConfig());
+    expect(serialized.customEffects).toBeUndefined();
   });
 });
 

@@ -42,8 +42,8 @@ describe("entranceEffects", () => {
     expect(entranceEffectTypes).toEqual(Object.keys(entranceEffects));
   });
 
-  it("has exactly 10 entrance effects", () => {
-    expect(Object.keys(entranceEffects)).toHaveLength(10);
+  it("has exactly 11 entrance effects", () => {
+    expect(Object.keys(entranceEffects)).toHaveLength(11);
   });
 });
 

@@ -5,6 +5,7 @@ import type {
   ResolvedTimelineConfig,
   TimelineConfig,
 } from "@shared/types";
+import { getEffectRegistry } from "@shared/effects/index";
 
 export type {
   AssetRegistry,
@@ -74,5 +75,18 @@ export const loadTimelineConfig = async (): Promise<ResolvedTimelineConfig> => {
     fetchJson<TimelineConfig>("timeline.json"),
     fetchJson<AssetRegistry>("asset-registry.json"),
   ]);
+
+  // Hydrate dynamic effect registry from customEffects in timeline.json
+  if (timeline.customEffects) {
+    const effectRegistry = getEffectRegistry();
+    for (const [name, entry] of Object.entries(timeline.customEffects)) {
+      try {
+        await effectRegistry.registerAsync(name, entry.code);
+      } catch (err) {
+        console.warn(`[remotion] Failed to compile custom effect "${name}":`, err);
+      }
+    }
+  }
+
   return resolveTimelineConfig(timeline, registry, (file) => staticFile(file));
 };

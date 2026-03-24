@@ -161,3 +161,29 @@ This keeps the config easy for both an AI agent and Python tools to read/write.
 - uploads should go through `python3 tools/ingest.py` so `asset_profiles/*.yaml` stay in sync
 
 `timeline.yaml` remains in the repo only as a frozen legacy artifact and should not be used for new edits.
+
+## DataProvider pattern
+
+The timeline editor uses a `DataProvider` interface (`shared/data-provider.ts`) to abstract all I/O operations (loading/saving timeline, resolving asset URLs, uploading assets). Two implementations exist:
+
+- **`LocalDataProvider`** (`shared/data-providers/local.ts`) — default. Talks to the Vite dev-server middleware endpoints (`/api/timeline`, `/api/save-timeline`, etc.). Resolves asset URLs as `/${file}` (registry entries already include the `inputs/` prefix).
+- **`ApiDataProvider`** (`shared/data-providers/api.ts`) — stub for future remote API integration. Constructor takes `{ baseUrl, token? }`.
+
+The active provider is supplied via `DataProviderContext` (`viewer/src/tools/video-editor/contexts/DataProviderContext.tsx`). Defaults to `LocalDataProvider`. To swap implementations, wrap the app with `<DataProviderWrapper provider={myProvider}>`.
+
+## Remote URL support
+
+- `resolveTimelineConfig()` in `shared/config-utils.ts` passes through `http://` and `https://` URLs in `AssetRegistryEntry.file` without calling the URL resolver. This allows the asset registry to contain a mix of local paths and remote CDN URLs.
+- `<Video>`, `<OffthreadVideo>`, `<Audio>`, and `<Img>` in `shared/compositions/` all include `crossOrigin="anonymous"` for CORS-enabled remote URL rendering.
+
+## Dynamic effects pipeline
+
+Custom visual effects can be authored as source code strings and compiled at runtime:
+
+- **`compileEffect(code)`** / **`compileEffectAsync(code)`** (`shared/effects/compile.ts`) — transpiles JSX/TS via sucrase and evaluates the result as a React component. Available globals in compiled code: `React`, `useCurrentFrame`, `useVideoConfig`, `interpolate`, `spring`, `AbsoluteFill`.
+- **`DynamicEffectRegistry`** (`shared/effects/dynamic-registry.ts`) — merges built-in static effects with dynamically compiled ones. Built-in effects always take priority. Singleton accessed via `getEffectRegistry()` in `shared/effects/index.tsx`.
+- **`customEffects` in `timeline.json`** — custom effects are persisted inline in the timeline config under the `customEffects` field. This ensures Remotion Studio/CLI can render them without browser localStorage.
+- **localStorage drafts** (`shared/effects/effect-store.ts`) — draft effects being edited can be stored in localStorage before being promoted to the timeline config.
+- **`wrapWithClipEffects()`** looks up effects from both the static maps and the dynamic registry. Use the `custom:` prefix in clip effect type names (e.g. `{ entrance: { type: "custom:sparkle", duration: 0.5 } }`) to reference dynamic effects.
+- **LLM prompt template** (`shared/effects/effect-prompt-template.ts`) — `getEffectPromptTemplate(description)` returns a prompt string for generating effect code via an LLM.
+- **Effect source strings** (`shared/effects/effect-sources.ts`) — built-in effects as self-contained source strings for DB storage and the dynamic pipeline.

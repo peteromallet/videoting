@@ -1,5 +1,5 @@
 import type { TimelineAction, TimelineEffect as EditorTimelineEffect, TimelineRow } from "@xzdarcy/timeline-engine";
-import { getClipSourceDuration, getConfigSignature, resolveTimelineConfig as resolveTimelineConfigShared } from "@shared/config-utils";
+import { getClipSourceDuration, getConfigSignature, resolveTimelineConfig as resolveTimelineConfigShared, type UrlResolver } from "@shared/config-utils";
 import { migrateToFlatTracks } from "@shared/migrate";
 import { TIMELINE_CLIP_FIELDS, validateSerializedConfig } from "@shared/serialize";
 import type {
@@ -12,6 +12,7 @@ import type {
   TrackDefinition,
   TrackKind,
 } from "@shared/types";
+import type { DataProvider } from "@shared/data-provider";
 import { loadAssetRegistry, loadTimelineConfig } from "@/tools/video-editor/lib/timeline-api";
 
 export interface ClipMeta {
@@ -135,8 +136,9 @@ const buildAssetMap = (registry: AssetRegistry): Record<string, string> => {
 export const resolveTimelineConfig = (
   config: TimelineConfig,
   registry: AssetRegistry,
+  urlResolver?: UrlResolver,
 ): ResolvedTimelineConfig => {
-  return resolveTimelineConfigShared(config, registry, resolveAssetUrl);
+  return resolveTimelineConfigShared(config, registry, urlResolver ?? resolveAssetUrl);
 };
 
 export const configToRows = (
@@ -194,6 +196,7 @@ export const rowsToConfig = (
   output: TimelineOutput,
   clipOrder: ClipOrderMap,
   tracks: TrackDefinition[],
+  customEffects?: TimelineConfig["customEffects"],
 ): TimelineConfig => {
   const actionMap = new Map<string, TimelineAction>();
   const trackActionIds: Record<string, string[]> = Object.fromEntries(tracks.map((track) => [track.id, []]));
@@ -288,6 +291,9 @@ export const rowsToConfig = (
     tracks: tracks.map((track) => ({ ...track })),
     clips,
   };
+  if (customEffects && Object.keys(customEffects).length > 0) {
+    config.customEffects = customEffects;
+  }
   validateSerializedConfig(config);
   return config;
 };
@@ -295,9 +301,10 @@ export const rowsToConfig = (
 export const buildTimelineData = (
   config: TimelineConfig,
   registry: AssetRegistry,
+  urlResolver?: UrlResolver,
 ): TimelineData => {
   const migratedConfig = migrateToFlatTracks(config);
-  const resolvedConfig = resolveTimelineConfig(migratedConfig, registry);
+  const resolvedConfig = resolveTimelineConfig(migratedConfig, registry, urlResolver);
   const rowData = configToRows(migratedConfig);
 
   return {
@@ -318,6 +325,17 @@ export const buildTimelineData = (
 export const loadTimelineJson = async (): Promise<TimelineData> => {
   const [config, registry] = await Promise.all([loadTimelineConfig(), loadAssetRegistry()]);
   return buildTimelineData(config, registry);
+};
+
+/**
+ * Load timeline data using a DataProvider instead of hardcoded fetch calls.
+ */
+export const loadTimelineJsonFromProvider = async (provider: DataProvider): Promise<TimelineData> => {
+  const [config, registry] = await Promise.all([
+    provider.loadTimeline(),
+    provider.loadAssetRegistry(),
+  ]);
+  return buildTimelineData(config, registry, (file) => provider.resolveAssetUrl(file));
 };
 
 export async function loadTranscript(assetKey: string, assetPath: string): Promise<TranscriptSegment[]> {

@@ -3,6 +3,7 @@ import { PreviewPanel } from "@/tools/video-editor/components/PreviewPanel/Previ
 import { PropertiesPanel } from "@/tools/video-editor/components/PropertiesPanel/PropertiesPanel";
 import { TimelineEditor } from "@/tools/video-editor/components/TimelineEditor/TimelineEditor";
 import { TimelineProvider, useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
+import { DataProviderWrapper } from "@/tools/video-editor/contexts/DataProviderContext";
 import { useKeyboardShortcuts } from "@/tools/video-editor/hooks/useKeyboardShortcuts";
 
 function VideoEditorLayout() {
@@ -44,8 +45,10 @@ function VideoEditorLayout() {
 
 export function VideoEditorPage() {
   return (
-    <TimelineProvider>
-      <VideoEditorLayout />
-    </TimelineProvider>
+    <DataProviderWrapper>
+      <TimelineProvider>
+        <VideoEditorLayout />
+      </TimelineProvider>
+    </DataProviderWrapper>
   );
 }

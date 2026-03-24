@@ -18,7 +18,8 @@
       "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime.d.ts"],
       "react-dom": ["./node_modules/@types/react-dom/index.d.ts"],
       "remotion": ["./node_modules/remotion"],
-      "@remotion/player": ["./node_modules/@remotion/player"]
+      "@remotion/player": ["./node_modules/@remotion/player"],
+      "sucrase": ["./node_modules/sucrase/dist/types/index.d.ts"]
     },
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
