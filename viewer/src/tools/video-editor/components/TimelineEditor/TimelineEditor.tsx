@@ -80,10 +80,26 @@ export function TimelineEditor() {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden rounded-lg border border-border/70 bg-editor-crust">
+    <div className="flex h-full w-full overflow-hidden rounded-lg border border-border/70 bg-editor-crust">
+      <div className="flex w-16 shrink-0 flex-col border-r border-border/40" style={{ paddingTop: 30 }}>
+        {data.tracks.map((track, index) => (
+          <TrackLabel
+            key={track.id}
+            track={track}
+            isSelected={selectedTrackId === track.id}
+            trackCount={data.tracks.length}
+            trackIndex={index}
+            sameKindCount={data.tracks.filter((t) => t.kind === track.kind).length}
+            onSelect={setSelectedTrackId}
+            onChange={handleTrackPopoverChange}
+            onReorder={handleReorderTrack}
+            onRemove={handleRemoveTrack}
+          />
+        ))}
+      </div>
       <div
         ref={timelineWrapperRef}
-        className="timeline-wrapper h-full w-full overflow-hidden"
+        className="timeline-wrapper h-full min-w-0 flex-1 overflow-hidden"
         onDragOver={onTimelineDragOver}
         onDragLeave={onTimelineDragLeave}
         onDrop={onTimelineDrop}

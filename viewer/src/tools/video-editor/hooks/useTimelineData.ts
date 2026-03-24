@@ -1,0 +1,466 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { TimelineRow } from "@xzdarcy/timeline-engine";
+import { getConfigSignature, parseResolution } from "@shared/config-utils";
+import { getTrackById } from "@shared/editor-utils";
+import { serializeForDisk } from "@shared/serialize";
+import type { TrackDefinition } from "@shared/types";
+import {
+  buildTrackClipOrder,
+  SCALE_SECONDS,
+} from "@/tools/video-editor/lib/coordinate-utils";
+import {
+  buildTimelineData,
+  configToRows,
+  resolveTimelineConfig,
+  rowsToConfig,
+  loadTimelineJson,
+  type ClipMeta,
+  type ClipOrderMap,
+  type TimelineData,
+} from "@/tools/video-editor/lib/timeline-data";
+import { loadAssetRegistry, saveTimelineConfig, uploadAssetFile } from "@/tools/video-editor/lib/timeline-api";
+import { useEditorSettings } from "@/tools/video-editor/settings/useEditorSettings";
+
+export type SaveStatus = "saved" | "saving" | "dirty" | "error";
+export type RenderStatus = "idle" | "rendering" | "done" | "error";
+
+export interface EditorPreferences {
+  scaleWidth: number;
+  clipSections: Record<string, boolean>;
+  assetPanel: {
+    showAll: boolean;
+    showHidden: boolean;
+    hidden: string[];
+  };
+}
+
+const defaultPreferences: EditorPreferences = {
+  scaleWidth: 160,
+  clipSections: {
+    timing: true,
+    position: true,
+    effects: true,
+    audio: false,
+    transitions: true,
+    text: true,
+  },
+  assetPanel: {
+    showAll: false,
+    showHidden: false,
+    hidden: [],
+  },
+};
+
+export interface ActionDragState {
+  rowId: string;
+  initialStart: number;
+  initialEnd: number;
+  latestStart: number;
+  latestEnd: number;
+}
+
+export interface UseTimelineDataResult {
+  data: TimelineData | null;
+  resolvedConfig: TimelineData["resolvedConfig"] | null;
+  selectedClipId: string | null;
+  selectedTrackId: string | null;
+  selectedClip: TimelineData["resolvedConfig"]["clips"][number] | null;
+  selectedTrack: TrackDefinition | null;
+  selectedClipHasPredecessor: boolean;
+  compositionSize: { width: number; height: number };
+  trackScaleMap: Record<string, number>;
+  saveStatus: SaveStatus;
+  renderStatus: RenderStatus;
+  renderLog: string;
+  renderDirty: boolean;
+  scale: number;
+  scaleWidth: number;
+  isLoading: boolean;
+  dataRef: React.MutableRefObject<TimelineData | null>;
+  crossTrackActive: React.MutableRefObject<boolean>;
+  actionDragStateRef: React.MutableRefObject<Record<string, ActionDragState>>;
+  resizeStartRef: React.MutableRefObject<Record<string, { start: number; from: number }>>;
+  preferences: EditorPreferences;
+  setSelectedClipId: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedTrackId: React.Dispatch<React.SetStateAction<string | null>>;
+  setRenderStatus: React.Dispatch<React.SetStateAction<RenderStatus>>;
+  setRenderLog: React.Dispatch<React.SetStateAction<string>>;
+  setRenderDirty: React.Dispatch<React.SetStateAction<boolean>>;
+  setScaleWidth: (updater: number | ((value: number) => number)) => void;
+  setClipSectionOpen: (section: keyof EditorPreferences["clipSections"], open: boolean) => void;
+  setAssetPanelState: (patch: Partial<EditorPreferences["assetPanel"]>) => void;
+  applyTimelineEdit: (
+    nextRows: TimelineRow[],
+    metaUpdates?: Record<string, Partial<ClipMeta>>,
+    metaDeletes?: string[],
+    clipOrderOverride?: ClipOrderMap,
+  ) => void;
+  applyResolvedConfigEdit: (
+    nextResolvedConfig: TimelineData["resolvedConfig"],
+    options?: { selectedClipId?: string | null; selectedTrackId?: string | null },
+  ) => void;
+  queryClient: ReturnType<typeof useQueryClient>;
+  uploadFiles: (files: File[]) => Promise<void>;
+  startRender: () => Promise<void>;
+}
+
+export function useTimelineData(): UseTimelineDataResult {
+  const queryClient = useQueryClient();
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSavedSignature = useRef("");
+  const dataRef = useRef<TimelineData | null>(null);
+  const resizeStartRef = useRef<Record<string, { start: number; from: number }>>({});
+  const crossTrackActive = useRef(false);
+  const actionDragStateRef = useRef<Record<string, ActionDragState>>({});
+
+  const [data, setData] = useState<TimelineData | null>(null);
+  const [selectedClipId, setSelectedClipId] = useState<string | null>(null);
+  const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("saved");
+  const [renderStatus, setRenderStatus] = useState<RenderStatus>("idle");
+  const [renderLog, setRenderLog] = useState("");
+  const [renderDirty, setRenderDirty] = useState(false);
+  const [preferences, setPreferences] = useEditorSettings<EditorPreferences>("video-editor:preferences", defaultPreferences);
+
+  const scale = SCALE_SECONDS;
+  const scaleWidth = preferences.scaleWidth;
+  dataRef.current = data;
+
+  const timelineQuery = useQuery({
+    queryKey: ["timeline-data"],
+    queryFn: loadTimelineJson,
+    refetchInterval: 1000,
+  });
+
+  const assetRegistryQuery = useQuery({
+    queryKey: ["asset-registry"],
+    queryFn: loadAssetRegistry,
+    refetchInterval: 2000,
+  });
+
+  const saveMutation = useMutation({
+    mutationFn: saveTimelineConfig,
+    onSuccess: (_value, savedConfig) => {
+      const current = dataRef.current;
+      if (!current) {
+        return;
+      }
+
+      setSaveStatus("saved");
+      setRenderDirty(true);
+      lastSavedSignature.current = getConfigSignature(resolveTimelineConfig(savedConfig, current.registry));
+    },
+    onError: () => {
+      setSaveStatus("error");
+    },
+  });
+
+  const materializeData = useCallback((
+    current: TimelineData,
+    rows: TimelineRow[],
+    meta: Record<string, ClipMeta>,
+    clipOrder: ClipOrderMap,
+  ): TimelineData => {
+    const config = rowsToConfig(rows, meta, current.output, clipOrder, current.tracks);
+    const resolvedConfig = resolveTimelineConfig(config, current.registry);
+    const rowData = configToRows(config);
+
+    return {
+      ...current,
+      config,
+      resolvedConfig,
+      rows: rowData.rows,
+      meta: rowData.meta,
+      clipOrder: rowData.clipOrder,
+      effects: rowData.effects,
+      tracks: config.tracks ?? [],
+      output: { ...config.output },
+      signature: getConfigSignature(resolvedConfig),
+    };
+  }, []);
+
+  const saveTimeline = useCallback(async (nextData: TimelineData) => {
+    setSaveStatus("saving");
+    await saveMutation.mutateAsync(nextData.config);
+  }, [saveMutation]);
+
+  const scheduleSave = useCallback((nextData: TimelineData) => {
+    setSaveStatus("dirty");
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+    }
+
+    saveTimer.current = setTimeout(() => {
+      saveTimer.current = null;
+      void saveTimeline(nextData);
+    }, 500);
+  }, [saveTimeline]);
+
+  const commitData = useCallback((
+    nextData: TimelineData,
+    options?: {
+      save?: boolean;
+      selectedClipId?: string | null;
+      selectedTrackId?: string | null;
+      updateLastSavedSignature?: boolean;
+    },
+  ) => {
+    setData(nextData);
+    if (options?.selectedClipId !== undefined) {
+      setSelectedClipId(options.selectedClipId);
+    } else if (selectedClipId && !nextData.meta[selectedClipId]) {
+      setSelectedClipId(null);
+    }
+
+    if (options?.selectedTrackId !== undefined) {
+      setSelectedTrackId(options.selectedTrackId);
+    } else {
+      const fallbackTrackId = selectedTrackId && nextData.tracks.some((track) => track.id === selectedTrackId)
+        ? selectedTrackId
+        : nextData.tracks[0]?.id ?? null;
+      setSelectedTrackId(fallbackTrackId);
+    }
+
+    if (options?.updateLastSavedSignature) {
+      lastSavedSignature.current = nextData.signature;
+    }
+
+    if (options?.save ?? true) {
+      scheduleSave(nextData);
+    }
+  }, [scheduleSave, selectedClipId, selectedTrackId]);
+
+  const applyTimelineEdit = useCallback((
+    nextRows: TimelineRow[],
+    metaUpdates?: Record<string, Partial<ClipMeta>>,
+    metaDeletes?: string[],
+    clipOrderOverride?: ClipOrderMap,
+  ) => {
+    const current = dataRef.current;
+    if (!current) {
+      return;
+    }
+
+    const nextMeta: Record<string, ClipMeta> = { ...current.meta };
+    if (metaUpdates) {
+      for (const [clipId, patch] of Object.entries(metaUpdates)) {
+        nextMeta[clipId] = nextMeta[clipId] ? { ...nextMeta[clipId], ...patch } : (patch as ClipMeta);
+      }
+    }
+
+    if (metaDeletes) {
+      for (const clipId of metaDeletes) {
+        delete nextMeta[clipId];
+      }
+    }
+
+    const clipOrder = clipOrderOverride ?? buildTrackClipOrder(current.tracks, current.clipOrder, metaDeletes);
+    const nextData = materializeData(current, nextRows, nextMeta, clipOrder);
+    commitData(nextData);
+  }, [commitData, materializeData]);
+
+  const applyResolvedConfigEdit = useCallback((
+    nextResolvedConfig: TimelineData["resolvedConfig"],
+    options?: { selectedClipId?: string | null; selectedTrackId?: string | null },
+  ) => {
+    const current = dataRef.current;
+    if (!current) {
+      return;
+    }
+
+    const nextData = buildTimelineData(serializeForDisk(nextResolvedConfig), current.registry);
+    commitData(nextData, {
+      selectedClipId: options?.selectedClipId,
+      selectedTrackId: options?.selectedTrackId,
+    });
+  }, [commitData]);
+
+  useEffect(() => {
+    if (timelineQuery.data && timelineQuery.data.signature !== lastSavedSignature.current) {
+      commitData(timelineQuery.data, { save: false, updateLastSavedSignature: true });
+    }
+  }, [commitData, timelineQuery.data]);
+
+  useEffect(() => {
+    const current = dataRef.current;
+    const registry = assetRegistryQuery.data;
+    if (!current || !registry) {
+      return;
+    }
+
+    const nextData = buildTimelineData(current.config, registry);
+    if (nextData.signature === current.signature && Object.keys(nextData.assetMap).length === Object.keys(current.assetMap).length) {
+      return;
+    }
+
+    commitData(nextData, {
+      save: false,
+      selectedClipId,
+      selectedTrackId,
+    });
+  }, [assetRegistryQuery.data, commitData, selectedClipId, selectedTrackId]);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimer.current) {
+        clearTimeout(saveTimer.current);
+      }
+    };
+  }, []);
+
+  const resolvedConfig = data?.resolvedConfig ?? null;
+  const selectedClip = useMemo(() => {
+    if (!resolvedConfig || !selectedClipId) {
+      return null;
+    }
+    return resolvedConfig.clips.find((clip) => clip.id === selectedClipId) ?? null;
+  }, [resolvedConfig, selectedClipId]);
+
+  const selectedTrack = useMemo(() => {
+    if (!data) {
+      return null;
+    }
+
+    const preferredTrackId = selectedClip?.track ?? selectedTrackId;
+    return preferredTrackId ? getTrackById(data.resolvedConfig, preferredTrackId) : data.tracks[0] ?? null;
+  }, [data, selectedClip, selectedTrackId]);
+
+  const selectedClipHasPredecessor = useMemo(() => {
+    if (!resolvedConfig || !selectedClip) {
+      return false;
+    }
+
+    const siblings = resolvedConfig.clips
+      .filter((clip) => clip.track === selectedClip.track)
+      .sort((left, right) => left.at - right.at);
+    const selectedIndex = siblings.findIndex((clip) => clip.id === selectedClip.id);
+    return selectedIndex > 0;
+  }, [resolvedConfig, selectedClip]);
+
+  const compositionSize = useMemo(() => {
+    return data ? parseResolution(data.output.resolution) : { width: 1280, height: 720 };
+  }, [data]);
+
+  const trackScaleMap = useMemo(() => {
+    if (!data) {
+      return {};
+    }
+
+    return Object.fromEntries(data.tracks.map((track) => [track.id, track.scale ?? 1]));
+  }, [data]);
+
+  const setScaleWidth = useCallback((updater: number | ((value: number) => number)) => {
+    setPreferences((current) => ({
+      ...current,
+      scaleWidth: typeof updater === "function" ? (updater as (value: number) => number)(current.scaleWidth) : updater,
+    }));
+  }, [setPreferences]);
+
+  const setClipSectionOpen = useCallback((section: keyof EditorPreferences["clipSections"], open: boolean) => {
+    setPreferences((current) => ({
+      ...current,
+      clipSections: {
+        ...current.clipSections,
+        [section]: open,
+      },
+    }));
+  }, [setPreferences]);
+
+  const setAssetPanelState = useCallback((patch: Partial<EditorPreferences["assetPanel"]>) => {
+    setPreferences((current) => ({
+      ...current,
+      assetPanel: {
+        ...current.assetPanel,
+        ...patch,
+      },
+    }));
+  }, [setPreferences]);
+
+  const uploadFiles = useCallback(async (files: File[]) => {
+    await Promise.all(files.map(uploadAssetFile));
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ["timeline-data"] }),
+      queryClient.invalidateQueries({ queryKey: ["asset-registry"] }),
+    ]);
+  }, [queryClient]);
+
+  const startRender = useCallback(async () => {
+    if (renderStatus === "rendering") {
+      return;
+    }
+
+    setRenderStatus("rendering");
+    setRenderLog("");
+    try {
+      const response = await fetch("/api/render", { method: "POST" });
+      const reader = response.body?.getReader();
+      if (!reader) {
+        setRenderStatus("error");
+        return;
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) {
+          if (line.startsWith("event: done")) {
+            setRenderStatus("done");
+            setRenderDirty(false);
+          } else if (line.startsWith("event: error")) {
+            setRenderStatus("error");
+          } else if (line.startsWith("data: ")) {
+            setRenderLog((currentLog) => currentLog + line.slice(6) + "\n");
+          }
+        }
+      }
+    } catch {
+      setRenderStatus("error");
+    }
+  }, [renderStatus]);
+
+  return {
+    data,
+    resolvedConfig,
+    selectedClipId,
+    selectedTrackId,
+    selectedClip,
+    selectedTrack,
+    selectedClipHasPredecessor,
+    compositionSize,
+    trackScaleMap,
+    saveStatus,
+    renderStatus,
+    renderLog,
+    renderDirty,
+    scale,
+    scaleWidth,
+    isLoading: timelineQuery.isLoading && !data,
+    dataRef,
+    crossTrackActive,
+    actionDragStateRef,
+    resizeStartRef,
+    preferences,
+    setSelectedClipId,
+    setSelectedTrackId,
+    setRenderStatus,
+    setRenderLog,
+    setRenderDirty,
+    setScaleWidth,
+    setClipSectionOpen,
+    setAssetPanelState,
+    applyTimelineEdit,
+    applyResolvedConfigEdit,
+    queryClient,
+    uploadFiles,
+    startRender,
+  };
+}

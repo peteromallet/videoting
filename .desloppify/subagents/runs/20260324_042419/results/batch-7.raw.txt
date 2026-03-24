@@ -1,0 +1,91 @@
+{
+  "batch": "dependency_health",
+  "batch_index": 7,
+  "assessments": {"dependency_health": 78.0},
+  "dimension_notes": {
+    "dependency_health": {
+      "evidence": [
+        "viewer/package.json uses file: references for @remotion/player and remotion, pointing to ../remotion/node_modules/. This couples the viewer's install to the remotion workspace and will break if remotion's node_modules layout changes.",
+        "@dnd-kit/core, @dnd-kit/sortable, and @dnd-kit/utilities are listed as dependencies but no DnD kit imports appear in the viewer source code — these appear unused and should be removed",
+        "clsx is imported by utils.ts (and transitively by 7 UI components) but is not listed in viewer/package.json dependencies — it works only because it is a transitive dependency of another package",
+        "No duplicate-purpose libraries observed: single HTTP client (fetch), single state management (react-query), single timeline library",
+        "No circular dependencies visible in the import graph — coupling_matrix shows only remotion/src ↔ remotion/src/timeline",
+        "React versions differ between viewer (^19.2.0) and remotion (^19.2.4) — minor semver range overlap but could cause version mismatch in edge cases",
+        "zod appears in viewer/node_modules but is not in package.json and no imports reference it in source — phantom dependency from a transitive install"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "single_edit",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "dependency_health": {
+      "dimension_character": "The dependency graph is lean with no duplicate-purpose libraries and no heavy deps pulled for light use. The main issues are structural: file: references create fragile cross-workspace coupling, @dnd-kit appears unused, and clsx is an unlisted phantom dependency. These are cleanup items rather than architectural problems.",
+      "score_rationale": "No overlapping libraries, no heavy dependencies for trivial use, no circular dependency cycles. Penalties for unused @dnd-kit packages (3 deps), fragile file: references to remotion internals, and phantom clsx dependency. These are concrete but localized issues that map to a score in the mid-70s."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "dependency_health",
+      "identifier": "unused_dnd_kit_deps",
+      "summary": "@dnd-kit/core, @dnd-kit/sortable, and @dnd-kit/utilities appear unused in viewer source code",
+      "related_files": ["viewer/package.json"],
+      "evidence": ["No imports from @dnd-kit found in viewer/src/**/*.{ts,tsx} — these packages add install weight without being used"],
+      "suggestion": "Remove @dnd-kit/core, @dnd-kit/sortable, and @dnd-kit/utilities from viewer/package.json dependencies",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "fragile_file_references",
+      "summary": "viewer/package.json uses file: references pointing into remotion/node_modules/ internals",
+      "related_files": ["viewer/package.json"],
+      "evidence": ["@remotion/player: 'file:../remotion/node_modules/@remotion/player' and remotion: 'file:../remotion/node_modules/remotion' — these break if remotion's node_modules layout changes due to hoisting, deduplication, or version updates"],
+      "suggestion": "Use a workspace manager (npm workspaces, pnpm workspaces) to share remotion dependencies, or pin specific npm versions in the viewer's own package.json",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "phantom_clsx_dependency",
+      "summary": "clsx is imported in viewer source but not listed in viewer/package.json",
+      "related_files": ["viewer/package.json", "viewer/src/shared/lib/utils.ts"],
+      "evidence": ["utils.ts imports from 'clsx' but clsx is not in dependencies or devDependencies — it works only as a transitive dependency"],
+      "suggestion": "Add clsx to viewer/package.json dependencies explicitly",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["The viewer was set up to share remotion's installation rather than managing its own dependency versions, leading to file: references and phantom transitive deps"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "dependency_health": {
+      "add": [
+        {
+          "header": "No duplicate-purpose production libraries",
+          "description": "The codebase uses fetch exclusively for HTTP, react-query for async state, and a single timeline library. No lodash, moment, or other heavy utility deps pulled for light use.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Fragile file: cross-workspace references",
+          "description": "viewer/package.json references remotion packages via file: paths into ../remotion/node_modules/, coupling the install process to remotion's internal node_modules layout.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Unused dnd-kit packages in viewer",
+          "description": "Three @dnd-kit packages are listed as dependencies but have no imports in source code, likely remnants of an abandoned drag-and-drop implementation.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

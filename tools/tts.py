@@ -38,7 +38,7 @@ from pathlib import Path
 
 import requests
 
-from common import ROOT, audio_duration
+from common import ROOT, audio_duration, download_file
 
 API_BASE = "https://app.resemble.ai/api/v2"
 MAX_SEGMENT_SECONDS = 19  # Edit API requires < 20s
@@ -267,15 +267,6 @@ def poll_edit(uuid: str, api_key: str, timeout: int = 180) -> str:
     raise TimeoutError(f"Edit {uuid} not ready after {timeout}s")
 
 
-def download_result(url: str, out_path: Path):
-    resp = requests.get(url, stream=True)
-    resp.raise_for_status()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "wb") as f:
-        for chunk in resp.iter_content(chunk_size=8192):
-            f.write(chunk)
-
-
 # ── standard interface ───────────────────────────────────────────────────────
 
 
@@ -325,7 +316,7 @@ def run(args: argparse.Namespace):
 
         out_path = Path(args.out)
         print(f"Downloading → {out_path}")
-        download_result(result_url, out_path)
+        download_file(result_url, out_path)
 
         print(f"\nDone: {out_path}")
         print(f"Next steps:")

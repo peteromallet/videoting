@@ -1,0 +1,101 @@
+{
+  "batch": "abstraction_fitness",
+  "batch_index": 6,
+  "assessments": {"abstraction_fitness": 72.0},
+  "dimension_notes": {
+    "abstraction_fitness": {
+      "evidence": [
+        "UseTimelineStateResult interface has 61 fields — it bundles state, refs, callbacks, and preferences into a single monolithic context value, forcing all consumers to depend on the entire surface even if they only use a small subset",
+        "cn() in viewer/src/shared/lib/utils.ts is a 1-line pass-through wrapper around clsx() with no added behavior, validation, or translation — pure ceremony",
+        "ClipMeta in timeline-data.ts duplicates nearly every field from TimelineClip in shared/types.ts (asset, track, from, to, speed, hold, volume, x, y, width, height, opacity, text, entrance, exit, continuous, transition, effects) — the parallel type adds maintenance burden without type safety benefit",
+        "getDefaultClipMeta() in timeline-data.ts is a mechanical field-by-field copy from TimelineClip to ClipMeta, confirming the types are structurally identical minus id/at",
+        "TimelineContext.tsx is a thin pass-through that wraps useTimelineState() into a context provider — this is a standard React pattern (skip) but the underlying hook's 61-field interface means the context provides no narrowing benefit",
+        "editor-utils.ts exports focused, behavior-carrying functions (splitClipAtPlayhead, toggleClipMute, addTrack) — these are earned abstractions that provide real value",
+        "coordinate-utils.ts exports focused utility functions with clear domain purpose — no pass-through indirection"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "sub_axes": {
+        "abstraction_leverage": 80.0,
+        "indirection_cost": 60.0,
+        "interface_honesty": 75.0,
+        "delegation_density": 95.0,
+        "definition_directness": 65.0,
+        "type_discipline": 80.0
+      }
+    }
+  },
+  "dimension_judgment": {
+    "abstraction_fitness": {
+      "dimension_character": "The shared/ layer has well-earned, behavior-carrying abstractions — editor-utils, config-utils, and serialize each add genuine domain logic. However, the viewer's central hook exposes a 61-field interface that forces all consumers to depend on the entire editor state, and the parallel ClipMeta type duplicates TimelineClip without narrowing or adding safety. A handful of trivial wrappers (cn over clsx) add naming ceremony without value.",
+      "score_rationale": "The codebase avoids deep delegation chains, facade modules, and one-implementation interfaces — the mechanical scan confirms zero wrappers and zero delegation-heavy classes. The main penalty comes from the bloated UseTimelineStateResult interface that passes a wide option object through context, and from the ClipMeta/TimelineClip parallel definition. These are concrete indirection costs but they affect one subsystem, not a codebase-wide pattern. Score of 72 reflects mostly good abstractions with a significant local fitness problem."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "bloated_timeline_context",
+      "summary": "UseTimelineStateResult bundles 61 fields into a single context value, forcing all consumers to depend on the entire surface",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineState.ts", "viewer/src/tools/video-editor/contexts/TimelineContext.tsx"],
+      "evidence": ["UseTimelineStateResult interface at line 81-143 exports data, refs, state setters, event handlers, and preferences as one flat object — consumers like Toolbar only need currentTime and formatTime but receive everything"],
+      "suggestion": "Split UseTimelineStateResult into focused sub-hooks or context slices: useTimelineData (data/config), useTimelinePlayback (currentTime, seek, play), useTimelineEditing (handlers), useTimelinePreferences (scaleWidth, sections). Each consumer imports only what it needs.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "props"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "parallel_clip_meta_type",
+      "summary": "ClipMeta duplicates TimelineClip fields without adding type narrowing or safety",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts", "shared/types.ts"],
+      "evidence": ["ClipMeta (lines 18-38) has 17 fields that are identical in name and type to TimelineClip (lines 61-83), differing only by omitting id and at. getDefaultClipMeta() at line 97 is a mechanical field copy."],
+      "suggestion": "Define ClipMeta as Omit<TimelineClip, 'id' | 'at'> to eliminate the parallel definition and ensure they stay in sync.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "cn_passthrough_wrapper",
+      "summary": "cn() is a 1-line pass-through wrapper around clsx with no added behavior",
+      "related_files": ["viewer/src/shared/lib/utils.ts"],
+      "evidence": ["utils.ts exports cn(...inputs) { return clsx(inputs); } — no tailwind-merge, no validation, no added logic. Seven UI components import cn instead of clsx directly."],
+      "suggestion": "Replace cn imports with direct clsx usage, or add tailwind-merge (twMerge) to justify the wrapper's existence.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["The editor grew organically as a single hook, accumulating all state management without periodic decomposition"],
+    "likely_symptoms": ["bloated_timeline_context is root; parallel_clip_meta_type is independently rooted in early design"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "abstraction_fitness": {
+      "add": [
+        {
+          "header": "Earned domain abstractions in shared/",
+          "description": "editor-utils, config-utils, serialize, and migrate each carry genuine domain logic (split, mute, resolution parsing, serialization validation). These are behavior-adding helpers, not pass-through wrappers.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Monolithic hook context interface",
+          "description": "useTimelineState returns 61 fields in a single object, threaded through React context. All consumers depend on the entire surface, creating unnecessary coupling between unrelated concerns like playback and track management.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "ClipMeta parallels TimelineClip without narrowing",
+          "description": "ClipMeta duplicates 17 fields from TimelineClip, differing only by omitting id and at. The duplication creates maintenance risk when fields are added to one but not the other.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

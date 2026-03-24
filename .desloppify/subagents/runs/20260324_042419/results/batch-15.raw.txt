@@ -1,0 +1,85 @@
+{
+  "batch": "package_organization",
+  "batch_index": 15,
+  "assessments": {
+    "package_organization": 82.0
+  },
+  "dimension_notes": {
+    "package_organization": {
+      "evidence": [
+        "The project has a clear top-level split: tools/ (Python CLI), viewer/ (React app), shared/ (TypeScript shared code), remotion/ (Remotion rendering), scripts/ (one-off shell scripts), inputs/ (source media), output/ (rendered output)",
+        "shared/ directory serves as genuine shared code between viewer and remotion -- imported by both subsystems via path alias @shared/",
+        "tools/ directory contains 9 Python files, all CLI tools plus common.py -- this is cohesive and appropriately flat for a small set of related tools",
+        "viewer/src/tools/video-editor/ has a well-organized component structure: components/ (PreviewPanel, PropertiesPanel, TimelineEditor, Toolbar), hooks/, lib/, contexts/, pages/, settings/",
+        "shared/ root has 5 files (config-utils.ts, editor-utils.ts, migrate.ts, serialize.ts, types.ts) plus subdirectories compositions/ and effects/ -- mixing utility modules with component directories",
+        "shared/compositions/ and shared/effects/ contain Remotion-specific React components that are only used by remotion/, not by viewer/ -- they are placed in shared/ but have no shared consumers",
+        "remotion/src/timeline/ directory exists but was not listed in the structure -- remotion/src/ imports from it and from shared/",
+        "viewer/src/shared/components/ui/ has 8 UI primitive components (badge, button, card, collapsible, input, popover, select, slider) with avg fan_in of 0.0 -- these appear to be installed UI primitives",
+        "The Python tools/ and TypeScript shared/ directories handle the same domain concepts (timeline loading, track management, migration) in parallel but separate implementations"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium"
+    }
+  },
+  "dimension_judgment": {
+    "package_organization": {
+      "dimension_character": "The top-level directory structure clearly maps to domain capabilities: tools for CLI operations, viewer for the React editor, shared for cross-subsystem TypeScript code, remotion for video rendering. Within each area, organization is generally logical. The main structural issue is that shared/ contains Remotion-specific compositions and effects that are not actually shared with the viewer, making the 'shared' label misleading for those subdirectories. The parallel Python/TypeScript implementations of the same concepts (migration, track management) are a natural consequence of the dual-language architecture.",
+      "score_rationale": "A developer can largely predict where to find things based on directory structure. The top-level split is clean and the viewer's internal organization is well-structured. The misplacement of Remotion-specific components under shared/ is the main navigability issue -- a developer looking for 'shared' code would find components only used by one consumer. This places the organization in the 'mostly coherent with minor placement outliers' range around 82."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "package_organization",
+      "identifier": "remotion_components_in_shared",
+      "summary": "shared/compositions/ and shared/effects/ contain Remotion-specific components not shared with viewer",
+      "related_files": [
+        "shared/compositions/AudioTrack.tsx",
+        "shared/compositions/VisualClip.tsx",
+        "shared/compositions/TextClip.tsx",
+        "shared/compositions/TimelineRenderer.tsx",
+        "shared/compositions/DebugTrack.tsx",
+        "shared/effects/entrances.tsx",
+        "shared/effects/exits.tsx",
+        "shared/effects/continuous.tsx",
+        "shared/effects/index.tsx"
+      ],
+      "evidence": [
+        "shared/effects/entrances.tsx has fan_in of 3, all from within shared/effects/ and remotion/ -- not imported by viewer/",
+        "shared/compositions/ files import from remotion library (useCurrentFrame, Sequence, AbsoluteFill) and are rendered by remotion/src/, not viewer/",
+        "The 'shared' directory name implies cross-consumer usage, but these subdirectories serve only the remotion subsystem"
+      ],
+      "suggestion": "Staged reorg plan: (1) Move shared/compositions/ to remotion/src/compositions/ and shared/effects/ to remotion/src/effects/. (2) Update path aliases in remotion's tsconfig to resolve @shared/compositions and @shared/effects to the new locations, or update import paths directly. (3) Verify with `npx tsc --noEmit` in the remotion directory. (4) The remaining shared/ files (types.ts, config-utils.ts, editor-utils.ts, migrate.ts, serialize.ts) are genuinely shared and should stay.",
+      "confidence": "medium",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["shared/ was likely created as a monorepo-style shared directory, but the compositions and effects were developed as Remotion components and placed there by path-alias convention rather than actual sharing need"]
+  },
+  "context_updates": {
+    "package_organization": {
+      "add": [
+        {
+          "header": "Clean top-level domain-capability mapping",
+          "description": "Root directories (tools/, viewer/, shared/, remotion/, scripts/, inputs/, output/) each map to a distinct capability or artifact type. A developer can immediately orient by directory name.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Well-organized viewer component hierarchy",
+          "description": "viewer/src/tools/video-editor/ follows a standard React project structure with components/, hooks/, lib/, contexts/, pages/, and settings/ subdirectories, each containing cohesive files.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent Python CLI flat structure",
+          "description": "tools/ keeps all 9 Python CLI files flat with common.py as the shared utility. At this file count, flat organization is appropriate and navigable.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

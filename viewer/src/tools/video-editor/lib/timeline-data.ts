@@ -1,11 +1,10 @@
 import type { TimelineAction, TimelineEffect as EditorTimelineEffect, TimelineRow } from "@xzdarcy/timeline-engine";
-import { getClipSourceDuration, getConfigSignature } from "@shared/config-utils";
+import { getClipSourceDuration, getConfigSignature, resolveTimelineConfig as resolveTimelineConfigShared } from "@shared/config-utils";
 import { migrateToFlatTracks } from "@shared/migrate";
 import { TIMELINE_CLIP_FIELDS, validateSerializedConfig } from "@shared/serialize";
 import type {
   AssetRegistry,
   ClipType,
-  ResolvedAssetRegistryEntry,
   ResolvedTimelineConfig,
   TimelineClip,
   TimelineConfig,
@@ -137,40 +136,7 @@ export const resolveTimelineConfig = (
   config: TimelineConfig,
   registry: AssetRegistry,
 ): ResolvedTimelineConfig => {
-  const migratedConfig = migrateToFlatTracks(config);
-  const resolvedRegistry: Record<string, ResolvedAssetRegistryEntry> = {};
-  for (const [assetId, entry] of Object.entries(registry.assets ?? {})) {
-    resolvedRegistry[assetId] = {
-      ...entry,
-      src: resolveAssetUrl(entry.file),
-    };
-  }
-
-  const clips = migratedConfig.clips.map((clip) => {
-    if (!clip.asset) {
-      return {
-        ...clip,
-        assetEntry: undefined,
-      };
-    }
-
-    const assetEntry = resolvedRegistry[clip.asset];
-    if (!assetEntry) {
-      throw new Error(`Clip '${clip.id}' references missing asset '${clip.asset}'`);
-    }
-
-    return {
-      ...clip,
-      assetEntry,
-    };
-  });
-
-  return {
-    output: { ...migratedConfig.output },
-    tracks: migratedConfig.tracks ?? [],
-    clips,
-    registry: resolvedRegistry,
-  };
+  return resolveTimelineConfigShared(config, registry, resolveAssetUrl);
 };
 
 export const configToRows = (

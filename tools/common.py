@@ -112,6 +112,18 @@ def save_json(data: Any, path: Path) -> None:
     _atomic_write_text(path, json.dumps(data, indent=2) + "\n")
 
 
+def download_file(url: str, out_path: Path) -> None:
+    """Download a file from a URL to a local path."""
+    import requests
+
+    resp = requests.get(url, stream=True)
+    resp.raise_for_status()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(out_path, "wb") as f:
+        for chunk in resp.iter_content(chunk_size=8192):
+            f.write(chunk)
+
+
 DEFAULT_VIDEO_SCALE = 0.95
 
 LEGACY_TRACK_MAP = {

@@ -1,0 +1,85 @@
+{
+  "batch": "incomplete_migration",
+  "batch_index": 14,
+  "assessments": {
+    "incomplete_migration": 72.0
+  },
+  "dimension_notes": {
+    "incomplete_migration": {
+      "evidence": [
+        "LEGACY_TRACK_MAP and LEGACY_ASSET_EFFECTS are defined in both common.py (Python) and migrate.ts (TypeScript) -- these are active migration shims that convert old track names (video->V2, overlay->V3, audio->A1) and old effect formats",
+        "migrate_timeline_to_flat_tracks in common.py and migrateToFlatTracks in migrate.ts implement the same migration logic in two languages -- the Python version is used by CLI tools and the TypeScript version by viewer/remotion",
+        "The timeline.yaml file still exists alongside timeline.json -- tools/migrate_yaml_to_json.py is the bridge, and view.py/render.py now work from JSON, but the YAML remains as the source-of-truth reference",
+        "TimelineClip.effects field typed as 'TimelineEffect[] | Record<string, number>' in types.ts represents the old format coexisting with the new entrance/exit/continuous fields -- getEffectValue in config-utils.ts handles both shapes",
+        "common.py's _migrate_legacy_effects function handles both dict-style and list-style effects formats, showing the old format is still present in data",
+        "The effects field is still defined on TimelineClip type and handled in serialization (serialize.ts TIMELINE_CLIP_FIELDS includes 'effects') even though new code uses entrance/exit/continuous",
+        "tools/migrate_yaml_to_json.py is described as a 'one-time migration' script but the migration shims remain active in production code paths (loaded every time config is read)",
+        "shared/migrate.ts file name itself signals incomplete migration -- it exists as a runtime transform rather than a completed data migration"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "incomplete_migration": {
+      "dimension_character": "The codebase has an active, ongoing migration from YAML-based timeline format with legacy track names and dict/list effects to a JSON-based flat-track format with structured entrance/exit/continuous effects. The migration is partially complete: new code uses the new format, but the old format is still accepted and transformed at runtime via migration shims in both Python (common.py) and TypeScript (migrate.ts). This means every config load pays the cost of migration checking, and developers must understand both the old and new formats when working with the timeline data model.",
+      "score_rationale": "The coexistence of YAML and JSON formats, old and new effect representations, and duplicated migration logic across two languages creates genuine confusion about which format to target. A developer extending the timeline would encounter both patterns and not know which to follow. The 'one-time' migration script has become a permanent runtime transform. This is solidly in the 'old and new patterns coexisting makes it unclear which to follow' range at 72."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "incomplete_migration",
+      "identifier": "runtime_migration_shims_permanent",
+      "summary": "Legacy migration shims run on every config load instead of being a one-time data migration",
+      "related_files": ["tools/common.py", "shared/migrate.ts"],
+      "evidence": [
+        "load_timeline() in common.py always calls migrate_timeline_to_flat_tracks, and every viewer config load calls migrateToFlatTracks -- these were intended as temporary migration helpers but are now permanent runtime code",
+        "LEGACY_TRACK_MAP and LEGACY_ASSET_EFFECTS are duplicated across Python and TypeScript"
+      ],
+      "suggestion": "Run the migration as a one-time transform on the actual timeline.json data file (update track IDs, convert effects to entrance/exit/continuous, remove the effects field). Then remove the runtime migration from load paths. Keep migration functions in a separate migrations/ directory for reference but remove them from the hot path.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "root_cause_cluster": "incomplete_format_migration"
+    },
+    {
+      "dimension": "incomplete_migration",
+      "identifier": "dual_effects_format_in_types",
+      "summary": "TimelineClip type carries both old 'effects' field and new entrance/exit/continuous fields",
+      "related_files": ["shared/types.ts", "shared/config-utils.ts", "shared/serialize.ts"],
+      "evidence": [
+        "TimelineClip has effects?: TimelineEffect[] | Record<string, number> alongside entrance?: ClipEntrance, exit?: ClipExit, continuous?: ClipContinuous",
+        "getEffectValue in config-utils.ts handles both array and dict shapes of the old effects format",
+        "TIMELINE_CLIP_FIELDS in serialize.ts includes 'effects' alongside the new fields"
+      ],
+      "suggestion": "After completing the data migration (previous issue), remove the effects field from TimelineClip, remove getEffectValue from config-utils.ts, and remove 'effects' from TIMELINE_CLIP_FIELDS. The ClipMeta interface in timeline-data.ts should also drop its effects field.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "root_cause_cluster": "incomplete_format_migration"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Timeline format evolved from YAML with inline effects to JSON with structured tracks and effects, but the migration was implemented as runtime transforms rather than data-level migration, so both formats persist indefinitely"],
+    "likely_symptoms": ["dual_effects_format_in_types is a symptom of runtime_migration_shims_permanent"]
+  },
+  "context_updates": {
+    "incomplete_migration": {
+      "add": [
+        {
+          "header": "Active YAML-to-JSON format migration",
+          "description": "The codebase is mid-migration from a YAML timeline format with legacy track names to a JSON format with structured tracks. Migration shims run on every config load in both Python and TypeScript, making both formats active simultaneously.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Dual effects representation in type system",
+          "description": "TimelineClip carries both the old effects field (dict/list of fade_in/fade_out) and the new entrance/exit/continuous fields. Both are handled in serialization and runtime code, requiring developers to understand both representations.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

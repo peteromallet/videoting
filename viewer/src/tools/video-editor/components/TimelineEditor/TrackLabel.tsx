@@ -1,4 +1,5 @@
 import type { TrackDefinition } from "@shared/types";
+import { ROW_HEIGHT } from "@/tools/video-editor/lib/coordinate-utils";
 import { TrackSettingsPopover } from "@/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover";
 
 interface TrackLabelProps {
@@ -26,23 +27,23 @@ export function TrackLabel({
 }: TrackLabelProps) {
   return (
     <div
-      className={`flex h-14 cursor-pointer items-center rounded-xl border px-3 ${isSelected ? "border-primary/50 bg-editor-surface0/85" : "border-border/70 bg-editor-surface0/35 hover:bg-editor-surface0/55"}`}
+      className={`group flex cursor-pointer items-center justify-between border-b border-border/20 px-1.5 ${isSelected ? "bg-primary/10" : "hover:bg-editor-surface0/40"}`}
+      style={{ height: ROW_HEIGHT }}
       onClick={() => onSelect(track.id)}
     >
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-semibold text-foreground">{track.id}</div>
-        <div className="truncate text-xs text-muted-foreground">{track.label}</div>
+      <span className="truncate text-[10px] font-semibold text-muted-foreground">{track.id}</span>
+      <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+        <TrackSettingsPopover
+          track={track}
+          trackCount={trackCount}
+          trackIndex={trackIndex}
+          sameKindCount={sameKindCount}
+          onChange={onChange}
+          onReorder={onReorder}
+          onRemove={onRemove}
+          onSelect={onSelect}
+        />
       </div>
-      <TrackSettingsPopover
-        track={track}
-        trackCount={trackCount}
-        trackIndex={trackIndex}
-        sameKindCount={sameKindCount}
-        onChange={onChange}
-        onReorder={onReorder}
-        onRemove={onRemove}
-        onSelect={onSelect}
-      />
     </div>
   );
 }

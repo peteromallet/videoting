@@ -21,6 +21,7 @@ from common import (
     ASSET_REGISTRY,
     ROOT,
     TIMELINE_JSON,
+    clip_source_duration,
     clip_timeline_duration,
     get_audio_tracks,
     get_track_by_id,
@@ -46,12 +47,6 @@ def parse_resolution(value: Any) -> tuple[int, int]:
 
 def resolve_asset(asset_id: str, registry: dict[str, Any]) -> Path:
     return resolve_asset_path(asset_id, registry=registry)
-
-
-def clip_src_duration(clip: dict[str, Any]) -> float:
-    if "hold" in clip:
-        return float(clip["hold"])
-    return float(clip.get("to", 0.0)) - float(clip.get("from", 0.0))
 
 
 def build_atempo_chain(speed: float) -> str:
@@ -153,7 +148,7 @@ def build_ffmpeg_command(
             input_idx = get_input_idx(asset_path)
             at = float(clip.get("at", 0.0))
             src_start = float(clip.get("from", 0.0))
-            src_dur = clip_src_duration(clip)
+            src_dur = clip_source_duration(clip)
             tl_dur = clip_timeline_duration(clip)
             speed = float(clip.get("speed", 1.0))
             fit = str(track.get("fit", "contain"))
@@ -246,7 +241,7 @@ def build_ffmpeg_command(
 
             input_idx = get_input_idx(asset_path)
             src_start = float(clip.get("from", 0.0))
-            src_dur = clip_src_duration(clip)
+            src_dur = clip_source_duration(clip)
             speed = float(clip.get("speed", 1.0))
             at_ms = int(float(clip.get("at", 0.0)) * 1000)
             volume = float(clip.get("volume", 1.0))

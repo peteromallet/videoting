@@ -1,0 +1,86 @@
+{
+  "batch": "ai_generated_debt",
+  "batch_index": 13,
+  "assessments": {
+    "ai_generated_debt": 85.5
+  },
+  "dimension_notes": {
+    "ai_generated_debt": {
+      "evidence": [
+        "Comments in the codebase are generally purposeful section headers (# -- helpers --, # -- API calls --) that aid navigation rather than restating code",
+        "Docstrings are used sparingly and add value when present -- e.g. detect_silence: 'Return list of {start, end} silence regions', clone_voice explains the multi-step process",
+        "No nosy debug logging pattern -- print statements are operational status updates during long-running operations (transcription, image generation) which is appropriate for CLI tools",
+        "getDefaultClipMeta in timeline-data.ts (lines 97-119) manually copies every field from TimelineClip to ClipMeta one-by-one -- this is a mechanical field-copying pattern that could use a spread or pick utility",
+        "The download_result function in tts.py (lines 270-276) and download_image in imagegen.py (lines 63-70) are nearly identical -- same chunk-based download pattern copied verbatim",
+        "Error handling in tts.py API functions follows a verbatim pattern: check resp.ok, check body.get('success'), raise RuntimeError -- repeated identically across create_voice, upload_recording, build_voice, create_edit",
+        "No generic handleData/processItem naming -- domain-specific names like ingest_audio, resolve_at_word, detect_silence, clip_span are used throughout"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "Verbatim error handling pattern in tts.py API functions and duplicated download logic between tts.py and imagegen.py show some boilerplate repetition. The field-by-field copying in getDefaultClipMeta is mechanical but not severe."
+    }
+  },
+  "dimension_judgment": {
+    "ai_generated_debt": {
+      "dimension_character": "The codebase is largely free of classic AI-generated debt patterns. Comments serve as section headers rather than restating code, naming uses domain-specific vocabulary throughout, and there is no defensive overengineering around pure expressions. The main AI-debt symptoms are localized: verbatim error handling boilerplate in tts.py's API wrapper functions, duplicated download logic between two tools, and a mechanical field-copying function in timeline-data.ts.",
+      "score_rationale": "Developer attention is spent on logic rather than noise in most files. The boilerplate is isolated to specific patterns (API error checking in tts.py, download functions) rather than being pervasive. This places the codebase in the 'mostly clean with small pockets' range around 85, pulled down slightly by the repeated patterns in the API wrapper layer."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "verbatim_api_error_handling_tts",
+      "summary": "Four API wrapper functions in tts.py repeat identical error-checking boilerplate",
+      "related_files": ["tools/tts.py"],
+      "evidence": [
+        "create_voice (line 108-118), upload_recording (line 121-139), build_voice (line 142-153), create_edit (line 223-245) all follow the same pattern: check resp.ok, raise RuntimeError with status; check body.get('success'), raise RuntimeError with body"
+      ],
+      "suggestion": "Extract a helper like _resemble_post(url, api_key, **kwargs) -> dict that handles the response checking pattern once, returning the parsed body. Each wrapper becomes a one-liner call with endpoint-specific parameters.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "duplicated_download_function",
+      "summary": "download_result in tts.py and download_image in imagegen.py are nearly identical",
+      "related_files": ["tools/tts.py", "tools/imagegen.py"],
+      "evidence": [
+        "tts.py download_result (lines 270-276) and imagegen.py download_image (lines 63-70) both: requests.get with stream=True, raise_for_status, mkdir parents, write chunks of 8192 bytes"
+      ],
+      "suggestion": "Move the download function to common.py as download_file(url, out_path) and import it in both tools.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Tools were developed independently with copy-paste of common patterns rather than extracting shared utilities upfront"],
+    "likely_symptoms": ["verbatim_api_error_handling_tts"]
+  },
+  "context_updates": {
+    "ai_generated_debt": {
+      "add": [
+        {
+          "header": "Domain-specific naming throughout tools",
+          "description": "Functions use precise domain vocabulary (ingest_audio, resolve_at_word, detect_silence, clip_span, extract_keyframes) rather than generic names like processData or handleInput. This means developers can understand function purpose from names alone.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Section header comments aid navigation",
+          "description": "Python tools use structured section dividers (# -- helpers --, # -- API calls --) that serve as table-of-contents markers in longer files. These add navigational value without restating code.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Sparse purposeful docstrings",
+          "description": "Docstrings are used selectively on functions where the name alone does not fully communicate the contract (e.g., clone_voice's multi-step process, detect_silence's return shape). Trivial functions have no docstrings, avoiding bloat.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

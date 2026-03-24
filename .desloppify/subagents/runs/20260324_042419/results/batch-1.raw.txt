@@ -1,0 +1,101 @@
+{
+  "batch": "cross_module_architecture",
+  "batch_index": 1,
+  "assessments": {"cross_module_architecture": 72.0},
+  "dimension_notes": {
+    "cross_module_architecture": {
+      "evidence": [
+        "remotion/src/load-config.ts duplicates the resolve-timeline-config logic found in viewer/src/tools/video-editor/lib/timeline-data.ts (resolveTimelineConfig). Both files independently iterate registry assets, resolve URLs, map clips to resolved entries, and call migrateToFlatTracks. The only difference is the URL resolution strategy (staticFile vs relative path).",
+        "shared/migrate.ts duplicates LEGACY_TRACK_MAP and LEGACY_ASSET_EFFECTS constants and migration logic that also exists in Python tools/common.py (_migrate_legacy_effects, migrate_timeline_to_flat_tracks). The TS and Python implementations must be kept in sync manually.",
+        "shared/ serves as a cross-boundary package imported by both remotion/ and viewer/, but it has no package.json, no explicit public API, and is consumed via path alias (@shared). This makes the boundary implicit rather than explicit.",
+        "Python tools/ and TypeScript shared/ both define clip duration calculation (clip_source_duration/clip_timeline_duration in common.py vs getClipSourceDuration/getClipTimelineDuration in config-utils.ts), with no shared source of truth.",
+        "render.py defines clip_src_duration which is identical to clip_source_duration in common.py -- local re-declaration of an already-available function from the same package."
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "cross_module_architecture": {
+      "dimension_character": "The codebase has a reasonable high-level split between Python tools, shared TypeScript library, viewer app, and remotion renderer. However, significant cross-boundary duplication exists: the timeline config resolution logic is duplicated between remotion/src/load-config.ts and viewer timeline-data.ts, and the legacy migration constants/logic are duplicated between Python common.py and TypeScript migrate.ts. The shared/ package serves its purpose as a cross-consumer library but its boundary is implicit (path alias, no package.json). No cycles or god modules exist, but the duplication indicates a missing shared boundary for config resolution.",
+      "score_rationale": "The architecture avoids cycles and has sensible directional dependencies (viewer and remotion both depend on shared, not on each other). However, the duplicated config resolution logic between remotion and viewer creates a real maintenance risk -- changes to one must be mirrored in the other, and the Python/TS duplication of migration logic doubles this problem. This brings the score below 80, as a developer making changes to timeline resolution logic must update multiple files across language boundaries. The score is above 60 because the duplication is concentrated in specific areas and the overall dependency direction is sound."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "duplicated_config_resolution",
+      "summary": "Timeline config resolution logic duplicated between remotion/src/load-config.ts and viewer timeline-data.ts",
+      "related_files": ["remotion/src/load-config.ts", "viewer/src/tools/video-editor/lib/timeline-data.ts"],
+      "evidence": [
+        "remotion/src/load-config.ts lines 71-111 and viewer/src/tools/video-editor/lib/timeline-data.ts resolveTimelineConfig (lines 136-174) both iterate registry assets, create resolvedRegistry entries, map clips to resolved entries with assetEntry, and return the same ResolvedTimelineConfig shape. The only difference is URL resolution (staticFile vs resolveAssetUrl)."
+      ],
+      "suggestion": "Extract a shared resolveTimelineConfig function into shared/config-utils.ts or a new shared/resolve.ts that accepts a URL resolver function as parameter. Both remotion and viewer would call the shared function with their own URL resolver.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "cross_language_migration_duplication",
+      "summary": "Legacy migration constants and logic duplicated between Python common.py and TypeScript shared/migrate.ts",
+      "related_files": ["tools/common.py", "shared/migrate.ts"],
+      "evidence": [
+        "LEGACY_TRACK_MAP and LEGACY_ASSET_EFFECTS are defined identically in both files. _migrate_legacy_effects in Python and migrateLegacyEffects in TypeScript implement the same fade_in/fade_out to entrance/exit transformation. migrate_timeline_to_flat_tracks and migrateToFlatTracks follow the same algorithm including default track generation and background clip insertion."
+      ],
+      "suggestion": "Since these two implementations must stay in sync, add a comment in both files referencing the other as a sync peer. Consider whether the Python migration is still needed at runtime or could be removed (if the JSON format is now canonical), eliminating one copy entirely.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "render_redeclares_clip_src_duration",
+      "summary": "render.py re-declares clip_src_duration, duplicating clip_source_duration from common.py",
+      "related_files": ["tools/render.py", "tools/common.py"],
+      "evidence": [
+        "render.py line 51-54 defines clip_src_duration with identical logic to common.py clip_source_duration (line 146-149). render.py already imports clip_timeline_duration from common but not clip_source_duration."
+      ],
+      "suggestion": "Delete clip_src_duration from render.py and import clip_source_duration from common instead.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["The Python-to-JSON migration created a dual-language implementation of timeline processing that was never consolidated after the JSON format became canonical."],
+    "likely_symptoms": ["render_redeclares_clip_src_duration is a symptom of the broader cross-language duplication pattern"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "cross_module_architecture": {
+      "add": [
+        {
+          "header": "Sound dependency direction across subsystems",
+          "description": "viewer and remotion both depend on shared/ but not on each other. Python tools/ are independent CLI scripts with no TS dependencies. No circular dependencies exist.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No god modules in the import graph",
+          "description": "shared/effects/entrances.tsx is the most-imported file with only 3 importers. No module acts as a hub that would create blast radius for common changes.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Implicit shared package boundary via path alias",
+          "description": "shared/ has no package.json and is consumed via @shared path alias in both remotion and viewer tsconfig. This works but makes the public API boundary implicit rather than documented.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Dual-language migration logic must stay in sync",
+          "description": "Python common.py and TypeScript migrate.ts both implement the legacy-to-flat-tracks migration with identical constants and logic. Changes to one require manual sync to the other.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Plus, Type, Video, Volume2, ZoomIn, ZoomOut } from "lucide-react";
+import { Type, Video, Volume2, ZoomIn, ZoomOut } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
@@ -17,7 +17,6 @@ export function Toolbar() {
     renderStatus,
     renderDirty,
     renderLog,
-    scaleWidth,
     setScaleWidth,
     startRender,
     handleAddTrack,

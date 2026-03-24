@@ -1,0 +1,85 @@
+{
+  "batch": "naming_quality",
+  "batch_index": 5,
+  "assessments": {"naming_quality": 85.5},
+  "dimension_notes": {
+    "naming_quality": {
+      "evidence": [
+        "Function names are generally precise and domain-aligned: getClipSourceDuration, getClipTimelineDuration, migrateToFlatTracks, resolveAssetPath, extract_keyframes, detect_silence, sentence_boundary_check -- these communicate intent clearly.",
+        "File names map cleanly to responsibilities: config-utils.ts, editor-utils.ts, serialize.ts, timeline-data.ts, coordinate-utils.ts.",
+        "Component names follow React convention and communicate purpose: VisualClip, AudioTrack, TimelineRenderer, OverlayEditor, ClipPanel, TrackPanel.",
+        "Effect names are descriptive: SlideUpEntrance, ZoomSpinEntrance, KenBurnsEffect, GlitchEffect.",
+        "The _call_llm_summary function in view.py is misleadingly named -- it does not call an LLM, it just returns the first description string. The name implies API interaction that does not happen.",
+        "roundTimelineValue is defined in both editor-utils.ts (exported) and migrate.ts (local const) with the same implementation. The duplicate in migrate.ts is not exposed but its existence creates vocabulary confusion about whether to use the shared or local version.",
+        "get prefix is used correctly throughout: getClipSourceDuration, getTrackById, getEffectValue, getAssetColor -- all are pure lookups without side effects."
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "_call_llm_summary name is misleading. roundTimelineValue is defined in two places with same name."
+    }
+  },
+  "dimension_judgment": {
+    "naming_quality": {
+      "dimension_character": "Naming quality across the codebase is consistently strong. Function names are domain-specific and communicate intent -- a developer reading getClipSourceDuration, migrateToFlatTracks, or detect_silence can predict behavior without checking implementation. The Python tools and TypeScript shared library both maintain clear naming vocabularies. The few issues are isolated: _call_llm_summary is misleadingly named, and roundTimelineValue exists as both a shared export and a local re-declaration. Overall, a developer working here would find names reliable and predictable.",
+      "score_rationale": "Names throughout the codebase are precise and domain-aligned, with consistent use of get/load/save/is prefixes that match their behavior. Effect component names (SlideUpEntrance, GlitchEffect) are self-documenting. This pushes the score above 85. The misleading _call_llm_summary name and the roundTimelineValue duplication are the only notable issues, and both are isolated rather than systemic. The score reflects strong naming with minor localized friction."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "naming_quality",
+      "identifier": "misleading_call_llm_summary",
+      "summary": "_call_llm_summary does not call an LLM -- it returns the first description string",
+      "related_files": ["tools/view.py"],
+      "evidence": [
+        "Line 32-33: def _call_llm_summary(descriptions: list[str]) -> str: return descriptions[0] if descriptions else '(no description)'. The name implies an API call to an LLM, but the function just returns the first element. This was likely a placeholder that was never implemented."
+      ],
+      "suggestion": "Rename to _pick_first_description or _default_summary to reflect what it actually does. If LLM summarization is intended for the future, add a TODO comment explaining the planned behavior.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "naming_quality",
+      "identifier": "duplicate_roundTimelineValue",
+      "summary": "roundTimelineValue defined identically in both editor-utils.ts (exported) and migrate.ts (local)",
+      "related_files": ["shared/editor-utils.ts", "shared/migrate.ts"],
+      "evidence": [
+        "editor-utils.ts line 6 exports roundTimelineValue. migrate.ts line 44 defines an identical local const roundTimelineValue. Having the same function name defined in two sibling files creates vocabulary ambiguity."
+      ],
+      "suggestion": "Import roundTimelineValue from editor-utils.ts in migrate.ts instead of re-declaring it locally.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": [],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "naming_quality": {
+      "add": [
+        {
+          "header": "Domain-specific function names throughout",
+          "description": "Functions like getClipSourceDuration, migrateToFlatTracks, detect_silence, sentence_boundary_check communicate intent precisely. A developer can predict behavior from the name alone.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent prefix conventions",
+          "description": "get* functions are pure lookups, load* functions read from disk/network, save* functions write, is* functions return booleans. These conventions hold reliably across both Python and TypeScript.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Self-documenting effect component names",
+          "description": "Effect components like SlideUpEntrance, ZoomSpinEntrance, KenBurnsEffect, FadeOutExit describe their visual behavior in their names, making the effects registry immediately scannable.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

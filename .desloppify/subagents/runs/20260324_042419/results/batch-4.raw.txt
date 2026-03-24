@@ -1,0 +1,116 @@
+{
+  "batch": "error_consistency",
+  "batch_index": 4,
+  "assessments": {"error_consistency": 73.0},
+  "dimension_notes": {
+    "error_consistency": {
+      "evidence": [
+        "Python tools use a consistent pattern: validate inputs early with sys.exit(1) for user errors, let exceptions propagate for API/runtime errors, and print user-facing errors to stderr. This is coherent within the Python layer.",
+        "TypeScript lib layer (timeline-api.ts, timeline-data.ts) consistently throws errors on failures, which is appropriate for library code.",
+        "TypeScript component layer (PreviewPanel, PropertiesPanel, TimelineEditor) consistently returns null for missing data, which is appropriate for React components.",
+        "Mixed strategy in AssetPanel.tsx: catches upload errors with try-catch and logs with console.error but does not propagate or surface the error to the user beyond a status message.",
+        "save-config.ts uses void .catch(console.error) pattern in createDebouncedTimelineSaver, swallowing save failures silently -- a user could lose edits without knowing.",
+        "common.py load_all_profiles silently swallows YAML parse exceptions with bare 'except Exception: pass', losing error context about malformed profile files.",
+        "ingest.py extract_keyframes has a bare 'except Exception: pass' around JSON parsing of ffprobe output, silently swallowing parse failures."
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "error_consistency": {
+      "dimension_character": "The codebase has reasonable layer-appropriate error strategies: Python tools validate early and exit, TS libraries throw, React components return null. However, several error-swallowing patterns undermine this: save-config.ts silently drops save failures, common.py silently skips malformed profiles, and ingest.py silently ignores keyframe extraction failures. These silent failure modes mean a developer cannot predict whether errors will surface or be lost. The Python layer is more consistent than the TypeScript layer, where error handling varies between throw, return null, try-catch-log, and silent swallowing within related modules.",
+      "score_rationale": "The layer-appropriate error strategies (sys.exit for CLI, throw for TS lib, return null for components) show intentional design, which pushes the score above 60. However, the silent error swallowing in save-config.ts is particularly concerning -- a user could lose edits without feedback. Combined with the bare 'except Exception: pass' patterns in Python and the mixed strategies in the viewer hooks layer, the score lands at 73. A developer cannot fully predict error behavior, especially around persistence and profile loading."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "error_consistency",
+      "identifier": "save_config_swallows_errors",
+      "summary": "createDebouncedTimelineSaver silently swallows save failures with console.error",
+      "related_files": ["remotion/src/save-config.ts"],
+      "evidence": [
+        "Line 38: void saveTimeline(config).catch((error: unknown) => { console.error('Failed to persist timeline edits.', error); }). Save failures are logged to console but not surfaced to the user. A failed save could result in lost edits."
+      ],
+      "suggestion": "Accept an onError callback in createDebouncedTimelineSaver and invoke it on failure, allowing the UI layer to surface save errors to the user (e.g., a toast or status indicator).",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "load_all_profiles_swallows_errors",
+      "summary": "load_all_profiles silently swallows YAML parse exceptions for malformed profiles",
+      "related_files": ["tools/common.py"],
+      "evidence": [
+        "Lines 81-85: bare 'except Exception: pass' around yaml.safe_load. If a profile file has malformed YAML, it is silently skipped. The user gets no indication that a profile was unreadable."
+      ],
+      "suggestion": "Log a warning with the filename and exception message (e.g., print(f'Warning: could not load {f.name}: {e}', file=sys.stderr)) instead of silently passing.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "keyframe_extraction_swallows_errors",
+      "summary": "extract_keyframes silently swallows JSON parse failures from ffprobe output",
+      "related_files": ["tools/ingest.py"],
+      "evidence": [
+        "Lines 132-139: bare 'except Exception: pass' around json.loads(r.stdout). If ffprobe returns invalid JSON, scene detection silently falls back to interval-only keyframes with no warning."
+      ],
+      "suggestion": "Log a warning when scene detection fails, so the user knows the keyframe extraction fell back to interval-only mode.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "asset_panel_error_swallowing",
+      "summary": "AssetPanel.tsx catches upload errors and logs them without user-visible feedback",
+      "related_files": ["viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx"],
+      "evidence": [
+        "The file is flagged for 'console.error without throw/return' and 'Catch blocks that only log (swallowed errors)'. Upload failures are caught and logged to console but the user sees no error state beyond the upload status reverting."
+      ],
+      "suggestion": "Surface upload errors in the UI -- for example, set an error state that renders an error message in the asset panel, or use a toast notification.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Silent error swallowing appears to be a pattern of 'good enough for now' -- each instance individually seems harmless but collectively they create unpredictable error behavior."],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "error_consistency": {
+      "add": [
+        {
+          "header": "Layer-appropriate error strategies in Python",
+          "description": "Python CLI tools consistently validate inputs early with sys.exit(1) for user errors and let API/runtime exceptions propagate naturally. User-facing errors go to stderr.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "TS library layer throws consistently",
+          "description": "timeline-api.ts, timeline-data.ts, serialize.ts, and shared/migrate.ts all throw Error on failures. This is a consistent contract for the library layer.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "React component null-return pattern",
+          "description": "Components like VisualAsset, TextClip, and PreviewPanel return null when data is missing, which is the standard React pattern for conditional rendering.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Silent error swallowing in persistence and ingestion",
+          "description": "Multiple files use bare except/catch-log patterns that silently lose errors: save-config.ts, common.py load_all_profiles, ingest.py extract_keyframes. A developer cannot predict whether failures will be surfaced.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

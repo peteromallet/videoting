@@ -1,0 +1,124 @@
+{
+  "batch": "type_safety",
+  "batch_index": 20,
+  "assessments": {
+    "type_safety": 76.8
+  },
+  "dimension_notes": {
+    "type_safety": {
+      "evidence": [
+        "shared/types.ts provides comprehensive type definitions for the domain: TimelineClip, TrackDefinition, ResolvedTimelineConfig, etc. — well-structured with meaningful field types",
+        "ClipEntrance, ClipExit, ClipContinuous all use 'type: string' for the effect type field (types.ts lines 30, 35, 40) rather than union literals matching the keys in shared/effects/index.tsx entranceEffects/exitEffects/continuousEffects registries",
+        "TimelineClip.effects uses 'TimelineEffect[] | Record<string, number>' (line 82) — a structurally heterogeneous union that forces runtime discrimination at every access site",
+        "uploadAssetFile returns Promise<unknown> (timeline-api.ts line 32) and the response.json() call on line 44 returns a second Promise that is not awaited — the function returns the result of the first response.json() via the thrown error path, but the success path returns a dangling Promise<unknown>",
+        "serializeClipForDisk casts Partial<Record<...>> as TimelineClip (serialize.ts line 60) — the 'as' cast bypasses type checking on required fields",
+        "serializeTrackForDisk uses the same pattern with 'as TrackDefinition' cast (serialize.ts line 81)",
+        "Python code in tools/ is entirely untyped beyond basic type hints on some function signatures — common.py uses dict[str, Any] pervasively",
+        "timeline-data.ts rowsToConfig line 312 uses 'as never' cast to suppress type errors when assigning to serializedClip[field]",
+        "selectedClip type in UseTimelineStateResult (line 87) uses a confusing conditional type: 'ReturnType<typeof getTrackById> extends never ? never : ...' — this evaluates to the second branch always since getTrackById returns TrackDefinition|null which does not extend never",
+        "The 'as' cast on window in load-config.ts line 52 uses double-cast: '(window as unknown as Record<string, unknown>).remotion_staticFiles' — necessary for accessing Remotion internals but fragile"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "type_safety": {
+      "dimension_character": "The codebase has a well-defined core type system in shared/types.ts that covers the domain model thoroughly. However, the boundaries where data is serialized, deserialized, or mapped between representations rely on unsafe 'as' casts rather than type-safe construction. Effect type fields use broad 'string' types where union literals matching the effect registries would provide compile-time safety. The Python layer is largely untyped beyond basic annotations.",
+      "score_rationale": "The score is in the mixed range. The positive foundation of shared/types.ts and consistent use of TypeScript throughout the shared and viewer layers is genuine. However, the 'as' casts in serialize.ts bypass the type system at a critical serialization boundary, the effect type fields use string where they could use literal unions, and the confusing conditional type on selectedClip undermines developer confidence. These are not isolated issues — they occur at data transformation boundaries that are central to the application's correctness."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "type_safety",
+      "identifier": "effect_type_fields_untyped",
+      "summary": "ClipEntrance, ClipExit, ClipContinuous use 'type: string' instead of literal unions matching effect registries",
+      "related_files": ["shared/types.ts", "shared/effects/index.tsx"],
+      "evidence": [
+        "types.ts line 30 ClipEntrance.type is 'string', but valid values are the keys of entranceEffects in effects/index.tsx: 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'zoom-in' | 'zoom-spin' | 'pulse' | 'fade' | 'flip' | 'bounce'. Same pattern for ClipExit and ClipContinuous."
+      ],
+      "suggestion": "Define literal union types (e.g., type EntranceEffectType = 'slide-up' | 'slide-down' | ... ) derived from the registry keys using keyof typeof, and use these in ClipEntrance, ClipExit, and ClipContinuous type definitions. This provides compile-time validation of effect type strings.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "unsafe_as_casts_serialize",
+      "summary": "serializeClipForDisk and serializeTrackForDisk use 'as' casts to bypass type checking on required fields",
+      "related_files": ["shared/serialize.ts"],
+      "evidence": [
+        "Line 60: 'return serializedClip as TimelineClip' where serializedClip is Partial<Record<...>>. Line 81: same pattern with 'as TrackDefinition'. These casts hide the possibility of missing required fields from the type system."
+      ],
+      "suggestion": "Build the base object with required fields typed correctly (e.g., const base: Pick<TimelineClip, 'id' | 'at' | 'track'> = { id, at, track }) and then spread optional fields, or use a builder function that returns the correct type without a cast.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "upload_asset_double_json_parse",
+      "summary": "uploadAssetFile calls response.json() twice — once for error, once for success — and the success return is a dangling promise",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-api.ts"],
+      "evidence": [
+        "Lines 40-44: On error, 'await response.json()' is called. On success (line 44), 'return response.json()' returns a Promise without await. This means the function's return type is Promise<unknown> where the actual return is a Promise<unknown> (unawaited json()). The caller ignores the return value, so this doesn't cause runtime bugs, but the contract is misleading."
+      ],
+      "suggestion": "Add await to the success path: 'return await response.json()' — or if the return value is truly unused, change the return type to Promise<void> and don't return the json body.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "confusing_selected_clip_conditional_type",
+      "summary": "selectedClip uses a confusing conditional type that always evaluates to the same branch",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineState.ts"],
+      "evidence": [
+        "Line 87: 'ReturnType<typeof getTrackById> extends never ? never : TimelineData[\"resolvedConfig\"][\"clips\"][number] | null' — getTrackById returns TrackDefinition | null, which does not extend never, so this always evaluates to the second branch. The conditional type adds confusion without value."
+      ],
+      "suggestion": "Simplify to: 'selectedClip: TimelineData[\"resolvedConfig\"][\"clips\"][number] | null' — or better, use the concrete type 'ResolvedTimelineClip | null'.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": [
+      "Effect types were defined as strings for flexibility when the registry was still evolving, but were never tightened once the registries stabilized",
+      "Serialization code was written to handle dynamic field sets, which is hard to express in TypeScript without casts"
+    ],
+    "likely_symptoms": ["unsafe_as_casts_serialize"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "type_safety": {
+      "add": [
+        {
+          "header": "Comprehensive domain types in shared/types.ts",
+          "description": "The core domain model (TimelineClip, TrackDefinition, ResolvedTimelineConfig, etc.) is well-defined with meaningful field types and proper use of optional fields. This provides a strong type foundation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Effect type fields use broad string instead of literal unions",
+          "description": "ClipEntrance.type, ClipExit.type, and ClipContinuous.type are typed as 'string' rather than literal unions matching the keys of the effect registries. This misses an opportunity for compile-time validation of effect names.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Serialization boundary uses unsafe casts",
+          "description": "serializeClipForDisk and serializeTrackForDisk build Partial objects and cast them with 'as' to the full type, bypassing type checking on required fields. This is the critical data-to-disk boundary.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Python tools layer is effectively untyped",
+          "description": "tools/common.py uses dict[str, Any] pervasively. While Python typing is not the primary concern for this TypeScript-focused codebase, the shared migration logic lacks type safety.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

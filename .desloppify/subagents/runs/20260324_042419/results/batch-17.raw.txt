@@ -1,0 +1,172 @@
+{
+  "batch": "design_coherence",
+  "batch_index": 17,
+  "assessments": {
+    "design_coherence": 62.3
+  },
+  "dimension_notes": {
+    "design_coherence": {
+      "evidence": [
+        "useTimelineState.ts is 1111 lines returning 50+ properties — a single hook managing timeline data loading, save/sync, clip CRUD, track CRUD, drag operations, render control, preference management, and time formatting",
+        "resolveTimelineConfig is duplicated between remotion/src/load-config.ts (lines 71-111) and viewer/src/tools/video-editor/lib/timeline-data.ts (lines 136-174) with near-identical logic differing only in URL resolution",
+        "timeline-data.ts rowsToConfig (lines 225-327) re-implements serialization logic already in shared/serialize.ts serializeClipForDisk — iterating TIMELINE_CLIP_FIELDS and building partial clips in the same pattern",
+        "Multiple orphaned files (11+ detected) suggest dead code accumulation: save-config.ts, DebugTrack.tsx, AssetPanel.tsx, ClipPanel.tsx, TimelineEditor.tsx, useCrossTrackDrag.ts, timeline-data.ts, collapsible.tsx, TrackPanel.tsx, editor-utils.ts",
+        "ClipMeta type in timeline-data.ts (lines 18-38) mirrors TimelineClip from shared/types.ts minus id/at fields — a parallel type definition rather than a derived one",
+        "common.py duplicates migration logic (LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS, migrate functions at lines 117-238) that also exists in shared/migrate.ts"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "architectural_change",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "design_coherence": {
+      "dimension_character": "The shared/ layer demonstrates good design — focused functions with clear responsibilities, well-typed utilities, and consistent patterns. However, the viewer's useTimelineState hook is a monolithic 1111-line function combining at least 6 distinct responsibilities, and significant code duplication exists between the remotion loader, viewer timeline-data module, and Python common.py. The accumulation of orphaned files across the viewer suggests iterative development left behind substantial dead code.",
+      "score_rationale": "The score sits in the 'significant drag' range because useTimelineState is a genuine design coherence problem — a developer modifying any timeline behavior must understand the entire 1111-line hook. Combined with the duplicated resolveTimelineConfig logic across two TypeScript files, duplicated migration logic between Python and TypeScript, and 11+ orphaned files that clutter navigation, the codebase has structural issues that impede developer productivity. The well-designed shared/ utilities prevent the score from dropping further."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "design_coherence",
+      "identifier": "monolithic_use_timeline_state",
+      "summary": "useTimelineState is 1111 lines mixing 6+ responsibilities into a single hook",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineState.ts"],
+      "evidence": [
+        "The hook manages: (1) data loading via react-query, (2) save/sync with debounced persistence, (3) clip CRUD operations, (4) track CRUD operations, (5) drag/resize handling, (6) render streaming, (7) preference management, (8) time formatting — all in one function returning 50+ properties"
+      ],
+      "suggestion": "Extract into focused hooks: useTimelineData (loading/sync), useTimelinePersistence (save/debounce), useClipOperations (CRUD), useTrackOperations (CRUD), useDragHandlers (move/resize), useRenderControl (render streaming). The main hook becomes a composition of these focused hooks.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "426e24f7e9a2ae53"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "duplicated_resolve_timeline_config",
+      "summary": "resolveTimelineConfig is duplicated between remotion/src/load-config.ts and viewer timeline-data.ts",
+      "related_files": ["remotion/src/load-config.ts", "viewer/src/tools/video-editor/lib/timeline-data.ts"],
+      "evidence": [
+        "load-config.ts lines 71-111 and timeline-data.ts lines 136-174 implement the same resolve logic: migrate config, resolve asset registry entries, map clips to resolved clips with assetEntry. The only difference is URL resolution (staticFile vs resolveAssetUrl)"
+      ],
+      "suggestion": "Extract a shared resolveTimelineConfig into shared/config-utils.ts that accepts a URL resolver function parameter, then call it from both locations with the appropriate resolver.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "509f45dcbee37e06"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "orphaned_save_config",
+      "summary": "remotion/src/save-config.ts has zero importers and appears to be dead code",
+      "related_files": ["remotion/src/save-config.ts"],
+      "evidence": [
+        "The file exports saveTimeline and createDebouncedTimelineSaver but no file in the codebase imports from it. The viewer uses its own save mechanism via timeline-api.ts saveTimelineConfig."
+      ],
+      "suggestion": "Delete remotion/src/save-config.ts if the save functionality has been superseded by the viewer's timeline-api.ts. If still needed, integrate it into the import graph.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "5ab4d6b36ad6e5a7"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "orphaned_debug_track",
+      "summary": "shared/compositions/DebugTrack.tsx has zero importers — dead debug code",
+      "related_files": ["shared/compositions/DebugTrack.tsx"],
+      "evidence": [
+        "DebugTrack is a debug-only component with console.log on mount/unmount and every 30 frames. No file imports it."
+      ],
+      "suggestion": "Delete DebugTrack.tsx — it is a debug utility with no consumers.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "fc20ca0bf60d405d"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "duplicated_serialization_in_rows_to_config",
+      "summary": "rowsToConfig re-implements clip serialization logic already in shared/serialize.ts",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts", "shared/serialize.ts"],
+      "evidence": [
+        "timeline-data.ts lines 296-316 iterate TIMELINE_CLIP_FIELDS and build a partial clip object with the same field-by-field pattern as serializeClipForDisk in serialize.ts lines 39-61"
+      ],
+      "suggestion": "Have rowsToConfig build the full clip object and then call serializeClipForDisk from shared/serialize.ts to produce the serialized output, eliminating the duplicated iteration pattern.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "orphaned_viewer_editor_files",
+      "summary": "Multiple viewer editor components have zero importers — likely dead code from iteration",
+      "related_files": [
+        "viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx",
+        "viewer/src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts",
+        "viewer/src/tools/video-editor/lib/timeline-data.ts"
+      ],
+      "evidence": [
+        "AssetPanel.tsx (254 LOC), ClipPanel.tsx (333 LOC), TimelineEditor.tsx (138 LOC), useCrossTrackDrag.ts (351 LOC), and timeline-data.ts (407 LOC) are all flagged as orphaned with zero importers. However, these may be imported dynamically through the VideoEditorPage or TimelineContext — further investigation needed"
+      ],
+      "suggestion": "Verify whether these files are imported via the component tree (they may be imported indirectly through pages/VideoEditorPage.tsx or contexts/TimelineContext.tsx). If truly orphaned, delete them to reduce codebase noise.",
+      "confidence": "medium",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "864854499ab0005c"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "collapsible_orphaned_duplicate",
+      "summary": "viewer/src/shared/components/ui/collapsible.tsx is orphaned and duplicates popover.tsx pattern",
+      "related_files": ["viewer/src/shared/components/ui/collapsible.tsx", "viewer/src/shared/components/ui/popover.tsx"],
+      "evidence": [
+        "collapsible.tsx has zero importers and implements the same controlled/uncontrolled open state pattern as popover.tsx"
+      ],
+      "suggestion": "Delete collapsible.tsx if unused, or extract the shared controlled/uncontrolled state pattern into a reusable hook if both components are needed.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "14bdfb8050b13b84"
+    }
+  ],
+  "retrospective": {
+    "root_causes": [
+      "Rapid iterative development produced the monolithic useTimelineState hook by accretion rather than design",
+      "The remotion and viewer apps evolved independently, leading to duplicated resolution and serialization logic",
+      "Dead code was not cleaned up as features were reworked or replaced"
+    ],
+    "likely_symptoms": ["orphaned_viewer_editor_files", "collapsible_orphaned_duplicate"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "design_coherence": {
+      "add": [
+        {
+          "header": "Shared utilities have focused single-responsibility functions",
+          "description": "shared/editor-utils.ts, shared/config-utils.ts, and shared/serialize.ts each contain focused utility functions with clear naming and single responsibilities. This is a strong pattern in the shared layer.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "useTimelineState is a monolithic 1111-line hook",
+          "description": "The hook grew by accretion to combine data loading, persistence, CRUD, drag handling, rendering, and preferences — all returning 50+ properties. This creates a blast radius where any timeline behavior change requires understanding the entire hook.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Significant dead code accumulation in viewer",
+          "description": "11+ files totaling over 2000 LOC appear to be orphaned in the viewer, suggesting features were iterated without cleanup. This clutters navigation and makes it harder to identify active code.",
+          "settled": false,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

@@ -28,7 +28,7 @@ from pathlib import Path
 import requests
 import yaml
 
-from common import ROOT, PROFILES_DIR, save_yaml
+from common import ROOT, PROFILES_DIR, download_file, save_yaml
 
 FAL_GENERATE_ENDPOINT = "https://fal.run/fal-ai/nano-banana-2"
 FAL_EDIT_ENDPOINT = "https://fal.run/fal-ai/nano-banana-2/edit"
@@ -58,16 +58,6 @@ def file_to_data_uri(path: Path) -> str:
     data = path.read_bytes()
     b64 = base64.b64encode(data).decode("utf-8")
     return f"data:{mime};base64,{b64}"
-
-
-def download_image(url: str, out_path: Path):
-    """Download an image from a URL."""
-    resp = requests.get(url, stream=True)
-    resp.raise_for_status()
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "wb") as f:
-        for chunk in resp.iter_content(chunk_size=8192):
-            f.write(chunk)
 
 
 def slugify(text: str) -> str:
@@ -276,7 +266,7 @@ def run(args: argparse.Namespace):
         out_path = pick_output_path(name, suffix, ext)
 
         print(f"  Downloading → {out_path.relative_to(ROOT)}")
-        download_image(url, out_path)
+        download_file(url, out_path)
         saved_paths.append(out_path)
 
     print(f"\nSaved {len(saved_paths)} image(s) to inputs/")

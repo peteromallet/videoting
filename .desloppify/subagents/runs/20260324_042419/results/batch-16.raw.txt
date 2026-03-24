@@ -1,0 +1,93 @@
+{
+  "batch": "initialization_coupling",
+  "batch_index": 16,
+  "assessments": {
+    "initialization_coupling": 72.5
+  },
+  "dimension_notes": {
+    "initialization_coupling": {
+      "evidence": [
+        "tools/common.py reads .env file and mutates os.environ at import time (lines 26-32), meaning any module importing common.py triggers environment side effects",
+        "tools/common.py defines module-level _profile_cache and _profile_paths mutable global dicts (lines 56-57) that act as implicit singletons with no encapsulation",
+        "tools/common.py computes ROOT, PROFILES_DIR, TIMELINE_YAML, TIMELINE_JSON, ASSET_REGISTRY as module-level constants at import time (lines 18-22)",
+        "remotion/src/save-config.ts has a module-level constant SAVE_ENDPOINT hardcoded at module scope (line 5)",
+        "viewer/src/main.tsx performs DOM side effect at import time: document.documentElement.classList.add('dark') (line 9)",
+        "viewer/src/main.tsx creates a module-level QueryClient singleton (line 7) — but this is the app entry point so it's appropriate",
+        "shared/effects/index.tsx builds module-level registries (entranceEffects, exitEffects, continuousEffects) at import time — these are effectively constant lookup tables which is acceptable",
+        "viewer/src/tools/video-editor/lib/timeline-data.ts has module-level ASSET_COLORS constant (lines 62-71) — benign constant"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "initialization_coupling": {
+      "dimension_character": "The TypeScript side of the codebase is mostly clean with regard to initialization coupling — module-level code is limited to constant registries and lookup tables, which is appropriate. The Python tools layer (tools/common.py) is the primary concern area, where import-time .env loading, mutable global caches, and path constants create a fragile initialization surface that would complicate testing and reuse.",
+      "score_rationale": "The codebase sits in the mixed range. The Python common.py module performs file I/O and env mutation at import time, and maintains mutable global caches without encapsulation — these are real initialization coupling issues that would trip up a developer writing tests or reusing modules in isolation. The TypeScript side is cleaner but the main.tsx DOM mutation at module scope is a minor wart. The score is pulled down from 80 by the Python side effects being genuinely problematic for testability."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "initialization_coupling",
+      "identifier": "common_py_env_import_side_effect",
+      "summary": "tools/common.py reads .env and mutates os.environ at import time",
+      "related_files": ["tools/common.py"],
+      "evidence": [
+        "Lines 26-32: module-level code reads ROOT/.env and calls os.environ.setdefault() for each line, executing file I/O and environment mutation as a side effect of importing common.py"
+      ],
+      "suggestion": "Move .env loading into a dedicated load_env() function called explicitly from each tool's main() or via a @requires_env decorator, rather than executing at import time. This makes the side effect explicit and controllable in tests.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "initialization_coupling",
+      "identifier": "common_py_mutable_global_caches",
+      "summary": "Module-level mutable caches in common.py create implicit singleton state",
+      "related_files": ["tools/common.py"],
+      "evidence": [
+        "Lines 56-57: _profile_cache and _profile_paths are module-level mutable dicts that accumulate state across calls with no way to reset or inject alternatives. load_profile() and get_profile_path() read and write these globals implicitly."
+      ],
+      "suggestion": "Encapsulate the profile cache behind a ProfileCache class or a simple clear_cache() function to make the caching explicit and resettable for testing.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Python CLI tools layer was designed for script-like one-shot usage, where import-time side effects are convenient but create coupling"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "initialization_coupling": {
+      "add": [
+        {
+          "header": "TypeScript modules use constant registries at module scope",
+          "description": "Effect registries in shared/effects/index.tsx and ASSET_COLORS in timeline-data.ts are immutable lookup tables built at import time — this is appropriate and does not create coupling.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Python common.py performs env and file IO at import time",
+          "description": "Importing tools/common.py triggers .env file reading and os.environ mutation as a side effect. This makes it impossible to import the module without those side effects occurring, creating fragility for testing and reuse.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Python profile caches are unencapsulated module globals",
+          "description": "_profile_cache and _profile_paths are mutable dicts at module scope with no clear/reset mechanism, creating implicit singleton state that persists across function calls.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Entry points appropriately bootstrap singletons",
+          "description": "viewer/src/main.tsx creates QueryClient at module scope, which is correct for an application entry point. remotion/src/Root.tsx similarly uses module scope for composition registration.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

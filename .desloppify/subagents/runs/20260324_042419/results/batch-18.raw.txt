@@ -1,0 +1,87 @@
+{
+  "batch": "contract_coherence",
+  "batch_index": 18,
+  "assessments": {
+    "contract_coherence": 82.4
+  },
+  "dimension_notes": {
+    "contract_coherence": {
+      "evidence": [
+        "Functions in shared/editor-utils.ts consistently return what their names promise: getClipEndSeconds returns a number, findClipById returns ClipMeta|null, isHoldClip returns boolean",
+        "onClickTimeArea in useTimelineSync.ts has return type inferred as undefined (line 56 returns undefined explicitly) but the UseTimelineStateResult interface declares it as returning undefined — consistent",
+        "getEffectValue in config-utils.ts lines 41-60 has a subtle contract issue: the function returns null for missing effects, but the inner array loop at line 55 uses 'effect[name] ?? null' which is redundant since typeof check already confirmed it's a number",
+        "loadTimelineConfig in load-config.ts throws on missing assets (line 96) while the same function pattern in timeline-data.ts resolveTimelineConfig also throws (line 159) — consistent error contract",
+        "serializeClipForDisk returns TimelineClip but builds it as a Partial — the 'as TimelineClip' cast on line 60 of serialize.ts hides the fact that required fields might be missing",
+        "uploadAssetFile in timeline-api.ts returns Promise<unknown> (line 32) but the only caller (useTimelineState.ts line 965) ignores the return value — the return type is honest about the untyped response",
+        "Effects type in TimelineClip (types.ts line 82) uses 'TimelineEffect[] | Record<string, number>' — a union that requires runtime discrimination, and getEffectValue in config-utils.ts correctly handles both branches"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "serializeClipForDisk uses an unsafe 'as' cast that could mask missing required fields; ClipMeta type parallels TimelineClip without deriving from it, creating drift risk"
+    }
+  },
+  "dimension_judgment": {
+    "contract_coherence": {
+      "dimension_character": "Functions generally honor their stated contracts — getters return the correct types, error contracts are consistent (throw on missing assets, return null for missing optional data), and naming accurately reflects behavior. The main contract concern is the 'as TimelineClip' cast in serialize.ts which papers over a potential type gap, and the parallel ClipMeta/TimelineClip definitions that could drift apart.",
+      "score_rationale": "The codebase is solid but uneven on contract coherence. The shared utilities layer demonstrates reliable contracts, and the naming-to-behavior mapping is trustworthy throughout. The unsafe cast in serialization is a real issue but isolated. The parallel type definitions create a maintenance risk rather than an active contract violation. These keep the score at the upper end of the 80 range rather than 90+."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "contract_coherence",
+      "identifier": "unsafe_cast_serialize_clip",
+      "summary": "serializeClipForDisk uses 'as TimelineClip' cast on a Partial, hiding missing required fields",
+      "related_files": ["shared/serialize.ts"],
+      "evidence": [
+        "Line 60: 'return serializedClip as TimelineClip' — serializedClip is typed as Partial<Record<TimelineClipField, ...>> which does not guarantee that required TimelineClip fields (id, at, track) are present. While the code manually sets id, at, and track above, the type system doesn't verify this."
+      ],
+      "suggestion": "Build the return value starting from a properly typed base object { id: clip.id, at: clip.at, track: clip.track } and spread optional fields onto it, so the return type is structurally guaranteed to satisfy TimelineClip without a cast.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "contract_coherence",
+      "identifier": "parallel_clip_meta_type",
+      "summary": "ClipMeta in timeline-data.ts mirrors TimelineClip fields without deriving from it, creating drift risk",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts", "shared/types.ts"],
+      "evidence": [
+        "ClipMeta (timeline-data.ts lines 18-38) manually lists the same fields as TimelineClip (types.ts lines 61-83) minus id and at. If a field is added to TimelineClip, ClipMeta must be manually updated to match — there is no type-level connection enforcing consistency."
+      ],
+      "suggestion": "Define ClipMeta as Omit<TimelineClip, 'id' | 'at'> or derive it from TimelineClip using mapped types, so changes to the source type automatically propagate.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Parallel type definitions emerged because the viewer needed a subset of clip data without the timeline-positional fields"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "contract_coherence": {
+      "add": [
+        {
+          "header": "Consistent error contracts across loaders",
+          "description": "Both remotion's loadTimelineConfig and viewer's resolveTimelineConfig throw on missing assets with descriptive error messages, providing a predictable error contract at the data boundary.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Getter/checker functions honor naming contracts",
+          "description": "Functions like getClipEndSeconds, isHoldClip, findClipById, getVisualTracks consistently return what their names promise without hidden side effects. A developer can trust the naming.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Effects union type handled correctly at all call sites",
+          "description": "TimelineClip.effects uses a TimelineEffect[] | Record<string, number> union. getEffectValue and migrateLegacyEffects both properly discriminate the branches with Array.isArray checks.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "batch": "api_surface_coherence",
+  "batch_index": 11,
+  "assessments": {
+    "api_surface_coherence": 78.5
+  },
+  "dimension_notes": {
+    "api_surface_coherence": {
+      "evidence": [
+        "timeline-api.ts mixes sync-returning functions (loadTimelineConfig, loadAssetRegistry) with explicitly async functions (saveTimelineConfig, uploadAssetFile) -- loadTimelineConfig and loadAssetRegistry return Promise but are not marked async, while saveTimelineConfig and uploadAssetFile use the async keyword",
+        "timeline-data.ts mixes sync exports (configToRows, buildTimelineData, rowsToConfig, getAssetColor, getSourceTime, inferTrackType, getNextClipId) with async exports (loadTimelineJson, loadTranscript) in the same module",
+        "Python CLI tools use a consistent add_arguments/run interface across all modules (ingest, view, search, render, tts, place), which is a coherent API surface",
+        "call_fal_generate and call_fal_edit in imagegen.py have 7 parameters each including api_key -- the api_key could be resolved from environment rather than threaded through as a parameter",
+        "remotion/src/load-config.ts defines its own loadTimelineConfig and fetchJson functions that parallel but differ from viewer/src/tools/video-editor/lib/timeline-api.ts versions -- two different API shapes for the same logical operation in different contexts",
+        "clip_src_duration in render.py duplicates clip_source_duration from common.py with identical logic -- callers see two names for the same operation"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium"
+    }
+  },
+  "dimension_judgment": {
+    "api_surface_coherence": {
+      "dimension_character": "The Python CLI tools share a strong, consistent API pattern (add_arguments/run/main) that makes the tooling surface predictable and composable via cli.py. The TypeScript side has more surface irregularity, with sync/async mixing in the same modules and parallel but divergent API shapes between the remotion and viewer subsystems for the same operations (config loading, asset resolution).",
+      "score_rationale": "The consistent CLI pattern lifts the score above 70, but the sync/async mixing in timeline-data.ts/timeline-api.ts and the duplicated-but-divergent config loading APIs between remotion and viewer create recurring friction. A developer extending one API would need to check whether the parallel version also needs updating. This lands solidly in the 'recurring friction' range around 78."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "sync_async_mixing_timeline_data",
+      "summary": "timeline-data.ts mixes sync and async exports in the same public API module",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts"],
+      "evidence": [
+        "Sync exports: configToRows, buildTimelineData, rowsToConfig, getAssetColor, getSourceTime, inferTrackType, getNextClipId alongside async exports: loadTimelineJson, loadTranscript"
+      ],
+      "suggestion": "Move loadTimelineJson and loadTranscript to timeline-api.ts which already handles async data fetching, keeping timeline-data.ts as a pure synchronous transformation module.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "duplicate_clip_duration_function",
+      "summary": "render.py defines clip_src_duration duplicating common.py's clip_source_duration",
+      "related_files": ["tools/render.py", "tools/common.py"],
+      "evidence": [
+        "render.py line 51-54: clip_src_duration has identical logic to common.py line 146-149: clip_source_duration -- both compute hold or to-from"
+      ],
+      "suggestion": "Remove clip_src_duration from render.py and use clip_source_duration from common (already imported module).",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "divergent_config_loading_apis",
+      "summary": "remotion/src/load-config.ts and viewer timeline-data.ts define parallel but divergent config loading APIs",
+      "related_files": ["remotion/src/load-config.ts", "viewer/src/tools/video-editor/lib/timeline-data.ts"],
+      "evidence": [
+        "Both define resolveTimelineConfig logic (asset resolution, migration) independently. remotion's loadTimelineConfig returns ResolvedTimelineConfig directly, while viewer's resolveTimelineConfig is a separate step called from buildTimelineData. The resolution logic is duplicated across the two."
+      ],
+      "suggestion": "Extract the shared resolution logic (migrateToFlatTracks + asset registry resolution + clip asset binding) into a function in shared/ that both remotion and viewer import. Each consumer only provides the fetch/staticFile strategy.",
+      "confidence": "medium",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Config resolution logic was duplicated when remotion and viewer subsystems were built independently"],
+    "likely_symptoms": ["duplicate_clip_duration_function is a symptom of render.py being developed before common.py had the function"]
+  },
+  "context_updates": {
+    "api_surface_coherence": {
+      "add": [
+        {
+          "header": "Consistent CLI add_arguments/run pattern",
+          "description": "All Python CLI tools (ingest, view, search, render, tts, place) share an identical add_arguments/run/main interface pattern, enabling clean composition via cli.py subparsers. This makes the CLI surface highly predictable.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Sync/async boundary in viewer lib",
+          "description": "timeline-data.ts mixes synchronous data transformation functions with async loading functions, making it unclear whether callers should expect sync or async behavior from this module.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

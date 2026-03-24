@@ -1,4 +1,11 @@
-import type { ResolvedTimelineConfig, TimelineClip } from "@shared/types";
+import { migrateToFlatTracks } from "@shared/migrate";
+import type {
+  AssetRegistry,
+  ResolvedAssetRegistryEntry,
+  ResolvedTimelineConfig,
+  TimelineClip,
+  TimelineConfig,
+} from "@shared/types";
 
 export const parseResolution = (resolution: string): { width: number; height: number } => {
   const [width, height] = resolution.toLowerCase().split("x");
@@ -61,4 +68,47 @@ export const getEffectValue = (
 
 export const getConfigSignature = (config: ResolvedTimelineConfig): string => {
   return JSON.stringify(config);
+};
+
+export type UrlResolver = (file: string) => string;
+
+export const resolveTimelineConfig = (
+  config: TimelineConfig,
+  registry: AssetRegistry,
+  resolveUrl: UrlResolver,
+): ResolvedTimelineConfig => {
+  const migratedConfig = migrateToFlatTracks(config);
+  const resolvedRegistry: Record<string, ResolvedAssetRegistryEntry> = {};
+  for (const [assetId, entry] of Object.entries(registry.assets ?? {})) {
+    resolvedRegistry[assetId] = {
+      ...entry,
+      src: resolveUrl(entry.file),
+    };
+  }
+
+  const clips = migratedConfig.clips.map((clip) => {
+    if (!clip.asset) {
+      return {
+        ...clip,
+        assetEntry: undefined,
+      };
+    }
+
+    const assetEntry = resolvedRegistry[clip.asset];
+    if (!assetEntry) {
+      throw new Error(`Clip '${clip.id}' references missing asset '${clip.asset}'`);
+    }
+
+    return {
+      ...clip,
+      assetEntry,
+    };
+  });
+
+  return {
+    output: { ...migratedConfig.output },
+    tracks: migratedConfig.tracks ?? [],
+    clips,
+    registry: resolvedRegistry,
+  };
 };

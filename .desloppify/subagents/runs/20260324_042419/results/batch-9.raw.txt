@@ -1,0 +1,94 @@
+{
+  "batch": "mid_level_elegance",
+  "batch_index": 9,
+  "assessments": {"mid_level_elegance": 74.0},
+  "dimension_notes": {
+    "mid_level_elegance": {
+      "evidence": [
+        "Data flow from API to UI follows a clear pipeline: timeline-api.ts (fetch) -> timeline-data.ts (parse/resolve) -> useTimelineState (state management) -> TimelineContext (distribution) -> components (consumption). Each layer has a defined role.",
+        "The shared/ module provides a clean seam between data model operations and UI: editor-utils operates on ResolvedTimelineConfig immutably, and the viewer converts between editor representation (TimelineRow/ClipMeta) and config representation (TimelineConfig) at a single boundary in timeline-data.ts (configToRows/rowsToConfig).",
+        "Two parallel edit paths exist: applyTimelineEdit operates on rows/meta, while applyResolvedConfigEdit operates on ResolvedTimelineConfig — some handlers use one, some use the other, creating inconsistent data translation patterns at the edit boundary",
+        "commitData is the single point where state is updated and save is scheduled — this consolidation prevents scattered state mutations, a positive orchestration pattern",
+        "The save pipeline (commitData -> scheduleSave -> saveTimeline -> saveMutation) is linear composition, not tangled back-and-forth calls",
+        "migrateToFlatTracks is called redundantly: once in buildTimelineData, and again inside resolveTimelineConfig and configToRows. Data entering the system gets migrated multiple times through different code paths.",
+        "Error propagation at API boundaries is consistent: timeline-api.ts throws on non-OK responses, useTimelineState catches via react-query and useMutation with onError handlers",
+        "The preview sync seam (useTimelineSync) cleanly isolates bidirectional time synchronization with explicit guards (isSyncingFromPreview/isSyncingFromTimeline) to prevent feedback loops"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "mid_level_elegance": {
+      "dimension_character": "Module handoffs follow a well-defined pipeline from API to state to UI, with clean separation between data model operations (shared/) and editor state management (hooks/). The key weakness is the dual edit path (applyTimelineEdit vs applyResolvedConfigEdit) which creates two data translation pathways at the same boundary, and redundant migration calls that process data multiple times through different code paths.",
+      "score_rationale": "The pipeline structure, single commit point, and clean preview sync seam are strong indicators of thoughtful boundary design. The dual edit path and redundant migration represent moderate seam entropy — they work correctly but create cognitive overhead and maintenance risk. These are localized issues within one module rather than systemic boundary failures. Score of 74 reflects good foundational seam design with specific integration hygiene issues."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "dual_edit_path",
+      "summary": "Two parallel data translation paths exist for timeline edits, creating inconsistent boundary patterns",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineState.ts"],
+      "evidence": [
+        "applyTimelineEdit (line 278) converts rows+meta -> config via rowsToConfig, used by onChange, onActionResizeEnd, handleDeleteClip, handleAssetDrop, handleAddText",
+        "applyResolvedConfigEdit (line 307) converts resolvedConfig -> config via serializeForDisk then rebuilds rows, used by handleSelectedClipChange, handleSplitSelectedClip, handleToggleMute, handleAddTrack, handleTrackPopoverChange, handleReorderTrack, handleRemoveTrack",
+        "Both paths converge on commitData but use different intermediate representations, forcing developers to choose which path to use for new features"
+      ],
+      "suggestion": "Consolidate to a single edit path. Since most handlers could operate on ResolvedTimelineConfig (the richer representation), make applyResolvedConfigEdit the primary path and convert row-level changes to resolved config edits.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "redundant_migration_calls",
+      "summary": "migrateToFlatTracks is called multiple times in the same data pipeline",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts", "shared/migrate.ts"],
+      "evidence": [
+        "buildTimelineData (line 329) calls migrateToFlatTracks on config, then passes the result to resolveTimelineConfig which calls migrateToFlatTracks again (line 140), and configToRows which also calls migrateToFlatTracks (line 179)",
+        "This means config is migrated 3 times when building initial timeline data"
+      ],
+      "suggestion": "Migrate once at the entry point (buildTimelineData), then have resolveTimelineConfig and configToRows accept already-migrated config. Add a type marker or use a distinct type (MigratedTimelineConfig) to enforce single-migration.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["The dual edit path emerged because some operations are natural on the row/action representation (drag, resize) while others are natural on the config representation (property changes, track management). No unification was done after both paths were established."],
+    "likely_symptoms": ["redundant_migration_calls is a symptom of the dual path — each path independently ensures migration is applied"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "mid_level_elegance": {
+      "add": [
+        {
+          "header": "Clean API-to-UI data pipeline",
+          "description": "Data flows linearly from timeline-api (fetch) through timeline-data (parse/resolve) to useTimelineState (manage) to context (distribute). Each layer has clear input/output contracts and a defined role.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Single commit point prevents scattered mutations",
+          "description": "All state updates flow through commitData, which handles state setting, selection fallback, save scheduling, and signature tracking in one place. This prevents scattered mutation patterns across handlers.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean preview sync seam isolation",
+          "description": "useTimelineSync encapsulates bidirectional time synchronization with explicit directional guards, preventing feedback loops between the preview player and timeline cursor.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Dual edit path at state boundary",
+          "description": "Two parallel data translation paths (applyTimelineEdit via rows/meta, applyResolvedConfigEdit via resolved config) coexist in useTimelineState. This forces developers to choose which representation to work with for each new feature.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

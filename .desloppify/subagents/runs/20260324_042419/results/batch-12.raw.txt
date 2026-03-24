@@ -1,0 +1,42 @@
+{
+  "batch": "authorization_consistency",
+  "batch_index": 12,
+  "assessments": {
+    "authorization_consistency": 92.0
+  },
+  "dimension_notes": {
+    "authorization_consistency": {
+      "evidence": [
+        "This is a local-only CLI + development tool codebase with no web server authentication, no route handlers, no RLS, and no permission system",
+        "API keys (OPENAI_API_KEY, RESEMBLE_API_KEY, FAL_KEY) are loaded from .env and used consistently via os.environ.get with clear error messages when missing",
+        "The viewer Vite dev server exposes /api/ endpoints but these are purely local development endpoints serving filesystem data -- no auth is needed or expected",
+        "No user-facing authentication boundaries exist in this codebase",
+        "API key handling is consistent: each tool checks for its required key at the start of run() and exits with a clear message if missing"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "API keys are read from environment at various points rather than through a centralized auth/config validation step. The viewer's /api/ endpoints have no validation of request content, though this is acceptable for a local dev tool."
+    }
+  },
+  "dimension_judgment": {
+    "authorization_consistency": {
+      "dimension_character": "This codebase has no authentication or authorization requirements -- it is a local CLI toolkit and development-time viewer. The only 'auth' surface is external API key management (OpenAI, Resemble, fal.ai), which is handled consistently across tools via .env loading in common.py. There are no route handlers, RLS, permission strings, or trust boundaries to evaluate.",
+      "score_rationale": "Authorization consistency is not a meaningful concern for this codebase. The dimension is effectively not applicable -- there are no protected resources, no user auth, no permission model. The API key handling that does exist is consistent and well-structured. Score of 92 reflects strong consistency in the limited auth surface that exists, with minor room for improvement in centralizing API key validation."
+    }
+  },
+  "issues": [],
+  "retrospective": {},
+  "context_updates": {
+    "authorization_consistency": {
+      "add": [
+        {
+          "header": "Local-only tooling with no auth surface",
+          "description": "This is a CLI + dev-server codebase with no user authentication, no route protection, and no permission model. The only auth-adjacent concern is external API key management, which is handled consistently via .env loading.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}
