@@ -7,14 +7,12 @@ import {
   addTrack,
   getTrackById,
   getVisualTracks,
-  reorderTracks,
-  removeTrack,
   splitClipAtPlayhead,
   toggleClipMute,
   updateClipInConfig,
 } from "@shared/editor-utils";
 import { serializeForDisk } from "@shared/serialize";
-import type { ClipType, TrackDefinition, TrackFit, TrackKind } from "@shared/types";
+import type { ClipType, TrackDefinition, TrackKind } from "@shared/types";
 import AssetPanel from "./AssetPanel";
 import { ClipPanel } from "./ClipPanel";
 import OverlayEditor from "./OverlayEditor";
@@ -33,13 +31,13 @@ import {
   type ClipOrderMap,
   type TimelineData,
 } from "./timeline-data";
+import { useCrossTrackDrag, type ActionDragState } from "./useCrossTrackDrag";
 import "@xzdarcy/react-timeline-editor/dist/react-timeline-editor.css";
 import "./App.css";
 
 const ROW_HEIGHT = 56;
 const SCALE_SECONDS = 5;
-const BLEND_MODES = ["normal", "multiply", "screen", "overlay", "darken", "lighten", "soft-light", "hard-light"];
-const FIT_OPTIONS: TrackFit[] = ["cover", "contain", "manual"];
+const TIMELINE_START_LEFT = 20;
 
 const isEditableTarget = (target: EventTarget | null): boolean => {
   if (!(target instanceof HTMLElement)) {
@@ -67,6 +65,23 @@ const buildTrackClipOrder = (tracks: TrackDefinition[], clipOrder: ClipOrderMap,
       (clipOrder[track.id] ?? []).filter((clipId) => !removedIds.includes(clipId)),
     ]),
   );
+};
+
+const moveClipBetweenTracks = (
+  clipOrder: ClipOrderMap,
+  clipId: string,
+  sourceTrackId: string,
+  targetTrackId: string,
+): ClipOrderMap => {
+  if (sourceTrackId === targetTrackId) {
+    return clipOrder;
+  }
+
+  return {
+    ...clipOrder,
+    [sourceTrackId]: (clipOrder[sourceTrackId] ?? []).filter((id) => id !== clipId),
+    [targetTrackId]: [...(clipOrder[targetTrackId] ?? []).filter((id) => id !== clipId), clipId],
+  };
 };
 
 const getCompatibleTrackId = (
@@ -373,6 +388,205 @@ function App() {
     return undefined;
   }, []);
 
+  const timelineWrapperRef = useRef<HTMLDivElement | null>(null);
+  const crossTrackActive = useRef(false);
+  const actionDragStateRef = useRef<Record<string, ActionDragState>>({});
+
+  const clearActionDragState = useCallback((clipId: string) => {
+    delete actionDragStateRef.current[clipId];
+  }, []);
+
+  const moveClipToRow = useCallback((clipId: string, targetRowId: string, newStartTime?: number) => {
+    const current = dataRef.current;
+    if (!current) {
+      return;
+    }
+
+    const sourceRow = current.rows.find((row) => row.actions.some((action) => action.id === clipId));
+    const targetRow = current.rows.find((row) => row.id === targetRowId);
+    if (!sourceRow || !targetRow) {
+      return;
+    }
+
+    const sourceTrack = current.tracks.find((track) => track.id === sourceRow.id);
+    const targetTrack = current.tracks.find((track) => track.id === targetRow.id);
+    const action = sourceRow.actions.find((candidate) => candidate.id === clipId);
+    if (!sourceTrack || !targetTrack || !action || sourceTrack.kind !== targetTrack.kind) {
+      return;
+    }
+
+    const duration = action.end - action.start;
+    const nextStart = typeof newStartTime === "number" ? Math.max(0, newStartTime) : action.start;
+    const nextAction = { ...action, start: nextStart, end: nextStart + duration };
+    const nextRows = current.rows.map((row) => {
+      if (sourceRow.id === targetRow.id && row.id === sourceRow.id) {
+        return {
+          ...row,
+          actions: row.actions.map((candidate) => (candidate.id === clipId ? nextAction : candidate)),
+        };
+      }
+
+      if (row.id === sourceRow.id) {
+        return { ...row, actions: row.actions.filter((candidate) => candidate.id !== clipId) };
+      }
+
+      if (row.id === targetRow.id) {
+        return { ...row, actions: [...row.actions, nextAction] };
+      }
+
+      return row;
+    });
+
+    const nextClipOrder = moveClipBetweenTracks(current.clipOrder, clipId, sourceRow.id, targetRow.id);
+    applyTimelineEdit(nextRows, { [clipId]: { track: targetRow.id } }, undefined, nextClipOrder);
+  }, [applyTimelineEdit]);
+
+  const createTrackAndMoveClip = useCallback((clipId: string, kind: TrackKind, newStartTime?: number) => {
+    const current = dataRef.current;
+    if (!current) {
+      return;
+    }
+
+    const sourceClip = current.resolvedConfig.clips.find((clip) => clip.id === clipId);
+    const sourceTrack = sourceClip ? current.resolvedConfig.tracks.find((track) => track.id === sourceClip.track) : null;
+    if (!sourceClip || !sourceTrack || sourceTrack.kind !== kind) {
+      return;
+    }
+
+    const nextResolvedConfigBase = addTrack(current.resolvedConfig, kind);
+    const newTrack = nextResolvedConfigBase.tracks.find((track) => {
+      return !current.resolvedConfig.tracks.some((existingTrack) => existingTrack.id === track.id);
+    }) ?? nextResolvedConfigBase.tracks[nextResolvedConfigBase.tracks.length - 1];
+    if (!newTrack) {
+      return;
+    }
+
+    const nextResolvedConfig = {
+      ...nextResolvedConfigBase,
+      clips: nextResolvedConfigBase.clips.map((clip) => {
+        if (clip.id !== clipId) {
+          return clip;
+        }
+
+        return {
+          ...clip,
+          at: typeof newStartTime === "number" ? Math.max(0, newStartTime) : clip.at,
+          track: newTrack.id,
+        };
+      }),
+    };
+
+    applyResolvedConfigEdit(nextResolvedConfig, {
+      selectedClipId: clipId,
+      selectedTrackId: newTrack.id,
+    });
+  }, [applyResolvedConfigEdit]);
+
+  // Move selected clip to a different compatible track (up/down in the track stack)
+  const moveSelectedClipToTrack = useCallback((direction: "up" | "down") => {
+    const current = dataRef.current;
+    if (!current || !selectedClipId) {
+      return;
+    }
+
+    const currentRowIndex = current.rows.findIndex((row) => row.actions.some((action) => action.id === selectedClipId));
+    if (currentRowIndex < 0) {
+      return;
+    }
+
+    const sourceTrack = current.tracks.find((track) => track.id === current.rows[currentRowIndex]?.id);
+    if (!sourceTrack) {
+      return;
+    }
+
+    let targetRowIndex = currentRowIndex;
+    while (true) {
+      targetRowIndex += direction === "up" ? -1 : 1;
+      if (targetRowIndex < 0 || targetRowIndex >= current.rows.length) {
+        return;
+      }
+
+      const targetTrack = current.tracks.find((track) => track.id === current.rows[targetRowIndex]?.id);
+      if (targetTrack?.kind === sourceTrack.kind) {
+        moveClipToRow(selectedClipId, targetTrack.id);
+        setSelectedTrackId(targetTrack.id);
+        return;
+      }
+    }
+  }, [moveClipToRow, selectedClipId]);
+
+  useCrossTrackDrag({
+    timelineWrapperRef,
+    dataRef,
+    moveClipToRow,
+    createTrackAndMoveClip,
+    setSelectedClipId,
+    setSelectedTrackId,
+    crossTrackActive,
+    rowHeight: ROW_HEIGHT,
+    scale,
+    scaleWidth,
+    startLeft: TIMELINE_START_LEFT,
+    actionDragStateRef,
+    clearActionDragState,
+  });
+
+  // Keyboard shortcut: Alt+Up/Down to move clip between tracks
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isEditableTarget(e.target)) {
+        return;
+      }
+
+      if (e.altKey && e.key === "ArrowUp") {
+        e.preventDefault();
+        moveSelectedClipToTrack("up");
+      } else if (e.altKey && e.key === "ArrowDown") {
+        e.preventDefault();
+        moveSelectedClipToTrack("down");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [moveSelectedClipToTrack]);
+
+  const onActionMoveStart = useCallback(({ action, row }: { action: TimelineAction; row: TimelineRow }) => {
+    actionDragStateRef.current[action.id] = {
+      rowId: row.id,
+      initialStart: action.start,
+      initialEnd: action.end,
+      latestStart: action.start,
+      latestEnd: action.end,
+    };
+  }, []);
+
+  const onActionMoving = useCallback(({ action, row, start, end }: {
+    action: TimelineAction;
+    row: TimelineRow;
+    start: number;
+    end: number;
+  }) => {
+    actionDragStateRef.current[action.id] = {
+      rowId: row.id,
+      initialStart: actionDragStateRef.current[action.id]?.initialStart ?? action.start,
+      initialEnd: actionDragStateRef.current[action.id]?.initialEnd ?? action.end,
+      latestStart: start,
+      latestEnd: end,
+    };
+
+    if (crossTrackActive.current) {
+      return false;
+    }
+
+    return undefined;
+  }, []);
+
+  const onActionMoveEnd = useCallback(({ action }: { action: TimelineAction; row: TimelineRow; start: number; end: number }) => {
+    if (!crossTrackActive.current) {
+      clearActionDragState(action.id);
+    }
+  }, [clearActionDragState]);
+
   const onActionResizeStart = useCallback(({ action }: { action: TimelineAction }) => {
     const clipMeta = dataRef.current?.meta[action.id];
     if (!clipMeta || typeof clipMeta.hold === "number") {
@@ -446,7 +660,12 @@ function App() {
       return;
     }
 
+    if (crossTrackActive.current) {
+      return false;
+    }
+
     applyTimelineEdit(nextRows, buildRowTrackPatches(nextRows));
+    return undefined;
   }, [applyTimelineEdit]);
 
   const onOverlayChange = useCallback((actionId: string, patch: Partial<ClipMeta>) => {
@@ -568,7 +787,7 @@ function App() {
     const scrollLeft = event.currentTarget.scrollLeft;
     const pixelsPerSecond = scaleWidth / scale;
     const dropX = event.clientX - rect.left;
-    const time = Math.max(0, (dropX + scrollLeft - 20) / pixelsPerSecond);
+    const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
 
     const rowElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
     const rowIndex = rowElements.findIndex((rowElement) => {
@@ -650,21 +869,6 @@ function App() {
     applyResolvedConfigEdit(toggleClipMute(resolvedConfig, selectedClipId), { selectedClipId });
   }, [applyResolvedConfigEdit, resolvedConfig, selectedClipId]);
 
-  const handleTrackPropertyChange = useCallback((trackId: string, patch: Partial<TrackDefinition>) => {
-    if (!resolvedConfig) {
-      return;
-    }
-
-    const nextResolvedConfig = {
-      ...resolvedConfig,
-      tracks: resolvedConfig.tracks.map((track) => {
-        return track.id === trackId ? { ...track, ...patch } : track;
-      }),
-    };
-
-    applyResolvedConfigEdit(nextResolvedConfig, { selectedTrackId: trackId });
-  }, [applyResolvedConfigEdit, resolvedConfig]);
-
   const handleAddTrack = useCallback((kind: TrackKind) => {
     if (!resolvedConfig) {
       return;
@@ -673,34 +877,6 @@ function App() {
     const nextResolvedConfig = addTrack(resolvedConfig, kind);
     const nextTrack = nextResolvedConfig.tracks[nextResolvedConfig.tracks.length - 1] ?? null;
     applyResolvedConfigEdit(nextResolvedConfig, { selectedTrackId: nextTrack?.id ?? null });
-  }, [applyResolvedConfigEdit, resolvedConfig]);
-
-  const handleRemoveTrack = useCallback((trackId: string) => {
-    if (!resolvedConfig) {
-      return;
-    }
-
-    const nextResolvedConfig = removeTrack(resolvedConfig, trackId);
-    applyResolvedConfigEdit(nextResolvedConfig, {
-      selectedClipId: selectedClipId && nextResolvedConfig.clips.some((clip) => clip.id === selectedClipId)
-        ? selectedClipId
-        : null,
-      selectedTrackId: nextResolvedConfig.tracks[0]?.id ?? null,
-    });
-  }, [applyResolvedConfigEdit, resolvedConfig, selectedClipId]);
-
-  const handleReorderTrack = useCallback((trackId: string, direction: -1 | 1) => {
-    if (!resolvedConfig) {
-      return;
-    }
-
-    const fromIndex = resolvedConfig.tracks.findIndex((track) => track.id === trackId);
-    if (fromIndex < 0) {
-      return;
-    }
-
-    const nextResolvedConfig = reorderTracks(resolvedConfig, fromIndex, fromIndex + direction);
-    applyResolvedConfigEdit(nextResolvedConfig, { selectedTrackId: trackId });
   }, [applyResolvedConfigEdit, resolvedConfig]);
 
   const handleAddText = useCallback(() => {
@@ -775,6 +951,8 @@ function App() {
     return (
       <div
         className={`clip-action${selectedClipId === action.id ? " selected" : ""}${isMuted ? " muted" : ""}${clipMeta.continuous ? " clip-action-pattern" : ""}`}
+        data-clip-id={action.id}
+        data-row-id={clipMeta.track}
         style={{ backgroundColor: color }}
         onMouseDown={() => {
           setSelectedClipId(action.id);
@@ -1004,78 +1182,21 @@ function App() {
 
       <div className="timeline-container">
         <div className="track-labels">
-          {data.tracks.map((track, index) => {
-            const removableCount = data.tracks.filter((candidate) => candidate.kind === track.kind).length;
-            return (
+          {data.tracks.map((track) => (
               <div
                 key={track.id}
                 className={`track-label${selectedTrackId === track.id ? " selected" : ""}`}
+                style={{ height: ROW_HEIGHT, minHeight: ROW_HEIGHT, maxHeight: ROW_HEIGHT }}
                 onClick={() => setSelectedTrackId(track.id)}
               >
-                <div className="track-label-top">
-                  <span>{track.label}</span>
-                  <div className="track-reorder-buttons">
-                    <button type="button" onClick={() => handleReorderTrack(track.id, -1)} disabled={index === 0}>↑</button>
-                    <button type="button" onClick={() => handleReorderTrack(track.id, 1)} disabled={index === data.tracks.length - 1}>↓</button>
-                    <button type="button" onClick={() => handleRemoveTrack(track.id)} disabled={removableCount <= 1}>×</button>
-                  </div>
-                </div>
-                {track.kind === "visual" ? (
-                  <>
-                    <label className="track-control">
-                      <span>Scale</span>
-                      <input
-                        type="range"
-                        min="0.2"
-                        max="1.5"
-                        step="0.05"
-                        value={track.scale ?? 1}
-                        onChange={(event) => handleTrackPropertyChange(track.id, { scale: Number(event.currentTarget.value) })}
-                      />
-                    </label>
-                    <label className="track-control">
-                      <span>Fit</span>
-                      <select
-                        value={track.fit ?? "contain"}
-                        onChange={(event) => handleTrackPropertyChange(track.id, { fit: event.currentTarget.value as TrackFit })}
-                      >
-                        {FIT_OPTIONS.map((fit) => (
-                          <option key={fit} value={fit}>{fit}</option>
-                        ))}
-                      </select>
-                    </label>
-                  </>
-                ) : null}
-                <label className="track-control">
-                  <span>Opacity</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={track.opacity ?? 1}
-                    onChange={(event) => handleTrackPropertyChange(track.id, { opacity: Number(event.currentTarget.value) })}
-                  />
-                </label>
-                {track.kind === "visual" ? (
-                  <label className="track-control">
-                    <span>Blend</span>
-                    <select
-                      value={track.blendMode ?? "normal"}
-                      onChange={(event) => handleTrackPropertyChange(track.id, { blendMode: event.currentTarget.value as TrackDefinition["blendMode"] })}
-                    >
-                      {BLEND_MODES.map((mode) => (
-                        <option key={mode} value={mode}>{mode}</option>
-                      ))}
-                    </select>
-                  </label>
-                ) : null}
+                <span className="track-label-id">{track.id}</span>
+                <span className="track-label-name">{track.label}</span>
               </div>
-            );
-          })}
+          ))}
         </div>
 
         <div
+          ref={timelineWrapperRef}
           className="timeline-wrapper"
           onDragOver={onTimelineDragOver}
           onDragLeave={onTimelineDragLeave}
@@ -1092,13 +1213,16 @@ function App() {
             minScaleCount={scaleCount}
             maxScaleCount={scaleCount}
             scaleSplitCount={5}
-            startLeft={20}
+            startLeft={TIMELINE_START_LEFT}
             rowHeight={ROW_HEIGHT}
             autoScroll
             dragLine
             getActionRender={getActionRender}
             onCursorDrag={onCursorDrag}
             onClickTimeArea={onClickTimeArea}
+            onActionMoveStart={onActionMoveStart}
+            onActionMoving={onActionMoving}
+            onActionMoveEnd={onActionMoveEnd}
             onActionResizeStart={onActionResizeStart}
             onActionResizeEnd={onActionResizeEnd}
           />

@@ -77,6 +77,18 @@ const effectIdForClip = (clipId: string): string => {
   return `effect-${clipId}`;
 };
 
+const getUniqueClipId = (clipId: string, usedIds: Set<string>): string => {
+  let duplicateIndex = 1;
+  let candidate = clipId;
+
+  while (usedIds.has(candidate)) {
+    candidate = `${clipId}-dup-${duplicateIndex}`;
+    duplicateIndex += 1;
+  }
+
+  return candidate;
+};
+
 const getClipDurationSeconds = (clip: TimelineClip): number => {
   return getClipSourceDuration(clip) / (clip.speed ?? 1);
 };
@@ -179,22 +191,31 @@ export const configToRows = (
   const effects: Record<string, EditorTimelineEffect> = {};
   const meta: Record<string, ClipMeta> = {};
   const rowsByTrack = new Map<string, TimelineAction[]>();
+  const usedClipIds = new Set<string>();
 
   for (const track of migratedConfig.tracks ?? []) {
     rowsByTrack.set(track.id, []);
   }
 
   for (const clip of migratedConfig.clips) {
+    const clipId = getUniqueClipId(clip.id, usedClipIds);
+    if (clipId !== clip.id) {
+      console.warn(
+        `[timeline] Duplicate clip id "${clip.id}" on track "${clip.track}" detected; using "${clipId}" in editor state.`,
+      );
+    }
+    usedClipIds.add(clipId);
+
     clipOrder[clip.track] ??= [];
-    clipOrder[clip.track].push(clip.id);
-    effects[effectIdForClip(clip.id)] = { id: effectIdForClip(clip.id) };
-    meta[clip.id] = getDefaultClipMeta(clip);
+    clipOrder[clip.track].push(clipId);
+    effects[effectIdForClip(clipId)] = { id: effectIdForClip(clipId) };
+    meta[clipId] = getDefaultClipMeta(clip);
 
     const action: TimelineAction = {
-      id: clip.id,
+      id: clipId,
       start: clip.at,
       end: clip.at + getClipDurationSeconds(clip),
-      effectId: effectIdForClip(clip.id),
+      effectId: effectIdForClip(clipId),
     };
 
     rowsByTrack.get(clip.track)?.push(action);

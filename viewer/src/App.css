@@ -232,25 +232,44 @@ body {
 }
 
 .track-labels {
-  width: 220px;
+  width: 100px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
   padding-top: 30px;
+  overflow: hidden;
 }
 
 .track-label {
-  min-height: 56px;
+  height: 56px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 4px;
-  padding: 6px 8px;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 4px 8px;
   font-size: 10px;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border);
   cursor: pointer;
+  overflow: hidden;
+}
+
+.track-label-id {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.track-label-name {
+  font-size: 9px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .track-label.selected {
@@ -324,6 +343,7 @@ body {
   min-width: 0;
   overflow-x: auto;
   overflow-y: visible;
+  position: relative;
 }
 
 .timeline-wrapper .timeline-editor {
@@ -342,6 +362,20 @@ body {
   border-radius: 3px;
   overflow: hidden;
   cursor: default;
+}
+
+.cross-track-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  opacity: 0.7;
+  pointer-events: none;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+}
+
+.cross-track-ghost .clip-delete-btn {
+  display: none;
 }
 
 .clip-action-pattern {
@@ -456,6 +490,7 @@ body {
 
 .timeline-editor-edit-area {
   overflow: auto !important;
+  position: relative;
 }
 
 .timeline-editor-edit-area .ReactVirtualized__Grid {
@@ -464,6 +499,31 @@ body {
 
 .timeline-editor-edit-row {
   border-bottom: 1px solid var(--border) !important;
+}
+
+.timeline-editor-edit-row.drop-target {
+  box-shadow: inset 0 0 0 2px rgba(137, 180, 250, 0.85);
+  background: rgba(137, 180, 250, 0.08);
+}
+
+.timeline-editor-edit-area.drop-target-new-track::after {
+  content: "Drop to create a new track";
+  position: absolute;
+  left: 20px;
+  right: 12px;
+  bottom: 10px;
+  height: 38px;
+  border: 1px dashed rgba(137, 180, 250, 0.85);
+  border-radius: 6px;
+  background: rgba(137, 180, 250, 0.08);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 
 .timeline-editor-action {

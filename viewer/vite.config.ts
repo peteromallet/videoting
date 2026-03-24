@@ -420,6 +420,7 @@ function timelineApiPlugin(): Plugin {
 export default defineConfig({
   plugins: [react(), timelineApiPlugin()],
   resolve: {
+    extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
     alias: {
       "@project": projectRoot,
       "@shared": path.resolve(projectRoot, "shared"),
