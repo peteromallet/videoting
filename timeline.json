@@ -79,6 +79,42 @@
       "fit": "contain",
       "opacity": 1,
       "blendMode": "normal"
+    },
+    {
+      "id": "A5",
+      "kind": "audio",
+      "label": "A5",
+      "scale": 1,
+      "fit": "contain",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V7",
+      "kind": "visual",
+      "label": "V7",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V8",
+      "kind": "visual",
+      "label": "V8",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V9",
+      "kind": "visual",
+      "label": "V9",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
     }
   ],
   "clips": [
@@ -202,6 +238,14 @@
       "clipType": "hold",
       "hold": 5,
       "opacity": 1
+    },
+    {
+      "id": "uploading-1774382319825-f1lt",
+      "at": 91.78,
+      "track": "V2",
+      "asset": "uploading:C7926711-6501-4962-AF65-916B10AE9D38.mp4",
+      "clipType": "hold",
+      "hold": 3
     },
     {
       "id": "clip-7",
@@ -385,6 +429,27 @@
       "opacity": 1
     },
     {
+      "id": "uploading-1774382307707-oig2",
+      "at": 78.47,
+      "track": "V3",
+      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
+      "clipType": "hold",
+      "hold": 3
+    },
+    {
+      "id": "clip-19",
+      "at": 78.47,
+      "track": "V3",
+      "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
       "id": "clip-4",
       "at": 1.94,
       "track": "A1",
@@ -392,6 +457,48 @@
       "clipType": "media",
       "from": 0,
       "to": 113.77
+    },
+    {
+      "id": "clip-20",
+      "at": 0,
+      "track": "V9",
+      "clipType": "text",
+      "hold": 4,
+      "x": 219,
+      "y": 356,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
+    },
+    {
+      "id": "clip-21",
+      "at": 50.23,
+      "track": "V9",
+      "clipType": "text",
+      "hold": 4,
+      "x": 181,
+      "y": 295,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
     }
   ]
 }

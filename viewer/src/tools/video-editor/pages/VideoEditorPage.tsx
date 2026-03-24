@@ -88,26 +88,29 @@ function VideoEditorLayout() {
 
         {/* Timeline with zoom controls above and add buttons below */}
         <div className="col-span-2 flex min-h-0 flex-col gap-1 overflow-hidden">
-          <div className="flex items-center gap-1 px-1">
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setScaleWidth((v: number) => Math.max(v / 1.4, 40))} title="Zoom out">
-              <ZoomOut className="h-3 w-3" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setScaleWidth((v: number) => Math.min(v * 1.4, 500))} title="Zoom in">
-              <ZoomIn className="h-3 w-3" />
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setScaleWidth((v: number) => Math.max(v / 1.4, 40))} title="Zoom out">
+                <ZoomOut className="h-3 w-3" />
+              </Button>
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setScaleWidth((v: number) => Math.min(v * 1.4, 500))} title="Zoom in">
+                <ZoomIn className="h-3 w-3" />
+              </Button>
+            </div>
+            <Button variant="ghost" size="sm" className="h-6 gap-1 px-2 text-[11px]" onClick={handleAddText} title="Add text at playhead">
+              <Type className="h-3 w-3" /> Add Text
             </Button>
           </div>
           <div className="min-h-0 flex-1 overflow-hidden">
             <TimelineEditor />
           </div>
           <div className="flex items-center gap-1 px-1 pb-0.5">
-            <Button variant="ghost" size="sm" className="h-6 gap-1 px-2 text-[11px]" onClick={() => handleAddTrack("visual")}>
-              <Video className="h-3 w-3" /> Visual
+            <span className="text-[10px] text-muted-foreground/60">+ Track</span>
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleAddTrack("visual")} title="Add visual track">
+              <Video className="h-3 w-3" />
             </Button>
-            <Button variant="ghost" size="sm" className="h-6 gap-1 px-2 text-[11px]" onClick={() => handleAddTrack("audio")}>
-              <Volume2 className="h-3 w-3" /> Audio
-            </Button>
-            <Button variant="ghost" size="sm" className="h-6 gap-1 px-2 text-[11px]" onClick={handleAddText}>
-              <Type className="h-3 w-3" /> Text
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleAddTrack("audio")} title="Add audio track">
+              <Volume2 className="h-3 w-3" />
             </Button>
           </div>
         </div>
