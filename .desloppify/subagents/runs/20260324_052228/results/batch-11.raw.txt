@@ -1,0 +1,72 @@
+{
+  "batch": "api_surface_coherence",
+  "batch_index": 11,
+  "assessments": {"api_surface_coherence": 82.5},
+  "dimension_notes": {
+    "api_surface_coherence": {
+      "evidence": [
+        "timeline-data.ts exports a mix of sync functions (configToRows, rowsToConfig, buildTimelineData, getAssetColor, getSourceTime, inferTrackType, getNextClipId) and async functions (loadTimelineJson, loadTranscript) in the same public module",
+        "timeline-api.ts has consistent async API surface: fetchJson, loadTimelineConfig, loadAssetRegistry, saveTimelineConfig, uploadAssetFile all return Promises",
+        "Python common.py public API is coherent: load/save pairs follow consistent naming (load_json/save_json, load_timeline/save_timeline, load_asset_registry/save_asset_registry)",
+        "useTimelineEditing takes 14 parameters in its args interface, which is at the API boundary threshold",
+        "render.py's clip_source_duration duplicating common.py's clip_source_duration has been fixed - render.py now imports from common"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "timeline-data.ts mixes sync and async exports in the same module; useTimelineEditing args interface passes 14 distinct parameters"
+    }
+  },
+  "dimension_judgment": {
+    "api_surface_coherence": {
+      "dimension_character": "API surfaces are generally consistent within individual modules. The Python tools follow clear load/save naming patterns, and timeline-api.ts presents a clean async API. The main friction point is timeline-data.ts which mixes sync utility functions with async data-loading functions, making it harder for consumers to predict what they are getting. The hook parameter interfaces, while large, are well-typed and explicit.",
+      "score_rationale": "The codebase scores above the 80 anchor because most API surfaces are predictable and consistently shaped. The mixed sync/async in timeline-data.ts and the large hook parameter interfaces create moderate friction, preventing a score above 85. No overloaded interfaces or inconsistent parameter ordering were found."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "timeline_data_mixed_sync_async",
+      "summary": "timeline-data.ts mixes sync and async exports in the same public API module",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts"],
+      "evidence": [
+        "Sync exports: configToRows, rowsToConfig, buildTimelineData, getAssetColor, getSourceTime, inferTrackType, getNextClipId",
+        "Async exports: loadTimelineJson, loadTranscript",
+        "Consumers cannot predict whether a function from this module returns a value or a Promise"
+      ],
+      "suggestion": "Move loadTimelineJson and loadTranscript into timeline-api.ts where the other async fetch functions live, keeping timeline-data.ts as a purely synchronous data-transformation module.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["timeline-data.ts accumulated both data transformation and data loading responsibilities over time"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "api_surface_coherence": {
+      "add": [
+        {
+          "header": "Consistent load/save naming in Python tools",
+          "description": "common.py follows a clear load_X/save_X pattern for all persistence operations (json, yaml, timeline, asset_registry), making the API predictable for tool authors.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean async API in timeline-api.ts",
+          "description": "All four functions in timeline-api.ts are async and follow consistent error handling (check response.ok, throw Error). The module has a single concern: HTTP communication with the dev server.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Well-typed hook parameter interfaces",
+          "description": "useTimelineEditing and useTimelineTrackManagement define explicit TypeScript interfaces for their arguments, making the contract between hooks clear even though parameter counts are high.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

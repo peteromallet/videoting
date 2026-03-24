@@ -1,19 +1,19 @@
 {
   "version": 3,
   "created": "2026-03-24T04:23:57+00:00",
-  "last_scan": "2026-03-24T04:39:46+00:00",
-  "scan_count": 5,
-  "overall_score": 74.5,
-  "objective_score": 70.7,
-  "strict_score": 74.5,
-  "verified_strict_score": 70.7,
+  "last_scan": "2026-03-24T05:22:21+00:00",
+  "scan_count": 6,
+  "overall_score": 17.7,
+  "objective_score": 70.9,
+  "strict_score": 17.7,
+  "verified_strict_score": 70.9,
   "stats": {
-    "total": 73,
+    "total": 250,
     "auto_resolved": 0,
     "deferred": 0,
     "false_positive": 0,
     "fixed": 20,
-    "open": 53,
+    "open": 230,
     "triaged_out": 0,
     "wontfix": 0,
     "by_tier": {
@@ -22,7 +22,7 @@
         "deferred": 0,
         "false_positive": 0,
         "fixed": 0,
-        "open": 35,
+        "open": 37,
         "triaged_out": 0,
         "wontfix": 0
       },
@@ -31,7 +31,16 @@
         "deferred": 0,
         "false_positive": 0,
         "fixed": 0,
-        "open": 18,
+        "open": 21,
+        "triaged_out": 0,
+        "wontfix": 0
+      },
+      "3": {
+        "auto_resolved": 0,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 171,
         "triaged_out": 0,
         "wontfix": 0
       },
@@ -40,7 +49,7 @@
         "deferred": 0,
         "false_positive": 0,
         "fixed": 20,
-        "open": 0,
+        "open": 1,
         "triaged_out": 0,
         "wontfix": 0
       }
@@ -65,7 +74,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:57+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -87,13 +96,13 @@
       "detail": {
         "count": 1,
         "lines": [
-          195
+          161
         ]
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:57+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -139,13 +148,13 @@
       "summary": "Bloated state: UseTimelineStateResult (61 fields)",
       "detail": {
         "prop_count": 61,
-        "line": 81,
+        "line": 8,
         "kind": "state"
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:58+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -163,14 +172,14 @@
       "file": "viewer/src/tools/video-editor/hooks/useTimelineState.ts",
       "tier": 3,
       "confidence": "medium",
-      "summary": "Orphaned file (1111 LOC): zero importers, not an entry point",
+      "summary": "Orphaned file (175 LOC): zero importers, not an entry point",
       "detail": {
-        "loc": 1111
+        "loc": 175
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -188,14 +197,14 @@
       "file": "viewer/src/tools/video-editor/lib/timeline-data.ts",
       "tier": 3,
       "confidence": "medium",
-      "summary": "Orphaned file (407 LOC): zero importers, not an entry point",
+      "summary": "Orphaned file (373 LOC): zero importers, not an entry point",
       "detail": {
-        "loc": 407
+        "loc": 373
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -220,7 +229,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -245,7 +254,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -270,7 +279,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -295,7 +304,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -370,7 +379,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -395,7 +404,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -420,7 +429,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -445,7 +454,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -470,7 +479,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -495,7 +504,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -513,14 +522,14 @@
       "file": "viewer/src/tools/video-editor/components/Toolbar/Toolbar.tsx",
       "tier": 3,
       "confidence": "medium",
-      "summary": "Orphaned file (68 LOC): zero importers, not an entry point",
+      "summary": "Orphaned file (67 LOC): zero importers, not an entry point",
       "detail": {
-        "loc": 68
+        "loc": 67
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -545,7 +554,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -570,7 +579,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -595,7 +604,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -645,7 +654,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -670,7 +679,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -695,7 +704,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -720,7 +729,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -745,7 +754,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -763,14 +772,14 @@
       "file": "viewer/src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx",
       "tier": 3,
       "confidence": "medium",
-      "summary": "Orphaned file (50 LOC): zero importers, not an entry point",
+      "summary": "Orphaned file (49 LOC): zero importers, not an entry point",
       "detail": {
-        "loc": 50
+        "loc": 49
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -795,7 +804,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -820,7 +829,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -845,7 +854,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -870,7 +879,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -895,7 +904,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -920,7 +929,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -945,7 +954,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -970,7 +979,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -995,7 +1004,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -1020,7 +1029,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -1045,7 +1054,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -1066,22 +1075,22 @@
       "summary": "10 disconnected function clusters (19 functions) \u2014 likely mixed responsibilities",
       "detail": {
         "cluster_count": 10,
-        "family": "roundTimelineValue, updateClipInConfig, addTrack, getAudioTracks",
+        "family": "createSplitClipId, getClipVolume, addTrack, getVisualTracks",
         "families": [
-          "roundTimelineValue",
-          "updateClipInConfig",
+          "createSplitClipId",
+          "getClipVolume",
           "addTrack",
-          "getAudioTracks",
+          "getVisualTracks",
+          "reorderTracks",
           "clampValue",
           "removeTrack",
-          "reorderTracks",
-          "getVisualTracks"
+          "getTrackById"
         ]
       },
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2541,7 +2550,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2571,7 +2580,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2601,7 +2610,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2631,7 +2640,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2691,7 +2700,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2721,7 +2730,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2751,7 +2760,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2811,7 +2820,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2841,7 +2850,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2871,7 +2880,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2901,7 +2910,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2932,7 +2941,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -2992,7 +3001,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -3022,7 +3031,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -3052,7 +3061,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -3082,7 +3091,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -3100,15 +3109,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Abstraction fit \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Abstraction fit \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "abstraction_fitness"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3134,15 +3143,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "AI generated debt \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "AI generated debt \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "ai_generated_debt"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3168,15 +3177,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "API coherence \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "API coherence \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "api_surface_coherence"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3202,15 +3211,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Auth consistency \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Auth consistency \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "authorization_consistency"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3236,15 +3245,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Contracts \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Contracts \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "contract_coherence"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3270,15 +3279,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Convention drift \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Convention drift \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "convention_outlier"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3304,15 +3313,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Cross-module arch \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Cross-module arch \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "cross_module_architecture"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3338,15 +3347,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Dep health \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Dep health \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "dependency_health"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3372,15 +3381,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Design coherence \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Design coherence \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "design_coherence"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3406,15 +3415,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Error consistency \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Error consistency \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "error_consistency"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3440,15 +3449,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "High elegance \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "High elegance \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "high_level_elegance"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3474,15 +3483,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Stale migration \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Stale migration \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "incomplete_migration"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3508,15 +3517,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Init coupling \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Init coupling \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "initialization_coupling"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3542,15 +3551,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Logic clarity \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Logic clarity \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "logic_clarity"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3576,15 +3585,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Low elegance \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Low elegance \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "low_level_elegance"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3610,15 +3619,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Mid elegance \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Mid elegance \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "mid_level_elegance"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3644,15 +3653,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Naming quality \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Naming quality \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "naming_quality"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3678,15 +3687,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Structure nav \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Structure nav \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "package_organization"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3712,15 +3721,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Test strategy \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Test strategy \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "test_strategy"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3746,15 +3755,15 @@
       "file": ".",
       "tier": 4,
       "confidence": "low",
-      "summary": "Type safety \u2014 no assessment on record, run `desloppify review --prepare`",
+      "summary": "Type safety \u2014 assessment reset by scan, re-review recommended",
       "detail": {
-        "reason": "unassessed",
+        "reason": "stale",
         "dimension": "type_safety"
       },
       "status": "fixed",
       "note": "Still absent in current scan scope (src)",
       "first_seen": "2026-03-24T04:23:59+00:00",
-      "last_seen": "2026-03-24T04:23:59+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": "2026-03-24T04:32:07+00:00",
       "reopen_count": 0,
       "work_item_kind": "assessment_request",
@@ -3804,7 +3813,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:24:01+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -3822,7 +3831,7 @@
       "file": "shared/types.ts",
       "tier": 3,
       "confidence": "medium",
-      "summary": "Boilerplate block repeated across 2 files (window 12 lines): shared/types.ts:66, viewer/src/tools/video-editor/lib/timeline-data.ts:21",
+      "summary": "Boilerplate block repeated across 2 files (window 12 lines): shared/types.ts:66, viewer/src/tools/video-editor/lib/timeline-data.ts:20",
       "detail": {
         "distinct_files": 2,
         "window_size": 12,
@@ -3833,7 +3842,7 @@
           },
           {
             "file": "viewer/src/tools/video-editor/lib/timeline-data.ts",
-            "line": 21
+            "line": 20
           }
         ],
         "sample": [
@@ -3846,7 +3855,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:24:01+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -3930,7 +3939,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T04:24:01+00:00",
-      "last_seen": "2026-03-24T04:34:16+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "mechanical_defect",
@@ -5799,6 +5808,1785 @@
       "suppressed": false,
       "suppressed_at": null,
       "suppression_pattern": null
+    },
+    "single_use::shared/editor-utils.ts": {
+      "id": "single_use::shared/editor-utils.ts",
+      "detector": "single_use",
+      "file": "shared/editor-utils.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Single-use (239 LOC): only imported by shared/editor-utils.test.ts",
+      "detail": {
+        "loc": 239,
+        "sole_importer": "shared/editor-utils.test.ts"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::remotion/src/CompositionVideo.tsx::untested_module": {
+      "id": "test_coverage::remotion/src/CompositionVideo.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "remotion/src/CompositionVideo.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (87 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 87,
+        "importer_count": 1,
+        "loc_weight": 9.327379053088816
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/compositions/VisualClip.tsx::untested_module": {
+      "id": "test_coverage::shared/compositions/VisualClip.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/compositions/VisualClip.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (129 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 129,
+        "importer_count": 1,
+        "loc_weight": 11.357816691600547
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (49 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 49,
+        "importer_count": 0,
+        "loc_weight": 7.0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (56 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 56,
+        "importer_count": 1,
+        "loc_weight": 7.483314773547883
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (60 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 60,
+        "importer_count": 0,
+        "loc_weight": 7.745966692414834
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/TimelineEditor/ClipAction.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/TimelineEditor/ClipAction.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/TimelineEditor/ClipAction.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (62 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 62,
+        "importer_count": 0,
+        "loc_weight": 7.874007874011811
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::remotion/src/Root.tsx::untested_module": {
+      "id": "test_coverage::remotion/src/Root.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "remotion/src/Root.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (50 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 50,
+        "importer_count": 1,
+        "loc_weight": 7.0710678118654755
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/effects/entrances.tsx::untested_module": {
+      "id": "test_coverage::shared/effects/entrances.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/effects/entrances.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (98 LOC, 3 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 98,
+        "importer_count": 3,
+        "loc_weight": 9.899494936611665
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (154 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 154,
+        "importer_count": 0,
+        "loc_weight": 12.409673645990857
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useKeyboardShortcuts.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useKeyboardShortcuts.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useKeyboardShortcuts.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (66 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 66,
+        "importer_count": 0,
+        "loc_weight": 8.12403840463596
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineTrackManagement.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineTrackManagement.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineTrackManagement.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (227 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 227,
+        "importer_count": 1,
+        "loc_weight": 15.066519173319364
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (254 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 254,
+        "importer_count": 0,
+        "loc_weight": 15.937377450509228
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/compositions/DebugTrack.tsx::untested_module": {
+      "id": "test_coverage::shared/compositions/DebugTrack.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/compositions/DebugTrack.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (60 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 60,
+        "importer_count": 0,
+        "loc_weight": 7.745966692414834
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/slider.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/slider.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/slider.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (29 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 29,
+        "importer_count": 0,
+        "loc_weight": 5.385164807134504
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (54 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 54,
+        "importer_count": 0,
+        "loc_weight": 7.3484692283495345
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/effects/continuous.tsx::untested_module": {
+      "id": "test_coverage::shared/effects/continuous.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/effects/continuous.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (44 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 44,
+        "importer_count": 1,
+        "loc_weight": 6.6332495807108
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/main.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/main.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/main.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (17 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 17,
+        "importer_count": 0,
+        "loc_weight": 4.123105625617661
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineState.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineState.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineState.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (175 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 175,
+        "importer_count": 0,
+        "loc_weight": 13.228756555322953
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/button.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/button.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/button.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (44 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 44,
+        "importer_count": 0,
+        "loc_weight": 6.6332495807108
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/popover.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/popover.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/popover.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (174 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 174,
+        "importer_count": 0,
+        "loc_weight": 13.19090595827292
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (67 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 67,
+        "importer_count": 0,
+        "loc_weight": 8.18535277187245
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/select.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/select.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/select.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (30 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 30,
+        "importer_count": 0,
+        "loc_weight": 5.477225575051661
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/compositions/TimelineRenderer.tsx::untested_module": {
+      "id": "test_coverage::shared/compositions/TimelineRenderer.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/compositions/TimelineRenderer.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (98 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 98,
+        "importer_count": 0,
+        "loc_weight": 9.899494936611665
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (130 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 130,
+        "importer_count": 0,
+        "loc_weight": 11.40175425099138
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::remotion/src/save-config.ts::untested_module": {
+      "id": "test_coverage::remotion/src/save-config.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "remotion/src/save-config.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (43 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 43,
+        "importer_count": 0,
+        "loc_weight": 6.557438524302
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/effects/exits.tsx::untested_module": {
+      "id": "test_coverage::shared/effects/exits.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/effects/exits.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (69 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 69,
+        "importer_count": 1,
+        "loc_weight": 8.306623862918075
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/collapsible.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/collapsible.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/collapsible.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (66 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 66,
+        "importer_count": 0,
+        "loc_weight": 8.12403840463596
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/lib/coordinate-utils.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/lib/coordinate-utils.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/lib/coordinate-utils.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (107 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 107,
+        "importer_count": 0,
+        "loc_weight": 10.344080432788601
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/compositions/AudioTrack.tsx::untested_module": {
+      "id": "test_coverage::shared/compositions/AudioTrack.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/compositions/AudioTrack.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (31 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 31,
+        "importer_count": 1,
+        "loc_weight": 5.5677643628300215
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/effects/index.tsx::untested_module": {
+      "id": "test_coverage::shared/effects/index.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/effects/index.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (93 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 93,
+        "importer_count": 0,
+        "loc_weight": 9.643650760992955
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/input.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/input.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/input.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (19 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 19,
+        "importer_count": 0,
+        "loc_weight": 4.358898943540674
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/badge.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/badge.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/badge.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (24 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 24,
+        "importer_count": 0,
+        "loc_weight": 4.898979485566356
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/contexts/TimelineContext.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/contexts/TimelineContext.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/contexts/TimelineContext.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (18 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 18,
+        "importer_count": 0,
+        "loc_weight": 4.242640687119285
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineData.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineData.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (466 LOC, 3 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 466,
+        "importer_count": 3,
+        "loc_weight": 21.587033144922902
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/lib/timeline-api.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/lib/timeline-api.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/lib/timeline-api.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (45 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 45,
+        "importer_count": 0,
+        "loc_weight": 6.708203932499369
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::remotion/src/load-config.ts::untested_module": {
+      "id": "test_coverage::remotion/src/load-config.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "remotion/src/load-config.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (78 LOC, 2 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 78,
+        "importer_count": 2,
+        "loc_weight": 8.831760866327848
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/Toolbar/Toolbar.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/Toolbar/Toolbar.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/Toolbar/Toolbar.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (67 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 67,
+        "importer_count": 0,
+        "loc_weight": 8.18535277187245
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineEditing.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineEditing.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (479 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 479,
+        "importer_count": 1,
+        "loc_weight": 21.88606862823929
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/shared/components/ui/card.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/shared/components/ui/card.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/shared/components/ui/card.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (38 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 38,
+        "importer_count": 0,
+        "loc_weight": 6.164414002968976
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (376 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 376,
+        "importer_count": 0,
+        "loc_weight": 19.390719429665317
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (333 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 333,
+        "importer_count": 0,
+        "loc_weight": 18.24828759089466
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (351 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 351,
+        "importer_count": 0,
+        "loc_weight": 18.734993995195193
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineSync.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/hooks/useTimelineSync.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineSync.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (60 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 60,
+        "importer_count": 0,
+        "loc_weight": 7.745966692414834
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/settings/useEditorSettings.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/settings/useEditorSettings.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/settings/useEditorSettings.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (32 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 32,
+        "importer_count": 0,
+        "loc_weight": 5.656854249492381
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/pages/VideoEditorPage.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/pages/VideoEditorPage.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/pages/VideoEditorPage.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (51 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 51,
+        "importer_count": 0,
+        "loc_weight": 7.14142842854285
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/TrackPanel.tsx::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/components/PropertiesPanel/TrackPanel.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/components/PropertiesPanel/TrackPanel.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (107 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 107,
+        "importer_count": 0,
+        "loc_weight": 10.344080432788601
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/transitions/index.ts::untested_module": {
+      "id": "test_coverage::shared/transitions/index.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/transitions/index.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (25 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 25,
+        "importer_count": 0,
+        "loc_weight": 5.0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::shared/compositions/TextClip.tsx::untested_module": {
+      "id": "test_coverage::shared/compositions/TextClip.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "shared/compositions/TextClip.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (58 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 58,
+        "importer_count": 1,
+        "loc_weight": 7.615773105863909
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::viewer/src/tools/video-editor/lib/timeline-data.ts::untested_module": {
+      "id": "test_coverage::viewer/src/tools/video-editor/lib/timeline-data.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "viewer/src/tools/video-editor/lib/timeline-data.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (373 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 373,
+        "importer_count": 0,
+        "loc_weight": 19.313207915827967
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::remotion/remotion.config.ts::untested_module": {
+      "id": "test_coverage::remotion/remotion.config.ts::untested_module",
+      "detector": "test_coverage",
+      "file": "remotion/remotion.config.ts",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (21 LOC, 0 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 21,
+        "importer_count": 0,
+        "loc_weight": 4.58257569495584
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::remotion/src/timeline/Timeline.tsx::untested_module": {
+      "id": "test_coverage::remotion/src/timeline/Timeline.tsx::untested_module",
+      "detector": "test_coverage",
+      "file": "remotion/src/timeline/Timeline.tsx",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (52 LOC, 1 importers)",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 52,
+        "importer_count": 1,
+        "loc_weight": 7.211102550927978
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::viewer/src/tools/video-editor/hooks/useTimelineData.ts::monster_function": {
+      "id": "smells::viewer/src/tools/video-editor/hooks/useTimelineData.ts::monster_function",
+      "detector": "smells",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "1x Monster function (>150 LOC)",
+      "detail": {
+        "smell_id": "monster_function",
+        "severity": "high",
+        "count": 1,
+        "lines": [
+          108
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::viewer/src/tools/video-editor/hooks/useTimelineData.ts::nested_closure": {
+      "id": "smells::viewer/src/tools/video-editor/hooks/useTimelineData.ts::nested_closure",
+      "detector": "smells",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Deeply nested closures \u2014 extract to module level",
+      "detail": {
+        "smell_id": "nested_closure",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          108
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::viewer/src/tools/video-editor/hooks/useTimelineData.ts::high_cyclomatic_complexity": {
+      "id": "smells::viewer/src/tools/video-editor/hooks/useTimelineData.ts::high_cyclomatic_complexity",
+      "detector": "smells",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x High cyclomatic complexity (>15 branches)",
+      "detail": {
+        "smell_id": "high_cyclomatic_complexity",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          108
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::shared/serialize.test.ts::as_any_cast": {
+      "id": "smells::shared/serialize.test.ts::as_any_cast",
+      "detector": "smells",
+      "file": "shared/serialize.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x `as any` type casts",
+      "detail": {
+        "smell_id": "as_any_cast",
+        "severity": "medium",
+        "count": 2,
+        "lines": [
+          81,
+          89
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::shared/serialize.test.ts::any_type": {
+      "id": "smells::shared/serialize.test.ts::any_type",
+      "detector": "smells",
+      "file": "shared/serialize.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "1x Explicit `any` types",
+      "detail": {
+        "smell_id": "any_type",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          104
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::viewer/src/tools/video-editor/hooks/useTimelineEditing.ts::hardcoded_color": {
+      "id": "smells::viewer/src/tools/video-editor/hooks/useTimelineEditing.ts::hardcoded_color",
+      "detector": "smells",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "1x Hardcoded color values",
+      "detail": {
+        "smell_id": "hardcoded_color",
+        "severity": "medium",
+        "count": 1,
+        "lines": [
+          448
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::shared/config-utils.test.ts::non_null_assert": {
+      "id": "smells::shared/config-utils.test.ts::non_null_assert",
+      "detector": "smells",
+      "file": "shared/config-utils.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "3x Non-null assertions (!.)",
+      "detail": {
+        "smell_id": "non_null_assert",
+        "severity": "low",
+        "count": 3,
+        "lines": [
+          155,
+          156,
+          162
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::shared/migrate.test.ts::non_null_assert": {
+      "id": "smells::shared/migrate.test.ts::non_null_assert",
+      "detector": "smells",
+      "file": "shared/migrate.test.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "12x Non-null assertions (!.)",
+      "detail": {
+        "smell_id": "non_null_assert",
+        "severity": "low",
+        "count": 12,
+        "lines": [
+          53,
+          54,
+          65,
+          66,
+          72,
+          75,
+          89,
+          91,
+          96,
+          97
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "test",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::viewer/src/tools/video-editor/hooks/useTimelineEditing.ts::non_null_assert": {
+      "id": "smells::viewer/src/tools/video-editor/hooks/useTimelineEditing.ts::non_null_assert",
+      "detector": "smells",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts",
+      "tier": 3,
+      "confidence": "low",
+      "summary": "2x Non-null assertions (!.)",
+      "detail": {
+        "smell_id": "non_null_assert",
+        "severity": "low",
+        "count": 2,
+        "lines": [
+          323,
+          324
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:19+00:00",
+      "last_seen": "2026-03-24T05:22:19+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "boilerplate_duplication::viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts::81a700dbb8d652ef": {
+      "id": "boilerplate_duplication::viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts::81a700dbb8d652ef",
+      "detector": "boilerplate_duplication",
+      "file": "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Boilerplate block repeated across 2 files (window 6 lines): viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts:37, viewer/src/tools/video-editor/lib/coordinate-utils.ts:16",
+      "detail": {
+        "distinct_files": 2,
+        "window_size": 6,
+        "locations": [
+          {
+            "file": "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts",
+            "line": 37
+          },
+          {
+            "file": "viewer/src/tools/video-editor/lib/coordinate-utils.ts",
+            "line": 16
+          }
+        ],
+        "sample": [
+          "=> {",
+          "    const mins = Math.floor(time / 60);",
+          "    const secs = Math.floor(time % 60);",
+          "    const ms = Math.floor((time % 1) * 100);"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-03-24T05:22:21+00:00",
+      "last_seen": "2026-03-24T05:22:21+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "typescript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
     }
   },
   "scan_coverage": {
@@ -5818,7 +7606,7 @@
         }
       },
       "warnings": [],
-      "updated_at": "2026-03-24T04:39:46+00:00"
+      "updated_at": "2026-03-24T05:22:21+00:00"
     }
   },
   "score_confidence": {
@@ -5839,120 +7627,156 @@
   },
   "subjective_assessments": {
     "abstraction_fitness": {
-      "score": 72.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00",
-      "components": [
-        "Abstraction Leverage",
-        "Indirection Cost",
-        "Interface Honesty",
-        "Delegation Density",
-        "Definition Directness",
-        "Type Discipline"
-      ],
-      "component_scores": {
-        "Abstraction Leverage": 80.0,
-        "Indirection Cost": 60.0,
-        "Interface Honesty": 75.0,
-        "Delegation Density": 95.0,
-        "Definition Directness": 65.0,
-        "Type Discipline": 80.0
-      }
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "ai_generated_debt": {
-      "score": 85.5,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "api_surface_coherence": {
-      "score": 78.5,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "authorization_consistency": {
-      "score": 92.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "contract_coherence": {
-      "score": 82.4,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "convention_outlier": {
-      "score": 80.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true,
+      "needs_review_refresh": true,
+      "refresh_reason": "mechanical_issues_changed",
+      "stale_since": "2026-03-24T05:22:21+00:00"
     },
     "cross_module_architecture": {
-      "score": 72.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "dependency_health": {
-      "score": 78.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "design_coherence": {
-      "score": 62.3,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true,
+      "needs_review_refresh": true,
+      "refresh_reason": "mechanical_issues_changed",
+      "stale_since": "2026-03-24T05:22:21+00:00"
     },
     "error_consistency": {
-      "score": 73.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true,
+      "needs_review_refresh": true,
+      "refresh_reason": "mechanical_issues_changed",
+      "stale_since": "2026-03-24T05:22:21+00:00"
     },
     "high_level_elegance": {
-      "score": 82.5,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "incomplete_migration": {
-      "score": 72.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "initialization_coupling": {
-      "score": 72.5,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "logic_clarity": {
-      "score": 86.2,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true,
+      "needs_review_refresh": true,
+      "refresh_reason": "mechanical_issues_changed",
+      "stale_since": "2026-03-24T05:22:21+00:00"
     },
     "low_level_elegance": {
-      "score": 68.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "mid_level_elegance": {
-      "score": 74.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "naming_quality": {
-      "score": 85.5,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "package_organization": {
-      "score": 82.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "test_strategy": {
-      "score": 5.0,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     },
     "type_safety": {
-      "score": 76.8,
-      "source": "holistic",
-      "assessed_at": "2026-03-24T04:32:07+00:00"
+      "score": 0.0,
+      "source": "scan_reset_subjective",
+      "assessed_at": "2026-03-24T05:22:18+00:00",
+      "reset_by": "scan_reset_subjective",
+      "placeholder": true
     }
   },
   "scan_history": [
@@ -6600,13 +8424,142 @@
           "strict": 1.7
         }
       }
+    },
+    {
+      "timestamp": "2026-03-24T05:22:21+00:00",
+      "lang": "typescript",
+      "strict_score": 17.7,
+      "verified_strict_score": 70.9,
+      "objective_score": 70.9,
+      "overall_score": 17.7,
+      "open": 230,
+      "diff_new": 62,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_issues": 138,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "disabled",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "full",
+        "confidence": 1.0,
+        "detector_count": 0,
+        "dimension_count": 0
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 89.6,
+          "strict": 89.6
+        },
+        "Security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "File health": {
+          "score": 98.8,
+          "strict": 98.8
+        },
+        "Duplication": {
+          "score": 97.5,
+          "strict": 97.5
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
     }
   ],
   "review_cache": {
     "detectors": {
       "boilerplate": {
         "version": 1,
-        "fingerprint": "1b54b4d8a5f37478bff9261e28fb692cf5871626",
+        "fingerprint": "c65fc3dca1aa3aa147f1f2385f5f6e64b56fe9c7",
         "entries": [
           {
             "id": "26820e5998820e65",
@@ -6924,27 +8877,6 @@
             ]
           },
           {
-            "id": "0a152f2ca3f4e7b2",
-            "distinct_files": 2,
-            "window_size": 7,
-            "locations": [
-              {
-                "file": "tools/common.py",
-                "line": 146
-              },
-              {
-                "file": "tools/render.py",
-                "line": 51
-              }
-            ],
-            "sample": [
-              "(clip: dict[str, Any]) -> float:",
-              "    if \"hold\" in clip:",
-              "        return float(clip[\"hold\"])",
-              "    return float(clip.get(\"to\", 0.0)) - float(clip.get(\"from\", 0.0))"
-            ]
-          },
-          {
             "id": "0a50658f964bade6",
             "distinct_files": 2,
             "window_size": 61,
@@ -7113,6 +9045,27 @@
             ]
           },
           {
+            "id": "254a91674fec9cdb",
+            "distinct_files": 2,
+            "window_size": 19,
+            "locations": [
+              {
+                "file": "remotion/public/timeline.json",
+                "line": 111
+              },
+              {
+                "file": "timeline.json",
+                "line": 80
+              }
+            ],
+            "sample": [
+              "}",
+              "    },",
+              "    {",
+              "      \"id\": \"clip-2\","
+            ]
+          },
+          {
             "id": "25bd48577828124b",
             "distinct_files": 2,
             "window_size": 24,
@@ -7260,27 +9213,6 @@
             ]
           },
           {
-            "id": "39951b8b58ca33e0",
-            "distinct_files": 2,
-            "window_size": 9,
-            "locations": [
-              {
-                "file": "tools/imagegen.py",
-                "line": 65
-              },
-              {
-                "file": "tools/tts.py",
-                "line": 271
-              }
-            ],
-            "sample": [
-              "resp = requests.get(url, stream=True)",
-              "    resp.raise_for_status()",
-              "    out_path.parent.mkdir(parents=True, exist_ok=True)",
-              "    with open(out_path, \"wb\") as f:"
-            ]
-          },
-          {
             "id": "45b20d8c6379e860",
             "distinct_files": 2,
             "window_size": 12,
@@ -7291,7 +9223,7 @@
               },
               {
                 "file": "viewer/src/tools/video-editor/lib/timeline-data.ts",
-                "line": 21
+                "line": 20
               }
             ],
             "sample": [
@@ -7386,27 +9318,6 @@
             ]
           },
           {
-            "id": "55b954b31d17cc20",
-            "distinct_files": 2,
-            "window_size": 21,
-            "locations": [
-              {
-                "file": "remotion/src/load-config.ts",
-                "line": 86
-              },
-              {
-                "file": "viewer/src/tools/video-editor/lib/timeline-data.ts",
-                "line": 149
-              }
-            ],
-            "sample": [
-              ".clips.map((clip) => {",
-              "    if (!clip.asset) {",
-              "      return {",
-              "        ...clip,"
-            ]
-          },
-          {
             "id": "582d70c76e34617c",
             "distinct_files": 2,
             "window_size": 15,
@@ -7493,7 +9404,7 @@
           {
             "id": "5f90258e6dfcd746",
             "distinct_files": 2,
-            "window_size": 91,
+            "window_size": 28,
             "locations": [
               {
                 "file": "remotion/public/timeline.json",
@@ -7617,6 +9528,27 @@
             ]
           },
           {
+            "id": "796b35a716589da1",
+            "distinct_files": 2,
+            "window_size": 20,
+            "locations": [
+              {
+                "file": "remotion/public/timeline.json",
+                "line": 64
+              },
+              {
+                "file": "timeline.json",
+                "line": 108
+              }
+            ],
+            "sample": [
+              ",",
+              "      \"clipType\": \"text\",",
+              "      \"hold\": 4,",
+              "      \"x\": 180,"
+            ]
+          },
+          {
             "id": "7eeb10af3e025155",
             "distinct_files": 2,
             "window_size": 7,
@@ -7656,6 +9588,27 @@
               "  const resolvedOpen = open ?? uncontrolledOpen;",
               "  const setOpen = React.useCallback<React.Dispatch<React.SetStateAction<boolean>>>((value) => {",
               "    const nextValue = typeof value === \"function\" ? value(resolvedOpen) : value;"
+            ]
+          },
+          {
+            "id": "81a700dbb8d652ef",
+            "distinct_files": 2,
+            "window_size": 6,
+            "locations": [
+              {
+                "file": "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts",
+                "line": 37
+              },
+              {
+                "file": "viewer/src/tools/video-editor/lib/coordinate-utils.ts",
+                "line": 16
+              }
+            ],
+            "sample": [
+              "=> {",
+              "    const mins = Math.floor(time / 60);",
+              "    const secs = Math.floor(time % 60);",
+              "    const ms = Math.floor((time % 1) * 100);"
             ]
           },
           {
@@ -7761,6 +9714,27 @@
               "",
               "3. **ClipPanel UI disorganized**: All settings are in a flat list without section groupings, headers, or collapsibility.",
               ""
+            ]
+          },
+          {
+            "id": "91bead222498f615",
+            "distinct_files": 2,
+            "window_size": 14,
+            "locations": [
+              {
+                "file": "shared/config-utils.test.ts",
+                "line": 12
+              },
+              {
+                "file": "shared/editor-utils.test.ts",
+                "line": 14
+              }
+            ],
+            "sample": [
+              "} from \"./types\";",
+              "",
+              "const makeClip = (overrides: Partial<ResolvedTimelineClip> = {}): ResolvedTimelineClip => ({",
+              "  id: \"clip-0\","
             ]
           },
           {
@@ -8085,7 +10059,7 @@
             "locations": [
               {
                 "file": "tools/common.py",
-                "line": 281
+                "line": 293
               },
               {
                 "file": "tools/ingest.py",
@@ -8313,9 +10287,9 @@
       },
       "security": {
         "version": 1,
-        "fingerprint": "64a416c6bde7310bb93dcdaa7ab5f7074ee7ba79",
+        "fingerprint": "e186967609ecf8e8fb4234637ff4333ef395bd5b",
         "entries": [],
-        "files_scanned": 0,
+        "files_scanned": 59,
         "coverage": null
       },
       "dupes": {
@@ -8334,13 +10308,13 @@
             "body_hash": "bff7c7f6dcefd0a5c523423953b597d2",
             "loc": 40
           },
-          "remotion/src/load-config.ts:fetchJson:36:69": {
+          "remotion/src/load-config.ts:fetchJson:37:70": {
             "body_hash": "7a9349a6c8e2b41101cff605b3487b80",
             "loc": 34
           },
-          "remotion/src/load-config.ts:loadTimelineConfig:71:111": {
-            "body_hash": "24ec27506fcfe22d7e491485cef79c5c",
-            "loc": 41
+          "remotion/src/load-config.ts:loadTimelineConfig:72:78": {
+            "body_hash": "921edab04b2e6e8ba8569dde8eb27114",
+            "loc": 7
           },
           "remotion/src/save-config.ts:saveTimeline:7:26": {
             "body_hash": "1ed8c21086c52e26c7486d6cec357ab2",
@@ -8366,29 +10340,33 @@
             "body_hash": "0911520fdde0f80cfc0c129f13c26a45",
             "loc": 6
           },
-          "shared/config-utils.ts:getClipSourceDuration:11:17": {
+          "shared/config-utils.ts:getClipSourceDuration:18:24": {
             "body_hash": "45bcf8baee9b0217d7891bc50b8ff820",
             "loc": 7
           },
-          "shared/config-utils.ts:getClipTimelineDuration:19:22": {
+          "shared/config-utils.ts:getClipTimelineDuration:26:29": {
             "body_hash": "bf59556b53a49f28cf8124c9ea6c5619",
             "loc": 4
           },
-          "shared/config-utils.ts:secondsToFrames:24:26": {
+          "shared/config-utils.ts:secondsToFrames:31:33": {
             "body_hash": "843e993d705340a5af84c742ee01294e",
             "loc": 3
           },
-          "shared/config-utils.ts:getClipDurationInFrames:28:30": {
+          "shared/config-utils.ts:getClipDurationInFrames:35:37": {
             "body_hash": "13e1776908b00bf8858f97e65bc04b45",
             "loc": 3
           },
-          "shared/config-utils.ts:getTimelineDurationInFrames:32:39": {
+          "shared/config-utils.ts:getTimelineDurationInFrames:39:46": {
             "body_hash": "0ac0409b57413190f2bec64b88451c8e",
             "loc": 8
           },
-          "shared/config-utils.ts:getConfigSignature:62:64": {
+          "shared/config-utils.ts:getConfigSignature:69:71": {
             "body_hash": "ecc8167638d212fe5a9b718fc3901f4d",
             "loc": 3
+          },
+          "shared/config-utils.ts:clips:89:106": {
+            "body_hash": "0f7cb18324e83fa740d33e55833cebc9",
+            "loc": 18
           },
           "shared/editor-utils.ts:roundTimelineValue:6:9": {
             "body_hash": "c12df7c869f614c8d5d588e3adfd6887",
@@ -8666,13 +10644,13 @@
             "body_hash": "263bcea61389d136fef19abf03e0b9da",
             "loc": 144
           },
-          "viewer/src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx:TrackLabel:18:50": {
+          "viewer/src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx:TrackLabel:17:49": {
             "body_hash": "47b45faa7e65f6686fbff88c76b595b6",
             "loc": 33
           },
-          "viewer/src/tools/video-editor/components/Toolbar/Toolbar.tsx:Toolbar:13:68": {
-            "body_hash": "e459f842f6e4af01329831ddb3b3dd77",
-            "loc": 56
+          "viewer/src/tools/video-editor/components/Toolbar/Toolbar.tsx:Toolbar:13:67": {
+            "body_hash": "f4657bc6e8f55a0a8c1cf2ee39a0aea5",
+            "loc": 55
           },
           "viewer/src/tools/video-editor/contexts/TimelineContext.tsx:TimelineProvider:6:9": {
             "body_hash": "6cc5fa256933326c4172cfa08f897566",
@@ -8722,13 +10700,29 @@
             "body_hash": "3f96b4416f85fcaeae3880a85f61525e",
             "loc": 54
           },
-          "viewer/src/tools/video-editor/hooks/useTimelineState.ts:useTimelineState:145:1111": {
-            "body_hash": "f6570a27e1b89c65f23766301a58ac01",
-            "loc": 967
+          "viewer/src/tools/video-editor/hooks/useTimelineData.ts:useTimelineData:108:466": {
+            "body_hash": "f866dfd573f4d3dd57b0267e11e5c5f3",
+            "loc": 359
+          },
+          "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts:useTimelineEditing:65:479": {
+            "body_hash": "2e48575389b2fae7d6b5ddcf8642fec3",
+            "loc": 415
+          },
+          "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts:useTimelinePlayback:19:56": {
+            "body_hash": "bde2121ab3470db3f976488a272116b8",
+            "loc": 38
+          },
+          "viewer/src/tools/video-editor/hooks/useTimelineState.ts:useTimelineState:72:175": {
+            "body_hash": "95ca51461f15b2340d749e5fe0d7ef87",
+            "loc": 104
           },
           "viewer/src/tools/video-editor/hooks/useTimelineSync.ts:useTimelineSync:13:60": {
             "body_hash": "cbd22e991422f5a2340029755d19203b",
             "loc": 48
+          },
+          "viewer/src/tools/video-editor/hooks/useTimelineTrackManagement.ts:useTimelineTrackManagement:27:227": {
+            "body_hash": "d104982ba9e93fa1587510ff4220fc36",
+            "loc": 201
           },
           "viewer/src/tools/video-editor/lib/coordinate-utils.ts:isEditableTarget:8:14": {
             "body_hash": "ba912e881447895ed84b9d669a7bd9b7",
@@ -8758,63 +10752,59 @@
             "body_hash": "cd381dc7f48c2072398f8f3e9e729119",
             "loc": 3
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:round:73:75": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:round:72:74": {
             "body_hash": "0386ef7797498daad03fc86a556cc536",
             "loc": 3
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:effectIdForClip:77:79": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:effectIdForClip:76:78": {
             "body_hash": "64e40a17ddc4d5815b3a9ca970a78463",
             "loc": 3
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:getUniqueClipId:81:91": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:getUniqueClipId:80:90": {
             "body_hash": "3b0bc134e1d37a97d704207d9329e412",
             "loc": 11
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:getClipDurationSeconds:93:95": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:getClipDurationSeconds:92:94": {
             "body_hash": "0b0a8dbce994785d1c32400a431e58f1",
             "loc": 3
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:getDefaultClipMeta:97:119": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:getDefaultClipMeta:96:118": {
             "body_hash": "3acd9dd8f7568b2ffcf8c56825c20e38",
             "loc": 23
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:resolveAssetUrl:121:124": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:resolveAssetUrl:120:123": {
             "body_hash": "67930d1c2562a9cd7808ec311a47efc6",
             "loc": 4
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:buildAssetMap:130:134": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:buildAssetMap:129:133": {
             "body_hash": "2ac0b929e11d172b3fe5ac2d02f150d4",
             "loc": 5
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:clips:149:166": {
-            "body_hash": "0f7cb18324e83fa740d33e55833cebc9",
-            "loc": 18
-          },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:trackActionIds:233:246": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:trackActionIds:199:212": {
             "body_hash": "b78725b740665b806ae654497156f80c",
             "loc": 14
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:baseOrder:250:317": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:baseOrder:216:283": {
             "body_hash": "7a28cf4a4692f4db12aa04ccfb1af961",
             "loc": 68
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:loadTimelineJson:352:355": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:loadTimelineJson:318:321": {
             "body_hash": "adc7e41ad94ae1655d4fab4419be4fb2",
             "loc": 4
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:getAssetColor:377:379": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:getAssetColor:343:345": {
             "body_hash": "44eca6b2fcd78ad762f9b104d73a0bd0",
             "loc": 3
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:getSourceTime:381:383": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:getSourceTime:347:349": {
             "body_hash": "4851e43c9078ef4187afeef0a81c23ba",
             "loc": 3
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:inferTrackType:385:396": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:inferTrackType:351:362": {
             "body_hash": "19c5b0909124acb06e59f94a3feecfbe",
             "loc": 12
           },
-          "viewer/src/tools/video-editor/lib/timeline-data.ts:getNextClipId:398:407": {
+          "viewer/src/tools/video-editor/lib/timeline-data.ts:getNextClipId:364:373": {
             "body_hash": "54e6e1c28defeea7b6e0522851dfe1c6",
             "loc": 10
           },
@@ -8856,532 +10846,103 @@
       "typecheck_cmd": "npx tsc --noEmit"
     }
   },
-  "zone_distribution": {},
+  "zone_distribution": {
+    "production": 59,
+    "test": 4,
+    "config": 4
+  },
   "tool_hash": "ab097af7227e",
-  "scan_path": "src",
+  "scan_path": ".",
   "scan_completeness": {
     "typescript": "full"
   },
   "potentials": {
     "typescript": {
-      "logs": 0,
-      "unused": 0,
+      "logs": 59,
+      "unused": 59,
       "exports": 0,
       "deprecated": 0,
-      "structural": 0,
-      "flat_dirs": 0,
-      "props": 0,
-      "single_use": 0,
+      "structural": 59,
+      "flat_dirs": 28,
+      "props": 21,
+      "single_use": 8,
       "coupling": 0,
-      "cycles": 0,
-      "orphaned": 0,
-      "patterns": 0,
-      "naming": 0,
-      "facade": 0,
-      "test_coverage": 0,
-      "smells": 0,
-      "react": 0,
-      "security": 0,
+      "cycles": 60,
+      "orphaned": 60,
+      "patterns": 3,
+      "naming": 19,
+      "facade": 60,
+      "responsibility_cohesion": 1,
+      "test_coverage": 547,
+      "smells": 61,
+      "react": 6,
+      "security": 59,
       "subjective_review": 20,
-      "dupes": 0,
+      "boilerplate_duplication": 8,
+      "dupes": 131,
       "stale_wontfix": 0
     }
   },
   "codebase_metrics": {
     "typescript": {
-      "total_files": 0,
-      "total_loc": 0,
-      "total_directories": 0
+      "total_files": 67,
+      "total_loc": 7715,
+      "total_directories": 22
     }
   },
   "dimension_scores": {
-    "Abstraction fit": {
-      "score": 72.0,
-      "strict": 72.0,
-      "verified_strict_score": 72.0,
-      "checks": 10,
-      "failing": 3,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.72,
-          "failing": 3,
-          "weighted_failures": 2.8,
-          "assessment_score": 72.0,
-          "placeholder": false,
-          "dimension_key": "abstraction_fitness",
-          "configured_weight": 8.0,
-          "components": [
-            "Abstraction Leverage",
-            "Indirection Cost",
-            "Interface Honesty",
-            "Delegation Density",
-            "Definition Directness",
-            "Type Discipline"
-          ],
-          "component_scores": {
-            "Abstraction Leverage": 80.0,
-            "Indirection Cost": 60.0,
-            "Interface Honesty": 75.0,
-            "Delegation Density": 95.0,
-            "Definition Directness": 65.0,
-            "Type Discipline": 80.0
-          }
-        }
-      }
-    },
-    "AI generated debt": {
-      "score": 85.5,
-      "strict": 85.5,
-      "verified_strict_score": 85.5,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.855,
-          "failing": 2,
-          "weighted_failures": 1.45,
-          "assessment_score": 85.5,
-          "placeholder": false,
-          "dimension_key": "ai_generated_debt",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "API coherence": {
-      "score": 78.5,
-      "strict": 78.5,
-      "verified_strict_score": 78.5,
-      "checks": 10,
-      "failing": 3,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.785,
-          "failing": 3,
-          "weighted_failures": 2.15,
-          "assessment_score": 78.5,
-          "placeholder": false,
-          "dimension_key": "api_surface_coherence",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Auth consistency": {
-      "score": 92.0,
-      "strict": 92.0,
-      "verified_strict_score": 92.0,
-      "checks": 10,
-      "failing": 0,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.92,
-          "failing": 0,
-          "weighted_failures": 0.8,
-          "assessment_score": 92.0,
-          "placeholder": false,
-          "dimension_key": "authorization_consistency",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Contracts": {
-      "score": 82.4,
-      "strict": 82.4,
-      "verified_strict_score": 82.4,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.824,
-          "failing": 2,
-          "weighted_failures": 1.76,
-          "assessment_score": 82.4,
-          "placeholder": false,
-          "dimension_key": "contract_coherence",
-          "configured_weight": 12.0,
-          "components": []
-        }
-      }
-    },
-    "Convention drift": {
-      "score": 80.0,
-      "strict": 80.0,
-      "verified_strict_score": 80.0,
-      "checks": 10,
-      "failing": 3,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.8,
-          "failing": 3,
-          "weighted_failures": 2.0,
-          "assessment_score": 80.0,
-          "placeholder": false,
-          "dimension_key": "convention_outlier",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Cross-module arch": {
-      "score": 72.0,
-      "strict": 72.0,
-      "verified_strict_score": 72.0,
-      "checks": 10,
-      "failing": 3,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.72,
-          "failing": 3,
-          "weighted_failures": 2.8,
-          "assessment_score": 72.0,
-          "placeholder": false,
-          "dimension_key": "cross_module_architecture",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Dep health": {
-      "score": 78.0,
-      "strict": 78.0,
-      "verified_strict_score": 78.0,
-      "checks": 10,
-      "failing": 3,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.78,
-          "failing": 3,
-          "weighted_failures": 2.2,
-          "assessment_score": 78.0,
-          "placeholder": false,
-          "dimension_key": "dependency_health",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Design coherence": {
-      "score": 62.3,
-      "strict": 62.3,
-      "verified_strict_score": 62.3,
-      "checks": 10,
-      "failing": 7,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.623,
-          "failing": 7,
-          "weighted_failures": 3.77,
-          "assessment_score": 62.3,
-          "placeholder": false,
-          "dimension_key": "design_coherence",
-          "configured_weight": 10.0,
-          "components": []
-        }
-      }
-    },
-    "Error consistency": {
-      "score": 73.0,
-      "strict": 73.0,
-      "verified_strict_score": 73.0,
-      "checks": 10,
-      "failing": 4,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.73,
-          "failing": 4,
-          "weighted_failures": 2.7,
-          "assessment_score": 73.0,
-          "placeholder": false,
-          "dimension_key": "error_consistency",
-          "configured_weight": 3.0,
-          "components": []
-        }
-      }
-    },
-    "High elegance": {
-      "score": 82.5,
-      "strict": 82.5,
-      "verified_strict_score": 82.5,
-      "checks": 10,
-      "failing": 1,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.825,
-          "failing": 1,
-          "weighted_failures": 1.75,
-          "assessment_score": 82.5,
-          "placeholder": false,
-          "dimension_key": "high_level_elegance",
-          "configured_weight": 22.0,
-          "components": []
-        }
-      }
-    },
-    "Stale migration": {
-      "score": 72.0,
-      "strict": 72.0,
-      "verified_strict_score": 72.0,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.72,
-          "failing": 2,
-          "weighted_failures": 2.8,
-          "assessment_score": 72.0,
-          "placeholder": false,
-          "dimension_key": "incomplete_migration",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Init coupling": {
-      "score": 72.5,
-      "strict": 72.5,
-      "verified_strict_score": 72.5,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.725,
-          "failing": 2,
-          "weighted_failures": 2.75,
-          "assessment_score": 72.5,
-          "placeholder": false,
-          "dimension_key": "initialization_coupling",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Logic clarity": {
-      "score": 86.2,
-      "strict": 86.2,
-      "verified_strict_score": 86.2,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.862,
-          "failing": 2,
-          "weighted_failures": 1.38,
-          "assessment_score": 86.2,
-          "placeholder": false,
-          "dimension_key": "logic_clarity",
-          "configured_weight": 6.0,
-          "components": []
-        }
-      }
-    },
-    "Low elegance": {
-      "score": 68.0,
-      "strict": 68.0,
-      "verified_strict_score": 68.0,
-      "checks": 10,
-      "failing": 4,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.68,
-          "failing": 4,
-          "weighted_failures": 3.2,
-          "assessment_score": 68.0,
-          "placeholder": false,
-          "dimension_key": "low_level_elegance",
-          "configured_weight": 12.0,
-          "components": []
-        }
-      }
-    },
-    "Mid elegance": {
-      "score": 74.0,
-      "strict": 74.0,
-      "verified_strict_score": 74.0,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.74,
-          "failing": 2,
-          "weighted_failures": 2.6,
-          "assessment_score": 74.0,
-          "placeholder": false,
-          "dimension_key": "mid_level_elegance",
-          "configured_weight": 22.0,
-          "components": []
-        }
-      }
-    },
-    "Naming quality": {
-      "score": 85.5,
-      "strict": 85.5,
-      "verified_strict_score": 85.5,
-      "checks": 10,
-      "failing": 2,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.855,
-          "failing": 2,
-          "weighted_failures": 1.45,
-          "assessment_score": 85.5,
-          "placeholder": false,
-          "dimension_key": "naming_quality",
-          "configured_weight": 2.0,
-          "components": []
-        }
-      }
-    },
-    "Structure nav": {
-      "score": 82.0,
-      "strict": 82.0,
-      "verified_strict_score": 82.0,
-      "checks": 10,
-      "failing": 1,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.82,
-          "failing": 1,
-          "weighted_failures": 1.8,
-          "assessment_score": 82.0,
-          "placeholder": false,
-          "dimension_key": "package_organization",
-          "configured_weight": 5.0,
-          "components": []
-        }
-      }
-    },
-    "Test strategy": {
-      "score": 5.0,
-      "strict": 5.0,
-      "verified_strict_score": 5.0,
-      "checks": 10,
-      "failing": 3,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.05,
-          "failing": 3,
-          "weighted_failures": 9.5,
-          "assessment_score": 5.0,
-          "placeholder": false,
-          "dimension_key": "test_strategy",
-          "configured_weight": 1.0,
-          "components": []
-        }
-      }
-    },
-    "Type safety": {
-      "score": 76.8,
-      "strict": 76.8,
-      "verified_strict_score": 76.8,
-      "checks": 10,
-      "failing": 4,
-      "tier": 4,
-      "detectors": {
-        "subjective_assessment": {
-          "potential": 10,
-          "pass_rate": 0.768,
-          "failing": 4,
-          "weighted_failures": 2.32,
-          "assessment_score": 76.8,
-          "placeholder": false,
-          "dimension_key": "type_safety",
-          "configured_weight": 12.0,
-          "components": []
-        }
-      }
-    },
     "Code quality": {
-      "score": 89.8,
-      "strict": 89.8,
-      "verified_strict_score": 89.8,
-      "checks": 362,
-      "failing": 56,
+      "score": 89.6,
+      "strict": 89.6,
+      "verified_strict_score": 89.6,
+      "checks": 385,
+      "failing": 62,
       "tier": 3,
       "detectors": {
         "unused": {
-          "potential": 55,
+          "potential": 59,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
         },
         "logs": {
-          "potential": 55,
-          "pass_rate": 0.9636363636363636,
+          "potential": 59,
+          "pass_rate": 0.9661016949152542,
           "failing": 2,
           "weighted_failures": 2.0
         },
         "smells": {
-          "potential": 57,
-          "pass_rate": 0.8614035087719298,
-          "failing": 16,
-          "weighted_failures": 7.9
+          "potential": 61,
+          "pass_rate": 0.8295081967213115,
+          "failing": 21,
+          "weighted_failures": 10.4
         },
         "orphaned": {
-          "potential": 55,
-          "pass_rate": 0.5418181818181821,
+          "potential": 60,
+          "pass_rate": 0.5800000000000002,
           "failing": 36,
           "weighted_failures": 25.199999999999985
         },
         "flat_dirs": {
-          "potential": 27,
+          "potential": 28,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
         },
         "naming": {
-          "potential": 18,
+          "potential": 19,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
         },
         "single_use": {
-          "potential": 9,
-          "pass_rate": 1.0,
-          "failing": 0,
-          "weighted_failures": 0.0
+          "potential": 8,
+          "pass_rate": 0.9125,
+          "failing": 1,
+          "weighted_failures": 0.7
         },
         "facade": {
-          "potential": 55,
+          "potential": 60,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
@@ -9410,98 +10971,513 @@
           "failing": 1,
           "weighted_failures": 0.7
         }
-      },
-      "carried_forward": true
+      }
     },
     "Security": {
       "score": 100.0,
       "strict": 100.0,
       "verified_strict_score": 100.0,
-      "checks": 110,
+      "checks": 119,
       "failing": 0,
       "tier": 4,
       "detectors": {
         "cycles": {
-          "potential": 55,
+          "potential": 60,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
         },
         "security": {
-          "potential": 55,
+          "potential": 59,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
         }
-      },
-      "carried_forward": true
+      }
     },
     "File health": {
-      "score": 98.7,
-      "strict": 98.7,
-      "verified_strict_score": 98.7,
-      "checks": 55,
+      "score": 98.8,
+      "strict": 98.8,
+      "verified_strict_score": 98.8,
+      "checks": 59,
       "failing": 1,
       "tier": 3,
       "detectors": {
         "structural": {
-          "potential": 55,
-          "pass_rate": 0.9872727272727272,
+          "potential": 59,
+          "pass_rate": 0.988135593220339,
           "failing": 1,
           "weighted_failures": 0.7
         }
-      },
-      "carried_forward": true
+      }
     },
     "Duplication": {
-      "score": 97.9,
-      "strict": 97.9,
-      "verified_strict_score": 97.9,
-      "checks": 134,
-      "failing": 4,
+      "score": 97.5,
+      "strict": 97.5,
+      "verified_strict_score": 97.5,
+      "checks": 139,
+      "failing": 5,
       "tier": 3,
       "detectors": {
         "dupes": {
-          "potential": 127,
+          "potential": 131,
           "pass_rate": 1.0,
           "failing": 0,
           "weighted_failures": 0.0
         },
         "boilerplate_duplication": {
-          "potential": 7,
-          "pass_rate": 0.6,
-          "failing": 4,
-          "weighted_failures": 2.8
+          "potential": 8,
+          "pass_rate": 0.5625,
+          "failing": 5,
+          "weighted_failures": 3.5
         }
-      },
-      "carried_forward": true
+      }
     },
     "Test health": {
-      "score": 1.7,
-      "strict": 1.7,
-      "verified_strict_score": 1.7,
-      "checks": 501,
-      "failing": 50,
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 547,
+      "failing": 101,
       "tier": 4,
       "detectors": {
         "test_coverage": {
-          "potential": 501,
-          "pass_rate": 0.01708564736881414,
-          "failing": 50,
-          "weighted_failures": 492.4400906682241
+          "potential": 547,
+          "pass_rate": 0.0,
+          "failing": 101,
+          "weighted_failures": 566.8287727009905
         }
-      },
-      "carried_forward": true
+      }
+    },
+    "Abstraction fit": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 3,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "abstraction_fitness",
+          "configured_weight": 8.0,
+          "components": []
+        }
+      }
+    },
+    "AI generated debt": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "ai_generated_debt",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "API coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 3,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "api_surface_coherence",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Auth consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "authorization_consistency",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Contracts": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "contract_coherence",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Convention drift": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 3,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "convention_outlier",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Cross-module arch": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 3,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "cross_module_architecture",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Dep health": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 3,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "dependency_health",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Design coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 7,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 7,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "design_coherence",
+          "configured_weight": 10.0,
+          "components": []
+        }
+      }
+    },
+    "Error consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 4,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 4,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "error_consistency",
+          "configured_weight": 3.0,
+          "components": []
+        }
+      }
+    },
+    "High elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 1,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 1,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "high_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Stale migration": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "incomplete_migration",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Init coupling": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "initialization_coupling",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Logic clarity": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "logic_clarity",
+          "configured_weight": 6.0,
+          "components": []
+        }
+      }
+    },
+    "Low elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 4,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 4,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "low_level_elegance",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Mid elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "mid_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Naming quality": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 2,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 2,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "naming_quality",
+          "configured_weight": 2.0,
+          "components": []
+        }
+      }
+    },
+    "Structure nav": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 1,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 1,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "package_organization",
+          "configured_weight": 5.0,
+          "components": []
+        }
+      }
+    },
+    "Test strategy": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 3,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "test_strategy",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Type safety": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 4,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 4,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "type_safety",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
     }
   },
   "reminder_history": {
     "auto_fixers_available": 3,
     "zone_classification": 3,
     "dry_run_first": 3,
-    "report_scores": 3,
-    "review_issues_pending": 2,
+    "report_scores": 5,
+    "review_issues_pending": 3,
     "stagnant_nudge": 5,
-    "feedback_nudge": 2
+    "feedback_nudge": 3
   },
   "assessment_import_audit": [
     {

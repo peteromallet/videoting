@@ -12,7 +12,8 @@ export default defineConfig({
   },
   test: {
     include: [
-      "../shared/**/*.test.ts",
+      "../shared/**/*.test.{ts,tsx}",
+      "src/**/*.test.{ts,tsx}",
     ],
   },
 });

@@ -1,7 +1,7 @@
 {
   "version": 8,
   "created": "2026-03-24T04:42:31+00:00",
-  "updated": "2026-03-24T04:42:39+00:00",
+  "updated": "2026-03-24T04:42:42+00:00",
   "queue_order": [
     "review::.::holistic::abstraction_fitness::bloated_timeline_context",
     "review::.::holistic::abstraction_fitness::cn_passthrough_wrapper",
@@ -356,16 +356,12 @@
   },
   "superseded": {},
   "promoted_ids": [],
-  "plan_start_scores": {
-    "strict": 16.4,
-    "overall": 16.4,
-    "objective": 65.6,
-    "verified": 65.6
-  },
+  "plan_start_scores": {},
   "refresh_state": {
     "_subjective_migration_pruned": true,
     "lifecycle_phase": "plan",
-    "subjective_review_completed_at_scan_count": 2
+    "subjective_review_completed_at_scan_count": 2,
+    "postflight_scan_completed_at_scan_count": 3
   },
   "execution_log": [
     {
@@ -616,6 +612,26 @@
         "import_scores_pruned": [],
         "sync_status": "synced",
         "sync_message": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T04:42:42+00:00",
+      "action": "clear_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-03-24T04:42:42+00:00",
+      "action": "complete_postflight_scan",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "scan_count": 3
       }
     }
   ],

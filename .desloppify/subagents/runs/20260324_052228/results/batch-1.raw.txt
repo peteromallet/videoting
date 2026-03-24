@@ -1,0 +1,87 @@
+{
+  "batch": "cross_module_architecture",
+  "batch_index": 1,
+  "assessments": {"cross_module_architecture": 72.0},
+  "dimension_notes": {
+    "cross_module_architecture": {
+      "evidence": [
+        "shared/ serves as a well-defined boundary module imported by both remotion/ and viewer/, with types.ts (4 importers) as the most-imported file — clean dependency direction from leaf packages toward shared",
+        "resolveTimelineConfig in config-utils.ts accepts a UrlResolver parameter, allowing remotion and viewer to inject different URL resolution strategies — good boundary design",
+        "Timeline config resolution logic is duplicated: remotion/src/load-config.ts calls resolveTimelineConfig(config, registry, staticFile) while viewer/lib/timeline-data.ts wraps the same function with a different resolver — both correctly delegate to shared/config-utils.ts but the wrapper patterns differ",
+        "Legacy migration constants (LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS, DEFAULT_VIDEO_SCALE) are duplicated identically between tools/common.py and shared/migrate.ts — a cross-language boundary issue that cannot be easily unified but represents drift risk",
+        "migrateToFlatTracks is called redundantly: buildTimelineData calls migrateToFlatTracks(config), then passes the result to resolveTimelineConfig which also calls migrateToFlatTracks internally — double migration is idempotent but wasteful",
+        "useTimelineState.ts acts as a composition hub (175 LOC) that assembles 4 focused hooks and re-exports ~65 fields through a single context — the hub pattern is reasonable after the refactor but the interface is still very wide",
+        "render.py imports clip_source_duration from common.py — no re-declaration, previously flagged issue appears resolved"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "cross_module_architecture": {
+      "dimension_character": "The codebase has a clean three-layer architecture (shared -> remotion/viewer -> tools) with shared/ serving as a well-defined boundary module. The recent refactoring split useTimelineState into focused hooks with clear delegation. The main architectural weakness is cross-language duplication of migration constants between Python and TypeScript, and redundant migrateToFlatTracks calls in the data pipeline.",
+      "score_rationale": "Dependency direction is consistently correct and the shared boundary is well-defined. The cross-language duplication is a real boundary integrity issue but inherent to the polyglot nature of the project. The redundant migration call and wide context interface prevent a higher score. Comparable to a mid-range project with good structure but some coordination overhead — 72."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "duplicate_migration_constants",
+      "summary": "Legacy migration constants duplicated between Python common.py and TypeScript shared/migrate.ts",
+      "related_files": ["tools/common.py", "shared/migrate.ts"],
+      "evidence": ["LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS, DEFAULT_VIDEO_SCALE are defined identically in both files with the same values"],
+      "suggestion": "Extract migration constants to a shared JSON file that both Python and TypeScript can load, or generate one from the other",
+      "confidence": "high",
+      "impact_scope": "codebase",
+      "fix_scope": "multi_file_refactor",
+      "root_cause_cluster": "cross_language_duplication"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "double_migration_call",
+      "summary": "migrateToFlatTracks called twice in the same data pipeline within buildTimelineData",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts", "shared/config-utils.ts"],
+      "evidence": ["buildTimelineData calls migrateToFlatTracks(config), then passes the result to resolveTimelineConfig which also calls migrateToFlatTracks internally (line 80 of config-utils.ts)"],
+      "suggestion": "Have resolveTimelineConfig accept already-migrated config, or add a check in migrateToFlatTracks to short-circuit when tracks already exist (it does check config.tracks?.length but still copies all clips)",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "wide_context_interface",
+      "summary": "UseTimelineStateResult bundles ~65 fields from 4 hooks into a single context value",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineState.ts", "viewer/src/tools/video-editor/contexts/TimelineContext.tsx"],
+      "evidence": ["UseTimelineStateResult interface lists 65 fields spanning data, playback, editing, and track management — all consumers receive the full surface even when they use 5-10 fields"],
+      "suggestion": "Consider splitting the context into separate providers (DataContext, PlaybackContext, EditingContext) so consumers only subscribe to the state they need, reducing unnecessary re-renders",
+      "confidence": "medium",
+      "impact_scope": "subsystem",
+      "fix_scope": "architectural_change"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Cross-language boundary between Python CLI tools and TypeScript viewer/remotion creates inherent duplication pressure", "Refactoring split the monolithic hook but preserved the wide context interface"],
+    "likely_symptoms": ["double_migration_call is a symptom of the config resolution boundary being unclear"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "cross_module_architecture": {
+      "add": [
+        {
+          "header": "Clean shared boundary with correct dependency direction",
+          "description": "shared/ is imported by both remotion/ and viewer/ with no reverse dependencies. Types, config-utils, editor-utils, and migrate form a cohesive shared layer. The UrlResolver parameter on resolveTimelineConfig enables different resolution strategies per consumer.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Refactored hook decomposition with composition hub",
+          "description": "useTimelineState was split into useTimelineData, useTimelineEditing, useTimelinePlayback, and useTimelineTrackManagement. The parent hook composes them cleanly but the resulting context surface remains very wide at ~65 fields.",
+          "settled": true,
+          "positive": false
+        }
+      ],
+      "remove": ["render.py re-declares clip_src_duration, duplicating clip_source_duration from common.py"]
+    }
+  }
+}

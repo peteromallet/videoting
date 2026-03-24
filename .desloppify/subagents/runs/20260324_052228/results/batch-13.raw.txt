@@ -1,0 +1,68 @@
+{
+  "batch": "ai_generated_debt",
+  "batch_index": 13,
+  "assessments": {"ai_generated_debt": 87.0},
+  "dimension_notes": {
+    "ai_generated_debt": {
+      "evidence": [
+        "Comments in the codebase are generally purposeful: common.py section headers (paths, subprocess helpers, profile helpers) aid navigation without restating code",
+        "No entry/exit logging patterns found; console.warn usage in timeline-data.ts is targeted (duplicate clip IDs)",
+        "No try-catch around pure expressions found",
+        "The getDefaultClipMeta function in timeline-data.ts manually copies every field from TimelineClip to ClipMeta - this is verbose but necessary since ClipMeta is a subset type",
+        "handleSelectedClipChange in useTimelineEditing.ts has a large field-by-field spread pattern (lines 353-373) that could be data-driven",
+        "ASSET_COLORS in timeline-data.ts uses hardcoded color strings - this is a legitimate domain mapping, not generic",
+        "No docstring bloat - functions are either undocumented or have brief, useful docstrings (e.g. common.py's audio_duration, download_file)"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "handleSelectedClipChange has a large manual field-by-field spread that is formulaic and could be simplified"
+    }
+  },
+  "dimension_judgment": {
+    "ai_generated_debt": {
+      "dimension_character": "The codebase is largely free of AI-generated debt hallmarks. Comments are purposeful section headers or genuine explanations, not restating. Logging is targeted rather than nosy. There are no pass-through wrapper functions without added logic. The main pattern that resembles AI-generated boilerplate is the field-by-field clip property spreading in handleSelectedClipChange, which is formulaic and repetitive.",
+      "score_rationale": "Scoring at 87 reflects a codebase where a developer's attention is mostly spent on real logic rather than ceremony. The code is purpose-driven with minimal noise. The field-by-field spread pattern in handleSelectedClipChange is the primary example of formulaic code, preventing a higher score."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "formulaic_clip_spread",
+      "summary": "handleSelectedClipChange manually spreads 15+ fields with individual clamping logic",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineEditing.ts"],
+      "evidence": [
+        "Lines 353-373 manually spread each clip field with individual Math.max/Math.min clamping, creating a 20-line block that is formulaic and error-prone when new fields are added"
+      ],
+      "suggestion": "Define a field-level constraint map (e.g. {speed: {min: 0.25, max: 4}, volume: {min: 0, max: 1}}) and use a generic merge-with-constraints helper, keeping the spread to a simple object merge with constraint application.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {},
+  "context_updates": {
+    "ai_generated_debt": {
+      "add": [
+        {
+          "header": "Purposeful section-header comments in common.py",
+          "description": "Section dividers like '-- paths --', '-- subprocess helpers --' provide navigation without restating any code. This is a positive pattern for file organization.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Targeted logging without noise",
+          "description": "console.warn is used only for actionable warnings (duplicate clip IDs in timeline-data.ts). No entry/exit logging, no full object dumps.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No pass-through wrappers without logic",
+          "description": "All wrapper-like functions add meaningful behavior. resolve_asset in render.py delegates to resolve_asset_path but this is the only such case and adds registry parameter threading.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

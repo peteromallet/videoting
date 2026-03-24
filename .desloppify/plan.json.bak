@@ -1,15 +1,8 @@
 {
   "version": 8,
   "created": "2026-03-24T04:24:01+00:00",
-  "updated": "2026-03-24T04:34:16+00:00",
+  "updated": "2026-03-24T04:39:46+00:00",
   "queue_order": [
-    "triage::strategize",
-    "triage::observe",
-    "triage::reflect",
-    "triage::organize",
-    "triage::enrich",
-    "triage::sense-check",
-    "triage::commit",
     "review::.::holistic::abstraction_fitness::bloated_timeline_context",
     "review::.::holistic::abstraction_fitness::cn_passthrough_wrapper",
     "review::.::holistic::abstraction_fitness::parallel_clip_meta_type",
@@ -62,7 +55,23 @@
     "review::.::holistic::type_safety::confusing_selected_clip_conditional_type",
     "review::.::holistic::type_safety::effect_type_fields_untyped",
     "review::.::holistic::type_safety::unsafe_as_casts_serialize",
-    "review::.::holistic::type_safety::upload_asset_double_json_parse"
+    "review::.::holistic::type_safety::upload_asset_double_json_parse",
+    "subjective::abstraction_fitness",
+    "subjective::api_surface_coherence",
+    "subjective::contract_coherence",
+    "subjective::convention_outlier",
+    "subjective::cross_module_architecture",
+    "subjective::dependency_health",
+    "subjective::design_coherence",
+    "subjective::error_consistency",
+    "subjective::high_level_elegance",
+    "subjective::incomplete_migration",
+    "subjective::initialization_coupling",
+    "subjective::low_level_elegance",
+    "subjective::mid_level_elegance",
+    "subjective::package_organization",
+    "subjective::test_strategy",
+    "subjective::type_safety"
   ],
   "deferred": [],
   "skipped": {},
@@ -491,7 +500,7 @@
     "_subjective_migration_pruned": true,
     "lifecycle_phase": "plan",
     "subjective_review_completed_at_scan_count": 2,
-    "postflight_scan_completed_at_scan_count": 4
+    "postflight_scan_completed_at_scan_count": 5
   },
   "execution_log": [
     {
@@ -778,6 +787,37 @@
       "detail": {
         "scan_count": 4
       }
+    },
+    {
+      "timestamp": "2026-03-24T04:39:46+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T04:39:46+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-03-24T04:39:46+00:00",
+      "action": "complete_postflight_scan",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "scan_count": 5
+      }
     }
   ],
   "epic_triage_meta": {
@@ -836,10 +876,17 @@
       "review::.::holistic::type_safety::effect_type_fields_untyped",
       "review::.::holistic::type_safety::unsafe_as_casts_serialize",
       "review::.::holistic::type_safety::upload_asset_double_json_parse"
-    ]
+    ],
+    "issue_snapshot_hash": "6c1271469e7c0d67"
   },
   "commit_log": [],
   "uncommitted_issues": [],
   "commit_tracking_branch": null,
-  "scan_count_at_plan_start": 4
+  "scan_count_at_plan_start": 5,
+  "previous_plan_start_scores": {
+    "strict": 74.5,
+    "overall": 74.5,
+    "objective": 70.7,
+    "verified": 70.7
+  }
 }
