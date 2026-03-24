@@ -27,14 +27,14 @@ function VideoEditorLayout() {
   return (
     <div className="flex h-screen flex-col bg-editor-base text-foreground">
       <Toolbar />
-      <main className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_360px] grid-rows-[minmax(0,1fr)_320px] gap-3 p-3">
-        <div className="min-h-0">
+      <main className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_280px] grid-rows-[minmax(0,1fr)_240px] gap-1.5 p-1.5">
+        <div className="h-full min-h-0 overflow-hidden">
           <PreviewPanel />
         </div>
-        <div className="min-h-0">
+        <div className="h-full min-h-0 overflow-y-auto">
           <PropertiesPanel />
         </div>
-        <div className="col-span-2 min-h-0">
+        <div className="col-span-2 h-full min-h-0 overflow-hidden">
           <TimelineEditor />
         </div>
       </main>

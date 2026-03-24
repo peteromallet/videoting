@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { Timeline } from "@xzdarcy/react-timeline-editor";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
 import { ROW_HEIGHT, TIMELINE_START_LEFT } from "@/tools/video-editor/lib/coordinate-utils";
 import { ClipAction } from "@/tools/video-editor/components/TimelineEditor/ClipAction";
@@ -81,35 +80,14 @@ export function TimelineEditor() {
   }
 
   return (
-    <Card className="flex min-h-0 flex-1 flex-col overflow-hidden">
-      <CardHeader className="border-b border-border/70 pb-3">
-        <CardTitle className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Timeline</CardTitle>
-      </CardHeader>
-      <CardContent className="flex min-h-0 flex-1 gap-3 p-3">
-        <div className="flex w-[220px] shrink-0 flex-col gap-2 overflow-auto">
-          {data.tracks.map((track, index) => (
-            <TrackLabel
-              key={track.id}
-              track={track}
-              isSelected={selectedTrackId === track.id}
-              trackCount={data.tracks.length}
-              trackIndex={index}
-              sameKindCount={data.tracks.filter((entry) => entry.kind === track.kind).length}
-              onSelect={setSelectedTrackId}
-              onChange={handleTrackPopoverChange}
-              onReorder={handleReorderTrack}
-              onRemove={handleRemoveTrack}
-            />
-          ))}
-        </div>
-
-        <div
-          ref={timelineWrapperRef}
-          className="timeline-wrapper min-h-0 flex-1 overflow-hidden rounded-xl border border-border/70 bg-editor-crust"
-          onDragOver={onTimelineDragOver}
-          onDragLeave={onTimelineDragLeave}
-          onDrop={onTimelineDrop}
-        >
+    <div className="h-full w-full overflow-hidden rounded-lg border border-border/70 bg-editor-crust">
+      <div
+        ref={timelineWrapperRef}
+        className="timeline-wrapper h-full w-full overflow-hidden"
+        onDragOver={onTimelineDragOver}
+        onDragLeave={onTimelineDragLeave}
+        onDrop={onTimelineDrop}
+      >
           <Timeline
             ref={timelineRef}
             style={{ width: "100%", height: "100%" }}
@@ -154,8 +132,7 @@ export function TimelineEditor() {
             onActionResizeStart={onActionResizeStart}
             onActionResizeEnd={onActionResizeEnd}
           />
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

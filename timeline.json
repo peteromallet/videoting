@@ -34,6 +34,15 @@
       "kind": "audio",
       "label": "Audio",
       "opacity": 1
+    },
+    {
+      "id": "V4",
+      "kind": "visual",
+      "label": "V4",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
     }
   ],
   "clips": [
@@ -48,6 +57,27 @@
       "y": 10,
       "width": 1280,
       "height": 720
+    },
+    {
+      "id": "clip-5",
+      "at": 0,
+      "track": "V1",
+      "clipType": "text",
+      "hold": 4,
+      "x": 180,
+      "y": 140,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
     },
     {
       "id": "clip-0",

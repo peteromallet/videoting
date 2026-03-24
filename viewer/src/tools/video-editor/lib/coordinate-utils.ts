@@ -1,7 +1,7 @@
 import type { TrackDefinition, TrackKind } from "@shared/types";
 import type { ClipMeta, ClipOrderMap } from "@/tools/video-editor/lib/timeline-data";
 
-export const ROW_HEIGHT = 56;
+export const ROW_HEIGHT = 36;
 export const SCALE_SECONDS = 5;
 export const TIMELINE_START_LEFT = 20;
 
