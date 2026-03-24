@@ -19,7 +19,8 @@ export function UploadSkeletonOverlay({
   const [, forceScrollSync] = useState(0);
   const uploadList = useMemo(() => Array.from(uploads.values()), [uploads]);
   const pixelsPerSecond = scaleWidth / scale;
-  const skeletonWidth = 3 * pixelsPerSecond;
+  const defaultDuration = 5; // match handleAssetDrop's default hold duration
+  const skeletonWidth = defaultDuration * pixelsPerSecond;
   const scrollLeft = gridRef?.scrollLeft ?? 0;
   const scrollTop = gridRef?.scrollTop ?? 0;
 
@@ -42,7 +43,8 @@ export function UploadSkeletonOverlay({
       {uploadList.map((upload) => {
         const left = upload.time * pixelsPerSecond + TIMELINE_START_LEFT - scrollLeft;
         const RULER_HEIGHT = 30;
-        const top = upload.trackIndex * ROW_HEIGHT - scrollTop + RULER_HEIGHT + 4;
+        // The library renders actions with ~1px top offset inside the row
+        const top = upload.trackIndex * ROW_HEIGHT - scrollTop + RULER_HEIGHT + 1;
         const isError = upload.status === "error";
 
         return (
@@ -53,7 +55,7 @@ export function UploadSkeletonOverlay({
               left,
               top,
               width: skeletonWidth,
-              height: ROW_HEIGHT - 8,
+              height: ROW_HEIGHT - 2,
               backgroundColor: isError ? "#991b1b" : "#475569",
               borderColor: "rgba(255,255,255,0.12)",
             }}

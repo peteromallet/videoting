@@ -303,6 +303,18 @@
       "opacity": 1
     },
     {
+      "id": "clip-42",
+      "at": 88.31,
+      "track": "V2",
+      "asset": "qh1ks13cxdybuxaaevd3-okdupdhk",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
       "id": "clip-11",
       "at": 54.72,
       "track": "V3",
@@ -449,6 +461,38 @@
       "y": 100,
       "width": 320,
       "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-41",
+      "at": 77.56,
+      "track": "V3",
+      "asset": "qh1ks13cxdybuxaaevd3-okdupdhk",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-43",
+      "at": 82.41,
+      "track": "V3",
+      "asset": "qh1ks13cxdybuxaaevd3-okdupdhk",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720,
       "opacity": 1
     },
     {
