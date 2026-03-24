@@ -1,11 +1,11 @@
-import { migrateToFlatTracks } from "@shared/migrate";
+import { migrateToFlatTracks } from "./migrate";
 import type {
   AssetRegistry,
   ResolvedAssetRegistryEntry,
   ResolvedTimelineConfig,
   TimelineClip,
   TimelineConfig,
-} from "@shared/types";
+} from "./types";
 
 export const parseResolution = (resolution: string): { width: number; height: number } => {
   const [width, height] = resolution.toLowerCase().split("x");

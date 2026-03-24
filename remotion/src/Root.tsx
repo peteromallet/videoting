@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Composition } from "remotion";
-import { getTimelineDurationInFrames, parseResolution } from "@shared/config-utils";
-import type { TimelineCompositionProps } from "@shared/types";
+import { getTimelineDurationInFrames, parseResolution } from "../../shared/config-utils";
+import type { TimelineCompositionProps } from "../../shared/types";
 import { CompositionVideo } from "./CompositionVideo";
 import { loadTimelineConfig } from "./load-config";
 import { Timeline } from "./timeline/Timeline";

@@ -1,5 +1,5 @@
-import { getClipTimelineDuration } from "@shared/config-utils";
-import type { ResolvedTimelineClip, ResolvedTimelineConfig, TrackDefinition, TrackKind } from "@shared/types";
+import { getClipTimelineDuration } from "./config-utils";
+import type { ResolvedTimelineClip, ResolvedTimelineConfig, TrackDefinition, TrackKind } from "./types";
 
 const SPLIT_EPSILON = 0.0001;
 

@@ -1,6 +1,6 @@
 import { getRemotionEnvironment } from "remotion";
-import { serializeForDisk } from "@shared/serialize";
-import type { ResolvedTimelineConfig } from "@shared/types";
+import { serializeForDisk } from "../../shared/serialize";
+import type { ResolvedTimelineConfig } from "../../shared/types";
 
 const SAVE_ENDPOINT = "http://localhost:3111/api/timeline";
 

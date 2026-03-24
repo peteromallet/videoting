@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Audio, Sequence } from "remotion";
-import { getClipDurationInFrames, secondsToFrames } from "@shared/config-utils";
-import type { ResolvedTimelineClip } from "@shared/types";
+import { getClipDurationInFrames, secondsToFrames } from "../config-utils";
+import type { ResolvedTimelineClip } from "../types";
 
 export const AudioTrack: FC<{
   trackId: string;

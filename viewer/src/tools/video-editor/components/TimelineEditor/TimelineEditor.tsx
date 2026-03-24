@@ -81,7 +81,7 @@ export function TimelineEditor() {
 
   return (
     <div className="flex h-full w-full overflow-hidden rounded-lg border border-border/70 bg-editor-crust">
-      <div className="flex w-24 shrink-0 flex-col border-r border-border/40" style={{ paddingTop: 30 }}>
+      <div className="flex w-24 shrink-0 flex-col overflow-y-auto border-r border-border/40" style={{ paddingTop: 30 }}>
         {data.tracks.map((track, index) => (
           <TrackLabel
             key={track.id}

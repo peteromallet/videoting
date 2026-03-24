@@ -1,5 +1,5 @@
-import { secondsToFrames } from "@shared/config-utils";
-import type { ResolvedTimelineClip } from "@shared/types";
+import { secondsToFrames } from "../config-utils";
+import type { ResolvedTimelineClip } from "../types";
 import type { FC, ReactNode } from "react";
 import { BounceEntrance, FadeEntrance, FlipEntrance, MeteoriteEntrance, PulseEntrance, SlideDownEntrance, SlideLeftEntrance, SlideRightEntrance, SlideUpEntrance, ZoomInEntrance, ZoomSpinEntrance } from "./entrances";
 import { DriftEffect, FloatEffect, GlitchEffect, KenBurnsEffect, SlowZoomEffect } from "./continuous";

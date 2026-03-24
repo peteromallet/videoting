@@ -23,7 +23,9 @@
     "@remotion/tailwind": "^4.0.434",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "remotion": "^4.0.434"
+    "remotion": "^4.0.434",
+    "sucrase": "^3.35.1",
+    "tsconfig-paths-webpack-plugin": "^4.2.0"
   },
   "devDependencies": {
     "@remotion/renderer": "^4.0.434",

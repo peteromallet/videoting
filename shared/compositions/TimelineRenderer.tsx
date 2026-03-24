@@ -1,7 +1,7 @@
 import { AbsoluteFill } from "remotion";
 import type { FC } from "react";
-import { getAudioTracks, getVisualTracks } from "@shared/editor-utils";
-import type { ResolvedTimelineClip, ResolvedTimelineConfig, TrackDefinition } from "@shared/types";
+import { getAudioTracks, getVisualTracks } from "../editor-utils";
+import type { ResolvedTimelineClip, ResolvedTimelineConfig, TrackDefinition } from "../types";
 import { AudioTrack } from "./AudioTrack";
 import { TextClipSequence } from "./TextClip";
 import { VisualClipSequence } from "./VisualClip";

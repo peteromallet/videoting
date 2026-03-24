@@ -41,7 +41,7 @@ function VideoEditorLayout() {
 
   return (
     <div className="flex h-screen flex-col bg-editor-base text-foreground">
-      <main className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_280px] grid-rows-[minmax(0,1fr)_auto] gap-1.5 p-1.5">
+      <main className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_280px] grid-rows-[minmax(0,1fr)_minmax(180px,35%)] gap-1.5 p-1.5">
         {/* Preview + render button above it */}
         <div className="flex h-full min-h-0 flex-col gap-1 overflow-hidden">
           <div className="flex items-center justify-between px-1">

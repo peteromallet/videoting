@@ -1,11 +1,11 @@
-import { resolveTimelineConfig } from "@shared/config-utils";
+import { resolveTimelineConfig } from "../../shared/config-utils";
 import { staticFile } from "remotion";
 import type {
   AssetRegistry,
   ResolvedTimelineConfig,
   TimelineConfig,
-} from "@shared/types";
-import { getEffectRegistry } from "@shared/effects/index";
+} from "../../shared/types";
+import { getEffectRegistry } from "../../shared/effects/index";
 
 export type {
   AssetRegistry,
@@ -20,7 +20,7 @@ export type {
   TimelineOutput,
   TrackDefinition,
   TrackKind,
-} from "@shared/types";
+} from "../../shared/types";
 
 export {
   getClipDurationInFrames,
@@ -31,7 +31,7 @@ export {
   getTimelineDurationInFrames,
   parseResolution,
   secondsToFrames,
-} from "@shared/config-utils";
+} from "../../shared/config-utils";
 
 export { resolveTimelineConfig };
 

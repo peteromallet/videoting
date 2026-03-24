@@ -1,9 +1,9 @@
 import type { CSSProperties, FC, ReactNode } from "react";
 import { AbsoluteFill, Img, OffthreadVideo, Sequence, Video, getRemotionEnvironment, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { getClipDurationInFrames, secondsToFrames } from "@shared/config-utils";
-import { wrapWithClipEffects } from "@shared/effects";
-import { transitions } from "@shared/transitions";
-import type { ResolvedTimelineClip, TrackDefinition } from "@shared/types";
+import { getClipDurationInFrames, secondsToFrames } from "../config-utils";
+import { wrapWithClipEffects } from "../effects";
+import { transitions } from "../transitions";
+import type { ResolvedTimelineClip, TrackDefinition } from "../types";
 
 type VisualClipProps = {
   clip: ResolvedTimelineClip;

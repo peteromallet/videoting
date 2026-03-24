@@ -384,10 +384,12 @@ function timelineApiPlugin(): Plugin {
           res.write(`event: ${event}\ndata: ${data}\n\n`);
         };
 
-        send("status", "Rendering preview...");
+        send("status", "Rendering with Remotion...");
 
-        const proc = spawn("python3", ["tools/render.py", "--preview"], {
-          cwd: projectRoot,
+        const remotionDir = path.join(projectRoot, "remotion");
+        const outputPath = path.join(projectRoot, "output", "render.mp4");
+        const proc = spawn("npx", ["remotion", "render", "Timeline", outputPath], {
+          cwd: remotionDir,
           stdio: ["ignore", "pipe", "pipe"],
         });
 

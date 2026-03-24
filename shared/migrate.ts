@@ -1,4 +1,4 @@
-import { getClipTimelineDuration } from "@shared/config-utils";
+import { getClipTimelineDuration } from "./config-utils";
 import type {
   ClipContinuous,
   ClipEntrance,
@@ -6,7 +6,7 @@ import type {
   TimelineClip,
   TimelineConfig,
   TrackDefinition,
-} from "@shared/types";
+} from "./types";
 
 const DEFAULT_VIDEO_SCALE = 0.95;
 

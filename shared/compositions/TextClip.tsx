@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { AbsoluteFill, Sequence } from "remotion";
-import { getClipDurationInFrames, secondsToFrames } from "@shared/config-utils";
-import { wrapWithClipEffects } from "@shared/effects";
-import type { ResolvedTimelineClip, TrackDefinition } from "@shared/types";
+import { getClipDurationInFrames, secondsToFrames } from "../config-utils";
+import { wrapWithClipEffects } from "../effects";
+import type { ResolvedTimelineClip, TrackDefinition } from "../types";
 
 type TextClipProps = {
   clip: ResolvedTimelineClip;

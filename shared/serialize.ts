@@ -1,4 +1,4 @@
-import type { ResolvedTimelineConfig, TimelineClip, TimelineConfig, TrackDefinition } from "@shared/types";
+import type { ResolvedTimelineConfig, TimelineClip, TimelineConfig, TrackDefinition } from "./types";
 
 export const TIMELINE_CLIP_FIELDS = [
   "id",

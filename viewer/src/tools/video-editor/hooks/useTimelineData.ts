@@ -474,19 +474,24 @@ export function useTimelineData(): UseTimelineDataResult {
 
     setRenderStatus("rendering");
     setRenderLog("");
+    console.log("[render] Starting render...");
     try {
       const response = await fetch("/api/render", { method: "POST" });
+      console.log("[render] Response status:", response.status);
       const reader = response.body?.getReader();
       if (!reader) {
+        console.error("[render] No reader available");
         setRenderStatus("error");
         return;
       }
 
       const decoder = new TextDecoder();
       let buffer = "";
+      let lastEvent = "";
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
+          console.log("[render] Stream ended. Last event:", lastEvent);
           break;
         }
 
@@ -494,13 +499,30 @@ export function useTimelineData(): UseTimelineDataResult {
         const lines = buffer.split("\n");
         buffer = lines.pop() ?? "";
         for (const line of lines) {
-          if (line.startsWith("event: done")) {
-            setRenderStatus("done");
-            setRenderDirty(false);
-          } else if (line.startsWith("event: error")) {
-            setRenderStatus("error");
+          console.log("[render] Line:", JSON.stringify(line));
+          if (line.startsWith("event: ")) {
+            lastEvent = line.slice(7).trim();
           } else if (line.startsWith("data: ")) {
-            setRenderLog((currentLog) => currentLog + line.slice(6) + "\n");
+            const data = line.slice(6);
+            if (lastEvent === "done") {
+              console.log("[render] DONE! Triggering download...");
+              setRenderStatus("done");
+              setRenderDirty(false);
+              // Auto-download the rendered video
+              const link = document.createElement("a");
+              link.href = "/output/render.mp4";
+              link.download = "render.mp4";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              lastEvent = "";
+            } else if (lastEvent === "error") {
+              console.error("[render] ERROR:", data);
+              setRenderStatus("error");
+              lastEvent = "";
+            } else {
+              setRenderLog((currentLog) => currentLog + data + "\n");
+            }
           }
         }
       }

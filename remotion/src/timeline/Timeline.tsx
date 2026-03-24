@@ -1,9 +1,9 @@
 import { AbsoluteFill } from "remotion";
 import type { FC } from "react";
 import { useEffect, useRef, useState } from "react";
-import { getConfigSignature } from "@shared/config-utils";
-import { TimelineRenderer } from "@shared/compositions/TimelineRenderer";
-import type { ResolvedTimelineConfig, TimelineCompositionProps } from "@shared/types";
+import { getConfigSignature } from "../../../shared/config-utils";
+import { TimelineRenderer } from "../../../shared/compositions/TimelineRenderer";
+import type { ResolvedTimelineConfig, TimelineCompositionProps } from "../../../shared/types";
 import { loadTimelineConfig } from "../load-config";
 
 export const Timeline: FC<TimelineCompositionProps> = ({ config: initialConfig }) => {
