@@ -302,55 +302,68 @@ export function useTimelineEditing({
 
     // Show drop position indicator
     const wrapper = event.currentTarget;
-    console.log("[dragOver] types:", types, "wrapper:", wrapper.className.slice(0, 40));
-    const editArea = wrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
-    const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
-    if (!editArea) return;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const relX = event.clientX - wrapperRect.left;
+    const relY = event.clientY - wrapperRect.top;
 
-    const rect = editArea.getBoundingClientRect();
+    // Use fixed-position overlay on document.body to avoid overflow:hidden clipping
+    const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
     const scrollLeft = grid?.scrollLeft ?? 0;
     const pixelsPerSecond = scaleWidth / scale;
-    const dropX = event.clientX - rect.left + scrollLeft;
-    const time = Math.max(0, (dropX - TIMELINE_START_LEFT) / pixelsPerSecond);
-    const indicatorX = TIMELINE_START_LEFT + time * pixelsPerSecond - scrollLeft;
+    const time = Math.max(0, (relX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
 
-    // Find target row
-    const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-    const rowIndex = rowElements.findIndex((el) => {
-      const r = el.getBoundingClientRect();
-      return event.clientY >= r.top && event.clientY <= r.bottom;
-    });
-
-    // Create or update indicator
-    let indicator = wrapper.querySelector<HTMLElement>("[data-drop-indicator]");
+    let indicator = document.querySelector<HTMLElement>("[data-drop-indicator]");
     if (!indicator) {
       indicator = document.createElement("div");
       indicator.dataset.dropIndicator = "true";
-      indicator.style.cssText = "position:absolute;pointer-events:none;z-index:100;transition:left 50ms ease,top 50ms ease;";
-      wrapper.style.position = "relative";
-      wrapper.appendChild(indicator);
+      document.body.appendChild(indicator);
     }
-
-    const targetRow = rowElements[rowIndex];
-    const rowTop = targetRow ? targetRow.getBoundingClientRect().top - rect.top : 0;
-    const rowHeight = targetRow ? targetRow.offsetHeight : 36;
-
-    indicator.innerHTML = `
-      <div style="position:absolute;left:${indicatorX}px;top:${rowTop}px;height:${rowHeight}px;width:2px;background:#89b4fa;border-radius:1px;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
-      <div style="position:absolute;left:${indicatorX + 4}px;top:${rowTop + 4}px;height:${rowHeight - 8}px;width:80px;background:rgba(137,180,250,0.15);border:1px dashed rgba(137,180,250,0.4);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(137,180,250,0.8);">${time.toFixed(1)}s</div>
+    indicator.style.cssText = `
+      position: fixed;
+      left: ${event.clientX}px;
+      top: ${wrapperRect.top}px;
+      width: 2px;
+      height: ${wrapperRect.height}px;
+      background: #89b4fa;
+      z-index: 99999;
+      pointer-events: none;
+      box-shadow: 0 0 8px rgba(137,180,250,0.6);
     `;
+
+    let label = document.querySelector<HTMLElement>("[data-drop-label]");
+    if (!label) {
+      label = document.createElement("div");
+      label.dataset.dropLabel = "true";
+      document.body.appendChild(label);
+    }
+    label.style.cssText = `
+      position: fixed;
+      left: ${event.clientX + 8}px;
+      top: ${event.clientY - 14}px;
+      background: rgba(137,180,250,0.9);
+      color: #1e1e2e;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      z-index: 100000;
+      pointer-events: none;
+      white-space: nowrap;
+    `;
+    label.textContent = `${time.toFixed(1)}s`;
   }, [scale, scaleWidth]);
 
   const onTimelineDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     delete event.currentTarget.dataset.dragOver;
-    const indicator = event.currentTarget.querySelector("[data-drop-indicator]");
-    indicator?.remove();
+    document.querySelector("[data-drop-indicator]")?.remove();
+    document.querySelector("[data-drop-label]")?.remove();
   }, []);
 
   const onTimelineDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     delete event.currentTarget.dataset.dragOver;
-    event.currentTarget.querySelector("[data-drop-indicator]")?.remove();
+    document.querySelector("[data-drop-indicator]")?.remove();
+    document.querySelector("[data-drop-label]")?.remove();
 
     // Handle external file drops
     const files = Array.from(event.dataTransfer.files);

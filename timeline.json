@@ -292,6 +292,27 @@
       "opacity": 1
     },
     {
+      "id": "uploading-1774381942993-vw6z",
+      "at": 51.53,
+      "track": "V3",
+      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
+      "clipType": "hold",
+      "hold": 3
+    },
+    {
+      "id": "clip-14",
+      "at": 51.53,
+      "track": "V3",
+      "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
       "id": "clip-4",
       "at": 1.94,
       "track": "A1",
