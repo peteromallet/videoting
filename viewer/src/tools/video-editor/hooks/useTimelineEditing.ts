@@ -430,15 +430,31 @@ export function useTimelineEditing({
           try {
             const result = await uploadAsset(file);
             patchRegistry(result.assetId, result.entry);
-            // Remove skeleton
+            // Replace skeleton in-place with real clip data (same position, same action)
             const current = dataRef.current!;
-            const cleanRows = current.rows.map(row => ({
+            const entry = result.entry;
+            const isImage = entry.type?.startsWith("image");
+            const realDuration = isImage ? defaultClipDuration : Math.max(1, Math.min(entry.duration ?? defaultClipDuration, defaultClipDuration));
+            const realId = getNextClipId(current.meta);
+            const realMeta: ClipMeta = {
+              asset: result.assetId,
+              track: compatibleTrackId,
+              clipType: isImage ? "hold" : "media",
+              ...(isImage ? { hold: realDuration } : { from: 0, to: realDuration, speed: 1 }),
+            };
+            // Swap the skeleton action ID and update the row
+            const nextRows = current.rows.map(row => ({
               ...row,
-              actions: row.actions.filter(a => a.id !== skeletonId),
+              actions: row.actions.map(a =>
+                a.id === skeletonId
+                  ? { ...a, id: realId, end: a.start + realDuration }
+                  : a
+              ),
             }));
-            applyTimelineEdit(cleanRows, undefined, [skeletonId]);
-            // Insert real clip at original drop position
-            handleAssetDrop(result.assetId, compatibleTrackId, clipTime);
+            // Remove skeleton meta, add real meta
+            applyTimelineEdit(nextRows, { [realId]: realMeta }, [skeletonId]);
+            setSelectedClipId(realId);
+            setSelectedTrackId(compatibleTrackId);
             void invalidateAssetRegistry();
           } catch (error) {
             console.error("[drop] Upload failed:", error);

@@ -127,8 +127,20 @@
       "hold": 120
     },
     {
-      "id": "clip-30",
-      "at": 35.41,
+      "id": "clip-31",
+      "at": 29.84,
+      "track": "V1",
+      "asset": "basecamp-1",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
+      "id": "clip-48",
+      "at": 37.69,
       "track": "V1",
       "asset": "apex-1",
       "clipType": "media",
@@ -139,16 +151,25 @@
       "opacity": 1
     },
     {
-      "id": "clip-31",
-      "at": 35.41,
+      "id": "clip-49",
+      "at": 43.28,
       "track": "V1",
-      "asset": "basecamp-1",
-      "clipType": "media",
-      "from": 0,
-      "to": 5,
-      "speed": 1,
-      "volume": 1,
-      "opacity": 1
+      "clipType": "text",
+      "hold": 4,
+      "x": 180,
+      "y": 140,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
     },
     {
       "id": "clip-0",
@@ -315,6 +336,19 @@
       "opacity": 1
     },
     {
+      "id": "clip-24",
+      "at": 38.62,
+      "track": "V2",
+      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 834,
+      "y": 77,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
       "id": "clip-11",
       "at": 54.72,
       "track": "V3",
@@ -350,19 +384,6 @@
       "to": 5,
       "speed": 1,
       "volume": 1,
-      "x": 100,
-      "y": 100,
-      "width": 320,
-      "height": 240,
-      "opacity": 1
-    },
-    {
-      "id": "clip-24",
-      "at": 41.04,
-      "track": "V3",
-      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
-      "clipType": "hold",
-      "hold": 5,
       "x": 100,
       "y": 100,
       "width": 320,
@@ -543,6 +564,19 @@
       "volume": 1,
       "x": 100,
       "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-47",
+      "at": 36.08,
+      "track": "V3",
+      "asset": "screenshot-2026-03-24-at-22-03-55",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 258,
+      "y": 204,
       "width": 320,
       "height": 240,
       "opacity": 1
