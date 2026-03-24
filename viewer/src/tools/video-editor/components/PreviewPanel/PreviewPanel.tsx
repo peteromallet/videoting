@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
 import OverlayEditor from "@/tools/video-editor/components/PreviewPanel/OverlayEditor";
 import RemotionPreview from "@/tools/video-editor/components/PreviewPanel/RemotionPreview";
@@ -23,13 +22,10 @@ export function PreviewPanel() {
   }
 
   return (
-    <Card className="flex h-full min-h-0 flex-col overflow-hidden">
-      <CardHeader className="border-b border-border/70 pb-3">
-        <CardTitle className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Preview</CardTitle>
-      </CardHeader>
-      <CardContent className="relative flex min-h-0 flex-1 p-3">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border/70">
+      <div className="relative flex min-h-0 flex-1">
         <div
-          className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-xl bg-editor-crust"
+          className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-editor-crust"
           onMouseDownCapture={(event) => {
             const target = event.target;
             if (!(target instanceof Element)) {
@@ -62,7 +58,7 @@ export function PreviewPanel() {
             onOverlayChange={onOverlayChange}
           />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

@@ -34,6 +34,42 @@
       "kind": "audio",
       "label": "Audio",
       "opacity": 1
+    },
+    {
+      "id": "V4",
+      "kind": "visual",
+      "label": "V4",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V5",
+      "kind": "visual",
+      "label": "V5",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "V6",
+      "kind": "visual",
+      "label": "V6",
+      "scale": 1,
+      "fit": "manual",
+      "opacity": 1,
+      "blendMode": "normal"
+    },
+    {
+      "id": "A2",
+      "kind": "audio",
+      "label": "A2",
+      "scale": 1,
+      "fit": "contain",
+      "opacity": 1,
+      "blendMode": "normal"
     }
   ],
   "clips": [
@@ -102,6 +138,48 @@
       "clipType": "media",
       "from": 0,
       "to": 113.77
+    },
+    {
+      "id": "clip-5",
+      "at": 7.22,
+      "track": "V6",
+      "clipType": "text",
+      "hold": 4,
+      "x": 180,
+      "y": 140,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
+    },
+    {
+      "id": "clip-6",
+      "at": 4.33,
+      "track": "V6",
+      "clipType": "text",
+      "hold": 4,
+      "x": 180,
+      "y": 140,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
     }
   ]
 }

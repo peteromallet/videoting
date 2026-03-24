@@ -31,7 +31,10 @@ export function TrackLabel({
       style={{ height: ROW_HEIGHT }}
       onClick={() => onSelect(track.id)}
     >
-      <span className="truncate text-[10px] font-semibold text-muted-foreground">{track.id}</span>
+      <div className="min-w-0 flex-1">
+        <div className="truncate text-[10px] font-semibold text-foreground/80">{track.label || track.id}</div>
+        <div className="truncate text-[8px] text-muted-foreground/60">{track.id}</div>
+      </div>
       <div className="opacity-0 group-hover:opacity-100 transition-opacity">
         <TrackSettingsPopover
           track={track}
