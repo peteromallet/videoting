@@ -527,17 +527,17 @@ export function useTimelineData(): UseTimelineDataResult {
               lastEvent = "";
             } else {
               setRenderLog((currentLog) => currentLog + data + "\n");
-              // Parse progress from Remotion output: "Encoded 1234/3600" or "Bundling 50%"
-              const encodedMatch = data.match(/Encoded\s+(\d+)\/(\d+)/);
-              if (encodedMatch) {
-                const current = parseInt(encodedMatch[1], 10);
-                const total = parseInt(encodedMatch[2], 10);
-                setRenderProgress({ current, total, percent: Math.round((current / total) * 100), phase: "Rendering" });
-              } else {
-                const bundlingMatch = data.match(/Bundling\s+(\d+)%/);
-                if (bundlingMatch) {
-                  setRenderProgress((prev) => ({ ...(prev ?? { current: 0, total: 100, percent: 0, phase: "Bundling" }), percent: parseInt(bundlingMatch[1], 10), phase: "Bundling" }));
-                }
+              // Parse progress from Remotion output
+              const renderedMatch = data.match(/(?:Rendered|Encoded)\s+(\d+)\/(\d+)/);
+              if (renderedMatch) {
+                const current = parseInt(renderedMatch[1], 10);
+                const total = parseInt(renderedMatch[2], 10);
+                setRenderProgress({ current, total, percent: total > 0 ? Math.round((current / total) * 100) : 0, phase: "Rendering" });
+              } else if (data.match(/Bundling\s+(\d+)%/)) {
+                const pct = parseInt(data.match(/Bundling\s+(\d+)%/)![1], 10);
+                setRenderProgress((prev) => ({ ...(prev ?? { current: 0, total: 0, percent: 0, phase: "Bundling" }), percent: pct, phase: "Bundling" }));
+              } else if (data.includes("Getting composition") || data.includes("Composition")) {
+                setRenderProgress((prev) => ({ ...(prev ?? { current: 0, total: 0, percent: 100, phase: "Bundling" }), phase: "Preparing..." }));
               }
             }
           }
