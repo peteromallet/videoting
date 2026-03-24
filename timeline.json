@@ -120,7 +120,7 @@
   "clips": [
     {
       "id": "bg-1",
-      "at": 0,
+      "at": 43.56,
       "track": "V1",
       "asset": "reigh-bg-v17-titled-dust",
       "clipType": "hold",
@@ -189,31 +189,6 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774381747284-jaln",
-      "at": 68.97,
-      "track": "V2",
-      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
-      "id": "clip-13",
-      "at": 68.97,
-      "track": "V2",
-      "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
-      "clipType": "hold",
-      "hold": 5,
-      "opacity": 1
-    },
-    {
-      "id": "uploading-1774382116394-03ec",
-      "at": 37.47,
-      "track": "V2",
-      "asset": "uploading:apex (1).png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-16",
       "at": 37.47,
       "track": "V2",
@@ -223,16 +198,8 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774382174902-ns3k",
-      "at": 53.91,
-      "track": "V2",
-      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-18",
-      "at": 53.91,
+      "at": 74.48,
       "track": "V2",
       "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
       "clipType": "hold",
@@ -240,12 +207,16 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774382319825-f1lt",
+      "id": "clip-22",
       "at": 91.78,
       "track": "V2",
-      "asset": "uploading:C7926711-6501-4962-AF65-916B10AE9D38.mp4",
-      "clipType": "hold",
-      "hold": 3
+      "asset": "c7926711-6501-4962-af65-916b10ae9d38",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
     },
     {
       "id": "clip-7",
@@ -261,14 +232,6 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774380790178-kkz8",
-      "at": 4.81,
-      "track": "V3",
-      "asset": "uploading:08_a_forest_engulfed_in_flames_stretching_to_the_horizon_1.webp",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-8",
       "at": 4.81,
       "track": "V3",
@@ -282,14 +245,6 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774380826100-ohnj",
-      "at": 30.88,
-      "track": "V3",
-      "asset": "uploading:08_a_forest_engulfed_in_flames_stretching_to_the_horizon_1.webp",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-9",
       "at": 30.88,
       "track": "V3",
@@ -301,22 +256,6 @@
       "width": 320,
       "height": 240,
       "opacity": 1
-    },
-    {
-      "id": "uploading-1774381361750-tfx4",
-      "at": 38.56,
-      "track": "V3",
-      "asset": "uploading:apex (1).png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
-      "id": "uploading-1774381365261-07fd",
-      "at": 54.72,
-      "track": "V3",
-      "asset": "uploading:apex (1).png",
-      "clipType": "hold",
-      "hold": 3
     },
     {
       "id": "clip-10",
@@ -345,14 +284,6 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774381741817-xyqn",
-      "at": 23.47,
-      "track": "V3",
-      "asset": "uploading:GMnYa1Ep87en1SCUcDGh7_mtKBMpeL.png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-12",
       "at": 23.47,
       "track": "V3",
@@ -366,16 +297,8 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774381942993-vw6z",
-      "at": 51.53,
-      "track": "V3",
-      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-14",
-      "at": 51.53,
+      "at": 67.54,
       "track": "V3",
       "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
       "clipType": "hold",
@@ -385,14 +308,6 @@
       "width": 320,
       "height": 240,
       "opacity": 1
-    },
-    {
-      "id": "uploading-1774382110206-u4ku",
-      "at": 17.75,
-      "track": "V3",
-      "asset": "uploading:apex (1).png",
-      "clipType": "hold",
-      "hold": 3
     },
     {
       "id": "clip-15",
@@ -408,37 +323,8 @@
       "opacity": 1
     },
     {
-      "id": "uploading-1774382170081-x3rt",
-      "at": 11.34,
-      "track": "V3",
-      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
       "id": "clip-17",
       "at": 11.34,
-      "track": "V3",
-      "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
-      "clipType": "hold",
-      "hold": 5,
-      "x": 100,
-      "y": 100,
-      "width": 320,
-      "height": 240,
-      "opacity": 1
-    },
-    {
-      "id": "uploading-1774382307707-oig2",
-      "at": 78.47,
-      "track": "V3",
-      "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
-      "clipType": "hold",
-      "hold": 3
-    },
-    {
-      "id": "clip-19",
-      "at": 78.47,
       "track": "V3",
       "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
       "clipType": "hold",

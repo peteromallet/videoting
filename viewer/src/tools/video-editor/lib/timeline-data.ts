@@ -220,6 +220,8 @@ export const rowsToConfig = (
     const appendedIds = (trackActionIds[track.id] ?? []).filter((clipId) => !baseOrder.includes(clipId));
 
     for (const clipId of [...baseOrder, ...appendedIds]) {
+      // Never persist uploading skeleton clips
+      if (clipId.startsWith("uploading-")) continue;
       const action = actionMap.get(clipId);
       const clipMeta = meta[clipId];
       if (!action || !clipMeta) {

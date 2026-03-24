@@ -415,28 +415,15 @@ export function useTimelineEditing({
       console.log("[drop] Upload complete, waiting for registry refresh...");
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Remove skeletons and add real clips
-      const current = dataRef.current;
-      if (current) {
-        // Remove skeleton actions
-        const cleanedRows = current.rows.map((row) => ({
-          ...row,
-          actions: row.actions.filter((a) => !skeletonIds.includes(a.id)),
-        }));
-        const metaDeletes = skeletonIds;
-
-        // Add real clips
-        applyTimelineEdit(cleanedRows, {}, metaDeletes, undefined);
-
-        for (const file of files) {
-          const assetKey = file.name.replace(/\.[^.]+$/, "").replace(/\s+/g, "-").toLowerCase();
-          const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
-          const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
-          const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
-          const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
-          console.log("[drop] Adding clip:", assetKey, "to track:", compatibleTrackId, "at:", time.toFixed(2));
-          handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
-        }
+      // Add real clips (skeletons are filtered out during serialization automatically)
+      for (const file of files) {
+        const assetKey = file.name.replace(/\.[^.]+$/, "").replace(/\s+/g, "-").toLowerCase();
+        const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+        const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
+        const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
+        const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
+        console.log("[drop] Adding clip:", assetKey, "to track:", compatibleTrackId, "at:", time.toFixed(2));
+        handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
       }
       return;
     }
