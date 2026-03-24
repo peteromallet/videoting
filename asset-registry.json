@@ -341,6 +341,11 @@
       "file": "inputs/test.png",
       "type": "image",
       "resolution": "1184x880"
+    },
+    "crest": {
+      "file": "inputs/crest.png",
+      "type": "image",
+      "resolution": "1024x1024"
     }
   }
 }

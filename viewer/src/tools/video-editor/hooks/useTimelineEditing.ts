@@ -390,6 +390,9 @@ export function useTimelineEditing({
         return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
       });
 
+      const defaultClipDuration = 5; // seconds — used for offset calculation
+      let timeOffset = 0;
+
       for (const file of files) {
         const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
         const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
@@ -399,12 +402,15 @@ export function useTimelineEditing({
           continue;
         }
 
+        const clipTime = time + timeOffset;
+        timeOffset += defaultClipDuration;
+
         const trackIndex = dataRef.current!.rows.findIndex((row) => row.id === compatibleTrackId);
         const uploadId = addUpload({
           file,
           trackId: compatibleTrackId,
           trackIndex: trackIndex >= 0 ? trackIndex : 0,
-          time,
+          time: clipTime,
           kind,
         });
 
@@ -412,7 +418,7 @@ export function useTimelineEditing({
           try {
             const result = await uploadAsset(file);
             patchRegistry(result.assetId, result.entry);
-            handleAssetDrop(result.assetId, compatibleTrackId, time);
+            handleAssetDrop(result.assetId, compatibleTrackId, clipTime);
             removeUpload(uploadId);
             void invalidateAssetRegistry();
           } catch (error) {
