@@ -1,0 +1,55 @@
+id: output_collage
+file: inputs/output_collage.mp4
+type: video
+duration_s: 8.367
+resolution: 436x644
+fps: 30.0
+visual_segments:
+- start: 0.0
+  end: 1.0
+  description: The image features a close-up of a dog with a furry white face, caught
+    mid-yawn, showing its tongue and teeth. The background is out of focus, emphasizing
+    the dog's expression.
+- start: 1.0
+  end: 2.0
+  description: The image shows a close-up of a white, fluffy dog with its mouth open,
+    appearing to yawn. There are distorted segments across the image, suggesting a
+    glitch or manipulation.
+- start: 2.0
+  end: 3.0
+  description: The image displays a close-up of a dog's face, specifically its mouth
+    and eyes. The dog appears to be yawning, with its tongue extended, and the fur
+    is fluffy and white.
+- start: 3.0
+  end: 4.0
+  description: The image shows a close-up of a small, fluffy dog with an open mouth
+    and tongue out, suggesting it might be panting or yawning. The dog's facial features
+    are partially obscured, creating a collage effect.
+- start: 4.0
+  end: 5.0
+  description: The image features a close-up of a dog's face, capturing its eyes and
+    mouth in a playful expression. The dog's mouth appears to be open, revealing its
+    tongue, with some distortion in the lower part of the image.
+- start: 5.0
+  end: 6.0
+  description: The image shows a close-up of a small, fluffy white dog with a slightly
+    scruffy appearance. The dog's face is centered, highlighting its dark eyes and
+    moist nose, with some stray hairs visible around its mouth.
+- start: 6.0
+  end: 7.0
+  description: The image shows a close-up of a small, white dog with a furry coat
+    and dark eyes. Its nose is visible, along with some strands of fur that are slightly
+    disheveled around its mouth.
+- start: 7.0
+  end: 8.0
+  description: The image shows a close-up of a small, fluffy white dog with dark eyes
+    and a snout. The dog appears to be looking directly at the camera, with some stray
+    hairs visible around its face.
+- start: 8.0
+  end: 8.367
+  description: The image shows a close-up of a small, fluffy, white dog with dark
+    eyes and a slightly damp nose. The dog's facial fur appears disheveled, and there
+    are some stray hairs visible around its mouth area.
+visual_summary: The video features a series of close-up shots of a small, fluffy white
+  dog, primarily capturing its yawning expressions and facial features with varying
+  degrees of distortion.

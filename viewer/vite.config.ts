@@ -304,15 +304,15 @@ function timelineApiPlugin(): Plugin {
           });
           proc.on("close", (code) => {
             if (code !== 0) {
-              res.statusCode = 500;
-              sendJson(res, { error: stderr || stdout || `Ingest failed with exit code ${code}` });
-              return;
+              console.warn(`[upload] Ingest failed (exit ${code}) for ${filename}, but file was saved. Error: ${stderr.slice(0, 200)}`);
             }
 
+            // Always succeed — the file is saved even if ingest (OpenAI transcription) fails
             sendJson(res, {
               ok: true,
               assetKey: assetKeyFromFilename(filename),
               path: relativePath,
+              ingestError: code !== 0 ? (stderr || stdout || `exit code ${code}`) : undefined,
             });
           });
         });

@@ -294,6 +294,28 @@
       "file": "inputs/rWDbKozHqGpR1hM9dHVEL_NSdht776.png",
       "type": "image",
       "resolution": "1200x896"
+    },
+    "apex-(1)": {
+      "file": "inputs/apex (1).png",
+      "type": "image",
+      "resolution": "1376x768"
+    },
+    "basecamp-(1)": {
+      "file": "inputs/basecamp (1).png",
+      "type": "image",
+      "resolution": "1024x1024"
+    },
+    "output_collage": {
+      "file": "inputs/output_collage.mp4",
+      "type": "video",
+      "duration": 8.367,
+      "resolution": "436x644",
+      "fps": 30.0
+    },
+    "08_a_forest_engulfed_in_flames_stretching_to_the_horizon_1": {
+      "file": "inputs/08_a_forest_engulfed_in_flames_stretching_to_the_horizon_1.webp",
+      "type": "image",
+      "resolution": "1024x368"
     }
   }
 }

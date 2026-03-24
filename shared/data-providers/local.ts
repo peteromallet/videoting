@@ -52,6 +52,7 @@ export class LocalDataProvider implements DataProvider {
   }
 
   async uploadAsset(file: File): Promise<{ assetId: string; entry: AssetRegistryEntry }> {
+    console.log(`[upload] Uploading ${file.name} (${(file.size / 1024 / 1024).toFixed(1)}MB)`);
     const response = await fetch("/api/upload", {
       method: "POST",
       headers: { "X-Filename": encodeURIComponent(file.name) },
@@ -60,10 +61,16 @@ export class LocalDataProvider implements DataProvider {
 
     if (!response.ok) {
       const payload = (await response.json()) as { error?: string };
+      console.error(`[upload] Failed:`, payload.error);
       throw new Error(payload.error ?? "Upload failed");
     }
 
-    return (await response.json()) as { assetId: string; entry: AssetRegistryEntry };
+    const result = (await response.json()) as { assetId?: string; assetKey?: string; entry?: AssetRegistryEntry; path?: string; ingestError?: string };
+    if (result.ingestError) {
+      console.warn(`[upload] File saved but ingest had issues:`, result.ingestError.slice(0, 200));
+    }
+    console.log(`[upload] Done:`, result.assetKey ?? result.assetId);
+    return { assetId: result.assetKey ?? result.assetId ?? file.name, entry: result.entry ?? { file: result.path ?? `inputs/${file.name}` } };
   }
 
   async loadWaveform(assetId: string): Promise<SilenceRegion[]> {
