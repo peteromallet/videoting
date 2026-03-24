@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent as ReactMouseEvent, RefObject } from "react";
 import type { TimelineRow } from "@xzdarcy/timeline-engine";
-import type { ClipMeta } from "./timeline-data";
+import type { ClipMeta } from "@/tools/video-editor/lib/timeline-data";
 
 interface ActiveOverlay {
   actionId: string;
@@ -37,15 +37,7 @@ type OverlayLayout = {
 const MIN_CLIP_SIZE = 20;
 
 const hasPositionOverride = (clipMeta: ClipMeta | undefined): boolean => {
-  return Boolean(
-    clipMeta
-    && (
-      clipMeta.x !== undefined
-      || clipMeta.y !== undefined
-      || clipMeta.width !== undefined
-      || clipMeta.height !== undefined
-    ),
-  );
+  return Boolean(clipMeta && (clipMeta.x !== undefined || clipMeta.y !== undefined || clipMeta.width !== undefined || clipMeta.height !== undefined));
 };
 
 const usesAbsoluteCompositionSpace = (clipMeta: ClipMeta | undefined): boolean => {
@@ -181,12 +173,8 @@ export default function OverlayEditor({
 
     const videoAspectRatio = compositionWidth / compositionHeight;
     const containerAspectRatio = playerRect.width / playerRect.height;
-    const videoWidth = containerAspectRatio > videoAspectRatio
-      ? playerRect.height * videoAspectRatio
-      : playerRect.width;
-    const videoHeight = containerAspectRatio > videoAspectRatio
-      ? playerRect.height
-      : playerRect.width / videoAspectRatio;
+    const videoWidth = containerAspectRatio > videoAspectRatio ? playerRect.height * videoAspectRatio : playerRect.width;
+    const videoHeight = containerAspectRatio > videoAspectRatio ? playerRect.height : playerRect.width / videoAspectRatio;
 
     return {
       left: playerRect.left - parentRect.left + (playerRect.width - videoWidth) / 2,
@@ -339,10 +327,9 @@ export default function OverlayEditor({
 
   return (
     <div
-      className="overlay-editor"
+      className="pointer-events-none absolute z-10"
       style={{ ...containerStyle, pointerEvents: selectedClipId ? "auto" : "none" }}
       onClick={(event) => {
-        // Click on empty space deselects
         if (event.target === event.currentTarget) {
           onSelectClip(null);
         }
@@ -364,7 +351,7 @@ export default function OverlayEditor({
         return (
           <div
             key={overlay.actionId}
-            className={`overlay-box${isSelected ? " selected" : ""}`}
+            className={`absolute border ${isSelected ? "border-editor-blue bg-editor-blue/10 shadow-[0_0_0_1px_rgba(137,180,250,0.4)]" : "border-white/45 bg-white/5"} cursor-move rounded-md`}
             style={style}
             onMouseDown={(event) => onMouseDown(event, overlay.actionId, "move")}
             onClick={(event) => {
@@ -372,13 +359,13 @@ export default function OverlayEditor({
               onSelectClip(overlay.actionId);
             }}
           >
-            <span className="overlay-label">{overlay.label}</span>
+            <span className="absolute -top-6 left-0 rounded-md bg-black/70 px-2 py-0.5 text-[10px] text-white">{overlay.label}</span>
             {isSelected ? (
               <>
-                <div className="overlay-handle nw" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-nw")} />
-                <div className="overlay-handle ne" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-ne")} />
-                <div className="overlay-handle sw" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-sw")} />
-                <div className="overlay-handle se" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-se")} />
+                <div className="absolute -left-1 -top-1 h-2 w-2 rounded-full border border-editor-blue bg-editor-base" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-nw")} />
+                <div className="absolute -right-1 -top-1 h-2 w-2 rounded-full border border-editor-blue bg-editor-base" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-ne")} />
+                <div className="absolute -bottom-1 -left-1 h-2 w-2 rounded-full border border-editor-blue bg-editor-base" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-sw")} />
+                <div className="absolute -bottom-1 -right-1 h-2 w-2 rounded-full border border-editor-blue bg-editor-base" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-se")} />
               </>
             ) : null}
           </div>

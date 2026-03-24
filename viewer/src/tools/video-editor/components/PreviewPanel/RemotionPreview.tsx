@@ -1,13 +1,11 @@
 import type { RefObject } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { Pause, Play, SkipBack } from "lucide-react";
 import { Player, type PlayerRef } from "@remotion/player";
 import { getTimelineDurationInFrames, parseResolution } from "@shared/config-utils";
 import { TimelineRenderer } from "@shared/compositions/TimelineRenderer";
-import { DebugTrack } from "@shared/compositions/DebugTrack";
 import type { ResolvedTimelineConfig } from "@shared/types";
-
-// Set to true to use a minimal single-video debug player
-const DEBUG_MODE = false;
+import { Button } from "@/shared/components/ui/button";
 
 const PREVIEW_SCALE = 1;
 
@@ -89,42 +87,42 @@ const RemotionPreview = forwardRef<PreviewHandle, RemotionPreviewProps>(function
   );
 
   return (
-    <div ref={playerContainerRef} className="live-preview remotion-preview">
-      {DEBUG_MODE ? (
-        <Player
-          ref={playerRef}
-          component={DebugTrack}
-          inputProps={{ src: "/inputs/demo-one.mp4" }}
-          durationInFrames={300}
-          fps={30}
-          compositionWidth={1280}
-          compositionHeight={720}
-          controls
-          style={{ width: "100%", height: "100%" }}
-        />
-      ) : (
-        <Player
-          ref={playerRef}
-          component={TimelineRenderer}
-          inputProps={inputProps}
-          durationInFrames={metadata.durationInFrames}
-          fps={metadata.fps}
-          compositionWidth={metadata.compositionWidth}
-          compositionHeight={metadata.compositionHeight}
-          controls={false}
-          clickToPlay={false}
-          doubleClickToFullscreen={false}
-          spaceKeyToPlayOrPause={false}
-          showVolumeControls={false}
-          style={{ width: "100%", height: "100%" }}
-        />
-      )}
-      <button className="skip-btn" onClick={() => playerRef.current?.seekTo(0)} title="Jump to beginning">
-        ⏮
-      </button>
-      <button className="play-btn" onClick={() => playerRef.current?.toggle()}>
-        {isPlaying ? "⏸" : "▶"}
-      </button>
+    <div ref={playerContainerRef} className="relative flex h-full min-h-[320px] w-full items-center justify-center overflow-hidden rounded-xl bg-[#05060a]">
+      <Player
+        ref={playerRef}
+        component={TimelineRenderer}
+        inputProps={inputProps}
+        durationInFrames={metadata.durationInFrames}
+        fps={metadata.fps}
+        compositionWidth={metadata.compositionWidth}
+        compositionHeight={metadata.compositionHeight}
+        controls={false}
+        clickToPlay={false}
+        doubleClickToFullscreen={false}
+        spaceKeyToPlayOrPause={false}
+        showVolumeControls={false}
+        style={{ width: "100%", height: "100%" }}
+      />
+      <div className="absolute inset-x-0 bottom-4 z-20 flex items-center justify-center gap-3">
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full border-white/20 bg-black/35 text-white backdrop-blur hover:bg-black/60"
+          onClick={() => playerRef.current?.seekTo(0)}
+          title="Jump to beginning"
+        >
+          <SkipBack className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-11 w-11 rounded-full border-white/20 bg-black/35 text-white backdrop-blur hover:bg-black/60"
+          onClick={() => playerRef.current?.toggle()}
+          title={isPlaying ? "Pause" : "Play"}
+        >
+          {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 fill-current" />}
+        </Button>
+      </div>
     </div>
   );
 });

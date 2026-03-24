@@ -44,8 +44,8 @@
       "asset": "reigh-bg-v17-titled-dust",
       "clipType": "hold",
       "hold": 120,
-      "x": -3,
-      "y": 8,
+      "x": -9,
+      "y": 10,
       "width": 1280,
       "height": 720
     },
@@ -57,10 +57,10 @@
       "clipType": "media",
       "from": 0,
       "to": 6.91,
-      "x": -68,
-      "y": 28,
-      "width": 1280,
-      "height": 720
+      "x": 12,
+      "y": 2,
+      "width": 1251,
+      "height": 706
     },
     {
       "id": "clip-1",
@@ -68,18 +68,27 @@
       "track": "V2",
       "asset": "venn-diagram",
       "clipType": "media",
-      "from": 0,
-      "to": 4.73,
-      "speed": 1.06
+      "from": 0.43,
+      "to": 5.83,
+      "speed": 1.06,
+      "x": 32,
+      "y": 18,
+      "width": 1216,
+      "height": 684,
+      "entrance": {
+        "type": "pulse",
+        "duration": 0.5
+      }
     },
     {
       "id": "clip-2",
-      "at": 11.37,
+      "at": 12,
       "track": "V2",
       "asset": "demo-one",
       "clipType": "media",
       "from": 0,
       "to": 4.97,
+      "volume": 0,
       "x": 21,
       "y": -75,
       "width": 1280,

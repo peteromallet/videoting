@@ -13,6 +13,7 @@ import type {
   TrackDefinition,
   TrackKind,
 } from "@shared/types";
+import { loadAssetRegistry, loadTimelineConfig } from "@/tools/video-editor/lib/timeline-api";
 
 export interface ClipMeta {
   asset?: string;
@@ -126,15 +127,6 @@ const resolveAssetUrl = (file: string): string => {
   return `/${normalized}`;
 };
 
-const fetchJson = async <T,>(url: string): Promise<T> => {
-  const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Failed to load ${url}: ${response.status} ${response.statusText}`);
-  }
-
-  return (await response.json()) as T;
-};
-
 const buildAssetMap = (registry: AssetRegistry): Record<string, string> => {
   return Object.fromEntries(
     Object.entries(registry.assets ?? {}).map(([assetId, entry]) => [assetId, entry.file]),
@@ -200,9 +192,7 @@ export const configToRows = (
   for (const clip of migratedConfig.clips) {
     const clipId = getUniqueClipId(clip.id, usedClipIds);
     if (clipId !== clip.id) {
-      console.warn(
-        `[timeline] Duplicate clip id "${clip.id}" on track "${clip.track}" detected; using "${clipId}" in editor state.`,
-      );
+      console.warn(`[timeline] Duplicate clip id "${clip.id}" on track "${clip.track}" detected; using "${clipId}" in editor state.`);
     }
     usedClipIds.add(clipId);
 
@@ -257,9 +247,7 @@ export const rowsToConfig = (
 
   const clips: TimelineClip[] = [];
   for (const track of tracks) {
-    const baseOrder = (clipOrder[track.id] ?? []).filter((clipId) => {
-      return actionMap.has(clipId);
-    });
+    const baseOrder = (clipOrder[track.id] ?? []).filter((clipId) => actionMap.has(clipId));
     const appendedIds = (trackActionIds[track.id] ?? []).filter((clipId) => !baseOrder.includes(clipId));
 
     for (const clipId of [...baseOrder, ...appendedIds]) {
@@ -362,10 +350,7 @@ export const buildTimelineData = (
 };
 
 export const loadTimelineJson = async (): Promise<TimelineData> => {
-  const [config, registry] = await Promise.all([
-    fetchJson<TimelineConfig>("/api/timeline"),
-    fetchJson<AssetRegistry>("/api/asset-registry"),
-  ]);
+  const [config, registry] = await Promise.all([loadTimelineConfig(), loadAssetRegistry()]);
   return buildTimelineData(config, registry);
 };
 

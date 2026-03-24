@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react";
 import type { TrackKind } from "@shared/types";
-import type { TimelineData } from "./timeline-data";
+import type { TimelineData } from "@/tools/video-editor/lib/timeline-data";
 
 const DRAG_THRESHOLD_PX = 10;
 
@@ -37,7 +37,6 @@ interface DragSession {
   startClientY: number;
   pointerOffsetX: number;
   pointerOffsetY: number;
-  initialStart: number;
   latestStart: number;
   clipEl: HTMLElement;
   moveListener: (event: PointerEvent) => void;
@@ -97,7 +96,7 @@ export const useCrossTrackDrag = ({
           session.clipEl.releasePointerCapture(session.pointerId);
         }
       } catch {
-        // Pointer capture may already be released
+        // Pointer capture may already be released.
       }
 
       dragSessionRef.current = null;
@@ -179,9 +178,7 @@ export const useCrossTrackDrag = ({
         return;
       }
 
-      const rowElements = Array.from(
-        wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"),
-      );
+      const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
       const highlightedRowEl = rowElements[rowIndex] ?? null;
       highlightedRowEl?.classList.add("drop-target");
       session.highlightedRowEl = highlightedRowEl;
@@ -204,7 +201,7 @@ export const useCrossTrackDrag = ({
       }
 
       const clipTarget = event.target instanceof HTMLElement ? event.target.closest<HTMLElement>(".clip-action") : null;
-      if (!clipTarget || event.target instanceof HTMLElement && event.target.closest(".clip-delete-btn")) {
+      if (!clipTarget || (event.target instanceof HTMLElement && event.target.closest("[data-delete-clip='true']"))) {
         return;
       }
 
@@ -307,7 +304,6 @@ export const useCrossTrackDrag = ({
         startClientY: event.clientY,
         pointerOffsetX: event.clientX - clipRect.left,
         pointerOffsetY: event.clientY - clipRect.top,
-        initialStart,
         latestStart: initialStart,
         clipEl: clipTarget,
         moveListener: handlePointerMove,
@@ -326,7 +322,6 @@ export const useCrossTrackDrag = ({
       window.addEventListener("pointercancel", handlePointerCancel);
     };
 
-    // Safety: if window loses focus during drag, clean up
     const handleBlur = () => {
       clearSession(dragSessionRef.current);
     };

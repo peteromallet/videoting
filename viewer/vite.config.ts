@@ -422,6 +422,7 @@ export default defineConfig({
   resolve: {
     extensions: [".mjs", ".js", ".mts", ".ts", ".jsx", ".tsx", ".json"],
     alias: {
+      "@": path.resolve(__dirname, "src"),
       "@project": projectRoot,
       "@shared": path.resolve(projectRoot, "shared"),
       react: path.resolve(__dirname, "node_modules/react"),
