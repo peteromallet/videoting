@@ -212,6 +212,48 @@
       "opacity": 1
     },
     {
+      "id": "uploading-1774381361750-tfx4",
+      "at": 38.56,
+      "track": "V3",
+      "asset": "uploading:apex (1).png",
+      "clipType": "hold",
+      "hold": 3
+    },
+    {
+      "id": "uploading-1774381365261-07fd",
+      "at": 54.72,
+      "track": "V3",
+      "asset": "uploading:apex (1).png",
+      "clipType": "hold",
+      "hold": 3
+    },
+    {
+      "id": "clip-10",
+      "at": 38.56,
+      "track": "V3",
+      "asset": "apex-(1)",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-11",
+      "at": 54.72,
+      "track": "V3",
+      "asset": "apex-(1)",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
       "id": "clip-4",
       "at": 1.94,
       "track": "A1",

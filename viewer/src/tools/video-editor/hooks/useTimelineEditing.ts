@@ -292,19 +292,62 @@ export function useTimelineEditing({
   }, [applyTimelineEdit, dataRef, selectedTrackId, setSelectedClipId, setSelectedTrackId]);
 
   const onTimelineDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    if (event.dataTransfer.types.includes("asset-key") || event.dataTransfer.types.includes("Files")) {
-      event.preventDefault();
-      event.currentTarget.dataset.dragOver = "true";
+    if (!event.dataTransfer.types.includes("asset-key") && !event.dataTransfer.types.includes("Files")) {
+      return;
     }
-  }, []);
+    event.preventDefault();
+    event.currentTarget.dataset.dragOver = "true";
+
+    // Show drop position indicator
+    const wrapper = event.currentTarget;
+    const editArea = wrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
+    const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+    if (!editArea) return;
+
+    const rect = editArea.getBoundingClientRect();
+    const scrollLeft = grid?.scrollLeft ?? 0;
+    const pixelsPerSecond = scaleWidth / scale;
+    const dropX = event.clientX - rect.left + scrollLeft;
+    const time = Math.max(0, (dropX - TIMELINE_START_LEFT) / pixelsPerSecond);
+    const indicatorX = TIMELINE_START_LEFT + time * pixelsPerSecond - scrollLeft;
+
+    // Find target row
+    const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
+    const rowIndex = rowElements.findIndex((el) => {
+      const r = el.getBoundingClientRect();
+      return event.clientY >= r.top && event.clientY <= r.bottom;
+    });
+
+    // Create or update indicator
+    let indicator = wrapper.querySelector<HTMLElement>("[data-drop-indicator]");
+    if (!indicator) {
+      indicator = document.createElement("div");
+      indicator.dataset.dropIndicator = "true";
+      indicator.style.cssText = "position:absolute;pointer-events:none;z-index:100;transition:left 50ms ease,top 50ms ease;";
+      wrapper.style.position = "relative";
+      wrapper.appendChild(indicator);
+    }
+
+    const targetRow = rowElements[rowIndex];
+    const rowTop = targetRow ? targetRow.getBoundingClientRect().top - rect.top : 0;
+    const rowHeight = targetRow ? targetRow.offsetHeight : 36;
+
+    indicator.innerHTML = `
+      <div style="position:absolute;left:${indicatorX}px;top:${rowTop}px;height:${rowHeight}px;width:2px;background:#89b4fa;border-radius:1px;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
+      <div style="position:absolute;left:${indicatorX + 4}px;top:${rowTop + 4}px;height:${rowHeight - 8}px;width:80px;background:rgba(137,180,250,0.15);border:1px dashed rgba(137,180,250,0.4);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(137,180,250,0.8);">${time.toFixed(1)}s</div>
+    `;
+  }, [scale, scaleWidth]);
 
   const onTimelineDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     delete event.currentTarget.dataset.dragOver;
+    const indicator = event.currentTarget.querySelector("[data-drop-indicator]");
+    indicator?.remove();
   }, []);
 
   const onTimelineDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     delete event.currentTarget.dataset.dragOver;
+    event.currentTarget.querySelector("[data-drop-indicator]")?.remove();
 
     // Handle external file drops
     const files = Array.from(event.dataTransfer.files);
