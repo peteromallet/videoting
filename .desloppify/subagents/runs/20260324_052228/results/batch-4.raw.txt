@@ -1,0 +1,87 @@
+{
+  "batch": "error_consistency",
+  "batch_index": 4,
+  "assessments": {"error_consistency": 62.0},
+  "dimension_notes": {
+    "error_consistency": {
+      "evidence": [
+        "timeline-api.ts has consistent error handling: fetchJson throws on non-ok responses with status info, saveTimelineConfig throws with response text, uploadAssetFile throws with parsed error message — good boundary-level error handling",
+        "config-utils.ts resolveTimelineConfig throws descriptive errors for missing assets — appropriate for a core function",
+        "serialize.ts validateSerializedConfig throws on unexpected keys — good defensive validation",
+        "load_all_profiles in common.py silently swallows YAML parse exceptions with bare 'except: pass' (line 84) — malformed profiles are silently skipped with no logging",
+        "startRender in useTimelineData.ts catches errors with bare 'catch' and sets renderStatus to 'error' but provides no error message to the user (line 425)",
+        "saveMutation onError sets status to 'error' but discards the error object (line 154-156) — no error context preserved",
+        "AssetPanel catches upload errors and logs them but the error is not surfaced to the user — confirmed by code reading (uses console.error)",
+        "createDebouncedTimelineSaver pattern replaced by scheduleSave/saveTimeline in useTimelineData — save failures are handled via mutation's onError which sets status, but the error details are still swallowed",
+        "ffprobe_json in common.py does not handle the case where ffprobe is not installed or the command fails — json.loads will throw on empty stdout but the error message will be confusing"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "error_consistency": {
+      "dimension_character": "The codebase has well-designed error handling at API boundaries (timeline-api.ts, config-utils.ts, serialize.ts) where functions throw descriptive errors. However, at the application layer, errors are frequently swallowed or reduced to status flags without preserving error details. The Python tools silently skip malformed profiles and lack error handling around subprocess calls. The pattern is consistently 'throw at boundaries, swallow at application level' but the swallowing loses actionable context.",
+      "score_rationale": "Error handling at I/O boundaries is largely present and consistent with throws + descriptive messages. However, multiple application-level catch blocks discard error context (startRender, saveMutation, upload handling, profile loading). The silent swallowing pattern is repeated enough to be systemic rather than localized. Score of 62 reflects good boundary handling undermined by context-losing catches at the application layer."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "error_consistency",
+      "identifier": "silent_profile_parse",
+      "summary": "load_all_profiles silently swallows YAML parse exceptions for malformed profiles",
+      "related_files": ["tools/common.py"],
+      "evidence": ["Line 84: bare 'except: pass' catches all exceptions including YAML parse errors, corrupted files, and permission errors — no logging or user feedback"],
+      "suggestion": "Log a warning with the filename and exception message before continuing, or use 'except yaml.YAMLError' to narrow the catch",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "render_error_no_context",
+      "summary": "startRender catches errors without preserving error details for user feedback",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineData.ts"],
+      "evidence": ["Line 425: bare 'catch' block sets renderStatus to 'error' but does not store the error message. The renderLog state could capture the error but doesn't."],
+      "suggestion": "Capture the error in the catch block and append it to renderLog so users can see what went wrong",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "save_error_swallowed",
+      "summary": "Save mutation onError discards the error object, only setting status flag",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineData.ts"],
+      "evidence": ["Lines 154-156: onError callback receives the error but only calls setSaveStatus('error') — the error message is lost"],
+      "suggestion": "Store the error message in state so the UI can display it, e.g. setSaveError(error.message)",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Application-level error handling consistently reduces errors to boolean status flags, losing diagnostic context", "Python subprocess helpers assume external tools are always available"],
+    "likely_symptoms": ["AssetPanel upload error logging is a symptom of the same pattern as save/render error swallowing"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "error_consistency": {
+      "add": [
+        {
+          "header": "Good error handling at API boundaries",
+          "description": "timeline-api.ts, config-utils.ts, and serialize.ts consistently throw descriptive errors at I/O and data boundaries. This provides a solid foundation for error propagation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Application layer reduces errors to status flags",
+          "description": "startRender, saveMutation, and upload handling all catch errors and set status flags without preserving the error message. Users see 'error' state but cannot diagnose the cause without checking browser console.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

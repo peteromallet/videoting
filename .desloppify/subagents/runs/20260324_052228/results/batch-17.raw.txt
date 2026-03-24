@@ -1,0 +1,95 @@
+{
+  "batch": "design_coherence",
+  "batch_index": 17,
+  "assessments": {"design_coherence": 79.0},
+  "dimension_notes": {
+    "design_coherence": {
+      "evidence": [
+        "useTimelineState was successfully split into 4 focused hooks (useTimelineData, useTimelineEditing, useTimelinePlayback, useTimelineTrackManagement), each with a single clear responsibility",
+        "Shared utility functions extracted to shared/editor-utils.ts (splitClipAtPlayhead, toggleClipMute, updateClipInConfig, addTrack, removeTrack, reorderTracks) and shared/config-utils.ts (getClipSourceDuration, parseResolution, etc.)",
+        "build_ffmpeg_command in render.py is 220+ lines with nested loops, multiple closures, and mixed visual/audio processing - a genuine complexity hotspot",
+        "useTimelineData at 466 lines handles data loading, saving, mutation, selection state, render status, and preferences - multiple distinct responsibilities remain in one hook",
+        "Many orphaned files in viewer/src/tools/video-editor/ (PreviewPanel/, PropertiesPanel/, TimelineEditor/, Toolbar/ components, useCrossTrackDrag, useKeyboardShortcuts, coordinate-utils, timeline-api, timeline-data) suggest incomplete component integration or dead code accumulation",
+        "The configToRows -> rowsToConfig round-trip pattern is a consistent design decision applied throughout the editor state management"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "design_coherence": {
+      "dimension_character": "The recent refactoring split useTimelineState into focused hooks and extracted shared utilities, which are positive structural improvements. However, useTimelineData still accumulates multiple responsibilities (data loading, saving, selection, render status, preferences), and build_ffmpeg_command remains a complex monolith. The large number of orphaned files suggests incomplete integration or dead code that clouds the design picture. The configToRows/rowsToConfig pattern is a strong, consistent architectural decision.",
+      "score_rationale": "Scoring at 79, just below the 80 anchor, because while the hook decomposition is a real improvement, the remaining multi-responsibility useTimelineData and the complex build_ffmpeg_command show that design coherence is uneven. The orphaned files create navigational confusion about what is active code vs dead code. The positive patterns (shared utilities, round-trip config pattern) prevent a lower score."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "design_coherence",
+      "identifier": "useTimelineData_mixed_responsibilities",
+      "summary": "useTimelineData handles data loading, saving, mutations, selection, render status, and preferences",
+      "related_files": ["viewer/src/tools/video-editor/hooks/useTimelineData.ts"],
+      "evidence": [
+        "466 lines managing: React Query loading (lines 130-140), save mutation with debouncing (lines 142-198), data materialization (lines 159-181), selection state (lines 117-119, 313-338), render status (lines 121-123, 388-428), and editor preferences (lines 124, 353-378)",
+        "The hook returns 30+ values/functions, suggesting it serves too many consumers with too many concerns"
+      ],
+      "suggestion": "Extract render management (startRender, renderStatus, renderLog, renderDirty) into a useRenderStatus hook. Extract selection state management (selectedClipId, selectedTrackId, selectedClip, selectedTrack) into a useSelectionState hook. This would leave useTimelineData focused on data loading, saving, and mutation.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "orphaned_component_files",
+      "summary": "33 files flagged as orphaned in viewer/src/tools/video-editor/ cloud the active codebase picture",
+      "related_files": [
+        "viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx",
+        "viewer/src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts",
+        "viewer/src/tools/video-editor/hooks/useKeyboardShortcuts.ts"
+      ],
+      "evidence": [
+        "Mechanical scan flagged 33 files as orphaned with zero importers",
+        "These files include full component implementations (OverlayEditor 376 LOC, ClipPanel 333 LOC, AssetPanel 254 LOC) that represent significant code",
+        "Some of these may be imported dynamically or via the component tree through VideoEditorPage -> TimelineProvider -> useTimelineContext chain, but the import graph doesn't show it"
+      ],
+      "suggestion": "Verify which of these files are actually used via the component tree (imported through barrel files or dynamic imports). For confirmed dead code, either delete or move to a clearly-labeled archive directory. For used-but-not-directly-imported files, add an explicit import chain so the dependency graph reflects reality.",
+      "confidence": "medium",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "concern_verdict": "confirmed",
+      "concern_fingerprint": "82e227551b5df2a1"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Incremental refactoring improved hook structure but did not fully address responsibility segregation or dead code"],
+    "likely_symptoms": ["orphaned_component_files"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "design_coherence": {
+      "add": [
+        {
+          "header": "Successful hook decomposition pattern",
+          "description": "useTimelineState was split into useTimelineData, useTimelineEditing, useTimelinePlayback, and useTimelineTrackManagement, each with typed interfaces. This is a strong design decision that makes responsibilities traceable.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Shared utility extraction to shared/",
+          "description": "Domain operations (splitClipAtPlayhead, toggleClipMute, addTrack, etc.) were extracted to shared/editor-utils.ts with comprehensive tests, eliminating duplication between remotion and viewer.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent config round-trip architecture",
+          "description": "The configToRows/rowsToConfig pattern provides a clean bidirectional transformation between timeline config and editor state, used consistently throughout the editing pipeline.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

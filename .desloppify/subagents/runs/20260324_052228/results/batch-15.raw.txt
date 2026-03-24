@@ -1,0 +1,75 @@
+{
+  "batch": "package_organization",
+  "batch_index": 15,
+  "assessments": {"package_organization": 82.0},
+  "dimension_notes": {
+    "package_organization": {
+      "evidence": [
+        "Project has clear top-level separation: tools/ (Python CLI), shared/ (cross-platform TS), viewer/ (React app), remotion/ (video rendering), scripts/ (one-off generators)",
+        "shared/ directory serves as the cross-cutting shared module with 5 production files (types.ts, config-utils.ts, editor-utils.ts, serialize.ts, migrate.ts) plus 3 test files and subdirectories (compositions/, effects/, transitions/) - well-organized for its size",
+        "viewer/src/tools/video-editor/ has a clear component-based structure: components/ (5 subdirectories), hooks/ (8 files), lib/ (4 files), contexts/, settings/, pages/",
+        "viewer/src/shared/components/ui/ contains 8 component files, many of which are orphaned (badge, button, card, input, popover, select, slider) - only collapsible.tsx appears to be used",
+        "The hooks/ directory has 8 files which is manageable but could benefit from an index file for discoverability",
+        "File fan-in data shows shared/types.ts (4 importers), shared/effects/entrances.tsx (3), useTimelineData.ts (3) as the most imported files"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "Orphaned UI components in viewer/src/shared/components/ui/ add navigational noise; scripts/ directory has related files that could be consolidated"
+    }
+  },
+  "dimension_judgment": {
+    "package_organization": {
+      "dimension_character": "The top-level directory structure clearly maps to domain capabilities (tools, shared, viewer, remotion) and the viewer's internal organization follows predictable component/hook/lib patterns. The main organizational friction comes from the accumulation of unused UI component scaffolding in viewer/src/shared/components/ui/ and the split between shared/ compositions that are used by remotion vs viewer. A developer would generally know where to find things.",
+      "score_rationale": "Scoring at 82 reflects a codebase where directory structure mostly aids navigation. The clear top-level separation and consistent viewer internal structure push the score up. The orphaned UI components and minor placement ambiguities (shared/ serving both remotion and viewer) prevent scoring higher. This is above the 80 anchor because the structure is more helpful than confusing."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "package_organization",
+      "identifier": "orphaned_ui_components",
+      "summary": "7 of 8 UI component files in viewer/src/shared/components/ui/ appear to be unused",
+      "related_files": [
+        "viewer/src/shared/components/ui/badge.tsx",
+        "viewer/src/shared/components/ui/button.tsx",
+        "viewer/src/shared/components/ui/card.tsx",
+        "viewer/src/shared/components/ui/input.tsx",
+        "viewer/src/shared/components/ui/popover.tsx",
+        "viewer/src/shared/components/ui/select.tsx",
+        "viewer/src/shared/components/ui/slider.tsx"
+      ],
+      "evidence": [
+        "Mechanical scan flagged all 7 files as orphaned with zero importers",
+        "Only collapsible.tsx appears to be actively imported in the codebase",
+        "These appear to be scaffolded UI primitives that were never integrated"
+      ],
+      "suggestion": "Staged plan: (1) Verify none are dynamically imported by searching for string references to component names. (2) Delete confirmed-unused files: badge.tsx, button.tsx, card.tsx, input.tsx, select.tsx, slider.tsx. (3) Evaluate popover.tsx separately since it has 174 LOC and may be referenced from orphaned panel components. (4) Run viewer build to verify no breakage.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["UI component scaffolding was generated ahead of actual usage needs"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "package_organization": {
+      "add": [
+        {
+          "header": "Clear domain-aligned top-level structure",
+          "description": "The five top-level directories (tools/, shared/, viewer/, remotion/, scripts/) each map to a distinct domain capability with minimal overlap. A new developer can predict where to find things.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent component organization in viewer",
+          "description": "viewer/src/tools/video-editor/ follows a standard React project layout with components/, hooks/, lib/, contexts/, and pages/ directories that match common conventions.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

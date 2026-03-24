@@ -1,0 +1,88 @@
+{
+  "batch": "initialization_coupling",
+  "batch_index": 16,
+  "assessments": {"initialization_coupling": 76.0},
+  "dimension_notes": {
+    "initialization_coupling": {
+      "evidence": [
+        "common.py reads .env at import time (lines 26-32): _env_file = ROOT / '.env'; if _env_file.exists(): ... os.environ.setdefault(). All tools that 'from common import ...' trigger env loading as a side effect",
+        "common.py computes module-level path constants (ROOT, PROFILES_DIR, TIMELINE_YAML, TIMELINE_JSON, ASSET_REGISTRY) at import time - these are static and stable",
+        "common.py has module-level mutable caches: _profile_cache and _profile_paths (lines 56-57) that accumulate state across calls",
+        "useEditorSettings reads from localStorage at import/render time via useMemo initial value",
+        "remotion/src/load-config.ts accesses window.remotion_staticBase and window.remotion_staticFiles at function call time rather than module scope, which is a positive pattern",
+        "No circular import dependencies detected across the codebase",
+        "No database connections or network calls at module scope"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "initialization_coupling": {
+      "dimension_character": "The main initialization coupling concern is Python common.py's import-time .env loading and module-level mutable caches. These create side effects on every import and shared mutable state that persists across calls. The TypeScript side is cleaner, with load-config.ts deferring window access to function call time. No circular dependencies or boot-order fragility was found.",
+      "score_rationale": "Scoring at 76, below the 80 anchor, because common.py's import-time .env loading and module-level mutable caches are real initialization coupling issues that would create test fragility. While the constants (ROOT, PROFILES_DIR) are reasonable at module scope, the .env loading side effect and mutable profile caches are patterns that make the module harder to test and reason about. The TypeScript side is well-designed in this regard."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "initialization_coupling",
+      "identifier": "import_time_env_loading",
+      "summary": "common.py reads .env file and modifies os.environ at import time",
+      "related_files": ["tools/common.py"],
+      "evidence": [
+        "Lines 26-32: module-level code reads .env and calls os.environ.setdefault for each key-value pair",
+        "Every tool that does 'from common import ...' triggers this side effect, making it impossible to import common without loading .env",
+        "In testing, this means environment variables are set before any test can configure its own environment"
+      ],
+      "suggestion": "Move the .env loading into a load_env() function and call it explicitly in each tool's main() or at the start of the if __name__ == '__main__' block. This preserves the convenience while removing the import-time side effect.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "initialization_coupling",
+      "identifier": "mutable_module_level_cache",
+      "summary": "common.py has module-level mutable caches (_profile_cache, _profile_paths) shared across all callers",
+      "related_files": ["tools/common.py"],
+      "evidence": [
+        "Lines 56-57: _profile_cache: dict[str, dict] = {} and _profile_paths: dict[str, Path] = {} are module-level mutable state",
+        "load_profile populates _profile_cache as a side effect; get_profile_path depends on _profile_paths being populated by load_profile",
+        "These caches persist across calls and cannot be cleared or reset, creating hidden coupling between callers"
+      ],
+      "suggestion": "These caches are acceptable for CLI tools that run once and exit. Add a brief comment documenting that these caches are intentional for CLI performance and not safe for long-running processes. If testing becomes a concern, add a clear_profile_cache() function.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["CLI tools optimized for single-run convenience over testability"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "initialization_coupling": {
+      "add": [
+        {
+          "header": "Deferred window access in load-config.ts",
+          "description": "remotion/src/load-config.ts accesses window.remotion_staticBase and window.remotion_staticFiles inside function bodies rather than at module scope, avoiding import-time browser API coupling.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No circular import dependencies",
+          "description": "The codebase has clean import direction: shared/ is imported by both remotion/ and viewer/, with no reverse dependencies. Python tools import from common.py in one direction.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Static path constants at module scope acceptable",
+          "description": "ROOT, PROFILES_DIR, TIMELINE_JSON etc. in common.py are computed from __file__ at import time but are deterministic and immutable - this is standard Python practice for path constants.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

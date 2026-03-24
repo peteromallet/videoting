@@ -1,0 +1,88 @@
+{
+  "batch": "incomplete_migration",
+  "batch_index": 14,
+  "assessments": {"incomplete_migration": 78.0},
+  "dimension_notes": {
+    "incomplete_migration": {
+      "evidence": [
+        "Legacy migration constants (LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS) are duplicated between Python common.py and TypeScript shared/migrate.ts, with both actively used at runtime",
+        "The Python tools still operate on timeline.yaml while the TypeScript viewer/remotion operates on timeline.json, with tools/migrate_yaml_to_json.py as the bridge",
+        "common.py still has TIMELINE_YAML constant and yaml loading machinery alongside the JSON path, suggesting dual-format support is still active",
+        "The TimelineClip.effects field in types.ts supports both array and object formats (TimelineEffect[] | Record<string, number>), which is a legacy compatibility shim that migrate.ts handles",
+        "config-utils.ts getEffectValue handles both array and object effects formats, keeping both code paths alive",
+        "All TypeScript source files are .ts/.tsx - no mixed JS/TS",
+        "No deprecated markers or TODO/FIXME migration comments found in source files"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "incomplete_migration": {
+      "dimension_character": "The codebase has an active but incomplete migration from YAML-based timeline format to JSON, and from legacy track names (video/overlay/audio) to structured track definitions (V1/V2/V3/A1). The migration code in shared/migrate.ts and common.py is well-structured, but the dual presence of legacy constants in both Python and TypeScript creates maintenance burden. The effects field supporting two formats is a lingering compatibility layer.",
+      "score_rationale": "Scoring at 78, slightly below the 80 anchor, because a developer encounters dual-format support (YAML vs JSON, legacy vs modern track names, array vs object effects) that creates 'which pattern do I follow?' confusion. The migration code itself is well-tested and intentional, but the coexistence of old and new patterns across the Python/TypeScript boundary is a meaningful source of friction."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "incomplete_migration",
+      "identifier": "dual_effects_format",
+      "summary": "TimelineClip.effects supports both array and object formats as a legacy shim",
+      "related_files": ["shared/types.ts", "shared/config-utils.ts", "shared/migrate.ts"],
+      "evidence": [
+        "types.ts line 82: effects?: TimelineEffect[] | Record<string, number> - the union type preserves both old and new formats",
+        "config-utils.ts getEffectValue handles both Array.isArray and object access patterns",
+        "migrate.ts migrateLegacyEffects converts effects to entrance/exit/continuous fields, meaning the effects field should never appear in migrated data"
+      ],
+      "suggestion": "Since migrateLegacyEffects strips the effects field (line 113: delete nextClip.effects), the effects field is only needed pre-migration. Remove effects from TimelineClip type and handle it only in the migration layer as an input-only type.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "incomplete_migration",
+      "identifier": "legacy_constants_duplication",
+      "summary": "Legacy migration constants duplicated across Python/TypeScript boundary",
+      "related_files": ["tools/common.py", "shared/migrate.ts"],
+      "evidence": [
+        "common.py LEGACY_TRACK_MAP = {'video': 'V2', 'overlay': 'V3', 'audio': 'A1'}",
+        "migrate.ts LEGACY_TRACK_MAP: Record<string, string> = {video: 'V2', overlay: 'V3', audio: 'A1'}",
+        "LEGACY_ASSET_EFFECTS is also duplicated with identical content in both files"
+      ],
+      "suggestion": "Add cross-reference comments in both files noting the sync peer. If the Python migration is only needed for the render.py ffmpeg path, document that explicitly and consider whether the YAML format is still needed at runtime.",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["The project migrated from YAML-based Python tools to JSON-based TypeScript but maintained backward compatibility, leading to dual-format support"],
+    "likely_symptoms": ["dual_effects_format", "legacy_constants_duplication"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "incomplete_migration": {
+      "add": [
+        {
+          "header": "Well-tested migration layer in shared/migrate.ts",
+          "description": "migrateToFlatTracks has comprehensive tests covering legacy-to-modern conversion, background clip creation, clipType inference, and idempotency. This is a positive migration pattern.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent TypeScript throughout viewer",
+          "description": "All viewer source files use .ts/.tsx extensions with no mixed JS/TS files, indicating TypeScript migration is complete for the frontend.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Active dual-format YAML/JSON timeline support",
+          "description": "Python tools still reference timeline.yaml while TypeScript operates on timeline.json. tools/migrate_yaml_to_json.py bridges the gap, suggesting the YAML format is still the primary authoring format.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "batch": "naming_quality",
+  "batch_index": 5,
+  "assessments": {"naming_quality": 74.0},
+  "dimension_notes": {
+    "naming_quality": {
+      "evidence": [
+        "Function names in shared/editor-utils.ts are clear and domain-specific: splitClipAtPlayhead, toggleClipMute, canSplitClipAtTime, getClipEndSeconds — these communicate intent precisely",
+        "Hook names follow React conventions and describe their responsibility: useTimelineData, useTimelineEditing, useTimelinePlayback, useTimelineTrackManagement, useTimelineSync, useCrossTrackDrag",
+        "_call_llm_summary in tools/view.py does not call an LLM — it returns the first description string. The name is misleading about its behavior.",
+        "roundTimelineValue defined identically in editor-utils.ts (exported) and migrate.ts (local) — naming is fine but the duplication creates confusion about which is canonical",
+        "getDefaultClipMeta in timeline-data.ts just copies all fields from TimelineClip to ClipMeta — the name suggests defaults but it's really a type conversion/extraction",
+        "commitData in useTimelineData.ts is a good name for the function that finalizes state updates and triggers saves",
+        "materializeData clearly communicates that it converts rows/meta back into a full TimelineData object",
+        "inferTrackType is a clear name for extension-based type detection; infer_asset_type in Python is similarly clear",
+        "applyTimelineEdit and applyResolvedConfigEdit clearly distinguish two different edit pathways"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "naming_quality": {
+      "dimension_character": "The codebase uses mostly precise, domain-specific names that communicate intent well. Hook names, shared utility names, and component names are consistently descriptive. The main naming defects are _call_llm_summary (which does not call an LLM) and getDefaultClipMeta (which is a type conversion, not a defaults provider). These are isolated cases against a generally strong naming baseline.",
+      "score_rationale": "Most function, variable, and file names communicate intent clearly. The _call_llm_summary name/behavior mismatch is the most significant defect — it actively misleads readers about what the function does. The getDefaultClipMeta name is mildly misleading. Overall naming quality is good with a couple of concrete defects preventing a higher score. Score of 74."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "naming_quality",
+      "identifier": "call_llm_summary_misleading",
+      "summary": "_call_llm_summary does not call an LLM -- it returns the first description string",
+      "related_files": ["tools/view.py"],
+      "evidence": ["Function name implies an LLM API call but the body is: 'return descriptions[0] if descriptions else \"(no description)\"' — it simply returns the first element"],
+      "suggestion": "Rename to _get_first_description or _pick_summary to reflect actual behavior",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["_call_llm_summary likely once called an LLM and was simplified without renaming"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "naming_quality": {
+      "add": [
+        {
+          "header": "Domain-specific names in shared utilities",
+          "description": "Functions like splitClipAtPlayhead, toggleClipMute, canSplitClipAtTime use precise video-editing vocabulary that maps directly to user-visible operations. Hook names (useTimelineEditing, useTimelinePlayback) clearly communicate their responsibility boundary.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

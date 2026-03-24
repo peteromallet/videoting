@@ -1,0 +1,1436 @@
+{
+  "assessments": {
+    "abstraction_fitness": {
+      "score": 68.0,
+      "components": [
+        "Abstraction Leverage",
+        "Indirection Cost",
+        "Interface Honesty",
+        "Delegation Density",
+        "Definition Directness",
+        "Type Discipline"
+      ],
+      "component_scores": {
+        "Abstraction Leverage": 80.0,
+        "Indirection Cost": 55.0,
+        "Interface Honesty": 85.0,
+        "Delegation Density": 90.0,
+        "Definition Directness": 85.0,
+        "Type Discipline": 90.0
+      }
+    },
+    "ai_generated_debt": 87.0,
+    "api_surface_coherence": 82.5,
+    "authorization_consistency": 92.0,
+    "contract_coherence": 84.0,
+    "convention_outlier": 70.0,
+    "cross_module_architecture": 72.0,
+    "design_coherence": 79.0,
+    "error_consistency": 62.0,
+    "incomplete_migration": 78.0,
+    "initialization_coupling": 76.0,
+    "logic_clarity": 86.0,
+    "low_level_elegance": 71.0,
+    "mid_level_elegance": 73.0,
+    "naming_quality": 74.0,
+    "package_organization": 82.0,
+    "test_strategy": 52.0,
+    "type_safety": 81.5
+  },
+  "dimension_notes": {
+    "cross_module_architecture": {
+      "evidence": [
+        "shared/ serves as a well-defined boundary module imported by both remotion/ and viewer/, with types.ts (4 importers) as the most-imported file \u2014 clean dependency direction from leaf packages toward shared",
+        "resolveTimelineConfig in config-utils.ts accepts a UrlResolver parameter, allowing remotion and viewer to inject different URL resolution strategies \u2014 good boundary design",
+        "Timeline config resolution logic is duplicated: remotion/src/load-config.ts calls resolveTimelineConfig(config, registry, staticFile) while viewer/lib/timeline-data.ts wraps the same function with a different resolver \u2014 both correctly delegate to shared/config-utils.ts but the wrapper patterns differ",
+        "Legacy migration constants (LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS, DEFAULT_VIDEO_SCALE) are duplicated identically between tools/common.py and shared/migrate.ts \u2014 a cross-language boundary issue that cannot be easily unified but represents drift risk",
+        "migrateToFlatTracks is called redundantly: buildTimelineData calls migrateToFlatTracks(config), then passes the result to resolveTimelineConfig which also calls migrateToFlatTracks internally \u2014 double migration is idempotent but wasteful",
+        "useTimelineState.ts acts as a composition hub (175 LOC) that assembles 4 focused hooks and re-exports ~65 fields through a single context \u2014 the hub pattern is reasonable after the refactor but the interface is still very wide",
+        "render.py imports clip_source_duration from common.py \u2014 no re-declaration, previously flagged issue appears resolved"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "convention_outlier": {
+      "evidence": [
+        "PreviewPanel siblings mix default and named exports: OverlayEditor and RemotionPreview use 'export default', while PreviewPanel uses 'export function' \u2014 inconsistent within the same directory",
+        "PropertiesPanel siblings mix default and named exports: AssetPanel uses 'export default function', while ClipPanel, TrackPanel, and PropertiesPanel use named exports \u2014 same pattern as PreviewPanel",
+        "Asset type detection logic exists in two forms: inferTrackType in timeline-data.ts (extension-based, returns TrackKind) and infer_asset_type in common.py (extension-based, returns string type like 'image', 'audio', 'video') \u2014 different function names and return types for conceptually similar logic",
+        "roundTimelineValue is defined identically in both editor-utils.ts (exported) and migrate.ts (local const) \u2014 same implementation, same default digits=4",
+        "formatTime is defined both as a standalone export in coordinate-utils.ts and as a useCallback in useTimelinePlayback.ts \u2014 identical formatting logic",
+        "TypeScript code consistently uses camelCase for functions/variables and PascalCase for types/components \u2014 good consistency within each language",
+        "Python code consistently uses snake_case \u2014 appropriate for the language"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "error_consistency": {
+      "evidence": [
+        "timeline-api.ts has consistent error handling: fetchJson throws on non-ok responses with status info, saveTimelineConfig throws with response text, uploadAssetFile throws with parsed error message \u2014 good boundary-level error handling",
+        "config-utils.ts resolveTimelineConfig throws descriptive errors for missing assets \u2014 appropriate for a core function",
+        "serialize.ts validateSerializedConfig throws on unexpected keys \u2014 good defensive validation",
+        "load_all_profiles in common.py silently swallows YAML parse exceptions with bare 'except: pass' (line 84) \u2014 malformed profiles are silently skipped with no logging",
+        "startRender in useTimelineData.ts catches errors with bare 'catch' and sets renderStatus to 'error' but provides no error message to the user (line 425)",
+        "saveMutation onError sets status to 'error' but discards the error object (line 154-156) \u2014 no error context preserved",
+        "AssetPanel catches upload errors and logs them but the error is not surfaced to the user \u2014 confirmed by code reading (uses console.error)",
+        "createDebouncedTimelineSaver pattern replaced by scheduleSave/saveTimeline in useTimelineData \u2014 save failures are handled via mutation's onError which sets status, but the error details are still swallowed",
+        "ffprobe_json in common.py does not handle the case where ffprobe is not installed or the command fails \u2014 json.loads will throw on empty stdout but the error message will be confusing"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "naming_quality": {
+      "evidence": [
+        "Function names in shared/editor-utils.ts are clear and domain-specific: splitClipAtPlayhead, toggleClipMute, canSplitClipAtTime, getClipEndSeconds \u2014 these communicate intent precisely",
+        "Hook names follow React conventions and describe their responsibility: useTimelineData, useTimelineEditing, useTimelinePlayback, useTimelineTrackManagement, useTimelineSync, useCrossTrackDrag",
+        "_call_llm_summary in tools/view.py does not call an LLM \u2014 it returns the first description string. The name is misleading about its behavior.",
+        "roundTimelineValue defined identically in editor-utils.ts (exported) and migrate.ts (local) \u2014 naming is fine but the duplication creates confusion about which is canonical",
+        "getDefaultClipMeta in timeline-data.ts just copies all fields from TimelineClip to ClipMeta \u2014 the name suggests defaults but it's really a type conversion/extraction",
+        "commitData in useTimelineData.ts is a good name for the function that finalizes state updates and triggers saves",
+        "materializeData clearly communicates that it converts rows/meta back into a full TimelineData object",
+        "inferTrackType is a clear name for extension-based type detection; infer_asset_type in Python is similarly clear",
+        "applyTimelineEdit and applyResolvedConfigEdit clearly distinguish two different edit pathways"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "abstraction_fitness": {
+      "evidence": [
+        "UseTimelineStateResult bundles ~65 fields into a single context value \u2014 all consumers (PreviewPanel, PropertiesPanel, TimelineEditor, Toolbar) destructure a subset but depend on the entire interface for re-render purposes",
+        "ClipMeta in timeline-data.ts duplicates most fields of TimelineClip from types.ts without adding type narrowing \u2014 asset, track, clipType, from, to, speed, hold, volume, x, y, width, height, opacity, text, entrance, exit, continuous, transition, effects are all repeated",
+        "cn() in utils.ts is a 1-line pass-through wrapper around clsx: 'return clsx(inputs)' with no added behavior, validation, or translation",
+        "useTimelineEditing takes 14 parameters via its args interface \u2014 this is a wide param bag that could be narrowed but the args pattern is better than individual parameters",
+        "useTimelineTrackManagement takes 6 parameters \u2014 reasonable for its scope",
+        "The shared/ types are lean and purpose-built: TimelineClip, TrackDefinition, TimelineConfig, ResolvedTimelineConfig each have clear semantic value",
+        "serializeClipForDisk and serializeTrackForDisk do genuine work \u2014 stripping assetEntry and validating the output. Not pass-through wrappers.",
+        "The hook decomposition creates explicit interfaces (UseTimelineEditingArgs, UseTimelineTrackManagementArgs) that document the contract between hooks \u2014 this is earned abstraction"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": "",
+      "sub_axes": {
+        "abstraction_leverage": 80.0,
+        "indirection_cost": 55.0,
+        "interface_honesty": 85.0,
+        "delegation_density": 90.0,
+        "definition_directness": 85.0,
+        "type_discipline": 90.0
+      }
+    },
+    "low_level_elegance": {
+      "evidence": [
+        "useTimelineState is now 175 lines composing 4 hooks \u2014 the previously-flagged 966-line function body is resolved",
+        "formatTime duplication: coordinate-utils.ts exports it as a pure function, useTimelinePlayback.ts redefines it as useCallback \u2014 identical logic in two places",
+        "roundTimelineValue duplication: editor-utils.ts exports it, migrate.ts redefines it locally \u2014 identical implementation",
+        "handleSelectedClipChange in useTimelineEditing.ts (lines 348-377) still manually maps 15+ fields with individual conditional expressions: at, clipType, from, to, speed, hold, volume, x, y, width, height, opacity, text, entrance, exit, continuous, transition \u2014 each with its own clamping logic. This could use a field-specification-driven approach",
+        "handleAssetDrop in useTimelineEditing.ts (lines 209-290) has three parallel branches (audio, image, video) that construct ClipMeta with slightly different fields \u2014 reasonable complexity for the domain but could benefit from a factory pattern",
+        "commitData in useTimelineData.ts has clean early-return guards and explicit option handling",
+        "onActionResizeEnd in useTimelineEditing.ts has well-structured control flow with clear separation between hold and media clip handling",
+        "splitClipAtPlayhead in editor-utils.ts has clear bifurcation between hold and media clips with proper rounding \u2014 well-crafted",
+        "rowsToConfig in timeline-data.ts handles clip ordering, serialization, and validation in a single pass \u2014 appropriately complex for the task"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "mid_level_elegance": {
+      "evidence": [
+        "Two parallel data translation paths exist for timeline edits: applyTimelineEdit (rows/meta -> materializeData -> config) and applyResolvedConfigEdit (resolvedConfig -> serialize -> buildTimelineData) \u2014 both converge on commitData but use different intermediate representations",
+        "applyTimelineEdit works at the row/action level (for drag, resize, reorder operations) while applyResolvedConfigEdit works at the domain model level (for property changes) \u2014 the distinction is functionally motivated by the timeline editor library's API",
+        "migrateToFlatTracks is called multiple times in the pipeline: buildTimelineData calls it on config, then passes result to resolveTimelineConfig which calls it again, and configToRows also calls it \u2014 idempotent but wasteful",
+        "Data flow from server to UI is clean: loadTimelineJson -> buildTimelineData -> TimelineData -> hooks -> components. The useQuery polling provides a simple sync mechanism",
+        "The debounced save pattern (scheduleSave -> saveTimeline -> saveMutation) is a clean composition with appropriate error handling propagation",
+        "Hook dependencies are explicit via args interfaces: useTimelineEditing receives exactly what it needs from useTimelineData, creating predictable handoff boundaries",
+        "The commitData function serves as a clean coordination point for state updates, handling selection state cleanup, save scheduling, and signature tracking in one place"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "test_strategy": {
+      "evidence": [
+        "Test runner exists: vitest is configured at project root (vitest.config.ts) covering shared/**/*.test.ts, and in viewer/ (viewer/vitest.config.ts) covering both shared and viewer source tests",
+        "Test files exist for core domain functions: shared/config-utils.test.ts (195 lines, 9 describes), shared/editor-utils.test.ts (237 lines, 8 describes), shared/migrate.test.ts (126 lines, 2 describes), shared/serialize.test.ts (113 lines, 4 describes)",
+        "viewer/src/tools/video-editor/lib/timeline-data.test.ts (296 lines) tests configToRows, rowsToConfig, resolveTimelineConfig, buildTimelineData, getAssetColor, inferTrackType, getNextClipId \u2014 comprehensive coverage of the data layer",
+        "viewer/src/tools/video-editor/lib/coordinate-utils.test.ts (165 lines) tests formatTime, updateClipOrder, buildTrackClipOrder, moveClipBetweenTracks, getCompatibleTrackId, buildRowTrackPatches \u2014 comprehensive coverage of coordinate utilities",
+        "Tests are well-structured with proper test factories (makeClip, makeConfig, makeRegistry), clear describe/it blocks, and test immutability verification",
+        "No tests for any React hooks (useTimelineData, useTimelineEditing, useTimelinePlayback, useTimelineTrackManagement, useCrossTrackDrag) \u2014 the most complex application logic is untested",
+        "No tests for any React components (PreviewPanel, PropertiesPanel, TimelineEditor, etc.)",
+        "No tests for Python tools (common.py, render.py, view.py, etc.)",
+        "No integration tests that verify the full data round-trip (load -> edit -> save -> reload)",
+        "Previously flagged 'No test runner, test config, or test files exist anywhere in the project' is RESOLVED \u2014 tests and vitest config now exist"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "api_surface_coherence": {
+      "evidence": [
+        "timeline-data.ts exports a mix of sync functions (configToRows, rowsToConfig, buildTimelineData, getAssetColor, getSourceTime, inferTrackType, getNextClipId) and async functions (loadTimelineJson, loadTranscript) in the same public module",
+        "timeline-api.ts has consistent async API surface: fetchJson, loadTimelineConfig, loadAssetRegistry, saveTimelineConfig, uploadAssetFile all return Promises",
+        "Python common.py public API is coherent: load/save pairs follow consistent naming (load_json/save_json, load_timeline/save_timeline, load_asset_registry/save_asset_registry)",
+        "useTimelineEditing takes 14 parameters in its args interface, which is at the API boundary threshold",
+        "render.py's clip_source_duration duplicating common.py's clip_source_duration has been fixed - render.py now imports from common"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "timeline-data.ts mixes sync and async exports in the same module; useTimelineEditing args interface passes 14 distinct parameters"
+    },
+    "authorization_consistency": {
+      "evidence": [
+        "This is a local development video editing tool, not a multi-user web application with auth requirements",
+        "The viewer dev server serves API endpoints (/api/timeline, /api/asset-registry, /api/save-timeline, /api/upload, /api/render) without auth, which is appropriate for a local-only tool",
+        "No route handlers with auth decorators exist anywhere in the codebase",
+        "No database or RLS patterns exist",
+        "No permission strings or access control patterns exist",
+        "API keys (OPENAI_API_KEY, RESEMBLE_API_KEY, FAL_KEY) are read from .env and used only in CLI tools that run locally"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "No auth concerns are applicable to this single-user local tool. The minor gap is that the dev server binds to a network port without any localhost-only restriction documentation."
+    },
+    "ai_generated_debt": {
+      "evidence": [
+        "Comments in the codebase are generally purposeful: common.py section headers (paths, subprocess helpers, profile helpers) aid navigation without restating code",
+        "No entry/exit logging patterns found; console.warn usage in timeline-data.ts is targeted (duplicate clip IDs)",
+        "No try-catch around pure expressions found",
+        "The getDefaultClipMeta function in timeline-data.ts manually copies every field from TimelineClip to ClipMeta - this is verbose but necessary since ClipMeta is a subset type",
+        "handleSelectedClipChange in useTimelineEditing.ts has a large field-by-field spread pattern (lines 353-373) that could be data-driven",
+        "ASSET_COLORS in timeline-data.ts uses hardcoded color strings - this is a legitimate domain mapping, not generic",
+        "No docstring bloat - functions are either undocumented or have brief, useful docstrings (e.g. common.py's audio_duration, download_file)"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "handleSelectedClipChange has a large manual field-by-field spread that is formulaic and could be simplified"
+    },
+    "incomplete_migration": {
+      "evidence": [
+        "Legacy migration constants (LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS) are duplicated between Python common.py and TypeScript shared/migrate.ts, with both actively used at runtime",
+        "The Python tools still operate on timeline.yaml while the TypeScript viewer/remotion operates on timeline.json, with tools/migrate_yaml_to_json.py as the bridge",
+        "common.py still has TIMELINE_YAML constant and yaml loading machinery alongside the JSON path, suggesting dual-format support is still active",
+        "The TimelineClip.effects field in types.ts supports both array and object formats (TimelineEffect[] | Record<string, number>), which is a legacy compatibility shim that migrate.ts handles",
+        "config-utils.ts getEffectValue handles both array and object effects formats, keeping both code paths alive",
+        "All TypeScript source files are .ts/.tsx - no mixed JS/TS",
+        "No deprecated markers or TODO/FIXME migration comments found in source files"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "package_organization": {
+      "evidence": [
+        "Project has clear top-level separation: tools/ (Python CLI), shared/ (cross-platform TS), viewer/ (React app), remotion/ (video rendering), scripts/ (one-off generators)",
+        "shared/ directory serves as the cross-cutting shared module with 5 production files (types.ts, config-utils.ts, editor-utils.ts, serialize.ts, migrate.ts) plus 3 test files and subdirectories (compositions/, effects/, transitions/) - well-organized for its size",
+        "viewer/src/tools/video-editor/ has a clear component-based structure: components/ (5 subdirectories), hooks/ (8 files), lib/ (4 files), contexts/, settings/, pages/",
+        "viewer/src/shared/components/ui/ contains 8 component files, many of which are orphaned (badge, button, card, input, popover, select, slider) - only collapsible.tsx appears to be used",
+        "The hooks/ directory has 8 files which is manageable but could benefit from an index file for discoverability",
+        "File fan-in data shows shared/types.ts (4 importers), shared/effects/entrances.tsx (3), useTimelineData.ts (3) as the most imported files"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium",
+      "issues_preventing_higher_score": "Orphaned UI components in viewer/src/shared/components/ui/ add navigational noise; scripts/ directory has related files that could be consolidated"
+    },
+    "initialization_coupling": {
+      "evidence": [
+        "common.py reads .env at import time (lines 26-32): _env_file = ROOT / '.env'; if _env_file.exists(): ... os.environ.setdefault(). All tools that 'from common import ...' trigger env loading as a side effect",
+        "common.py computes module-level path constants (ROOT, PROFILES_DIR, TIMELINE_YAML, TIMELINE_JSON, ASSET_REGISTRY) at import time - these are static and stable",
+        "common.py has module-level mutable caches: _profile_cache and _profile_paths (lines 56-57) that accumulate state across calls",
+        "useEditorSettings reads from localStorage at import/render time via useMemo initial value",
+        "remotion/src/load-config.ts accesses window.remotion_staticBase and window.remotion_staticFiles at function call time rather than module scope, which is a positive pattern",
+        "No circular import dependencies detected across the codebase",
+        "No database connections or network calls at module scope"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "design_coherence": {
+      "evidence": [
+        "useTimelineState was successfully split into 4 focused hooks (useTimelineData, useTimelineEditing, useTimelinePlayback, useTimelineTrackManagement), each with a single clear responsibility",
+        "Shared utility functions extracted to shared/editor-utils.ts (splitClipAtPlayhead, toggleClipMute, updateClipInConfig, addTrack, removeTrack, reorderTracks) and shared/config-utils.ts (getClipSourceDuration, parseResolution, etc.)",
+        "build_ffmpeg_command in render.py is 220+ lines with nested loops, multiple closures, and mixed visual/audio processing - a genuine complexity hotspot",
+        "useTimelineData at 466 lines handles data loading, saving, mutation, selection state, render status, and preferences - multiple distinct responsibilities remain in one hook",
+        "Many orphaned files in viewer/src/tools/video-editor/ (PreviewPanel/, PropertiesPanel/, TimelineEditor/, Toolbar/ components, useCrossTrackDrag, useKeyboardShortcuts, coordinate-utils, timeline-api, timeline-data) suggest incomplete component integration or dead code accumulation",
+        "The configToRows -> rowsToConfig round-trip pattern is a consistent design decision applied throughout the editor state management"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "contract_coherence": {
+      "evidence": [
+        "config-utils.ts resolveTimelineConfig throws Error when clip references missing asset (line 99) - clear error contract that is tested",
+        "timeline-api.ts fetchJson, saveTimelineConfig, uploadAssetFile all throw on !response.ok - consistent error contract across the HTTP layer",
+        "common.py load_profile returns dict | None - contract is honest about nullable return",
+        "common.py get_openai_client returns None when no API key - honest nullable contract",
+        "serialize.ts validateSerializedConfig throws on invalid keys - documented via tests",
+        "editor-utils.ts updateClipInConfig returns same config reference when no match (structural sharing) - clever but contract is clear from return type",
+        "render.py resolve_asset is a thin wrapper around resolve_asset_path that just passes registry - the name accurately reflects its role",
+        "common.py load_all_profiles silently catches exceptions (line 84: except Exception: pass) when loading individual profiles, which means malformed profiles are silently dropped"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "load_all_profiles silently drops malformed profiles; getConfigSignature contract is misleading - it returns full JSON serialization, not a hash"
+    },
+    "logic_clarity": {
+      "evidence": [
+        "Control flow in editor-utils.ts functions is clean and direct: canSplitClipAtTime uses simple comparison, splitClipAtPlayhead uses early return for not-found and clear if/else for hold vs media clips",
+        "useTimelineSync uses guard clauses (isSyncingFromTimeline.current check) before main logic - clear pattern",
+        "coordinate-utils.ts functions are pure and direct with no unnecessary branching",
+        "render.py build_ffmpeg_command has deep nesting (image vs video, then fit mode, then track-specific scaling) but the branching is necessary for the domain",
+        "onClickTimeArea returns undefined explicitly (line 56 of useTimelineSync.ts) - this is required by the timeline library's contract, not dead code",
+        "formatTime function is duplicated between useTimelinePlayback.ts (line 37) and coordinate-utils.ts (line 16) - identical implementations",
+        "No always-true/always-false conditions found",
+        "No dead code paths after unconditional returns found",
+        "No async functions that never await found"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "formatTime is duplicated; onActionMoving returns false or undefined based on crossTrackActive without clear documentation of what these return values mean to the caller"
+    },
+    "type_safety": {
+      "evidence": [
+        "shared/types.ts defines comprehensive types for the domain: TimelineClip, TrackDefinition, ResolvedTimelineConfig, etc. with appropriate use of optional fields",
+        "Python tools have no type annotations on most functions in view.py, search.py, ingest.py beyond the common.py signatures",
+        "common.py uses modern Python type hints: dict[str, Any], list[str], Path | None, etc.",
+        "ClipMeta interface in timeline-data.ts mirrors TimelineClip fields without using Pick/Omit, creating a parallel type that could drift",
+        "The 'as never' cast in rowsToConfig line 278 (serializedClip[field] = value as never) bypasses type checking for dynamic field assignment",
+        "serializeClipForDisk and serializeTrackForDisk cast Partial<Record<...>> to full types via 'as TimelineClip' and 'as TrackDefinition' - these are safe given the preceding field-copy loop but are unsafe in principle",
+        "uploadAssetFile in timeline-api.ts returns Promise<unknown> rather than a typed response",
+        "ActionDragState is defined in both useTimelineData.ts and useCrossTrackDrag.ts as separate but identical interfaces",
+        "render.py parse_resolution returns tuple[int, int] which is well-typed"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium",
+      "issues_preventing_higher_score": ""
+    }
+  },
+  "dimension_judgment": {
+    "cross_module_architecture": {
+      "dimension_character": "The codebase has a clean three-layer architecture (shared -> remotion/viewer -> tools) with shared/ serving as a well-defined boundary module. The recent refactoring split useTimelineState into focused hooks with clear delegation. The main architectural weakness is cross-language duplication of migration constants between Python and TypeScript, and redundant migrateToFlatTracks calls in the data pipeline.",
+      "score_rationale": "Dependency direction is consistently correct and the shared boundary is well-defined. The cross-language duplication is a real boundary integrity issue but inherent to the polyglot nature of the project. The redundant migration call and wide context interface prevent a higher score. Comparable to a mid-range project with good structure but some coordination overhead \u2014 72."
+    },
+    "convention_outlier": {
+      "dimension_character": "The codebase generally follows language-appropriate naming conventions (camelCase in TypeScript, snake_case in Python) consistently. The main convention drift is in export patterns \u2014 sibling component files inconsistently use default vs named exports within the same directory. There are also a few instances of duplicated utility functions (roundTimelineValue, formatTime) across modules where one canonical location should exist.",
+      "score_rationale": "Naming conventions within each language are consistent. The export pattern inconsistency across sibling components is a recurring pattern affecting 2 directories. The duplicated utility functions are small but represent convention drift where one module follows a different protocol than its siblings. Score of 70 reflects these moderate inconsistencies against otherwise clean conventions."
+    },
+    "error_consistency": {
+      "dimension_character": "The codebase has well-designed error handling at API boundaries (timeline-api.ts, config-utils.ts, serialize.ts) where functions throw descriptive errors. However, at the application layer, errors are frequently swallowed or reduced to status flags without preserving error details. The Python tools silently skip malformed profiles and lack error handling around subprocess calls. The pattern is consistently 'throw at boundaries, swallow at application level' but the swallowing loses actionable context.",
+      "score_rationale": "Error handling at I/O boundaries is largely present and consistent with throws + descriptive messages. However, multiple application-level catch blocks discard error context (startRender, saveMutation, upload handling, profile loading). The silent swallowing pattern is repeated enough to be systemic rather than localized. Score of 62 reflects good boundary handling undermined by context-losing catches at the application layer."
+    },
+    "naming_quality": {
+      "dimension_character": "The codebase uses mostly precise, domain-specific names that communicate intent well. Hook names, shared utility names, and component names are consistently descriptive. The main naming defects are _call_llm_summary (which does not call an LLM) and getDefaultClipMeta (which is a type conversion, not a defaults provider). These are isolated cases against a generally strong naming baseline.",
+      "score_rationale": "Most function, variable, and file names communicate intent clearly. The _call_llm_summary name/behavior mismatch is the most significant defect \u2014 it actively misleads readers about what the function does. The getDefaultClipMeta name is mildly misleading. Overall naming quality is good with a couple of concrete defects preventing a higher score. Score of 74."
+    },
+    "abstraction_fitness": {
+      "dimension_character": "Most abstractions in the codebase are earned \u2014 the shared module types, serialize/migrate functions, and hook decomposition interfaces all add genuine value. However, three specific abstractions hurt more than they help: the monolithic context value forces all consumers onto one re-render surface, ClipMeta duplicates TimelineClip without narrowing, and cn() adds a layer of indirection over clsx for no functional reason.",
+      "score_rationale": "The codebase generally avoids unnecessary abstraction \u2014 there are no wrapper-heavy class hierarchies, no one-implementation interfaces, and the hook interfaces are well-designed. The wide context value is the most impactful issue since it affects all consumers. ClipMeta duplication adds naming ceremony without type safety benefits. cn() is trivial. Score of 68 reflects good abstraction discipline undermined by a few concrete over-indirection points."
+    },
+    "low_level_elegance": {
+      "dimension_character": "The codebase shows good function-level craft in most areas, with clean control flow in the shared utilities (splitClipAtPlayhead, rowsToConfig) and well-structured hooks after the refactoring. The main craft issues are handleSelectedClipChange's 15-field manual clamping pattern and the duplicated utility functions (formatTime, roundTimelineValue) that break the 'one canonical location' principle. Helper extraction is balanced \u2014 no micro-fragmentation.",
+      "score_rationale": "Most functions have direct, intention-revealing control flow. The refactoring resolved the major monolith. The handleSelectedClipChange clamping pattern is the most significant remaining craft issue \u2014 it's verbose and error-prone for changes. The utility duplications are small but indicate inconsistent extraction practices. Score of 71 reflects generally good craft with a few concrete improvements available."
+    },
+    "mid_level_elegance": {
+      "dimension_character": "The handoff design between hooks is clean with explicit dependency injection via typed args interfaces. The debounced save pipeline and data loading flow are well-composed. The main seam quality issue is the two parallel data translation paths (applyTimelineEdit vs applyResolvedConfigEdit) which, while functionally motivated, create different mental models for similar operations. The redundant migrateToFlatTracks calls indicate boundary confusion about which layer is responsible for migration.",
+      "score_rationale": "Integration seams are generally clean with explicit handoff contracts between hooks. The dual edit paths are a real design tension but stem from the timeline editor library's row-based API vs. the domain model's clip-based API \u2014 not a gratuitous bifurcation. The redundant migration calls are the clearest seam quality issue. Score of 73 reflects good composition patterns with some boundary coordination overhead."
+    },
+    "test_strategy": {
+      "dimension_character": "The codebase has made significant progress from having zero tests to having comprehensive unit tests for all shared domain functions and viewer utility modules. The test quality is good: proper factories, immutability checks, edge case coverage. However, the most complex application logic \u2014 the React hooks that orchestrate timeline editing \u2014 has no test coverage at all. Components and Python tools are also untested. The testing strategy covers the foundation but not the application layer.",
+      "score_rationale": "The presence of well-structured tests for shared/config-utils, shared/editor-utils, shared/migrate, shared/serialize, timeline-data, and coordinate-utils represents a substantial improvement from zero coverage. However, critical paths through the hooks (useTimelineEditing, useTimelineData) remain untested. These hooks contain the most complex state management and editing logic. The absence of any component or integration tests means defects in the orchestration layer can only be caught manually. Score of 52 reflects good foundation coverage offset by significant gaps in application-layer testing."
+    },
+    "api_surface_coherence": {
+      "dimension_character": "API surfaces are generally consistent within individual modules. The Python tools follow clear load/save naming patterns, and timeline-api.ts presents a clean async API. The main friction point is timeline-data.ts which mixes sync utility functions with async data-loading functions, making it harder for consumers to predict what they are getting. The hook parameter interfaces, while large, are well-typed and explicit.",
+      "score_rationale": "The codebase scores above the 80 anchor because most API surfaces are predictable and consistently shaped. The mixed sync/async in timeline-data.ts and the large hook parameter interfaces create moderate friction, preventing a score above 85. No overloaded interfaces or inconsistent parameter ordering were found."
+    },
+    "authorization_consistency": {
+      "dimension_character": "This codebase is a local-only video editing tool with no multi-user features, no database, and no protected resources. Auth patterns are not applicable here. API keys for external services are properly loaded from .env files and not hardcoded.",
+      "score_rationale": "Authorization consistency is not meaningfully testable in a single-user local tool. The codebase correctly avoids unnecessary auth ceremony. API keys are handled via environment variables, which is the appropriate pattern. Scoring at 92 reflects that the dimension is well-handled for the context, with the minor note that server binding could be explicitly localhost-only."
+    },
+    "ai_generated_debt": {
+      "dimension_character": "The codebase is largely free of AI-generated debt hallmarks. Comments are purposeful section headers or genuine explanations, not restating. Logging is targeted rather than nosy. There are no pass-through wrapper functions without added logic. The main pattern that resembles AI-generated boilerplate is the field-by-field clip property spreading in handleSelectedClipChange, which is formulaic and repetitive.",
+      "score_rationale": "Scoring at 87 reflects a codebase where a developer's attention is mostly spent on real logic rather than ceremony. The code is purpose-driven with minimal noise. The field-by-field spread pattern in handleSelectedClipChange is the primary example of formulaic code, preventing a higher score."
+    },
+    "incomplete_migration": {
+      "dimension_character": "The codebase has an active but incomplete migration from YAML-based timeline format to JSON, and from legacy track names (video/overlay/audio) to structured track definitions (V1/V2/V3/A1). The migration code in shared/migrate.ts and common.py is well-structured, but the dual presence of legacy constants in both Python and TypeScript creates maintenance burden. The effects field supporting two formats is a lingering compatibility layer.",
+      "score_rationale": "Scoring at 78, slightly below the 80 anchor, because a developer encounters dual-format support (YAML vs JSON, legacy vs modern track names, array vs object effects) that creates 'which pattern do I follow?' confusion. The migration code itself is well-tested and intentional, but the coexistence of old and new patterns across the Python/TypeScript boundary is a meaningful source of friction."
+    },
+    "package_organization": {
+      "dimension_character": "The top-level directory structure clearly maps to domain capabilities (tools, shared, viewer, remotion) and the viewer's internal organization follows predictable component/hook/lib patterns. The main organizational friction comes from the accumulation of unused UI component scaffolding in viewer/src/shared/components/ui/ and the split between shared/ compositions that are used by remotion vs viewer. A developer would generally know where to find things.",
+      "score_rationale": "Scoring at 82 reflects a codebase where directory structure mostly aids navigation. The clear top-level separation and consistent viewer internal structure push the score up. The orphaned UI components and minor placement ambiguities (shared/ serving both remotion and viewer) prevent scoring higher. This is above the 80 anchor because the structure is more helpful than confusing."
+    },
+    "initialization_coupling": {
+      "dimension_character": "The main initialization coupling concern is Python common.py's import-time .env loading and module-level mutable caches. These create side effects on every import and shared mutable state that persists across calls. The TypeScript side is cleaner, with load-config.ts deferring window access to function call time. No circular dependencies or boot-order fragility was found.",
+      "score_rationale": "Scoring at 76, below the 80 anchor, because common.py's import-time .env loading and module-level mutable caches are real initialization coupling issues that would create test fragility. While the constants (ROOT, PROFILES_DIR) are reasonable at module scope, the .env loading side effect and mutable profile caches are patterns that make the module harder to test and reason about. The TypeScript side is well-designed in this regard."
+    },
+    "design_coherence": {
+      "dimension_character": "The recent refactoring split useTimelineState into focused hooks and extracted shared utilities, which are positive structural improvements. However, useTimelineData still accumulates multiple responsibilities (data loading, saving, selection, render status, preferences), and build_ffmpeg_command remains a complex monolith. The large number of orphaned files suggests incomplete integration or dead code that clouds the design picture. The configToRows/rowsToConfig pattern is a strong, consistent architectural decision.",
+      "score_rationale": "Scoring at 79, just below the 80 anchor, because while the hook decomposition is a real improvement, the remaining multi-responsibility useTimelineData and the complex build_ffmpeg_command show that design coherence is uneven. The orphaned files create navigational confusion about what is active code vs dead code. The positive patterns (shared utilities, round-trip config pattern) prevent a lower score."
+    },
+    "contract_coherence": {
+      "dimension_character": "Functions generally honor their stated contracts. The TypeScript layer has consistent throw-on-error behavior with good test coverage. The Python layer is mostly honest about nullable returns. The main contract concerns are load_all_profiles silently swallowing parse errors and getConfigSignature returning a full JSON string rather than a digest - the name implies a compact signature.",
+      "score_rationale": "Scoring at 84, above the 80 anchor, because contracts are mostly trustworthy. A developer can predict error behavior across the HTTP layer and the config resolution pipeline. The silent error swallowing in load_all_profiles and the misleading getConfigSignature name are specific, addressable issues that prevent a higher score."
+    },
+    "logic_clarity": {
+      "dimension_character": "Control flow across the codebase is generally direct and intention-revealing. Guard clauses are used consistently, early returns prevent deep nesting, and boolean logic is not over-complicated. The main logic clarity issues are minor: a duplicated formatTime implementation and an onActionMoving callback where the false vs undefined return value distinction requires knowing the library's contract.",
+      "score_rationale": "Scoring at 86, above the 80 anchor but below 90, because a developer can reliably trace logic flow without surprises. The control flow in both Python and TypeScript layers is direct. The duplicated formatTime and the implicit return-value contract in onActionMoving are the only friction points, and both are isolated and low-impact."
+    },
+    "type_safety": {
+      "dimension_character": "The TypeScript layer has a well-defined type hierarchy rooted in shared/types.ts that serves as reliable documentation of the domain model. Type annotations are comprehensive in the shared modules and hooks. However, there are unsafe type assertions in serialization code, a parallel ClipMeta interface that mirrors TimelineClip, duplicate ActionDragState definitions, and some Python tools lack type annotations entirely. The Python side of common.py uses modern type hints, but the tool scripts are largely untyped.",
+      "score_rationale": "Scoring at 81.5, slightly above the 80 anchor, because the TypeScript types are generally trustworthy and the shared type definitions are well-structured. The 'as never' and 'as Type' casts in serialization code, the parallel ClipMeta definition, and the duplicate ActionDragState create pockets where a developer cannot fully trust the type system. The untyped Python tool scripts are a secondary concern since they are CLI entry points."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "duplicate_migration_constants",
+      "summary": "Legacy migration constants duplicated between Python common.py and TypeScript shared/migrate.ts",
+      "confidence": "high",
+      "suggestion": "Extract migration constants to a shared JSON file that both Python and TypeScript can load, or generate one from the other",
+      "related_files": [
+        "tools/common.py",
+        "shared/migrate.ts"
+      ],
+      "evidence": [
+        "LEGACY_TRACK_MAP, LEGACY_ASSET_EFFECTS, DEFAULT_VIDEO_SCALE are defined identically in both files with the same values"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "double_migration_call",
+      "summary": "migrateToFlatTracks called twice in the same data pipeline within buildTimelineData",
+      "confidence": "high",
+      "suggestion": "Have resolveTimelineConfig accept already-migrated config, or add a check in migrateToFlatTracks to short-circuit when tracks already exist (it does check config.tracks?.length but still copies all clips)",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/timeline-data.ts",
+        "shared/config-utils.ts"
+      ],
+      "evidence": [
+        "buildTimelineData calls migrateToFlatTracks(config), then passes the result to resolveTimelineConfig which also calls migrateToFlatTracks internally (line 80 of config-utils.ts)"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "wide_context_interface",
+      "summary": "UseTimelineStateResult bundles ~65 fields from 4 hooks into a single context value",
+      "confidence": "medium",
+      "suggestion": "Consider splitting the context into separate providers (DataContext, PlaybackContext, EditingContext) so consumers only subscribe to the state they need, reducing unnecessary re-renders",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineState.ts",
+        "viewer/src/tools/video-editor/contexts/TimelineContext.tsx"
+      ],
+      "evidence": [
+        "UseTimelineStateResult interface lists 65 fields spanning data, playback, editing, and track management \u2014 all consumers receive the full surface even when they use 5-10 fields"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "architectural_change"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "mixed_export_preview",
+      "summary": "PreviewPanel siblings mix default and named exports",
+      "confidence": "high",
+      "suggestion": "Standardize on named exports for all components in this directory, matching the PreviewPanel pattern",
+      "related_files": [
+        "viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
+        "viewer/src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx",
+        "viewer/src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx"
+      ],
+      "evidence": [
+        "OverlayEditor uses 'export default function', RemotionPreview uses 'export default RemotionPreview' (forwardRef), while PreviewPanel uses 'export function PreviewPanel' \u2014 three different export patterns in the same directory"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "mixed_export_properties",
+      "summary": "PropertiesPanel siblings mix default and named exports",
+      "confidence": "high",
+      "suggestion": "Standardize AssetPanel to use named export to match its siblings",
+      "related_files": [
+        "viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx"
+      ],
+      "evidence": [
+        "AssetPanel uses 'export default function AssetPanel', while ClipPanel uses 'export function ClipPanel' and PropertiesPanel uses 'export function PropertiesPanel'"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "duplicate_round_timeline_value",
+      "summary": "roundTimelineValue defined identically in editor-utils.ts and migrate.ts",
+      "confidence": "high",
+      "suggestion": "Import roundTimelineValue from editor-utils.ts in migrate.ts instead of re-defining it",
+      "related_files": [
+        "shared/editor-utils.ts",
+        "shared/migrate.ts"
+      ],
+      "evidence": [
+        "shared/editor-utils.ts line 6: exported roundTimelineValue with (value, digits=4). shared/migrate.ts line 44: local const roundTimelineValue with identical implementation"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "duplicate_format_time",
+      "summary": "formatTime defined as standalone function and as useCallback with identical logic",
+      "confidence": "high",
+      "suggestion": "Import formatTime from coordinate-utils.ts in useTimelinePlayback instead of redefining it",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/coordinate-utils.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts"
+      ],
+      "evidence": [
+        "coordinate-utils.ts line 16 exports formatTime as a pure function. useTimelinePlayback.ts line 37 defines formatTime as useCallback with identical formatting logic"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "silent_profile_parse",
+      "summary": "load_all_profiles silently swallows YAML parse exceptions for malformed profiles",
+      "confidence": "high",
+      "suggestion": "Log a warning with the filename and exception message before continuing, or use 'except yaml.YAMLError' to narrow the catch",
+      "related_files": [
+        "tools/common.py"
+      ],
+      "evidence": [
+        "Line 84: bare 'except: pass' catches all exceptions including YAML parse errors, corrupted files, and permission errors \u2014 no logging or user feedback"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "render_error_no_context",
+      "summary": "startRender catches errors without preserving error details for user feedback",
+      "confidence": "high",
+      "suggestion": "Capture the error in the catch block and append it to renderLog so users can see what went wrong",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts"
+      ],
+      "evidence": [
+        "Line 425: bare 'catch' block sets renderStatus to 'error' but does not store the error message. The renderLog state could capture the error but doesn't."
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "error_consistency",
+      "identifier": "save_error_swallowed",
+      "summary": "Save mutation onError discards the error object, only setting status flag",
+      "confidence": "high",
+      "suggestion": "Store the error message in state so the UI can display it, e.g. setSaveError(error.message)",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts"
+      ],
+      "evidence": [
+        "Lines 154-156: onError callback receives the error but only calls setSaveStatus('error') \u2014 the error message is lost"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "naming_quality",
+      "identifier": "call_llm_summary_misleading",
+      "summary": "_call_llm_summary does not call an LLM -- it returns the first description string",
+      "confidence": "high",
+      "suggestion": "Rename to _get_first_description or _pick_summary to reflect actual behavior",
+      "related_files": [
+        "tools/view.py"
+      ],
+      "evidence": [
+        "Function name implies an LLM API call but the body is: 'return descriptions[0] if descriptions else \"(no description)\"' \u2014 it simply returns the first element"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "wide_context_value",
+      "summary": "UseTimelineStateResult bundles ~65 fields into a single context value, forcing all consumers to depend on the entire surface",
+      "confidence": "medium",
+      "suggestion": "Split into focused context providers (DataContext, PlaybackContext, EditingContext) aligned with the existing hook decomposition, so consumers only subscribe to relevant state slices",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineState.ts",
+        "viewer/src/tools/video-editor/contexts/TimelineContext.tsx"
+      ],
+      "evidence": [
+        "UseTimelineStateResult interface has 65 fields. PreviewPanel uses ~10, PropertiesPanel uses ~12, TimelineEditor uses ~15 \u2014 each consumer receives and depends on the full 65-field object"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "architectural_change"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "clip_meta_duplication",
+      "summary": "ClipMeta duplicates TimelineClip fields without adding type narrowing or safety",
+      "confidence": "high",
+      "suggestion": "Define ClipMeta as Omit<TimelineClip, 'id' | 'at'> to eliminate the duplication while preserving the same runtime shape",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/timeline-data.ts",
+        "shared/types.ts"
+      ],
+      "evidence": [
+        "ClipMeta (lines 17-37 of timeline-data.ts) has 16 fields that are identical to TimelineClip fields (minus 'id' and 'at'). No narrowing, no required fields, no validation \u2014 just a subset copy"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "abstraction_fitness",
+      "identifier": "cn_passthrough",
+      "summary": "cn() is a 1-line pass-through wrapper around clsx with no added behavior",
+      "confidence": "medium",
+      "suggestion": "Import clsx directly at call sites, or keep cn() if there's an intent to add tailwind-merge later \u2014 but document that intent",
+      "related_files": [
+        "viewer/src/shared/lib/utils.ts"
+      ],
+      "evidence": [
+        "The entire file is: import { clsx, type ClassValue } from 'clsx'; export function cn(...inputs: ClassValue[]): string { return clsx(inputs); }"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "manual_field_clamping",
+      "summary": "handleSelectedClipChange manually clamps 15+ fields with individual conditional expressions",
+      "confidence": "medium",
+      "suggestion": "Define a field constraint map (e.g. { speed: { min: 0.25, max: 4 }, hold: { min: 0.1 }, ... }) and use a generic applyPatch function that applies clamping rules from the map",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts"
+      ],
+      "evidence": [
+        "Lines 348-377: each field is handled individually with its own Math.min/Math.max logic \u2014 at uses Math.max(0), speed uses Math.min(4, Math.max(0.25)), hold uses Math.max(0.1), volume uses Math.min(1, Math.max(0)), width/height use Math.max(20), opacity uses Math.min(1, Math.max(0))"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "format_time_duplication",
+      "summary": "formatTime is defined identically in coordinate-utils.ts and as a useCallback in useTimelinePlayback.ts",
+      "confidence": "high",
+      "suggestion": "Import formatTime from coordinate-utils.ts in useTimelinePlayback.ts instead of redefining it as useCallback",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/coordinate-utils.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts"
+      ],
+      "evidence": [
+        "Both define: mins = Math.floor(time / 60), secs = Math.floor(time % 60), ms = Math.floor((time % 1) * 100) with identical template string formatting"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "dual_edit_paths",
+      "summary": "Two parallel data translation paths exist for timeline edits, creating inconsistent boundary patterns",
+      "confidence": "medium",
+      "suggestion": "Document the two paths and when each should be used (row-level for drag/resize, config-level for property changes) in a comment on commitData or in the hook's JSDoc",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts"
+      ],
+      "evidence": [
+        "applyTimelineEdit: rows -> materializeData (rowsToConfig -> resolveTimelineConfig -> configToRows). applyResolvedConfigEdit: resolvedConfig -> serializeForDisk -> buildTimelineData. Both end at commitData but traverse different intermediate representations."
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "redundant_migrate_calls",
+      "summary": "migrateToFlatTracks is called multiple times in the same data pipeline",
+      "confidence": "high",
+      "suggestion": "Have resolveTimelineConfig and configToRows accept pre-migrated config, or ensure migrateToFlatTracks short-circuits efficiently when tracks are already present",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/timeline-data.ts",
+        "shared/config-utils.ts"
+      ],
+      "evidence": [
+        "buildTimelineData line 299 calls migrateToFlatTracks, then passes result to resolveTimelineConfig which calls migrateToFlatTracks again at line 80. configToRows at line 145 also calls migrateToFlatTracks."
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "untested_hooks",
+      "summary": "Core timeline editing hooks have zero test coverage despite containing the most complex application logic",
+      "confidence": "high",
+      "suggestion": "Start with testing the pure logic within hooks by extracting testable functions (e.g., the clip property clamping in handleSelectedClipChange, the asset drop logic in handleAssetDrop) or use @testing-library/react-hooks for hook-level tests",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelineTrackManagement.ts",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts"
+      ],
+      "evidence": [
+        "useTimelineEditing (479 LOC) handles drag, resize, drop, split, delete, property changes with complex state coordination. useTimelineData (466 LOC) handles data loading, save scheduling, and state materialization. Neither has any test coverage."
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "no_integration_tests",
+      "summary": "No integration tests verify the full data round-trip (load -> edit -> save -> reload)",
+      "confidence": "high",
+      "suggestion": "Add an integration test that performs a simulated edit through the full pipeline and verifies the result matches expectations",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/timeline-data.ts",
+        "shared/serialize.ts"
+      ],
+      "evidence": [
+        "serialize.test.ts has a round-trip test for serialize -> parse -> serialize but no test verifies the full pipeline through configToRows -> user edit -> rowsToConfig -> serializeForDisk -> buildTimelineData"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "timeline_data_mixed_sync_async",
+      "summary": "timeline-data.ts mixes sync and async exports in the same public API module",
+      "confidence": "medium",
+      "suggestion": "Move loadTimelineJson and loadTranscript into timeline-api.ts where the other async fetch functions live, keeping timeline-data.ts as a purely synchronous data-transformation module.",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/timeline-data.ts"
+      ],
+      "evidence": [
+        "Sync exports: configToRows, rowsToConfig, buildTimelineData, getAssetColor, getSourceTime, inferTrackType, getNextClipId",
+        "Async exports: loadTimelineJson, loadTranscript",
+        "Consumers cannot predict whether a function from this module returns a value or a Promise"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "ai_generated_debt",
+      "identifier": "formulaic_clip_spread",
+      "summary": "handleSelectedClipChange manually spreads 15+ fields with individual clamping logic",
+      "confidence": "medium",
+      "suggestion": "Define a field-level constraint map (e.g. {speed: {min: 0.25, max: 4}, volume: {min: 0, max: 1}}) and use a generic merge-with-constraints helper, keeping the spread to a simple object merge with constraint application.",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts"
+      ],
+      "evidence": [
+        "Lines 353-373 manually spread each clip field with individual Math.max/Math.min clamping, creating a 20-line block that is formulaic and error-prone when new fields are added"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "incomplete_migration",
+      "identifier": "dual_effects_format",
+      "summary": "TimelineClip.effects supports both array and object formats as a legacy shim",
+      "confidence": "high",
+      "suggestion": "Since migrateLegacyEffects strips the effects field (line 113: delete nextClip.effects), the effects field is only needed pre-migration. Remove effects from TimelineClip type and handle it only in the migration layer as an input-only type.",
+      "related_files": [
+        "shared/types.ts",
+        "shared/config-utils.ts",
+        "shared/migrate.ts"
+      ],
+      "evidence": [
+        "types.ts line 82: effects?: TimelineEffect[] | Record<string, number> - the union type preserves both old and new formats",
+        "config-utils.ts getEffectValue handles both Array.isArray and object access patterns",
+        "migrate.ts migrateLegacyEffects converts effects to entrance/exit/continuous fields, meaning the effects field should never appear in migrated data"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "incomplete_migration",
+      "identifier": "legacy_constants_duplication",
+      "summary": "Legacy migration constants duplicated across Python/TypeScript boundary",
+      "confidence": "high",
+      "suggestion": "Add cross-reference comments in both files noting the sync peer. If the Python migration is only needed for the render.py ffmpeg path, document that explicitly and consider whether the YAML format is still needed at runtime.",
+      "related_files": [
+        "tools/common.py",
+        "shared/migrate.ts"
+      ],
+      "evidence": [
+        "common.py LEGACY_TRACK_MAP = {'video': 'V2', 'overlay': 'V3', 'audio': 'A1'}",
+        "migrate.ts LEGACY_TRACK_MAP: Record<string, string> = {video: 'V2', overlay: 'V3', audio: 'A1'}",
+        "LEGACY_ASSET_EFFECTS is also duplicated with identical content in both files"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "package_organization",
+      "identifier": "orphaned_ui_components",
+      "summary": "7 of 8 UI component files in viewer/src/shared/components/ui/ appear to be unused",
+      "confidence": "high",
+      "suggestion": "Staged plan: (1) Verify none are dynamically imported by searching for string references to component names. (2) Delete confirmed-unused files: badge.tsx, button.tsx, card.tsx, input.tsx, select.tsx, slider.tsx. (3) Evaluate popover.tsx separately since it has 174 LOC and may be referenced from orphaned panel components. (4) Run viewer build to verify no breakage.",
+      "related_files": [
+        "viewer/src/shared/components/ui/badge.tsx",
+        "viewer/src/shared/components/ui/button.tsx",
+        "viewer/src/shared/components/ui/card.tsx",
+        "viewer/src/shared/components/ui/input.tsx",
+        "viewer/src/shared/components/ui/popover.tsx",
+        "viewer/src/shared/components/ui/select.tsx",
+        "viewer/src/shared/components/ui/slider.tsx"
+      ],
+      "evidence": [
+        "Mechanical scan flagged all 7 files as orphaned with zero importers",
+        "Only collapsible.tsx appears to be actively imported in the codebase",
+        "These appear to be scaffolded UI primitives that were never integrated"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "initialization_coupling",
+      "identifier": "import_time_env_loading",
+      "summary": "common.py reads .env file and modifies os.environ at import time",
+      "confidence": "high",
+      "suggestion": "Move the .env loading into a load_env() function and call it explicitly in each tool's main() or at the start of the if __name__ == '__main__' block. This preserves the convenience while removing the import-time side effect.",
+      "related_files": [
+        "tools/common.py"
+      ],
+      "evidence": [
+        "Lines 26-32: module-level code reads .env and calls os.environ.setdefault for each key-value pair",
+        "Every tool that does 'from common import ...' triggers this side effect, making it impossible to import common without loading .env",
+        "In testing, this means environment variables are set before any test can configure its own environment"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "initialization_coupling",
+      "identifier": "mutable_module_level_cache",
+      "summary": "common.py has module-level mutable caches (_profile_cache, _profile_paths) shared across all callers",
+      "confidence": "medium",
+      "suggestion": "These caches are acceptable for CLI tools that run once and exit. Add a brief comment documenting that these caches are intentional for CLI performance and not safe for long-running processes. If testing becomes a concern, add a clear_profile_cache() function.",
+      "related_files": [
+        "tools/common.py"
+      ],
+      "evidence": [
+        "Lines 56-57: _profile_cache: dict[str, dict] = {} and _profile_paths: dict[str, Path] = {} are module-level mutable state",
+        "load_profile populates _profile_cache as a side effect; get_profile_path depends on _profile_paths being populated by load_profile",
+        "These caches persist across calls and cannot be cleared or reset, creating hidden coupling between callers"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "useTimelineData_mixed_responsibilities",
+      "summary": "useTimelineData handles data loading, saving, mutations, selection, render status, and preferences",
+      "confidence": "medium",
+      "suggestion": "Extract render management (startRender, renderStatus, renderLog, renderDirty) into a useRenderStatus hook. Extract selection state management (selectedClipId, selectedTrackId, selectedClip, selectedTrack) into a useSelectionState hook. This would leave useTimelineData focused on data loading, saving, and mutation.",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts"
+      ],
+      "evidence": [
+        "466 lines managing: React Query loading (lines 130-140), save mutation with debouncing (lines 142-198), data materialization (lines 159-181), selection state (lines 117-119, 313-338), render status (lines 121-123, 388-428), and editor preferences (lines 124, 353-378)",
+        "The hook returns 30+ values/functions, suggesting it serves too many consumers with too many concerns"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "orphaned_component_files",
+      "summary": "33 files flagged as orphaned in viewer/src/tools/video-editor/ cloud the active codebase picture",
+      "confidence": "medium",
+      "suggestion": "Verify which of these files are actually used via the component tree (imported through barrel files or dynamic imports). For confirmed dead code, either delete or move to a clearly-labeled archive directory. For used-but-not-directly-imported files, add an explicit import chain so the dependency graph reflects reality.",
+      "related_files": [
+        "viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx",
+        "viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx",
+        "viewer/src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts",
+        "viewer/src/tools/video-editor/hooks/useKeyboardShortcuts.ts"
+      ],
+      "evidence": [
+        "Mechanical scan flagged 33 files as orphaned with zero importers",
+        "These files include full component implementations (OverlayEditor 376 LOC, ClipPanel 333 LOC, AssetPanel 254 LOC) that represent significant code",
+        "Some of these may be imported dynamically or via the component tree through VideoEditorPage -> TimelineProvider -> useTimelineContext chain, but the import graph doesn't show it"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "contract_coherence",
+      "identifier": "silent_profile_load_error",
+      "summary": "load_all_profiles silently drops profiles that fail to parse",
+      "confidence": "high",
+      "suggestion": "Log a warning to stderr when a profile fails to load (e.g. print(f'Warning: failed to load {f}: {exc}', file=sys.stderr)) so that callers at least see that data was skipped.",
+      "related_files": [
+        "tools/common.py"
+      ],
+      "evidence": [
+        "Line 84: 'except Exception: pass' catches all errors including malformed YAML, permission errors, and corrupted files",
+        "The function's return type (list[dict]) gives no indication that some profiles may have been silently skipped",
+        "Callers (search.py, view.py) have no way to know if results are incomplete"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "contract_coherence",
+      "identifier": "misleading_config_signature_name",
+      "summary": "getConfigSignature returns full JSON serialization, not a compact signature or hash",
+      "confidence": "medium",
+      "suggestion": "Rename to getConfigSnapshot or serializeConfig to accurately reflect that it returns a full JSON string used for equality comparison, not a compact signature.",
+      "related_files": [
+        "shared/config-utils.ts"
+      ],
+      "evidence": [
+        "Line 70: 'return JSON.stringify(config)' - returns the complete JSON representation of the entire config",
+        "The name 'signature' implies a digest/hash/fingerprint, but this is the full serialized content",
+        "Used for equality comparison (timeline-data.ts line 314, useTimelineData.ts line 152) - the function works correctly for this purpose but the name is misleading"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "logic_clarity",
+      "identifier": "duplicated_formatTime",
+      "summary": "formatTime function duplicated between useTimelinePlayback.ts and coordinate-utils.ts",
+      "confidence": "high",
+      "suggestion": "Remove the formatTime callback from useTimelinePlayback and import the one from coordinate-utils.ts instead. Since coordinate-utils already exports it, just wire through the existing export.",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts",
+        "viewer/src/tools/video-editor/lib/coordinate-utils.ts"
+      ],
+      "evidence": [
+        "useTimelinePlayback.ts lines 37-41: formatTime callback with identical mins/secs/ms logic",
+        "coordinate-utils.ts lines 16-20: formatTime export with identical logic",
+        "Both produce the same 'M:SS.CC' format string"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "duplicate_action_drag_state",
+      "summary": "ActionDragState interface is defined identically in both useTimelineData.ts and useCrossTrackDrag.ts",
+      "confidence": "high",
+      "suggestion": "Delete the definition from useCrossTrackDrag.ts and import ActionDragState from useTimelineData.ts, which already exports it.",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts"
+      ],
+      "evidence": [
+        "useTimelineData.ts lines 55-61: ActionDragState with rowId, initialStart, initialEnd, latestStart, latestEnd",
+        "useCrossTrackDrag.ts lines 8-14: identical ActionDragState definition",
+        "These are separate types that happen to be structurally identical - changes to one won't propagate to the other"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "unsafe_as_never_cast",
+      "summary": "rowsToConfig uses 'as never' to bypass TypeScript's type checking for dynamic field assignment",
+      "confidence": "medium",
+      "suggestion": "The dynamic field copy loop is a reasonable pattern. Add a brief comment explaining why the cast is safe: the loop iterates over TIMELINE_CLIP_FIELDS which are keyof TimelineClip, so the assignment is type-safe at runtime even though TypeScript's index-signature narrowing cannot prove it.",
+      "related_files": [
+        "viewer/src/tools/video-editor/lib/timeline-data.ts"
+      ],
+      "evidence": [
+        "Line 278: serializedClip[field] = value as never - this silences all type checking on the assignment",
+        "The same pattern appears in serialize.ts for serializeClipForDisk and serializeTrackForDisk with 'as TimelineClip' casts"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "review_quality": {
+    "batch_count": 18,
+    "dimension_coverage": 0.05,
+    "evidence_density": 4.625,
+    "high_score_missing_issue_note": 0
+  },
+  "context_updates": {
+    "cross_module_architecture": {
+      "add": [
+        {
+          "header": "Clean shared boundary with correct dependency direction",
+          "description": "shared/ is imported by both remotion/ and viewer/ with no reverse dependencies. Types, config-utils, editor-utils, and migrate form a cohesive shared layer. The UrlResolver parameter on resolveTimelineConfig enables different resolution strategies per consumer.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Refactored hook decomposition with composition hub",
+          "description": "useTimelineState was split into useTimelineData, useTimelineEditing, useTimelinePlayback, and useTimelineTrackManagement. The parent hook composes them cleanly but the resulting context surface remains very wide at ~65 fields.",
+          "settled": true,
+          "positive": false
+        }
+      ],
+      "remove": [
+        "render.py re-declares clip_src_duration, duplicating clip_source_duration from common.py"
+      ]
+    },
+    "convention_outlier": {
+      "add": [
+        {
+          "header": "Consistent language-appropriate naming conventions",
+          "description": "TypeScript uses camelCase for functions/variables and PascalCase for types/components consistently. Python uses snake_case throughout. No cross-language naming drift within either side.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "error_consistency": {
+      "add": [
+        {
+          "header": "Good error handling at API boundaries",
+          "description": "timeline-api.ts, config-utils.ts, and serialize.ts consistently throw descriptive errors at I/O and data boundaries. This provides a solid foundation for error propagation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Application layer reduces errors to status flags",
+          "description": "startRender, saveMutation, and upload handling all catch errors and set status flags without preserving the error message. Users see 'error' state but cannot diagnose the cause without checking browser console.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "naming_quality": {
+      "add": [
+        {
+          "header": "Domain-specific names in shared utilities",
+          "description": "Functions like splitClipAtPlayhead, toggleClipMute, canSplitClipAtTime use precise video-editing vocabulary that maps directly to user-visible operations. Hook names (useTimelineEditing, useTimelinePlayback) clearly communicate their responsibility boundary.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "abstraction_fitness": {
+      "add": [
+        {
+          "header": "Hook interfaces document earned contracts",
+          "description": "UseTimelineEditingArgs and UseTimelineTrackManagementArgs make dependencies between hooks explicit. This is genuinely useful abstraction that aids comprehension and enables independent testing.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Shared types are lean and purpose-built",
+          "description": "TimelineClip, TrackDefinition, TimelineConfig, ResolvedTimelineConfig are minimal types that model the domain without excess ceremony. No one-implementation interfaces or unused generics.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "low_level_elegance": {
+      "add": [
+        {
+          "header": "Clean control flow in shared utilities",
+          "description": "splitClipAtPlayhead, rowsToConfig, and configToRows have well-structured control flow with clear bifurcation between hold and media clips, proper rounding, and explicit guard clauses.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Refactored hooks have balanced extraction",
+          "description": "The 4 focused hooks (data, editing, playback, track management) each have appropriate scope \u2014 no micro-fragmentation. Helper extraction in coordinate-utils.ts is well-calibrated.",
+          "settled": true,
+          "positive": true
+        }
+      ],
+      "remove": [
+        "useTimelineState is a 966-line function body containing ~30 callback definitions with mixed concerns"
+      ]
+    },
+    "mid_level_elegance": {
+      "add": [
+        {
+          "header": "Explicit hook dependency injection via typed args",
+          "description": "useTimelineEditing and useTimelineTrackManagement receive dependencies via typed args interfaces (UseTimelineEditingArgs, UseTimelineTrackManagementArgs). This makes handoffs between hooks predictable and testable.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean debounced save composition",
+          "description": "The save pipeline (scheduleSave -> saveTimeline -> saveMutation with signature-based deduplication) is well-composed with appropriate timeout management and error propagation.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "test_strategy": {
+      "add": [
+        {
+          "header": "Well-structured tests for shared domain functions",
+          "description": "config-utils, editor-utils, migrate, serialize, timeline-data, and coordinate-utils all have comprehensive unit tests with proper factories, edge case coverage, and immutability verification. Tests are behavior-focused rather than implementation-coupled.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Vitest configured at two levels",
+          "description": "Root vitest.config.ts covers shared/ tests. viewer/vitest.config.ts covers both shared and viewer source tests with proper path aliases. Test infrastructure is properly set up.",
+          "settled": true,
+          "positive": true
+        }
+      ],
+      "remove": [
+        "No test runner, test config, or test files exist anywhere in the project",
+        "Core domain functions in shared/ (split, migrate, serialize, parse) have zero test coverage despite being pure and highly testable"
+      ]
+    },
+    "api_surface_coherence": {
+      "add": [
+        {
+          "header": "Consistent load/save naming in Python tools",
+          "description": "common.py follows a clear load_X/save_X pattern for all persistence operations (json, yaml, timeline, asset_registry), making the API predictable for tool authors.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean async API in timeline-api.ts",
+          "description": "All four functions in timeline-api.ts are async and follow consistent error handling (check response.ok, throw Error). The module has a single concern: HTTP communication with the dev server.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Well-typed hook parameter interfaces",
+          "description": "useTimelineEditing and useTimelineTrackManagement define explicit TypeScript interfaces for their arguments, making the contract between hooks clear even though parameter counts are high.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "authorization_consistency": {
+      "add": [
+        {
+          "header": "Single-user local tool without auth needs",
+          "description": "This is a local development video editor with a Vite dev server. There are no multi-user features, no database, and no protected resources requiring auth patterns.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "API keys properly loaded from environment",
+          "description": "External service credentials (OpenAI, Resemble AI, fal.ai) are read from .env via common.py's auto-load mechanism, never hardcoded in source.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "ai_generated_debt": {
+      "add": [
+        {
+          "header": "Purposeful section-header comments in common.py",
+          "description": "Section dividers like '-- paths --', '-- subprocess helpers --' provide navigation without restating any code. This is a positive pattern for file organization.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Targeted logging without noise",
+          "description": "console.warn is used only for actionable warnings (duplicate clip IDs in timeline-data.ts). No entry/exit logging, no full object dumps.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No pass-through wrappers without logic",
+          "description": "All wrapper-like functions add meaningful behavior. resolve_asset in render.py delegates to resolve_asset_path but this is the only such case and adds registry parameter threading.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "incomplete_migration": {
+      "add": [
+        {
+          "header": "Well-tested migration layer in shared/migrate.ts",
+          "description": "migrateToFlatTracks has comprehensive tests covering legacy-to-modern conversion, background clip creation, clipType inference, and idempotency. This is a positive migration pattern.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent TypeScript throughout viewer",
+          "description": "All viewer source files use .ts/.tsx extensions with no mixed JS/TS files, indicating TypeScript migration is complete for the frontend.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Active dual-format YAML/JSON timeline support",
+          "description": "Python tools still reference timeline.yaml while TypeScript operates on timeline.json. tools/migrate_yaml_to_json.py bridges the gap, suggesting the YAML format is still the primary authoring format.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "package_organization": {
+      "add": [
+        {
+          "header": "Clear domain-aligned top-level structure",
+          "description": "The five top-level directories (tools/, shared/, viewer/, remotion/, scripts/) each map to a distinct domain capability with minimal overlap. A new developer can predict where to find things.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent component organization in viewer",
+          "description": "viewer/src/tools/video-editor/ follows a standard React project layout with components/, hooks/, lib/, contexts/, and pages/ directories that match common conventions.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "initialization_coupling": {
+      "add": [
+        {
+          "header": "Deferred window access in load-config.ts",
+          "description": "remotion/src/load-config.ts accesses window.remotion_staticBase and window.remotion_staticFiles inside function bodies rather than at module scope, avoiding import-time browser API coupling.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No circular import dependencies",
+          "description": "The codebase has clean import direction: shared/ is imported by both remotion/ and viewer/, with no reverse dependencies. Python tools import from common.py in one direction.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Static path constants at module scope acceptable",
+          "description": "ROOT, PROFILES_DIR, TIMELINE_JSON etc. in common.py are computed from __file__ at import time but are deterministic and immutable - this is standard Python practice for path constants.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "design_coherence": {
+      "add": [
+        {
+          "header": "Successful hook decomposition pattern",
+          "description": "useTimelineState was split into useTimelineData, useTimelineEditing, useTimelinePlayback, and useTimelineTrackManagement, each with typed interfaces. This is a strong design decision that makes responsibilities traceable.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Shared utility extraction to shared/",
+          "description": "Domain operations (splitClipAtPlayhead, toggleClipMute, addTrack, etc.) were extracted to shared/editor-utils.ts with comprehensive tests, eliminating duplication between remotion and viewer.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent config round-trip architecture",
+          "description": "The configToRows/rowsToConfig pattern provides a clean bidirectional transformation between timeline config and editor state, used consistently throughout the editing pipeline.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "contract_coherence": {
+      "add": [
+        {
+          "header": "Consistent throw-on-error in TS HTTP layer",
+          "description": "timeline-api.ts functions all throw Error on !response.ok with descriptive messages. This is a reliable contract that consumers can depend on.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Honest nullable returns in Python helpers",
+          "description": "load_profile returns dict | None and get_openai_client returns None when API key is missing. These nullable returns are reflected in type annotations and handled by callers.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Structural sharing in updateClipInConfig",
+          "description": "updateClipInConfig returns the same config reference when no clip matches, enabling cheap identity comparisons. This is a deliberate contract choice that is consistent with immutable data patterns.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "logic_clarity": {
+      "add": [
+        {
+          "header": "Consistent guard clause pattern in hooks",
+          "description": "All editing and track management hooks use early-return guard clauses to check for null data/config before proceeding, making the happy path immediately visible.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean pure functions in shared utilities",
+          "description": "Functions in config-utils.ts, editor-utils.ts, and coordinate-utils.ts are pure with direct control flow, no hidden side effects, and no unnecessary branching.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "type_safety": {
+      "add": [
+        {
+          "header": "Comprehensive domain types in shared/types.ts",
+          "description": "The 130-line types.ts file defines the full domain model with appropriate use of optional fields, union types (ClipType, TrackKind, TrackBlendMode), and resolved/unresolved type variants. This serves as reliable documentation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Modern Python type hints in common.py",
+          "description": "common.py uses Python 3.10+ type syntax (dict[str, Any], Path | None, list[str]) consistently across its public API, providing useful type documentation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Typed hook interfaces for cross-hook contracts",
+          "description": "UseTimelineEditingArgs, UseTimelineTrackManagementArgs, and UseTimelineSyncOptions all define explicit interfaces for hook parameters, making the contracts between hooks verifiable by the compiler.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  },
+  "review_scope": {
+    "reviewed_files_count": 0,
+    "successful_batch_count": 18,
+    "full_sweep_included": false,
+    "total_files": 59,
+    "imported_dimensions": [
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "contract_coherence",
+      "convention_outlier",
+      "cross_module_architecture",
+      "design_coherence",
+      "error_consistency",
+      "incomplete_migration",
+      "initialization_coupling",
+      "logic_clarity",
+      "low_level_elegance",
+      "mid_level_elegance",
+      "naming_quality",
+      "package_organization",
+      "test_strategy",
+      "type_safety"
+    ]
+  },
+  "provenance": {
+    "kind": "blind_review_batch_import",
+    "blind": true,
+    "runner": "dry-run",
+    "run_stamp": "20260324_052228",
+    "created_at": "2026-03-24T05:30:25+00:00",
+    "batch_count": 18,
+    "batch_indexes": [
+      1,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "packet_path": "/Users/peteromalley/Documents/announcement-video/.desloppify/review_packet_blind.json",
+    "packet_sha256": "6f56fd1dc716d2b67bda2817f4aaeaf3b020fca06a6d9adde27054f3612dc0d7"
+  },
+  "assessment_coverage": {
+    "scored_dimensions": [
+      "naming_quality",
+      "logic_clarity",
+      "type_safety",
+      "contract_coherence",
+      "error_consistency",
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "high_level_elegance",
+      "mid_level_elegance",
+      "low_level_elegance",
+      "cross_module_architecture",
+      "initialization_coupling",
+      "convention_outlier",
+      "dependency_health",
+      "test_strategy",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "incomplete_migration",
+      "package_organization",
+      "design_coherence"
+    ],
+    "selected_dimensions": [
+      "naming_quality",
+      "logic_clarity",
+      "type_safety",
+      "contract_coherence",
+      "error_consistency",
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "high_level_elegance",
+      "mid_level_elegance",
+      "low_level_elegance",
+      "cross_module_architecture",
+      "initialization_coupling",
+      "convention_outlier",
+      "dependency_health",
+      "test_strategy",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "incomplete_migration",
+      "package_organization",
+      "design_coherence"
+    ],
+    "imported_dimensions": [
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "contract_coherence",
+      "convention_outlier",
+      "cross_module_architecture",
+      "design_coherence",
+      "error_consistency",
+      "incomplete_migration",
+      "initialization_coupling",
+      "logic_clarity",
+      "low_level_elegance",
+      "mid_level_elegance",
+      "naming_quality",
+      "package_organization",
+      "test_strategy",
+      "type_safety"
+    ],
+    "missing_dimensions": [
+      "high_level_elegance",
+      "dependency_health"
+    ]
+  }
+}

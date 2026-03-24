@@ -1,0 +1,90 @@
+{
+  "batch": "convention_outlier",
+  "batch_index": 3,
+  "assessments": {"convention_outlier": 70.0},
+  "dimension_notes": {
+    "convention_outlier": {
+      "evidence": [
+        "PreviewPanel siblings mix default and named exports: OverlayEditor and RemotionPreview use 'export default', while PreviewPanel uses 'export function' — inconsistent within the same directory",
+        "PropertiesPanel siblings mix default and named exports: AssetPanel uses 'export default function', while ClipPanel, TrackPanel, and PropertiesPanel use named exports — same pattern as PreviewPanel",
+        "Asset type detection logic exists in two forms: inferTrackType in timeline-data.ts (extension-based, returns TrackKind) and infer_asset_type in common.py (extension-based, returns string type like 'image', 'audio', 'video') — different function names and return types for conceptually similar logic",
+        "roundTimelineValue is defined identically in both editor-utils.ts (exported) and migrate.ts (local const) — same implementation, same default digits=4",
+        "formatTime is defined both as a standalone export in coordinate-utils.ts and as a useCallback in useTimelinePlayback.ts — identical formatting logic",
+        "TypeScript code consistently uses camelCase for functions/variables and PascalCase for types/components — good consistency within each language",
+        "Python code consistently uses snake_case — appropriate for the language"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "convention_outlier": {
+      "dimension_character": "The codebase generally follows language-appropriate naming conventions (camelCase in TypeScript, snake_case in Python) consistently. The main convention drift is in export patterns — sibling component files inconsistently use default vs named exports within the same directory. There are also a few instances of duplicated utility functions (roundTimelineValue, formatTime) across modules where one canonical location should exist.",
+      "score_rationale": "Naming conventions within each language are consistent. The export pattern inconsistency across sibling components is a recurring pattern affecting 2 directories. The duplicated utility functions are small but represent convention drift where one module follows a different protocol than its siblings. Score of 70 reflects these moderate inconsistencies against otherwise clean conventions."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "convention_outlier",
+      "identifier": "mixed_export_preview",
+      "summary": "PreviewPanel siblings mix default and named exports",
+      "related_files": ["viewer/src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx", "viewer/src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx", "viewer/src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx"],
+      "evidence": ["OverlayEditor uses 'export default function', RemotionPreview uses 'export default RemotionPreview' (forwardRef), while PreviewPanel uses 'export function PreviewPanel' — three different export patterns in the same directory"],
+      "suggestion": "Standardize on named exports for all components in this directory, matching the PreviewPanel pattern",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "mixed_export_properties",
+      "summary": "PropertiesPanel siblings mix default and named exports",
+      "related_files": ["viewer/src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx", "viewer/src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx", "viewer/src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx"],
+      "evidence": ["AssetPanel uses 'export default function AssetPanel', while ClipPanel uses 'export function ClipPanel' and PropertiesPanel uses 'export function PropertiesPanel'"],
+      "suggestion": "Standardize AssetPanel to use named export to match its siblings",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "duplicate_round_timeline_value",
+      "summary": "roundTimelineValue defined identically in editor-utils.ts and migrate.ts",
+      "related_files": ["shared/editor-utils.ts", "shared/migrate.ts"],
+      "evidence": ["shared/editor-utils.ts line 6: exported roundTimelineValue with (value, digits=4). shared/migrate.ts line 44: local const roundTimelineValue with identical implementation"],
+      "suggestion": "Import roundTimelineValue from editor-utils.ts in migrate.ts instead of re-defining it",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "duplicate_format_time",
+      "summary": "formatTime defined as standalone function and as useCallback with identical logic",
+      "related_files": ["viewer/src/tools/video-editor/lib/coordinate-utils.ts", "viewer/src/tools/video-editor/hooks/useTimelinePlayback.ts"],
+      "evidence": ["coordinate-utils.ts line 16 exports formatTime as a pure function. useTimelinePlayback.ts line 37 defines formatTime as useCallback with identical formatting logic"],
+      "suggestion": "Import formatTime from coordinate-utils.ts in useTimelinePlayback instead of redefining it",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Export pattern inconsistency likely stems from different authors or AI-generation passes that didn't standardize", "Utility duplication from incremental development where needed functions were copied rather than extracted"],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "convention_outlier": {
+      "add": [
+        {
+          "header": "Consistent language-appropriate naming conventions",
+          "description": "TypeScript uses camelCase for functions/variables and PascalCase for types/components consistently. Python uses snake_case throughout. No cross-language naming drift within either side.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

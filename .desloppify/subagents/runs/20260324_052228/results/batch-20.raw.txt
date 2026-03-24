@@ -1,0 +1,88 @@
+{
+  "batch": "type_safety",
+  "batch_index": 20,
+  "assessments": {"type_safety": 81.5},
+  "dimension_notes": {
+    "type_safety": {
+      "evidence": [
+        "shared/types.ts defines comprehensive types for the domain: TimelineClip, TrackDefinition, ResolvedTimelineConfig, etc. with appropriate use of optional fields",
+        "Python tools have no type annotations on most functions in view.py, search.py, ingest.py beyond the common.py signatures",
+        "common.py uses modern Python type hints: dict[str, Any], list[str], Path | None, etc.",
+        "ClipMeta interface in timeline-data.ts mirrors TimelineClip fields without using Pick/Omit, creating a parallel type that could drift",
+        "The 'as never' cast in rowsToConfig line 278 (serializedClip[field] = value as never) bypasses type checking for dynamic field assignment",
+        "serializeClipForDisk and serializeTrackForDisk cast Partial<Record<...>> to full types via 'as TimelineClip' and 'as TrackDefinition' - these are safe given the preceding field-copy loop but are unsafe in principle",
+        "uploadAssetFile in timeline-api.ts returns Promise<unknown> rather than a typed response",
+        "ActionDragState is defined in both useTimelineData.ts and useCrossTrackDrag.ts as separate but identical interfaces",
+        "render.py parse_resolution returns tuple[int, int] which is well-typed"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "medium"
+    }
+  },
+  "dimension_judgment": {
+    "type_safety": {
+      "dimension_character": "The TypeScript layer has a well-defined type hierarchy rooted in shared/types.ts that serves as reliable documentation of the domain model. Type annotations are comprehensive in the shared modules and hooks. However, there are unsafe type assertions in serialization code, a parallel ClipMeta interface that mirrors TimelineClip, duplicate ActionDragState definitions, and some Python tools lack type annotations entirely. The Python side of common.py uses modern type hints, but the tool scripts are largely untyped.",
+      "score_rationale": "Scoring at 81.5, slightly above the 80 anchor, because the TypeScript types are generally trustworthy and the shared type definitions are well-structured. The 'as never' and 'as Type' casts in serialization code, the parallel ClipMeta definition, and the duplicate ActionDragState create pockets where a developer cannot fully trust the type system. The untyped Python tool scripts are a secondary concern since they are CLI entry points."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "type_safety",
+      "identifier": "duplicate_action_drag_state",
+      "summary": "ActionDragState interface is defined identically in both useTimelineData.ts and useCrossTrackDrag.ts",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts"
+      ],
+      "evidence": [
+        "useTimelineData.ts lines 55-61: ActionDragState with rowId, initialStart, initialEnd, latestStart, latestEnd",
+        "useCrossTrackDrag.ts lines 8-14: identical ActionDragState definition",
+        "These are separate types that happen to be structurally identical - changes to one won't propagate to the other"
+      ],
+      "suggestion": "Delete the definition from useCrossTrackDrag.ts and import ActionDragState from useTimelineData.ts, which already exports it.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "unsafe_as_never_cast",
+      "summary": "rowsToConfig uses 'as never' to bypass TypeScript's type checking for dynamic field assignment",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts"],
+      "evidence": [
+        "Line 278: serializedClip[field] = value as never - this silences all type checking on the assignment",
+        "The same pattern appears in serialize.ts for serializeClipForDisk and serializeTrackForDisk with 'as TimelineClip' casts"
+      ],
+      "suggestion": "The dynamic field copy loop is a reasonable pattern. Add a brief comment explaining why the cast is safe: the loop iterates over TIMELINE_CLIP_FIELDS which are keyof TimelineClip, so the assignment is type-safe at runtime even though TypeScript's index-signature narrowing cannot prove it.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {},
+  "context_updates": {
+    "type_safety": {
+      "add": [
+        {
+          "header": "Comprehensive domain types in shared/types.ts",
+          "description": "The 130-line types.ts file defines the full domain model with appropriate use of optional fields, union types (ClipType, TrackKind, TrackBlendMode), and resolved/unresolved type variants. This serves as reliable documentation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Modern Python type hints in common.py",
+          "description": "common.py uses Python 3.10+ type syntax (dict[str, Any], Path | None, list[str]) consistently across its public API, providing useful type documentation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Typed hook interfaces for cross-hook contracts",
+          "description": "UseTimelineEditingArgs, UseTimelineTrackManagementArgs, and UseTimelineSyncOptions all define explicit interfaces for hook parameters, making the contracts between hooks verifiable by the compiler.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

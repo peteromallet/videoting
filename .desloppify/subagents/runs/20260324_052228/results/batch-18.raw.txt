@@ -1,0 +1,86 @@
+{
+  "batch": "contract_coherence",
+  "batch_index": 18,
+  "assessments": {"contract_coherence": 84.0},
+  "dimension_notes": {
+    "contract_coherence": {
+      "evidence": [
+        "config-utils.ts resolveTimelineConfig throws Error when clip references missing asset (line 99) - clear error contract that is tested",
+        "timeline-api.ts fetchJson, saveTimelineConfig, uploadAssetFile all throw on !response.ok - consistent error contract across the HTTP layer",
+        "common.py load_profile returns dict | None - contract is honest about nullable return",
+        "common.py get_openai_client returns None when no API key - honest nullable contract",
+        "serialize.ts validateSerializedConfig throws on invalid keys - documented via tests",
+        "editor-utils.ts updateClipInConfig returns same config reference when no match (structural sharing) - clever but contract is clear from return type",
+        "render.py resolve_asset is a thin wrapper around resolve_asset_path that just passes registry - the name accurately reflects its role",
+        "common.py load_all_profiles silently catches exceptions (line 84: except Exception: pass) when loading individual profiles, which means malformed profiles are silently dropped"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "load_all_profiles silently drops malformed profiles; getConfigSignature contract is misleading - it returns full JSON serialization, not a hash"
+    }
+  },
+  "dimension_judgment": {
+    "contract_coherence": {
+      "dimension_character": "Functions generally honor their stated contracts. The TypeScript layer has consistent throw-on-error behavior with good test coverage. The Python layer is mostly honest about nullable returns. The main contract concerns are load_all_profiles silently swallowing parse errors and getConfigSignature returning a full JSON string rather than a digest - the name implies a compact signature.",
+      "score_rationale": "Scoring at 84, above the 80 anchor, because contracts are mostly trustworthy. A developer can predict error behavior across the HTTP layer and the config resolution pipeline. The silent error swallowing in load_all_profiles and the misleading getConfigSignature name are specific, addressable issues that prevent a higher score."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "contract_coherence",
+      "identifier": "silent_profile_load_error",
+      "summary": "load_all_profiles silently drops profiles that fail to parse",
+      "related_files": ["tools/common.py"],
+      "evidence": [
+        "Line 84: 'except Exception: pass' catches all errors including malformed YAML, permission errors, and corrupted files",
+        "The function's return type (list[dict]) gives no indication that some profiles may have been silently skipped",
+        "Callers (search.py, view.py) have no way to know if results are incomplete"
+      ],
+      "suggestion": "Log a warning to stderr when a profile fails to load (e.g. print(f'Warning: failed to load {f}: {exc}', file=sys.stderr)) so that callers at least see that data was skipped.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "contract_coherence",
+      "identifier": "misleading_config_signature_name",
+      "summary": "getConfigSignature returns full JSON serialization, not a compact signature or hash",
+      "related_files": ["shared/config-utils.ts"],
+      "evidence": [
+        "Line 70: 'return JSON.stringify(config)' - returns the complete JSON representation of the entire config",
+        "The name 'signature' implies a digest/hash/fingerprint, but this is the full serialized content",
+        "Used for equality comparison (timeline-data.ts line 314, useTimelineData.ts line 152) - the function works correctly for this purpose but the name is misleading"
+      ],
+      "suggestion": "Rename to getConfigSnapshot or serializeConfig to accurately reflect that it returns a full JSON string used for equality comparison, not a compact signature.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {},
+  "context_updates": {
+    "contract_coherence": {
+      "add": [
+        {
+          "header": "Consistent throw-on-error in TS HTTP layer",
+          "description": "timeline-api.ts functions all throw Error on !response.ok with descriptive messages. This is a reliable contract that consumers can depend on.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Honest nullable returns in Python helpers",
+          "description": "load_profile returns dict | None and get_openai_client returns None when API key is missing. These nullable returns are reflected in type annotations and handled by callers.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Structural sharing in updateClipInConfig",
+          "description": "updateClipInConfig returns the same config reference when no clip matches, enabling cheap identity comparisons. This is a deliberate contract choice that is consistent with immutable data patterns.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

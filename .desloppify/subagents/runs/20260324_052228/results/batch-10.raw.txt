@@ -1,0 +1,86 @@
+{
+  "batch": "test_strategy",
+  "batch_index": 10,
+  "assessments": {"test_strategy": 52.0},
+  "dimension_notes": {
+    "test_strategy": {
+      "evidence": [
+        "Test runner exists: vitest is configured at project root (vitest.config.ts) covering shared/**/*.test.ts, and in viewer/ (viewer/vitest.config.ts) covering both shared and viewer source tests",
+        "Test files exist for core domain functions: shared/config-utils.test.ts (195 lines, 9 describes), shared/editor-utils.test.ts (237 lines, 8 describes), shared/migrate.test.ts (126 lines, 2 describes), shared/serialize.test.ts (113 lines, 4 describes)",
+        "viewer/src/tools/video-editor/lib/timeline-data.test.ts (296 lines) tests configToRows, rowsToConfig, resolveTimelineConfig, buildTimelineData, getAssetColor, inferTrackType, getNextClipId — comprehensive coverage of the data layer",
+        "viewer/src/tools/video-editor/lib/coordinate-utils.test.ts (165 lines) tests formatTime, updateClipOrder, buildTrackClipOrder, moveClipBetweenTracks, getCompatibleTrackId, buildRowTrackPatches — comprehensive coverage of coordinate utilities",
+        "Tests are well-structured with proper test factories (makeClip, makeConfig, makeRegistry), clear describe/it blocks, and test immutability verification",
+        "No tests for any React hooks (useTimelineData, useTimelineEditing, useTimelinePlayback, useTimelineTrackManagement, useCrossTrackDrag) — the most complex application logic is untested",
+        "No tests for any React components (PreviewPanel, PropertiesPanel, TimelineEditor, etc.)",
+        "No tests for Python tools (common.py, render.py, view.py, etc.)",
+        "No integration tests that verify the full data round-trip (load -> edit -> save -> reload)",
+        "Previously flagged 'No test runner, test config, or test files exist anywhere in the project' is RESOLVED — tests and vitest config now exist"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high"
+    }
+  },
+  "dimension_judgment": {
+    "test_strategy": {
+      "dimension_character": "The codebase has made significant progress from having zero tests to having comprehensive unit tests for all shared domain functions and viewer utility modules. The test quality is good: proper factories, immutability checks, edge case coverage. However, the most complex application logic — the React hooks that orchestrate timeline editing — has no test coverage at all. Components and Python tools are also untested. The testing strategy covers the foundation but not the application layer.",
+      "score_rationale": "The presence of well-structured tests for shared/config-utils, shared/editor-utils, shared/migrate, shared/serialize, timeline-data, and coordinate-utils represents a substantial improvement from zero coverage. However, critical paths through the hooks (useTimelineEditing, useTimelineData) remain untested. These hooks contain the most complex state management and editing logic. The absence of any component or integration tests means defects in the orchestration layer can only be caught manually. Score of 52 reflects good foundation coverage offset by significant gaps in application-layer testing."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "test_strategy",
+      "identifier": "untested_hooks",
+      "summary": "Core timeline editing hooks have zero test coverage despite containing the most complex application logic",
+      "related_files": [
+        "viewer/src/tools/video-editor/hooks/useTimelineEditing.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelineData.ts",
+        "viewer/src/tools/video-editor/hooks/useTimelineTrackManagement.ts",
+        "viewer/src/tools/video-editor/hooks/useCrossTrackDrag.ts"
+      ],
+      "evidence": ["useTimelineEditing (479 LOC) handles drag, resize, drop, split, delete, property changes with complex state coordination. useTimelineData (466 LOC) handles data loading, save scheduling, and state materialization. Neither has any test coverage."],
+      "suggestion": "Start with testing the pure logic within hooks by extracting testable functions (e.g., the clip property clamping in handleSelectedClipChange, the asset drop logic in handleAssetDrop) or use @testing-library/react-hooks for hook-level tests",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "no_integration_tests",
+      "summary": "No integration tests verify the full data round-trip (load -> edit -> save -> reload)",
+      "related_files": ["viewer/src/tools/video-editor/lib/timeline-data.ts", "shared/serialize.ts"],
+      "evidence": ["serialize.test.ts has a round-trip test for serialize -> parse -> serialize but no test verifies the full pipeline through configToRows -> user edit -> rowsToConfig -> serializeForDisk -> buildTimelineData"],
+      "suggestion": "Add an integration test that performs a simulated edit through the full pipeline and verifies the result matches expectations",
+      "confidence": "high",
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Tests were recently added for pure domain functions but the React hook layer has not yet been addressed", "Hook testing requires either extraction of pure logic or a React testing environment which adds setup complexity"],
+    "likely_symptoms": [],
+    "possible_false_positives": ["No test runner, test config, or test files exist anywhere in the project — RESOLVED, vitest config and 6 test files now exist", "Core domain functions in shared/ have zero test coverage — RESOLVED, all 4 shared modules have test files"]
+  },
+  "context_updates": {
+    "test_strategy": {
+      "add": [
+        {
+          "header": "Well-structured tests for shared domain functions",
+          "description": "config-utils, editor-utils, migrate, serialize, timeline-data, and coordinate-utils all have comprehensive unit tests with proper factories, edge case coverage, and immutability verification. Tests are behavior-focused rather than implementation-coupled.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Vitest configured at two levels",
+          "description": "Root vitest.config.ts covers shared/ tests. viewer/vitest.config.ts covers both shared and viewer source tests with proper path aliases. Test infrastructure is properly set up.",
+          "settled": true,
+          "positive": true
+        }
+      ],
+      "remove": [
+        "No test runner, test config, or test files exist anywhere in the project",
+        "Core domain functions in shared/ (split, migrate, serialize, parse) have zero test coverage despite being pure and highly testable"
+      ]
+    }
+  }
+}

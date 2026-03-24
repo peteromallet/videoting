@@ -1,291 +1,694 @@
 {
   "version": 8,
   "created": "2026-03-24T04:42:31+00:00",
-  "updated": "2026-03-24T04:42:42+00:00",
+  "updated": "2026-03-24T05:32:06+00:00",
   "queue_order": [
-    "review::.::holistic::abstraction_fitness::bloated_timeline_context",
-    "review::.::holistic::abstraction_fitness::cn_passthrough_wrapper",
-    "review::.::holistic::abstraction_fitness::parallel_clip_meta_type",
-    "review::.::holistic::ai_generated_debt::duplicated_download_function",
-    "review::.::holistic::ai_generated_debt::verbatim_api_error_handling_tts",
-    "review::.::holistic::api_surface_coherence::divergent_config_loading_apis",
-    "review::.::holistic::api_surface_coherence::duplicate_clip_duration_function",
-    "review::.::holistic::api_surface_coherence::sync_async_mixing_timeline_data",
-    "review::.::holistic::contract_coherence::parallel_clip_meta_type",
-    "review::.::holistic::contract_coherence::unsafe_cast_serialize_clip",
-    "review::.::holistic::convention_outlier::detect_type_duplication_convention",
-    "review::.::holistic::convention_outlier::mixed_exports_preview_panel",
-    "review::.::holistic::convention_outlier::mixed_exports_properties_panel",
-    "review::.::holistic::cross_module_architecture::cross_language_migration_duplication",
-    "review::.::holistic::cross_module_architecture::duplicated_config_resolution",
-    "review::.::holistic::cross_module_architecture::render_redeclares_clip_src_duration",
+    "subjective::design_coherence",
+    "subjective::error_consistency",
+    "subjective::logic_clarity",
+    "review::.::holistic::high_level_elegance::monolithic_timeline_state_hook",
+    "review::.::holistic::abstraction_fitness::clip_meta_duplication",
+    "review::.::holistic::abstraction_fitness::cn_passthrough",
+    "review::.::holistic::abstraction_fitness::wide_context_value",
+    "review::.::holistic::ai_generated_debt::formulaic_clip_spread",
+    "review::.::holistic::api_surface_coherence::timeline_data_mixed_sync_async",
+    "review::.::holistic::contract_coherence::misleading_config_signature_name",
+    "review::.::holistic::contract_coherence::silent_profile_load_error",
+    "review::.::holistic::convention_outlier::duplicate_format_time",
+    "review::.::holistic::convention_outlier::duplicate_round_timeline_value",
+    "review::.::holistic::convention_outlier::mixed_export_preview",
+    "review::.::holistic::convention_outlier::mixed_export_properties",
+    "review::.::holistic::cross_module_architecture::double_migration_call",
+    "review::.::holistic::cross_module_architecture::duplicate_migration_constants",
+    "review::.::holistic::cross_module_architecture::wide_context_interface",
     "review::.::holistic::dependency_health::fragile_file_references",
     "review::.::holistic::dependency_health::phantom_clsx_dependency",
     "review::.::holistic::dependency_health::unused_dnd_kit_deps",
-    "review::.::holistic::design_coherence::collapsible_orphaned_duplicate",
-    "review::.::holistic::design_coherence::duplicated_resolve_timeline_config",
-    "review::.::holistic::design_coherence::duplicated_serialization_in_rows_to_config",
-    "review::.::holistic::design_coherence::monolithic_use_timeline_state",
-    "review::.::holistic::design_coherence::orphaned_debug_track",
-    "review::.::holistic::design_coherence::orphaned_save_config",
-    "review::.::holistic::design_coherence::orphaned_viewer_editor_files",
-    "review::.::holistic::error_consistency::asset_panel_error_swallowing",
-    "review::.::holistic::error_consistency::keyframe_extraction_swallows_errors",
-    "review::.::holistic::error_consistency::load_all_profiles_swallows_errors",
-    "review::.::holistic::error_consistency::save_config_swallows_errors",
-    "review::.::holistic::high_level_elegance::monolithic_timeline_state_hook",
-    "review::.::holistic::incomplete_migration::dual_effects_format_in_types",
-    "review::.::holistic::incomplete_migration::runtime_migration_shims_permanent",
-    "review::.::holistic::initialization_coupling::common_py_env_import_side_effect",
-    "review::.::holistic::initialization_coupling::common_py_mutable_global_caches",
-    "review::.::holistic::logic_clarity::duplicated_format_time",
-    "review::.::holistic::logic_clarity::redundant_null_coalescing_get_effect_value",
-    "review::.::holistic::low_level_elegance::duplicated_format_time",
-    "review::.::holistic::low_level_elegance::duplicated_round_timeline_value",
-    "review::.::holistic::low_level_elegance::manual_field_clamping_sprawl",
-    "review::.::holistic::low_level_elegance::monster_hook_function",
-    "review::.::holistic::mid_level_elegance::dual_edit_path",
-    "review::.::holistic::mid_level_elegance::redundant_migration_calls",
-    "review::.::holistic::naming_quality::duplicate_roundTimelineValue",
-    "review::.::holistic::naming_quality::misleading_call_llm_summary",
-    "review::.::holistic::package_organization::remotion_components_in_shared",
-    "review::.::holistic::test_strategy::no_test_infrastructure",
-    "review::.::holistic::test_strategy::untested_core_domain_logic",
-    "review::.::holistic::test_strategy::untested_data_transformations",
-    "review::.::holistic::type_safety::confusing_selected_clip_conditional_type",
-    "review::.::holistic::type_safety::effect_type_fields_untyped",
-    "review::.::holistic::type_safety::unsafe_as_casts_serialize",
-    "review::.::holistic::type_safety::upload_asset_double_json_parse",
+    "review::.::holistic::design_coherence::orphaned_component_files",
+    "review::.::holistic::design_coherence::useTimelineData_mixed_responsibilities",
+    "review::.::holistic::error_consistency::render_error_no_context",
+    "review::.::holistic::error_consistency::save_error_swallowed",
+    "review::.::holistic::error_consistency::silent_profile_parse",
+    "review::.::holistic::incomplete_migration::dual_effects_format",
+    "review::.::holistic::incomplete_migration::legacy_constants_duplication",
+    "review::.::holistic::initialization_coupling::import_time_env_loading",
+    "review::.::holistic::initialization_coupling::mutable_module_level_cache",
+    "review::.::holistic::logic_clarity::duplicated_formatTime",
+    "review::.::holistic::low_level_elegance::format_time_duplication",
+    "review::.::holistic::low_level_elegance::manual_field_clamping",
+    "review::.::holistic::mid_level_elegance::dual_edit_paths",
+    "review::.::holistic::mid_level_elegance::redundant_migrate_calls",
+    "review::.::holistic::naming_quality::call_llm_summary_misleading",
+    "review::.::holistic::package_organization::orphaned_ui_components",
+    "review::.::holistic::test_strategy::no_integration_tests",
+    "review::.::holistic::test_strategy::untested_hooks",
+    "review::.::holistic::type_safety::duplicate_action_drag_state",
+    "review::.::holistic::type_safety::unsafe_as_never_cast",
     "subjective::abstraction_fitness",
     "subjective::api_surface_coherence",
     "subjective::contract_coherence",
     "subjective::convention_outlier",
     "subjective::cross_module_architecture",
     "subjective::dependency_health",
-    "subjective::design_coherence",
-    "subjective::error_consistency",
     "subjective::high_level_elegance",
     "subjective::incomplete_migration",
     "subjective::initialization_coupling",
     "subjective::low_level_elegance",
     "subjective::mid_level_elegance",
+    "subjective::naming_quality",
     "subjective::package_organization",
     "subjective::test_strategy",
-    "subjective::type_safety"
+    "subjective::type_safety",
+    "triage::strategize",
+    "triage::observe",
+    "triage::reflect",
+    "triage::organize",
+    "triage::enrich",
+    "triage::sense-check",
+    "triage::commit"
   ],
   "deferred": [],
-  "skipped": {},
+  "skipped": {
+    "test_coverage::src/shared/components/ui/badge.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/badge.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:42+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/button.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/button.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:54+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/card.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/card.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:54+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/collapsible.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/collapsible.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:55+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/input.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/input.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:55+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/popover.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/popover.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:55+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/select.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/select.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:56+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/shared/components/ui/slider.tsx": {
+      "issue_id": "test_coverage::src/shared/components/ui/slider.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:56+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    },
+    "test_coverage::src/main.tsx": {
+      "issue_id": "test_coverage::src/main.tsx",
+      "kind": "permanent",
+      "reason": null,
+      "note": "React entry point, just renders App",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect",
+      "created_at": "2026-03-24T05:31:57+00:00",
+      "review_after": null,
+      "skipped_at_scan": 5
+    }
+  },
   "active_cluster": null,
   "overrides": {
     "test_coverage::src/tools/video-editor/hooks/useTimelineEditing.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useTimelineEditing.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useTimelineData.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useTimelineData.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/lib/timeline-data.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/lib/timeline-data.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useCrossTrackDrag.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useCrossTrackDrag.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PropertiesPanel/ClipPanel.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PropertiesPanel/AssetPanel.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useTimelineTrackManagement.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useTimelineTrackManagement.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useTimelineState.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useTimelineState.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/popover.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/popover.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/TimelineEditor/TimelineEditor.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PreviewPanel/RemotionPreview.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PropertiesPanel/TrackPanel.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PropertiesPanel/TrackPanel.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/lib/coordinate-utils.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/lib/coordinate-utils.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/Toolbar/Toolbar.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/Toolbar/Toolbar.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/collapsible.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/collapsible.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useKeyboardShortcuts.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useKeyboardShortcuts.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/TimelineEditor/ClipAction.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/TimelineEditor/ClipAction.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useTimelineSync.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useTimelineSync.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PropertiesPanel/PropertiesPanel.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/hooks/useTimelinePlayback.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/hooks/useTimelinePlayback.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/PreviewPanel/PreviewPanel.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/pages/VideoEditorPage.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/pages/VideoEditorPage.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/components/TimelineEditor/TrackLabel.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/lib/timeline-api.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/lib/timeline-api.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/button.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/button.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/card.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/card.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/settings/useEditorSettings.ts": {
       "issue_id": "test_coverage::src/tools/video-editor/settings/useEditorSettings.ts",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/select.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/select.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/slider.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/slider.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/badge.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/badge.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/shared/components/ui/input.tsx": {
       "issue_id": "test_coverage::src/shared/components/ui/input.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/tools/video-editor/contexts/TimelineContext.tsx": {
       "issue_id": "test_coverage::src/tools/video-editor/contexts/TimelineContext.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
     },
     "test_coverage::src/main.tsx": {
       "issue_id": "test_coverage::src/main.tsx",
       "created_at": "2026-03-24T04:42:31+00:00",
       "cluster": "auto/test_coverage-untested_module",
-      "updated_at": "2026-03-24T04:42:31+00:00"
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::cross_module_architecture::duplicated_config_resolution": {
+      "issue_id": "review::.::holistic::cross_module_architecture::duplicated_config_resolution",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-cross_module_architecture",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::cross_module_architecture::cross_language_migration_duplication": {
+      "issue_id": "review::.::holistic::cross_module_architecture::cross_language_migration_duplication",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-cross_module_architecture",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::cross_module_architecture::render_redeclares_clip_src_duration": {
+      "issue_id": "review::.::holistic::cross_module_architecture::render_redeclares_clip_src_duration",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-cross_module_architecture",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::convention_outlier::mixed_exports_preview_panel": {
+      "issue_id": "review::.::holistic::convention_outlier::mixed_exports_preview_panel",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-convention_outlier",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::convention_outlier::mixed_exports_properties_panel": {
+      "issue_id": "review::.::holistic::convention_outlier::mixed_exports_properties_panel",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-convention_outlier",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::convention_outlier::detect_type_duplication_convention": {
+      "issue_id": "review::.::holistic::convention_outlier::detect_type_duplication_convention",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-convention_outlier",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::error_consistency::save_config_swallows_errors": {
+      "issue_id": "review::.::holistic::error_consistency::save_config_swallows_errors",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-error_consistency",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::error_consistency::load_all_profiles_swallows_errors": {
+      "issue_id": "review::.::holistic::error_consistency::load_all_profiles_swallows_errors",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-error_consistency",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::error_consistency::keyframe_extraction_swallows_errors": {
+      "issue_id": "review::.::holistic::error_consistency::keyframe_extraction_swallows_errors",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-error_consistency",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::error_consistency::asset_panel_error_swallowing": {
+      "issue_id": "review::.::holistic::error_consistency::asset_panel_error_swallowing",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-error_consistency",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::naming_quality::misleading_call_llm_summary": {
+      "issue_id": "review::.::holistic::naming_quality::misleading_call_llm_summary",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-naming_quality",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::naming_quality::duplicate_roundTimelineValue": {
+      "issue_id": "review::.::holistic::naming_quality::duplicate_roundTimelineValue",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-naming_quality",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::abstraction_fitness::bloated_timeline_context": {
+      "issue_id": "review::.::holistic::abstraction_fitness::bloated_timeline_context",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-abstraction_fitness",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::abstraction_fitness::parallel_clip_meta_type": {
+      "issue_id": "review::.::holistic::abstraction_fitness::parallel_clip_meta_type",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-abstraction_fitness",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::abstraction_fitness::cn_passthrough_wrapper": {
+      "issue_id": "review::.::holistic::abstraction_fitness::cn_passthrough_wrapper",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-abstraction_fitness",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::dependency_health::unused_dnd_kit_deps": {
+      "issue_id": "review::.::holistic::dependency_health::unused_dnd_kit_deps",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-dependency_health",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::dependency_health::fragile_file_references": {
+      "issue_id": "review::.::holistic::dependency_health::fragile_file_references",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-dependency_health",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::dependency_health::phantom_clsx_dependency": {
+      "issue_id": "review::.::holistic::dependency_health::phantom_clsx_dependency",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-dependency_health",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::low_level_elegance::monster_hook_function": {
+      "issue_id": "review::.::holistic::low_level_elegance::monster_hook_function",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-low_level_elegance",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::low_level_elegance::duplicated_format_time": {
+      "issue_id": "review::.::holistic::low_level_elegance::duplicated_format_time",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-low_level_elegance",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::low_level_elegance::duplicated_round_timeline_value": {
+      "issue_id": "review::.::holistic::low_level_elegance::duplicated_round_timeline_value",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-low_level_elegance",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::low_level_elegance::manual_field_clamping_sprawl": {
+      "issue_id": "review::.::holistic::low_level_elegance::manual_field_clamping_sprawl",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-low_level_elegance",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::mid_level_elegance::dual_edit_path": {
+      "issue_id": "review::.::holistic::mid_level_elegance::dual_edit_path",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-mid_level_elegance",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::mid_level_elegance::redundant_migration_calls": {
+      "issue_id": "review::.::holistic::mid_level_elegance::redundant_migration_calls",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-mid_level_elegance",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::test_strategy::no_test_infrastructure": {
+      "issue_id": "review::.::holistic::test_strategy::no_test_infrastructure",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-test_strategy",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::test_strategy::untested_core_domain_logic": {
+      "issue_id": "review::.::holistic::test_strategy::untested_core_domain_logic",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-test_strategy",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::test_strategy::untested_data_transformations": {
+      "issue_id": "review::.::holistic::test_strategy::untested_data_transformations",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-test_strategy",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::api_surface_coherence::sync_async_mixing_timeline_data": {
+      "issue_id": "review::.::holistic::api_surface_coherence::sync_async_mixing_timeline_data",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-api_surface_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::api_surface_coherence::duplicate_clip_duration_function": {
+      "issue_id": "review::.::holistic::api_surface_coherence::duplicate_clip_duration_function",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-api_surface_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::api_surface_coherence::divergent_config_loading_apis": {
+      "issue_id": "review::.::holistic::api_surface_coherence::divergent_config_loading_apis",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-api_surface_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::ai_generated_debt::verbatim_api_error_handling_tts": {
+      "issue_id": "review::.::holistic::ai_generated_debt::verbatim_api_error_handling_tts",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-ai_generated_debt",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::ai_generated_debt::duplicated_download_function": {
+      "issue_id": "review::.::holistic::ai_generated_debt::duplicated_download_function",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-ai_generated_debt",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::incomplete_migration::runtime_migration_shims_permanent": {
+      "issue_id": "review::.::holistic::incomplete_migration::runtime_migration_shims_permanent",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-incomplete_migration",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::incomplete_migration::dual_effects_format_in_types": {
+      "issue_id": "review::.::holistic::incomplete_migration::dual_effects_format_in_types",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-incomplete_migration",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::initialization_coupling::common_py_env_import_side_effect": {
+      "issue_id": "review::.::holistic::initialization_coupling::common_py_env_import_side_effect",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-initialization_coupling",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::initialization_coupling::common_py_mutable_global_caches": {
+      "issue_id": "review::.::holistic::initialization_coupling::common_py_mutable_global_caches",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-initialization_coupling",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::monolithic_use_timeline_state": {
+      "issue_id": "review::.::holistic::design_coherence::monolithic_use_timeline_state",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::duplicated_resolve_timeline_config": {
+      "issue_id": "review::.::holistic::design_coherence::duplicated_resolve_timeline_config",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::orphaned_save_config": {
+      "issue_id": "review::.::holistic::design_coherence::orphaned_save_config",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::orphaned_debug_track": {
+      "issue_id": "review::.::holistic::design_coherence::orphaned_debug_track",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::duplicated_serialization_in_rows_to_config": {
+      "issue_id": "review::.::holistic::design_coherence::duplicated_serialization_in_rows_to_config",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::orphaned_viewer_editor_files": {
+      "issue_id": "review::.::holistic::design_coherence::orphaned_viewer_editor_files",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::design_coherence::collapsible_orphaned_duplicate": {
+      "issue_id": "review::.::holistic::design_coherence::collapsible_orphaned_duplicate",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-design_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::contract_coherence::unsafe_cast_serialize_clip": {
+      "issue_id": "review::.::holistic::contract_coherence::unsafe_cast_serialize_clip",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-contract_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::contract_coherence::parallel_clip_meta_type": {
+      "issue_id": "review::.::holistic::contract_coherence::parallel_clip_meta_type",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-contract_coherence",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::logic_clarity::redundant_null_coalescing_get_effect_value": {
+      "issue_id": "review::.::holistic::logic_clarity::redundant_null_coalescing_get_effect_value",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-logic_clarity",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::logic_clarity::duplicated_format_time": {
+      "issue_id": "review::.::holistic::logic_clarity::duplicated_format_time",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-logic_clarity",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::type_safety::effect_type_fields_untyped": {
+      "issue_id": "review::.::holistic::type_safety::effect_type_fields_untyped",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-type_safety",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::type_safety::unsafe_as_casts_serialize": {
+      "issue_id": "review::.::holistic::type_safety::unsafe_as_casts_serialize",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-type_safety",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::type_safety::upload_asset_double_json_parse": {
+      "issue_id": "review::.::holistic::type_safety::upload_asset_double_json_parse",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-type_safety",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "review::.::holistic::type_safety::confusing_selected_clip_conditional_type": {
+      "issue_id": "review::.::holistic::type_safety::confusing_selected_clip_conditional_type",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/review-type_safety",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "subjective::dependency_health": {
+      "issue_id": "subjective::dependency_health",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/under-target-review",
+      "updated_at": "2026-03-24T04:44:56+00:00"
+    },
+    "subjective::high_level_elegance": {
+      "issue_id": "subjective::high_level_elegance",
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "cluster": "auto/under-target-review",
+      "updated_at": "2026-03-24T04:44:56+00:00"
     }
   },
   "clusters": {
@@ -339,29 +742,344 @@
       "action_type": "refactor",
       "execution_policy": "planned_only"
     },
-    "auto/initial-review": {
-      "name": "auto/initial-review",
-      "description": "Initial review of 20 unscored subjective dimensions",
-      "issue_ids": [],
-      "created_at": "2026-03-24T04:42:31+00:00",
-      "updated_at": "2026-03-24T04:42:31+00:00",
+    "auto/review-cross_module_architecture": {
+      "name": "auto/review-cross_module_architecture",
+      "description": "Address 3 cross_module_architecture review issues",
+      "issue_ids": [
+        "review::.::holistic::cross_module_architecture::duplicated_config_resolution",
+        "review::.::holistic::cross_module_architecture::cross_language_migration_duplication",
+        "review::.::holistic::cross_module_architecture::render_redeclares_clip_src_duration"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
       "auto": true,
-      "cluster_key": "subjective::unscored",
-      "action": "desloppify review --prepare --dimensions abstraction_fitness,ai_generated_debt,api_surface_coherence,authorization_consistency,contract_coherence,convention_outlier,cross_module_architecture,dependency_health,design_coherence,error_consistency,high_level_elegance,incomplete_migration,initialization_coupling,logic_clarity,low_level_elegance,mid_level_elegance,naming_quality,package_organization,test_strategy,type_safety",
+      "cluster_key": "review::cross_module_architecture",
+      "action": "address design quality issues from AI code review",
       "execution_status": "review",
       "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-convention_outlier": {
+      "name": "auto/review-convention_outlier",
+      "description": "Address 3 convention_outlier review issues",
+      "issue_ids": [
+        "review::.::holistic::convention_outlier::mixed_exports_preview_panel",
+        "review::.::holistic::convention_outlier::mixed_exports_properties_panel",
+        "review::.::holistic::convention_outlier::detect_type_duplication_convention"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::convention_outlier",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-error_consistency": {
+      "name": "auto/review-error_consistency",
+      "description": "Address 4 error_consistency review issues",
+      "issue_ids": [
+        "review::.::holistic::error_consistency::save_config_swallows_errors",
+        "review::.::holistic::error_consistency::load_all_profiles_swallows_errors",
+        "review::.::holistic::error_consistency::keyframe_extraction_swallows_errors",
+        "review::.::holistic::error_consistency::asset_panel_error_swallowing"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::error_consistency",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-naming_quality": {
+      "name": "auto/review-naming_quality",
+      "description": "Address 2 naming_quality review issues",
+      "issue_ids": [
+        "review::.::holistic::naming_quality::misleading_call_llm_summary",
+        "review::.::holistic::naming_quality::duplicate_roundTimelineValue"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::naming_quality",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-abstraction_fitness": {
+      "name": "auto/review-abstraction_fitness",
+      "description": "Address 3 abstraction_fitness review issues",
+      "issue_ids": [
+        "review::.::holistic::abstraction_fitness::bloated_timeline_context",
+        "review::.::holistic::abstraction_fitness::parallel_clip_meta_type",
+        "review::.::holistic::abstraction_fitness::cn_passthrough_wrapper"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::abstraction_fitness",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-dependency_health": {
+      "name": "auto/review-dependency_health",
+      "description": "Address 3 dependency_health review issues",
+      "issue_ids": [
+        "review::.::holistic::dependency_health::unused_dnd_kit_deps",
+        "review::.::holistic::dependency_health::fragile_file_references",
+        "review::.::holistic::dependency_health::phantom_clsx_dependency"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::dependency_health",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-low_level_elegance": {
+      "name": "auto/review-low_level_elegance",
+      "description": "Address 4 low_level_elegance review issues",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::monster_hook_function",
+        "review::.::holistic::low_level_elegance::duplicated_format_time",
+        "review::.::holistic::low_level_elegance::duplicated_round_timeline_value",
+        "review::.::holistic::low_level_elegance::manual_field_clamping_sprawl"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::low_level_elegance",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-mid_level_elegance": {
+      "name": "auto/review-mid_level_elegance",
+      "description": "Address 2 mid_level_elegance review issues",
+      "issue_ids": [
+        "review::.::holistic::mid_level_elegance::dual_edit_path",
+        "review::.::holistic::mid_level_elegance::redundant_migration_calls"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::mid_level_elegance",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-test_strategy": {
+      "name": "auto/review-test_strategy",
+      "description": "Address 3 test_strategy review issues",
+      "issue_ids": [
+        "review::.::holistic::test_strategy::no_test_infrastructure",
+        "review::.::holistic::test_strategy::untested_core_domain_logic",
+        "review::.::holistic::test_strategy::untested_data_transformations"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::test_strategy",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-api_surface_coherence": {
+      "name": "auto/review-api_surface_coherence",
+      "description": "Address 3 api_surface_coherence review issues",
+      "issue_ids": [
+        "review::.::holistic::api_surface_coherence::sync_async_mixing_timeline_data",
+        "review::.::holistic::api_surface_coherence::duplicate_clip_duration_function",
+        "review::.::holistic::api_surface_coherence::divergent_config_loading_apis"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::api_surface_coherence",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-ai_generated_debt": {
+      "name": "auto/review-ai_generated_debt",
+      "description": "Address 2 ai_generated_debt review issues",
+      "issue_ids": [
+        "review::.::holistic::ai_generated_debt::verbatim_api_error_handling_tts",
+        "review::.::holistic::ai_generated_debt::duplicated_download_function"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::ai_generated_debt",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-incomplete_migration": {
+      "name": "auto/review-incomplete_migration",
+      "description": "Address 2 incomplete_migration review issues",
+      "issue_ids": [
+        "review::.::holistic::incomplete_migration::runtime_migration_shims_permanent",
+        "review::.::holistic::incomplete_migration::dual_effects_format_in_types"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::incomplete_migration",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-initialization_coupling": {
+      "name": "auto/review-initialization_coupling",
+      "description": "Address 2 initialization_coupling review issues",
+      "issue_ids": [
+        "review::.::holistic::initialization_coupling::common_py_env_import_side_effect",
+        "review::.::holistic::initialization_coupling::common_py_mutable_global_caches"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::initialization_coupling",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-design_coherence": {
+      "name": "auto/review-design_coherence",
+      "description": "Address 7 design_coherence review issues",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::monolithic_use_timeline_state",
+        "review::.::holistic::design_coherence::duplicated_resolve_timeline_config",
+        "review::.::holistic::design_coherence::orphaned_save_config",
+        "review::.::holistic::design_coherence::orphaned_debug_track",
+        "review::.::holistic::design_coherence::duplicated_serialization_in_rows_to_config",
+        "review::.::holistic::design_coherence::orphaned_viewer_editor_files",
+        "review::.::holistic::design_coherence::collapsible_orphaned_duplicate"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::design_coherence",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-contract_coherence": {
+      "name": "auto/review-contract_coherence",
+      "description": "Address 2 contract_coherence review issues",
+      "issue_ids": [
+        "review::.::holistic::contract_coherence::unsafe_cast_serialize_clip",
+        "review::.::holistic::contract_coherence::parallel_clip_meta_type"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::contract_coherence",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-logic_clarity": {
+      "name": "auto/review-logic_clarity",
+      "description": "Address 2 logic_clarity review issues",
+      "issue_ids": [
+        "review::.::holistic::logic_clarity::redundant_null_coalescing_get_effect_value",
+        "review::.::holistic::logic_clarity::duplicated_format_time"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::logic_clarity",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/review-type_safety": {
+      "name": "auto/review-type_safety",
+      "description": "Address 4 type_safety review issues",
+      "issue_ids": [
+        "review::.::holistic::type_safety::effect_type_fields_untyped",
+        "review::.::holistic::type_safety::unsafe_as_casts_serialize",
+        "review::.::holistic::type_safety::upload_asset_double_json_parse",
+        "review::.::holistic::type_safety::confusing_selected_clip_conditional_type"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "review::type_safety",
+      "action": "address design quality issues from AI code review",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/under-target-review": {
+      "name": "auto/under-target-review",
+      "description": "Consider re-reviewing 16 dimensions under target score",
+      "issue_ids": [
+        "subjective::dependency_health",
+        "subjective::high_level_elegance"
+      ],
+      "created_at": "2026-03-24T04:44:56+00:00",
+      "updated_at": "2026-03-24T04:44:56+00:00",
+      "auto": true,
+      "cluster_key": "subjective::under-target",
+      "action": "desloppify review --prepare --dimensions abstraction_fitness,api_surface_coherence,contract_coherence,convention_outlier,cross_module_architecture,dependency_health,design_coherence,error_consistency,high_level_elegance,incomplete_migration,initialization_coupling,low_level_elegance,mid_level_elegance,package_organization,test_strategy,type_safety",
+      "execution_status": "review",
+      "user_modified": false,
+      "optional": true,
       "action_type": "manual_fix",
       "execution_policy": "planned_only"
     }
   },
   "superseded": {},
   "promoted_ids": [],
-  "plan_start_scores": {},
+  "plan_start_scores": {
+    "strict": 74.6,
+    "overall": 74.6,
+    "objective": 65.6,
+    "verified": 65.6
+  },
   "refresh_state": {
     "_subjective_migration_pruned": true,
     "lifecycle_phase": "plan",
-    "subjective_review_completed_at_scan_count": 2,
-    "postflight_scan_completed_at_scan_count": 3
+    "subjective_review_completed_at_scan_count": 5,
+    "postflight_scan_completed_at_scan_count": 6
   },
   "execution_log": [
     {
@@ -633,11 +1351,392 @@
       "detail": {
         "scan_count": 3
       }
+    },
+    {
+      "timestamp": "2026-03-24T04:44:56+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T04:44:56+00:00",
+      "action": "auto_cluster",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T04:44:56+00:00",
+      "action": "sync_triage",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "injected": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T04:44:56+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-03-24T04:44:56+00:00",
+      "action": "complete_postflight_scan",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "scan_count": 4
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:30:25+00:00",
+      "action": "review_import_sync",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "trigger": "review_import",
+        "new_ids": [
+          "review::.::holistic::abstraction_fitness::clip_meta_duplication",
+          "review::.::holistic::abstraction_fitness::cn_passthrough",
+          "review::.::holistic::abstraction_fitness::wide_context_value",
+          "review::.::holistic::ai_generated_debt::formulaic_clip_spread",
+          "review::.::holistic::api_surface_coherence::timeline_data_mixed_sync_async",
+          "review::.::holistic::contract_coherence::misleading_config_signature_name",
+          "review::.::holistic::contract_coherence::silent_profile_load_error",
+          "review::.::holistic::convention_outlier::duplicate_format_time",
+          "review::.::holistic::convention_outlier::duplicate_round_timeline_value",
+          "review::.::holistic::convention_outlier::mixed_export_preview",
+          "review::.::holistic::convention_outlier::mixed_export_properties",
+          "review::.::holistic::cross_module_architecture::double_migration_call",
+          "review::.::holistic::cross_module_architecture::duplicate_migration_constants",
+          "review::.::holistic::cross_module_architecture::wide_context_interface",
+          "review::.::holistic::dependency_health::fragile_file_references",
+          "review::.::holistic::dependency_health::phantom_clsx_dependency",
+          "review::.::holistic::dependency_health::unused_dnd_kit_deps",
+          "review::.::holistic::design_coherence::orphaned_component_files",
+          "review::.::holistic::design_coherence::useTimelineData_mixed_responsibilities",
+          "review::.::holistic::error_consistency::render_error_no_context",
+          "review::.::holistic::error_consistency::save_error_swallowed",
+          "review::.::holistic::error_consistency::silent_profile_parse",
+          "review::.::holistic::high_level_elegance::monolithic_timeline_state_hook",
+          "review::.::holistic::incomplete_migration::dual_effects_format",
+          "review::.::holistic::incomplete_migration::legacy_constants_duplication",
+          "review::.::holistic::initialization_coupling::import_time_env_loading",
+          "review::.::holistic::initialization_coupling::mutable_module_level_cache",
+          "review::.::holistic::logic_clarity::duplicated_formatTime",
+          "review::.::holistic::low_level_elegance::format_time_duplication",
+          "review::.::holistic::low_level_elegance::manual_field_clamping",
+          "review::.::holistic::mid_level_elegance::dual_edit_paths",
+          "review::.::holistic::mid_level_elegance::redundant_migrate_calls",
+          "review::.::holistic::naming_quality::call_llm_summary_misleading",
+          "review::.::holistic::package_organization::orphaned_ui_components",
+          "review::.::holistic::test_strategy::no_integration_tests",
+          "review::.::holistic::test_strategy::untested_hooks",
+          "review::.::holistic::type_safety::duplicate_action_drag_state",
+          "review::.::holistic::type_safety::unsafe_as_never_cast"
+        ],
+        "added_to_queue": [
+          "review::.::holistic::abstraction_fitness::clip_meta_duplication",
+          "review::.::holistic::abstraction_fitness::cn_passthrough",
+          "review::.::holistic::abstraction_fitness::wide_context_value",
+          "review::.::holistic::ai_generated_debt::formulaic_clip_spread",
+          "review::.::holistic::api_surface_coherence::timeline_data_mixed_sync_async",
+          "review::.::holistic::contract_coherence::misleading_config_signature_name",
+          "review::.::holistic::contract_coherence::silent_profile_load_error",
+          "review::.::holistic::convention_outlier::duplicate_format_time",
+          "review::.::holistic::convention_outlier::duplicate_round_timeline_value",
+          "review::.::holistic::convention_outlier::mixed_export_preview",
+          "review::.::holistic::convention_outlier::mixed_export_properties",
+          "review::.::holistic::cross_module_architecture::double_migration_call",
+          "review::.::holistic::cross_module_architecture::duplicate_migration_constants",
+          "review::.::holistic::cross_module_architecture::wide_context_interface",
+          "review::.::holistic::dependency_health::fragile_file_references",
+          "review::.::holistic::dependency_health::phantom_clsx_dependency",
+          "review::.::holistic::dependency_health::unused_dnd_kit_deps",
+          "review::.::holistic::design_coherence::orphaned_component_files",
+          "review::.::holistic::design_coherence::useTimelineData_mixed_responsibilities",
+          "review::.::holistic::error_consistency::render_error_no_context",
+          "review::.::holistic::error_consistency::save_error_swallowed",
+          "review::.::holistic::error_consistency::silent_profile_parse",
+          "review::.::holistic::incomplete_migration::dual_effects_format",
+          "review::.::holistic::incomplete_migration::legacy_constants_duplication",
+          "review::.::holistic::initialization_coupling::import_time_env_loading",
+          "review::.::holistic::initialization_coupling::mutable_module_level_cache",
+          "review::.::holistic::logic_clarity::duplicated_formatTime",
+          "review::.::holistic::low_level_elegance::format_time_duplication",
+          "review::.::holistic::low_level_elegance::manual_field_clamping",
+          "review::.::holistic::mid_level_elegance::dual_edit_paths",
+          "review::.::holistic::mid_level_elegance::redundant_migrate_calls",
+          "review::.::holistic::naming_quality::call_llm_summary_misleading",
+          "review::.::holistic::package_organization::orphaned_ui_components",
+          "review::.::holistic::test_strategy::no_integration_tests",
+          "review::.::holistic::test_strategy::untested_hooks",
+          "review::.::holistic::type_safety::duplicate_action_drag_state",
+          "review::.::holistic::type_safety::unsafe_as_never_cast"
+        ],
+        "workflow_injected_ids": [],
+        "triage_injected": false,
+        "triage_injected_ids": [],
+        "triage_deferred": false,
+        "diff_new": 34,
+        "diff_reopened": 0,
+        "diff_auto_resolved": 69,
+        "stale_pruned_from_queue": [
+          "review::.::holistic::package_organization::remotion_components_in_shared"
+        ],
+        "covered_subjective_pruned_from_queue": [
+          "subjective::abstraction_fitness",
+          "subjective::api_surface_coherence",
+          "subjective::contract_coherence",
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::design_coherence",
+          "subjective::error_consistency",
+          "subjective::incomplete_migration",
+          "subjective::initialization_coupling",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::package_organization",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "covered_subjective": [
+          "subjective::abstraction_fitness",
+          "subjective::ai_generated_debt",
+          "subjective::api_surface_coherence",
+          "subjective::authorization_consistency",
+          "subjective::contract_coherence",
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::design_coherence",
+          "subjective::error_consistency",
+          "subjective::incomplete_migration",
+          "subjective::initialization_coupling",
+          "subjective::logic_clarity",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::naming_quality",
+          "subjective::package_organization",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "stale_sync_injected": [],
+        "stale_sync_pruned": [],
+        "auto_cluster_changes": 0,
+        "import_scores_injected": [],
+        "import_scores_pruned": [],
+        "sync_status": "synced",
+        "sync_message": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:42+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/badge.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:42+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:54+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/button.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:54+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/card.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:55+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/collapsible.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:55+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/input.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:55+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/popover.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:56+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/select.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:56+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/shared/components/ui/slider.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "shadcn-ui third-party primitive that does not need project tests",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:31:57+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "test_coverage::src/main.tsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "React entry point, just renders App",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:32:06+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:32:06+00:00",
+      "action": "sync_triage",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "injected": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:32:06+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-03-24T05:32:06+00:00",
+      "action": "complete_postflight_scan",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "scan_count": 6
+      }
     }
   ],
   "epic_triage_meta": {},
   "commit_log": [],
   "uncommitted_issues": [],
   "commit_tracking_branch": null,
-  "scan_count_at_plan_start": 1
+  "scan_count_at_plan_start": 6,
+  "previous_plan_start_scores": {
+    "strict": 73.2,
+    "overall": 73.2,
+    "objective": 65.6,
+    "verified": 65.6
+  }
 }
