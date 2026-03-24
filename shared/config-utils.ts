@@ -92,7 +92,7 @@ export const resolveTimelineConfig = (
   }
 
   const clips = migratedConfig.clips.map((clip) => {
-    if (!clip.asset) {
+    if (!clip.asset || clip.asset.startsWith("uploading:")) {
       return {
         ...clip,
         assetEntry: undefined,
@@ -101,7 +101,11 @@ export const resolveTimelineConfig = (
 
     const assetEntry = resolvedRegistry[clip.asset];
     if (!assetEntry) {
-      throw new Error(`Clip '${clip.id}' references missing asset '${clip.asset}'`);
+      console.warn(`Clip '${clip.id}' references missing asset '${clip.asset}' — skipping`);
+      return {
+        ...clip,
+        assetEntry: undefined,
+      };
     }
 
     return {
