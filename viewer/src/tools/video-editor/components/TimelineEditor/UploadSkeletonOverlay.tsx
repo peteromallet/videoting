@@ -41,7 +41,8 @@ export function UploadSkeletonOverlay({
     <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
       {uploadList.map((upload) => {
         const left = upload.time * pixelsPerSecond + TIMELINE_START_LEFT - scrollLeft;
-        const top = upload.trackIndex * ROW_HEIGHT - scrollTop + 4;
+        const RULER_HEIGHT = 30;
+        const top = upload.trackIndex * ROW_HEIGHT - scrollTop + RULER_HEIGHT + 4;
         const isError = upload.status === "error";
 
         return (
