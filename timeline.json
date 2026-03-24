@@ -20,7 +20,7 @@
       "id": "V2",
       "kind": "visual",
       "label": "V2",
-      "scale": 1.3,
+      "scale": 0.9,
       "fit": "contain",
       "opacity": 1,
       "blendMode": "normal"
@@ -47,7 +47,7 @@
   "clips": [
     {
       "id": "clip-background",
-      "at": 1.34,
+      "at": 0,
       "track": "V1",
       "asset": "reigh-bg-v17-titled-dust",
       "clipType": "hold",
@@ -59,13 +59,13 @@
       }
     },
     {
-      "id": "clip-3",
-      "at": 15.97,
+      "id": "clip-3b",
+      "at": 8.97,
       "track": "V2",
       "asset": "demo-two",
       "clipType": "media",
       "from": 0,
-      "to": 23.14,
+      "to": 22.63,
       "speed": 4,
       "volume": 0,
       "entrance": {
@@ -73,19 +73,28 @@
         "duration": 0.5
       },
       "exit": {
-        "type": "flip",
+        "type": "fade-out",
         "duration": 0.6
       }
     },
     {
-      "id": "clip-3b",
-      "at": 15.97,
-      "track": "V3",
+      "id": "clip-5",
+      "at": 31.19,
+      "track": "V2",
+      "asset": "bg-dark-abstract",
+      "clipType": "hold",
+      "hold": 5,
+      "opacity": 1
+    },
+    {
+      "id": "clip-3",
+      "at": 17.21,
+      "track": "V2",
       "asset": "demo-two",
       "clipType": "media",
-      "from": 0,
+      "from": 1.7,
       "to": 23.14,
-      "speed": 4,
+      "speed": 3,
       "volume": 0,
       "entrance": {
         "type": "pulse",
@@ -94,6 +103,10 @@
       "exit": {
         "type": "flip",
         "duration": 0.6
+      },
+      "continuous": {
+        "type": "float",
+        "intensity": 0.5
       }
     },
     {
@@ -107,25 +120,6 @@
       "entrance": {
         "type": "zoom-in",
         "duration": 0.5
-      }
-    },
-    {
-      "id": "clip-3c",
-      "at": 15.97,
-      "track": "A1",
-      "asset": "demo-two",
-      "clipType": "media",
-      "from": 0,
-      "to": 23.14,
-      "speed": 4,
-      "volume": 0,
-      "entrance": {
-        "type": "pulse",
-        "duration": 0.5
-      },
-      "exit": {
-        "type": "flip",
-        "duration": 0.6
       }
     }
   ]

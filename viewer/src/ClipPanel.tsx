@@ -95,7 +95,7 @@ export const ClipPanel: FC<ClipPanelProps> = ({
   const muted = isClipMuted(clip);
   const canSplit = canSplitClipAtTime(clip, playheadSeconds);
   const isTextClip = clip.clipType === "text";
-  const supportsPositioning = track?.kind === "visual" && (track.fit === "manual" || isTextClip);
+  const supportsPositioning = track?.kind === "visual";
   const textValue = {
     content: clip.text?.content ?? "",
     fontFamily: clip.text?.fontFamily,

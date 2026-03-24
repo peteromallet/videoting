@@ -89,11 +89,15 @@ export const useCrossTrackDrag = ({
 
       clearDropIndicators(session);
       session.ghostEl?.remove();
-      session.clipEl.removeEventListener("pointermove", session.moveListener);
-      session.clipEl.removeEventListener("pointerup", session.upListener);
-      session.clipEl.removeEventListener("pointercancel", session.cancelListener);
-      if (session.clipEl.hasPointerCapture(session.pointerId)) {
-        session.clipEl.releasePointerCapture(session.pointerId);
+      window.removeEventListener("pointermove", session.moveListener);
+      window.removeEventListener("pointerup", session.upListener);
+      window.removeEventListener("pointercancel", session.cancelListener);
+      try {
+        if (session.clipEl.hasPointerCapture(session.pointerId)) {
+          session.clipEl.releasePointerCapture(session.pointerId);
+        }
+      } catch {
+        // Pointer capture may already be released
       }
 
       dragSessionRef.current = null;
@@ -317,14 +321,21 @@ export const useCrossTrackDrag = ({
         createTrackOnDrop: false,
       };
 
-      clipTarget.addEventListener("pointermove", handlePointerMove);
-      clipTarget.addEventListener("pointerup", handlePointerUp);
-      clipTarget.addEventListener("pointercancel", handlePointerCancel);
+      window.addEventListener("pointermove", handlePointerMove);
+      window.addEventListener("pointerup", handlePointerUp);
+      window.addEventListener("pointercancel", handlePointerCancel);
+    };
+
+    // Safety: if window loses focus during drag, clean up
+    const handleBlur = () => {
+      clearSession(dragSessionRef.current);
     };
 
     wrapper.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("blur", handleBlur);
     return () => {
       wrapper.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("blur", handleBlur);
       clearSession(dragSessionRef.current);
     };
   }, [

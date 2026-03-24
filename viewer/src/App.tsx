@@ -17,6 +17,7 @@ import AssetPanel from "./AssetPanel";
 import { ClipPanel } from "./ClipPanel";
 import OverlayEditor from "./OverlayEditor";
 import RemotionPreview, { type PreviewHandle } from "./RemotionPreview";
+import { TrackSettingsPopover } from "./TrackSettingsPopover";
 import {
   buildTimelineData,
   configToRows,
@@ -879,6 +880,63 @@ function App() {
     applyResolvedConfigEdit(nextResolvedConfig, { selectedTrackId: nextTrack?.id ?? null });
   }, [applyResolvedConfigEdit, resolvedConfig]);
 
+  const handleTrackPopoverChange = useCallback((trackId: string, patch: Partial<TrackDefinition>) => {
+    if (!resolvedConfig) {
+      return;
+    }
+
+    const nextConfig = {
+      ...resolvedConfig,
+      tracks: resolvedConfig.tracks.map((t) =>
+        t.id === trackId ? { ...t, ...patch } : t
+      ),
+    };
+    applyResolvedConfigEdit(nextConfig, { selectedTrackId: trackId });
+  }, [applyResolvedConfigEdit, resolvedConfig]);
+
+  const handleReorderTrack = useCallback((trackId: string, direction: -1 | 1) => {
+    if (!resolvedConfig) {
+      return;
+    }
+
+    const idx = resolvedConfig.tracks.findIndex((t) => t.id === trackId);
+    if (idx < 0) {
+      return;
+    }
+
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= resolvedConfig.tracks.length) {
+      return;
+    }
+
+    const nextTracks = [...resolvedConfig.tracks];
+    [nextTracks[idx], nextTracks[targetIdx]] = [nextTracks[targetIdx], nextTracks[idx]];
+    applyResolvedConfigEdit({ ...resolvedConfig, tracks: nextTracks }, { selectedTrackId: trackId });
+  }, [applyResolvedConfigEdit, resolvedConfig]);
+
+  const handleRemoveTrack = useCallback((trackId: string) => {
+    if (!resolvedConfig) {
+      return;
+    }
+
+    const track = resolvedConfig.tracks.find((t) => t.id === trackId);
+    if (!track) {
+      return;
+    }
+
+    const sameKind = resolvedConfig.tracks.filter((t) => t.kind === track.kind);
+    if (sameKind.length <= 1) {
+      return;
+    }
+
+    const nextConfig = {
+      ...resolvedConfig,
+      tracks: resolvedConfig.tracks.filter((t) => t.id !== trackId),
+      clips: resolvedConfig.clips.filter((c) => c.track !== trackId),
+    };
+    applyResolvedConfigEdit(nextConfig, { selectedTrackId: null });
+  }, [applyResolvedConfigEdit, resolvedConfig]);
+
   const handleAddText = useCallback(() => {
     if (!data) {
       return;
@@ -1156,6 +1214,8 @@ function App() {
             trackScaleMap={trackScaleMap}
             compositionWidth={compositionSize.width}
             compositionHeight={compositionSize.height}
+            selectedClipId={selectedClipId}
+            onSelectClip={setSelectedClipId}
             onOverlayChange={onOverlayChange}
           />
         </div>
@@ -1183,15 +1243,29 @@ function App() {
       <div className="timeline-container">
         <div className="track-labels">
           {data.tracks.map((track) => (
-              <div
-                key={track.id}
-                className={`track-label${selectedTrackId === track.id ? " selected" : ""}`}
-                style={{ height: ROW_HEIGHT, minHeight: ROW_HEIGHT, maxHeight: ROW_HEIGHT }}
-                onClick={() => setSelectedTrackId(track.id)}
-              >
-                <span className="track-label-id">{track.id}</span>
-                <span className="track-label-name">{track.label}</span>
+            <div
+              key={track.id}
+              className={`track-label${selectedTrackId === track.id ? " selected" : ""}`}
+              style={{ height: ROW_HEIGHT, minHeight: ROW_HEIGHT, maxHeight: ROW_HEIGHT }}
+              onClick={() => setSelectedTrackId(track.id)}
+            >
+              <div className="track-label-row">
+                <div className="track-label-copy">
+                  <span className="track-label-id">{track.id}</span>
+                  <span className="track-label-name">{track.label}</span>
+                </div>
+                <TrackSettingsPopover
+                  track={track}
+                  trackCount={data.tracks.length}
+                  trackIndex={data.tracks.findIndex((entry) => entry.id === track.id)}
+                  sameKindCount={data.tracks.filter((entry) => entry.kind === track.kind).length}
+                  onChange={handleTrackPopoverChange}
+                  onReorder={handleReorderTrack}
+                  onRemove={handleRemoveTrack}
+                  onSelect={setSelectedTrackId}
+                />
               </div>
+            </div>
           ))}
         </div>
 

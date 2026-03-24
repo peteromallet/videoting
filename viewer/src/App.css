@@ -245,16 +245,29 @@ body {
   height: 56px;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  gap: 2px;
   padding: 4px 8px;
   font-size: 10px;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border);
   cursor: pointer;
   overflow: hidden;
+}
+
+.track-label-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.track-label-copy {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .track-label-id {
@@ -274,6 +287,41 @@ body {
 
 .track-label.selected {
   background: rgba(137, 180, 250, 0.08);
+}
+
+.track-label-gear {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.track-label-gear svg {
+  width: 14px;
+  height: 14px;
+}
+
+.track-label:hover .track-label-gear,
+.track-label.selected .track-label-gear,
+.track-label-gear.open {
+  opacity: 0.85;
+}
+
+.track-label-gear:hover,
+.track-label-gear.open {
+  background: var(--bg-surface);
+  border-color: var(--border);
+  color: var(--text-primary);
 }
 
 .track-label-top {
@@ -336,6 +384,19 @@ body {
   background: var(--bg-surface);
   color: var(--text-primary);
   font-size: 10px;
+}
+
+.track-settings-popover {
+  position: fixed;
+  width: 220px;
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  z-index: 1000;
 }
 
 .timeline-wrapper {
@@ -961,4 +1022,89 @@ body {
 .timeline-wrapper.drag-over {
   outline: 2px dashed var(--accent);
   outline-offset: -2px;
+}
+
+/* Track panel */
+.track-panel {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.track-panel-empty {
+  color: var(--text-muted);
+  font-size: 11px;
+  text-align: center;
+  padding: 12px;
+}
+
+.track-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-panel-header strong {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.track-panel-kind {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.track-panel-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.track-panel-actions button {
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.track-panel-actions button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.track-panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.track-panel-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.track-panel-slider-row input[type="range"] {
+  flex: 1;
+}
+
+.track-panel-value {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: right;
 }

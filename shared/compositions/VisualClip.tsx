@@ -13,8 +13,14 @@ type VisualClipProps = {
 };
 
 const getClipBoxStyle = (clip: ResolvedTimelineClip, track: TrackDefinition): CSSProperties => {
+  const hasPositionOverride = (
+    clip.x !== undefined
+    || clip.y !== undefined
+    || clip.width !== undefined
+    || clip.height !== undefined
+  );
   const fit = track.fit ?? "contain";
-  if (fit === "manual") {
+  if (fit === "manual" || hasPositionOverride) {
     return {
       position: "absolute",
       left: clip.x ?? 0,

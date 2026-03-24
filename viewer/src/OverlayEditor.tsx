@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { RefObject } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent, RefObject } from "react";
 import type { TimelineRow } from "@xzdarcy/timeline-engine";
 import type { ClipMeta } from "./timeline-data";
 
@@ -11,7 +11,6 @@ interface ActiveOverlay {
   y: number;
   width: number;
   height: number;
-  opacity: number;
 }
 
 interface Props {
@@ -22,6 +21,8 @@ interface Props {
   trackScaleMap: Record<string, number>;
   compositionWidth: number;
   compositionHeight: number;
+  selectedClipId: string | null;
+  onSelectClip: (clipId: string | null) => void;
   onOverlayChange: (actionId: string, patch: Partial<ClipMeta>) => void;
 }
 
@@ -33,6 +34,20 @@ type OverlayLayout = {
   height: number;
 };
 
+const MIN_CLIP_SIZE = 20;
+
+const hasPositionOverride = (clipMeta: ClipMeta | undefined): boolean => {
+  return Boolean(
+    clipMeta
+    && (
+      clipMeta.x !== undefined
+      || clipMeta.y !== undefined
+      || clipMeta.width !== undefined
+      || clipMeta.height !== undefined
+    ),
+  );
+};
+
 export default function OverlayEditor({
   rows,
   meta,
@@ -41,13 +56,15 @@ export default function OverlayEditor({
   trackScaleMap,
   compositionWidth,
   compositionHeight,
+  selectedClipId,
+  onSelectClip,
   onOverlayChange,
 }: Props) {
-  const [selected, setSelected] = useState<string | null>(null);
   const [layout, setLayout] = useState<OverlayLayout | null>(null);
   const dragState = useRef<{
     mode: DragMode;
     actionId: string;
+    trackId: string;
     startMouseX: number;
     startMouseY: number;
     startX: number;
@@ -74,26 +91,27 @@ export default function OverlayEditor({
           continue;
         }
 
-        const isPositioned = clipMeta.clipType === "text" || typeof clipMeta.x === "number" || typeof clipMeta.y === "number";
-        if (!isPositioned) {
+        const isSelected = selectedClipId === action.id;
+        const isPositioned = clipMeta.clipType === "text" || hasPositionOverride(clipMeta);
+        if (!isPositioned && !isSelected) {
           continue;
         }
 
+        const useFullFrameBounds = isSelected && !hasPositionOverride(clipMeta);
         overlays.push({
           actionId: action.id,
           label: clipMeta.asset ?? clipMeta.text?.content ?? action.id,
           track: row.id,
           x: clipMeta.x ?? 0,
           y: clipMeta.y ?? 0,
-          width: clipMeta.width ?? 320,
-          height: clipMeta.height ?? 240,
-          opacity: clipMeta.opacity ?? 1,
+          width: clipMeta.width ?? (useFullFrameBounds ? compositionWidth : 320),
+          height: clipMeta.height ?? (useFullFrameBounds ? compositionHeight : 240),
         });
       }
     }
 
     return overlays;
-  }, [currentTime, meta, rows]);
+  }, [compositionHeight, compositionWidth, currentTime, meta, rows, selectedClipId]);
 
   const getTrackProjection = useCallback((trackId: string, currentLayout: OverlayLayout) => {
     const trackScale = trackScaleMap[trackId] ?? 1;
@@ -110,7 +128,7 @@ export default function OverlayEditor({
 
   const computeLayout = useCallback((): OverlayLayout | null => {
     const player = playerContainerRef.current;
-    if (!player) {
+    if (!player || compositionWidth <= 0 || compositionHeight <= 0) {
       return null;
     }
 
@@ -119,16 +137,28 @@ export default function OverlayEditor({
       return null;
     }
 
-    const rect = player.getBoundingClientRect();
+    const playerRect = player.getBoundingClientRect();
     const parentRect = parent.getBoundingClientRect();
+    if (playerRect.width <= 0 || playerRect.height <= 0) {
+      return null;
+    }
+
+    const videoAspectRatio = compositionWidth / compositionHeight;
+    const containerAspectRatio = playerRect.width / playerRect.height;
+    const videoWidth = containerAspectRatio > videoAspectRatio
+      ? playerRect.height * videoAspectRatio
+      : playerRect.width;
+    const videoHeight = containerAspectRatio > videoAspectRatio
+      ? playerRect.height
+      : playerRect.width / videoAspectRatio;
 
     return {
-      left: rect.left - parentRect.left,
-      top: rect.top - parentRect.top,
-      width: rect.width,
-      height: rect.height,
+      left: playerRect.left - parentRect.left + (playerRect.width - videoWidth) / 2,
+      top: playerRect.top - parentRect.top + (playerRect.height - videoHeight) / 2,
+      width: videoWidth,
+      height: videoHeight,
     };
-  }, [playerContainerRef]);
+  }, [compositionHeight, compositionWidth, playerContainerRef]);
 
   useEffect(() => {
     const updateLayout = () => {
@@ -156,7 +186,7 @@ export default function OverlayEditor({
     };
   }, [computeLayout, playerContainerRef]);
 
-  const onMouseDown = useCallback((event: React.MouseEvent, actionId: string, mode: DragMode) => {
+  const onMouseDown = useCallback((event: ReactMouseEvent, actionId: string, mode: DragMode) => {
     event.stopPropagation();
     event.preventDefault();
 
@@ -165,18 +195,34 @@ export default function OverlayEditor({
       return;
     }
 
+    const needsInitialization = !hasPositionOverride(clipMeta);
+    const startX = clipMeta.x ?? 0;
+    const startY = clipMeta.y ?? 0;
+    const startW = clipMeta.width ?? (needsInitialization ? compositionWidth : 320);
+    const startH = clipMeta.height ?? (needsInitialization ? compositionHeight : 240);
+
+    if (needsInitialization) {
+      onOverlayChange(actionId, {
+        x: 0,
+        y: 0,
+        width: compositionWidth,
+        height: compositionHeight,
+      });
+    }
+
     dragState.current = {
       mode,
       actionId,
+      trackId: clipMeta.track,
       startMouseX: event.clientX,
       startMouseY: event.clientY,
-      startX: clipMeta.x ?? 0,
-      startY: clipMeta.y ?? 0,
-      startW: clipMeta.width ?? 320,
-      startH: clipMeta.height ?? 240,
+      startX,
+      startY,
+      startW,
+      startH,
     };
-    setSelected(actionId);
-  }, [meta]);
+    onSelectClip(actionId);
+  }, [compositionHeight, compositionWidth, meta, onOverlayChange, onSelectClip]);
 
   useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
@@ -186,7 +232,7 @@ export default function OverlayEditor({
         return;
       }
 
-      const projection = getTrackProjection(meta[state.actionId]?.track ?? "V2", currentLayout);
+      const projection = getTrackProjection(state.trackId, currentLayout);
       const dx = (event.clientX - state.startMouseX) / projection.scaleX;
       const dy = (event.clientY - state.startMouseY) / projection.scaleY;
 
@@ -204,21 +250,21 @@ export default function OverlayEditor({
       let nextHeight = state.startH;
 
       if (state.mode === "resize-se") {
-        nextWidth = Math.max(20, state.startW + dx);
-        nextHeight = Math.max(20, state.startH + dy);
+        nextWidth = Math.max(MIN_CLIP_SIZE, state.startW + dx);
+        nextHeight = Math.max(MIN_CLIP_SIZE, state.startH + dy);
       } else if (state.mode === "resize-sw") {
-        nextX = state.startX + dx;
-        nextWidth = Math.max(20, state.startW - dx);
-        nextHeight = Math.max(20, state.startH + dy);
+        nextWidth = Math.max(MIN_CLIP_SIZE, state.startW - dx);
+        nextHeight = Math.max(MIN_CLIP_SIZE, state.startH + dy);
+        nextX = state.startX + (state.startW - nextWidth);
       } else if (state.mode === "resize-ne") {
-        nextWidth = Math.max(20, state.startW + dx);
-        nextY = state.startY + dy;
-        nextHeight = Math.max(20, state.startH - dy);
+        nextWidth = Math.max(MIN_CLIP_SIZE, state.startW + dx);
+        nextHeight = Math.max(MIN_CLIP_SIZE, state.startH - dy);
+        nextY = state.startY + (state.startH - nextHeight);
       } else if (state.mode === "resize-nw") {
-        nextX = state.startX + dx;
-        nextY = state.startY + dy;
-        nextWidth = Math.max(20, state.startW - dx);
-        nextHeight = Math.max(20, state.startH - dy);
+        nextWidth = Math.max(MIN_CLIP_SIZE, state.startW - dx);
+        nextHeight = Math.max(MIN_CLIP_SIZE, state.startH - dy);
+        nextX = state.startX + (state.startW - nextWidth);
+        nextY = state.startY + (state.startH - nextHeight);
       }
 
       onOverlayChange(state.actionId, {
@@ -239,12 +285,13 @@ export default function OverlayEditor({
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [getTrackProjection, meta, onOverlayChange]);
+  }, [getTrackProjection, onOverlayChange]);
 
   if (activeOverlays.length === 0 || !layout) {
     return null;
   }
-  const containerStyle: React.CSSProperties = {
+
+  const containerStyle: CSSProperties = {
     left: layout.left,
     top: layout.top,
     width: layout.width,
@@ -252,11 +299,11 @@ export default function OverlayEditor({
   };
 
   return (
-    <div className="overlay-editor" style={containerStyle} onClick={() => setSelected(null)}>
+    <div className="overlay-editor" style={containerStyle}>
       {activeOverlays.map((overlay) => {
-        const isSelected = selected === overlay.actionId;
+        const isSelected = selectedClipId === overlay.actionId;
         const projection = getTrackProjection(overlay.track, layout);
-        const style: React.CSSProperties = {
+        const style: CSSProperties = {
           left: projection.offsetX + overlay.x * projection.scaleX,
           top: projection.offsetY + overlay.y * projection.scaleY,
           width: overlay.width * projection.scaleX,
@@ -271,7 +318,7 @@ export default function OverlayEditor({
             onMouseDown={(event) => onMouseDown(event, overlay.actionId, "move")}
             onClick={(event) => {
               event.stopPropagation();
-              setSelected(overlay.actionId);
+              onSelectClip(overlay.actionId);
             }}
           >
             <span className="overlay-label">{overlay.label}</span>
