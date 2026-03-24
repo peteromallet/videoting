@@ -292,14 +292,17 @@ export function useTimelineEditing({
   }, [applyTimelineEdit, dataRef, selectedTrackId, setSelectedClipId, setSelectedTrackId]);
 
   const onTimelineDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    if (!event.dataTransfer.types.includes("asset-key") && !event.dataTransfer.types.includes("Files")) {
+    const types = Array.from(event.dataTransfer.types);
+    if (!types.includes("asset-key") && !types.includes("Files")) {
       return;
     }
     event.preventDefault();
+    event.stopPropagation();
     event.currentTarget.dataset.dragOver = "true";
 
     // Show drop position indicator
     const wrapper = event.currentTarget;
+    console.log("[dragOver] types:", types, "wrapper:", wrapper.className.slice(0, 40));
     const editArea = wrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
     const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
     if (!editArea) return;

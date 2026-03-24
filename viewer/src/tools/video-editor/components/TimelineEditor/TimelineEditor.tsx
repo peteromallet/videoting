@@ -99,7 +99,7 @@ export function TimelineEditor() {
       </div>
       <div
         ref={timelineWrapperRef}
-        className="timeline-wrapper h-full min-w-0 flex-1 overflow-hidden"
+        className="timeline-wrapper relative h-full min-w-0 flex-1 overflow-hidden"
         onDragOver={onTimelineDragOver}
         onDragLeave={onTimelineDragLeave}
         onDrop={onTimelineDrop}
