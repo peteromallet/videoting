@@ -184,6 +184,33 @@ export const ClipPanel: FC<ClipPanelProps> = ({
     };
   };
 
+  const handlePositionChange = (patch: Partial<ClipMeta>) => {
+    if (positionOverrides) {
+      onChange(patch);
+      return;
+    }
+
+    if (clip.clipType === "text") {
+      onChange({
+        x: clip.x ?? 0,
+        y: clip.y ?? 0,
+        width: clip.width ?? 640,
+        height: clip.height ?? 160,
+        ...patch,
+      });
+      return;
+    }
+
+    const trackScale = Math.max(track?.scale ?? 1, 0.01);
+    onChange({
+      x: clip.x ?? Math.round(compositionWidth * (1 - trackScale) / 2),
+      y: clip.y ?? Math.round(compositionHeight * (1 - trackScale) / 2),
+      width: clip.width ?? Math.round(compositionWidth * trackScale),
+      height: clip.height ?? Math.round(compositionHeight * trackScale),
+      ...patch,
+    });
+  };
+
   return (
     <div className="clip-panel">
       <div className="clip-panel-header">
@@ -240,14 +267,14 @@ export const ClipPanel: FC<ClipPanelProps> = ({
               label="X"
               step={1}
               value={clip.x}
-              onChange={(value) => onChange({ x: value })}
+              onChange={(value) => handlePositionChange({ x: value })}
               {...getPositionFieldProps(clip.x)}
             />
             <NumberField
               label="Y"
               step={1}
               value={clip.y}
-              onChange={(value) => onChange({ y: value })}
+              onChange={(value) => handlePositionChange({ y: value })}
               {...getPositionFieldProps(clip.y)}
             />
           </div>
@@ -257,7 +284,7 @@ export const ClipPanel: FC<ClipPanelProps> = ({
               min={20}
               step={1}
               value={clip.width}
-              onChange={(value) => onChange({ width: value })}
+              onChange={(value) => handlePositionChange({ width: value })}
               {...getPositionFieldProps(clip.width)}
             />
             <NumberField
@@ -265,7 +292,7 @@ export const ClipPanel: FC<ClipPanelProps> = ({
               min={20}
               step={1}
               value={clip.height}
-              onChange={(value) => onChange({ height: value })}
+              onChange={(value) => handlePositionChange({ height: value })}
               {...getPositionFieldProps(clip.height)}
             />
           </div>

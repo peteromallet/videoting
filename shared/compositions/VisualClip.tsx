@@ -1,5 +1,5 @@
 import type { CSSProperties, FC, ReactNode } from "react";
-import { AbsoluteFill, Img, OffthreadVideo, Sequence, Video, getRemotionEnvironment, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Img, OffthreadVideo, Sequence, Video, getRemotionEnvironment, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import { getClipDurationInFrames, secondsToFrames } from "@shared/config-utils";
 import { wrapWithClipEffects } from "@shared/effects";
 import { transitions } from "@shared/transitions";
@@ -12,7 +12,12 @@ type VisualClipProps = {
   predecessor?: ResolvedTimelineClip | null;
 };
 
-const getClipBoxStyle = (clip: ResolvedTimelineClip, track: TrackDefinition): CSSProperties => {
+const getClipBoxStyle = (
+  clip: ResolvedTimelineClip,
+  track: TrackDefinition,
+  compositionWidth: number,
+  compositionHeight: number,
+): CSSProperties => {
   const hasPositionOverride = (
     clip.x !== undefined
     || clip.y !== undefined
@@ -21,14 +26,12 @@ const getClipBoxStyle = (clip: ResolvedTimelineClip, track: TrackDefinition): CS
   );
   const fit = track.fit ?? "contain";
   if (fit === "manual" || hasPositionOverride) {
-    const trackScale = Math.max(track.scale ?? 1, 0.01);
-    const shouldBypassTrackScale = hasPositionOverride;
     return {
       position: "absolute",
-      left: (clip.x ?? 0) / (shouldBypassTrackScale ? trackScale : 1),
-      top: (clip.y ?? 0) / (shouldBypassTrackScale ? trackScale : 1),
-      width: (clip.width ?? 320) / (shouldBypassTrackScale ? trackScale : 1),
-      height: (clip.height ?? 240) / (shouldBypassTrackScale ? trackScale : 1),
+      left: clip.x ?? 0,
+      top: clip.y ?? 0,
+      width: clip.width ?? compositionWidth,
+      height: clip.height ?? compositionHeight,
       objectFit: "cover",
       opacity: clip.opacity ?? 1,
     };
@@ -47,7 +50,8 @@ const VisualAsset: FC<VisualClipProps> = ({ clip, track, fps }) => {
     return null;
   }
 
-  const style = getClipBoxStyle(clip, track);
+  const { width: compositionWidth, height: compositionHeight } = useVideoConfig();
+  const style = getClipBoxStyle(clip, track, compositionWidth, compositionHeight);
   const sharedStyle: CSSProperties = {
     ...style,
     mixBlendMode: track.blendMode && track.blendMode !== "normal" ? track.blendMode : undefined,

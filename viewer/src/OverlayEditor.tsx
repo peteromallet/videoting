@@ -48,6 +48,10 @@ const hasPositionOverride = (clipMeta: ClipMeta | undefined): boolean => {
   );
 };
 
+const usesAbsoluteCompositionSpace = (clipMeta: ClipMeta | undefined): boolean => {
+  return Boolean(clipMeta && (clipMeta.clipType === "text" || hasPositionOverride(clipMeta)));
+};
+
 export default function OverlayEditor({
   rows,
   meta,
@@ -64,15 +68,47 @@ export default function OverlayEditor({
   const dragState = useRef<{
     mode: DragMode;
     actionId: string;
-    trackId: string;
     startMouseX: number;
     startMouseY: number;
     startX: number;
     startY: number;
     startW: number;
     startH: number;
+    effectiveScale: number;
   } | null>(null);
   const layoutRef = useRef<OverlayLayout | null>(null);
+
+  const getTrackDefaultBounds = useCallback((trackId: string) => {
+    const trackScale = Math.max(trackScaleMap[trackId] ?? 1, 0.01);
+    return {
+      x: Math.round(compositionWidth * (1 - trackScale) / 2),
+      y: Math.round(compositionHeight * (1 - trackScale) / 2),
+      width: Math.round(compositionWidth * trackScale),
+      height: Math.round(compositionHeight * trackScale),
+    };
+  }, [compositionHeight, compositionWidth, trackScaleMap]);
+
+  const getClipBounds = useCallback((clipMeta: ClipMeta, trackId: string) => {
+    if (clipMeta.clipType === "text") {
+      return {
+        x: clipMeta.x ?? 0,
+        y: clipMeta.y ?? 0,
+        width: clipMeta.width ?? 640,
+        height: clipMeta.height ?? 160,
+      };
+    }
+
+    if (hasPositionOverride(clipMeta)) {
+      return {
+        x: clipMeta.x ?? 0,
+        y: clipMeta.y ?? 0,
+        width: clipMeta.width ?? compositionWidth,
+        height: clipMeta.height ?? compositionHeight,
+      };
+    }
+
+    return getTrackDefaultBounds(trackId);
+  }, [compositionHeight, compositionWidth, getTrackDefaultBounds]);
 
   const activeOverlays = useMemo(() => {
     const overlays: ActiveOverlay[] = [];
@@ -92,26 +128,26 @@ export default function OverlayEditor({
         }
 
         const isSelected = selectedClipId === action.id;
-        const isPositioned = clipMeta.clipType === "text" || hasPositionOverride(clipMeta);
+        const isPositioned = usesAbsoluteCompositionSpace(clipMeta);
         if (!isPositioned && !isSelected) {
           continue;
         }
 
-        const useFullFrameBounds = isSelected && !hasPositionOverride(clipMeta);
+        const bounds = getClipBounds(clipMeta, row.id);
         overlays.push({
           actionId: action.id,
           label: clipMeta.asset ?? clipMeta.text?.content ?? action.id,
           track: row.id,
-          x: clipMeta.x ?? 0,
-          y: clipMeta.y ?? 0,
-          width: clipMeta.width ?? (useFullFrameBounds ? compositionWidth : 320),
-          height: clipMeta.height ?? (useFullFrameBounds ? compositionHeight : 240),
+          x: bounds.x,
+          y: bounds.y,
+          width: bounds.width,
+          height: bounds.height,
         });
       }
     }
 
     return overlays;
-  }, [compositionHeight, compositionWidth, currentTime, meta, rows, selectedClipId]);
+  }, [currentTime, getClipBounds, meta, rows, selectedClipId]);
 
   const getTrackProjection = useCallback((currentLayout: OverlayLayout, effectiveScale: number) => {
     const trackScale = Math.max(effectiveScale, 0.01);
@@ -195,34 +231,32 @@ export default function OverlayEditor({
       return;
     }
 
-    const needsInitialization = !hasPositionOverride(clipMeta);
-    const startX = clipMeta.x ?? 0;
-    const startY = clipMeta.y ?? 0;
-    const startW = clipMeta.width ?? (needsInitialization ? compositionWidth : 320);
-    const startH = clipMeta.height ?? (needsInitialization ? compositionHeight : 240);
+    const needsInitialization = clipMeta.clipType !== "text" && !hasPositionOverride(clipMeta);
+    const bounds = getClipBounds(clipMeta, clipMeta.track);
+    let startX = bounds.x;
+    let startY = bounds.y;
+    let startW = bounds.width;
+    let startH = bounds.height;
+    let effectiveScale = usesAbsoluteCompositionSpace(clipMeta) ? 1 : (trackScaleMap[clipMeta.track] ?? 1);
 
     if (needsInitialization) {
-      onOverlayChange(actionId, {
-        x: 0,
-        y: 0,
-        width: compositionWidth,
-        height: compositionHeight,
-      });
+      effectiveScale = 1;
+      onOverlayChange(actionId, { x: startX, y: startY, width: startW, height: startH });
     }
 
     dragState.current = {
       mode,
       actionId,
-      trackId: clipMeta.track,
       startMouseX: event.clientX,
       startMouseY: event.clientY,
       startX,
       startY,
       startW,
       startH,
+      effectiveScale,
     };
     onSelectClip(actionId);
-  }, [compositionHeight, compositionWidth, meta, onOverlayChange, onSelectClip]);
+  }, [getClipBounds, meta, onOverlayChange, onSelectClip, trackScaleMap]);
 
   useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
@@ -233,9 +267,11 @@ export default function OverlayEditor({
       }
 
       const clipMeta = meta[state.actionId];
-      const trackScale = trackScaleMap[state.trackId] ?? 1;
-      const effectiveScale = hasPositionOverride(clipMeta) ? 1 : trackScale;
-      const projection = getTrackProjection(currentLayout, effectiveScale);
+      if (!clipMeta) {
+        return;
+      }
+
+      const projection = getTrackProjection(currentLayout, state.effectiveScale);
       const dx = (event.clientX - state.startMouseX) / projection.scaleX;
       const dy = (event.clientY - state.startMouseY) / projection.scaleY;
 
@@ -288,7 +324,7 @@ export default function OverlayEditor({
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [getTrackProjection, meta, onOverlayChange, trackScaleMap]);
+  }, [getTrackProjection, meta, onOverlayChange]);
 
   if (activeOverlays.length === 0 || !layout) {
     return null;
@@ -302,12 +338,21 @@ export default function OverlayEditor({
   };
 
   return (
-    <div className="overlay-editor" style={containerStyle}>
+    <div
+      className="overlay-editor"
+      style={{ ...containerStyle, pointerEvents: selectedClipId ? "auto" : "none" }}
+      onClick={(event) => {
+        // Click on empty space deselects
+        if (event.target === event.currentTarget) {
+          onSelectClip(null);
+        }
+      }}
+    >
       {activeOverlays.map((overlay) => {
         const isSelected = selectedClipId === overlay.actionId;
         const clipMeta = meta[overlay.actionId];
         const trackScale = trackScaleMap[overlay.track] ?? 1;
-        const effectiveScale = hasPositionOverride(clipMeta) ? 1 : trackScale;
+        const effectiveScale = usesAbsoluteCompositionSpace(clipMeta) ? 1 : trackScale;
         const projection = getTrackProjection(layout, effectiveScale);
         const style: CSSProperties = {
           left: projection.offsetX + overlay.x * projection.scaleX,

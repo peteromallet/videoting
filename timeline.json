@@ -2,147 +2,97 @@
   "output": {
     "resolution": "1280x720",
     "fps": 30,
-    "file": "output/render.mp4",
-    "background": "reigh-bg-v17-titled-dust",
-    "background_scale": 0.95
+    "file": "output/render.mp4"
   },
   "tracks": [
     {
       "id": "V1",
       "kind": "visual",
-      "label": "V1",
+      "label": "Background",
       "scale": 1,
       "fit": "cover",
-      "opacity": 1,
-      "blendMode": "normal"
+      "opacity": 1
     },
     {
       "id": "V2",
       "kind": "visual",
-      "label": "V2",
-      "scale": 0.9,
-      "fit": "cover",
-      "opacity": 1,
-      "blendMode": "multiply"
+      "label": "Main Video",
+      "scale": 0.95,
+      "fit": "contain",
+      "opacity": 1
     },
     {
       "id": "V3",
       "kind": "visual",
-      "label": "V3",
+      "label": "Overlay",
       "scale": 1,
       "fit": "manual",
-      "opacity": 1,
-      "blendMode": "normal"
+      "opacity": 1
     },
     {
       "id": "A1",
       "kind": "audio",
-      "label": "A1",
-      "scale": 1,
-      "fit": "contain",
-      "opacity": 1,
-      "blendMode": "normal"
+      "label": "Audio",
+      "opacity": 1
     }
   ],
   "clips": [
     {
-      "id": "clip-background",
+      "id": "bg-1",
       "at": 0,
       "track": "V1",
       "asset": "reigh-bg-v17-titled-dust",
       "clipType": "hold",
-      "hold": 118.61,
-      "x": 304,
-      "y": 5,
+      "hold": 120,
+      "x": -3,
+      "y": 8,
       "width": 1280,
-      "height": 720,
-      "opacity": 1,
-      "continuous": {
-        "type": "ken-burns",
-        "intensity": 0.5
-      }
+      "height": 720
     },
     {
-      "id": "clip-3b",
-      "at": 8.97,
+      "id": "clip-0",
+      "at": 0,
       "track": "V2",
-      "asset": "demo-two",
+      "asset": "output-composition",
       "clipType": "media",
       "from": 0,
-      "to": 12.79,
-      "speed": 4,
-      "volume": 0,
-      "x": 172,
-      "y": -23,
+      "to": 6.91,
+      "x": -68,
+      "y": 28,
       "width": 1280,
-      "height": 720,
-      "entrance": {
-        "type": "pulse",
-        "duration": 0.5
-      },
-      "exit": {
-        "type": "fade-out",
-        "duration": 0.6
-      }
+      "height": 720
     },
     {
-      "id": "clip-3b-1774315356591",
-      "at": 15.81,
+      "id": "clip-1",
+      "at": 6.91,
       "track": "V2",
-      "asset": "demo-two",
+      "asset": "venn-diagram",
       "clipType": "media",
-      "from": 12.79,
-      "to": 22.63,
-      "speed": 4,
-      "volume": 0,
-      "x": -244,
-      "y": 251,
-      "width": 1280,
-      "height": 720,
-      "entrance": {
-        "type": "pulse",
-        "duration": 0.5
-      },
-      "exit": {
-        "type": "fade-out",
-        "duration": 0.6
-      }
+      "from": 0,
+      "to": 4.73,
+      "speed": 1.06
     },
     {
-      "id": "clip-5",
-      "at": 31.19,
+      "id": "clip-2",
+      "at": 11.37,
       "track": "V2",
-      "asset": "bg-dark-abstract",
-      "clipType": "hold",
-      "hold": 5,
-      "opacity": 1
+      "asset": "demo-one",
+      "clipType": "media",
+      "from": 0,
+      "to": 4.97,
+      "x": 21,
+      "y": -75,
+      "width": 1280,
+      "height": 720
     },
     {
       "id": "clip-3",
-      "at": 13.54,
-      "track": "V3",
+      "at": 19.97,
+      "track": "V2",
       "asset": "demo-two",
       "clipType": "media",
-      "from": 1.7,
-      "to": 23.14,
-      "speed": 3,
-      "volume": 0,
-      "x": 731,
-      "y": -94,
-      "width": 1071,
-      "height": 658,
-      "entrance": {
-        "type": "zoom-in",
-        "duration": 0.5
-      },
-      "exit": {
-        "type": "flip",
-        "duration": 0.6
-      },
-      "continuous": {
-        "type": "float",
-        "intensity": 0.5
-      }
+      "from": 5,
+      "to": 10.16
     },
     {
       "id": "clip-4",
@@ -151,11 +101,7 @@
       "asset": "input",
       "clipType": "media",
       "from": 0,
-      "to": 113.77,
-      "entrance": {
-        "type": "zoom-in",
-        "duration": 0.5
-      }
+      "to": 113.77
     }
   ]
 }

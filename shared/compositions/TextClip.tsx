@@ -10,33 +10,20 @@ type TextClipProps = {
   fps: number;
 };
 
-const hasPositionOverride = (clip: ResolvedTimelineClip): boolean => {
-  return (
-    clip.x !== undefined
-    || clip.y !== undefined
-    || clip.width !== undefined
-    || clip.height !== undefined
-  );
-};
-
-export const TextClip: FC<TextClipProps> = ({ clip, track, fps }) => {
+export const TextClip: FC<TextClipProps> = ({ clip, track: _track, fps }) => {
   const durationInFrames = getClipDurationInFrames(clip, fps);
   const text = clip.text;
   if (!text) {
     return null;
   }
 
-  const trackScale = Math.max(track.scale ?? 1, 0.01);
-  const shouldBypassTrackScale = hasPositionOverride(clip);
-  const clipScale = shouldBypassTrackScale ? trackScale : 1;
-
   const content = (
     <AbsoluteFill
       style={{
-        left: (clip.x ?? 0) / clipScale,
-        top: (clip.y ?? 0) / clipScale,
-        width: (clip.width ?? 640) / clipScale,
-        height: (clip.height ?? 160) / clipScale,
+        left: clip.x ?? 0,
+        top: clip.y ?? 0,
+        width: clip.width ?? 640,
+        height: clip.height ?? 160,
         position: "absolute",
         justifyContent: "center",
         color: text.color ?? "#ffffff",

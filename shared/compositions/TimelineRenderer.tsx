@@ -20,11 +20,8 @@ const renderVisualTrack = (
     <AbsoluteFill
       key={track.id}
       style={{
-        transform: `scale(${track.scale ?? 1})`,
-        transformOrigin: "center center",
         opacity: track.opacity ?? 1,
         mixBlendMode: track.blendMode && track.blendMode !== "normal" ? track.blendMode : undefined,
-        overflow: "hidden",
       }}
     >
       {sortedClips.map((clip, index) => {
@@ -32,14 +29,41 @@ const renderVisualTrack = (
           return <TextClipSequence key={clip.id} clip={clip} track={track} fps={fps} />;
         }
 
+        const predecessor = index > 0 ? sortedClips[index - 1] : null;
+        const hasPositionOverride = (
+          clip.x !== undefined
+          || clip.y !== undefined
+          || clip.width !== undefined
+          || clip.height !== undefined
+        );
+        if (hasPositionOverride) {
+          return (
+            <VisualClipSequence
+              key={clip.id}
+              clip={clip}
+              track={track}
+              fps={fps}
+              predecessor={predecessor}
+            />
+          );
+        }
+
         return (
-          <VisualClipSequence
+          <AbsoluteFill
             key={clip.id}
-            clip={clip}
-            track={track}
-            fps={fps}
-            predecessor={index > 0 ? sortedClips[index - 1] : null}
-          />
+            style={{
+              transform: `scale(${track.scale ?? 1})`,
+              transformOrigin: "center center",
+              overflow: "hidden",
+            }}
+          >
+            <VisualClipSequence
+              clip={clip}
+              track={track}
+              fps={fps}
+              predecessor={predecessor}
+            />
+          </AbsoluteFill>
         );
       })}
     </AbsoluteFill>
