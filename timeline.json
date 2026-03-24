@@ -178,6 +178,19 @@
       }
     },
     {
+      "id": "clip-7",
+      "at": 41.44,
+      "track": "V3",
+      "asset": "08_a_forest_engulfed_in_flames_stretching_to_the_horizon_1",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
       "id": "clip-4",
       "at": 1.94,
       "track": "A1",
