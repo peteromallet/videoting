@@ -309,8 +309,10 @@ export function useTimelineEditing({
     // Handle external file drops
     const files = Array.from(event.dataTransfer.files);
     if (files.length > 0 && dataRef.current) {
-      const rect = event.currentTarget.getBoundingClientRect();
-      const scrollLeft = event.currentTarget.scrollLeft;
+      const editArea = event.currentTarget.querySelector<HTMLElement>(".timeline-editor-edit-area");
+      const grid = event.currentTarget.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+      const rect = (editArea ?? event.currentTarget).getBoundingClientRect();
+      const scrollLeft = grid?.scrollLeft ?? event.currentTarget.scrollLeft;
       const pixelsPerSecond = scaleWidth / scale;
       const dropX = event.clientX - rect.left;
       const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
@@ -389,8 +391,10 @@ export function useTimelineEditing({
       return;
     }
 
-    const rect = event.currentTarget.getBoundingClientRect();
-    const scrollLeft = event.currentTarget.scrollLeft;
+    const editArea2 = event.currentTarget.querySelector<HTMLElement>(".timeline-editor-edit-area");
+    const grid2 = event.currentTarget.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+    const rect = (editArea2 ?? event.currentTarget).getBoundingClientRect();
+    const scrollLeft = grid2?.scrollLeft ?? event.currentTarget.scrollLeft;
     const pixelsPerSecond = scaleWidth / scale;
     const dropX = event.clientX - rect.left;
     const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
