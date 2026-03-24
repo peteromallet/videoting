@@ -306,57 +306,52 @@ export function useTimelineEditing({
     const relX = event.clientX - wrapperRect.left;
     const relY = event.clientY - wrapperRect.top;
 
-    // Use fixed-position overlay on document.body to avoid overflow:hidden clipping
+    // Find target row
+    const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
+    const targetRowIndex = rowElements.findIndex((el) => {
+      const r = el.getBoundingClientRect();
+      return event.clientY >= r.top && event.clientY <= r.bottom;
+    });
+    const targetRow = rowElements[targetRowIndex];
+
+    // Calculate time
     const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
     const scrollLeft = grid?.scrollLeft ?? 0;
     const pixelsPerSecond = scaleWidth / scale;
     const time = Math.max(0, (relX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
 
+    // Get target row position for the highlight
+    const rowRect = targetRow?.getBoundingClientRect();
+    const rowTop = rowRect?.top ?? wrapperRect.top;
+    const rowHeight = rowRect?.height ?? 36;
+    const trackName = dataRef.current?.tracks[targetRowIndex]?.label ?? dataRef.current?.tracks[targetRowIndex]?.id ?? "";
+
+    // Create or update the drop indicator (fixed on body)
     let indicator = document.querySelector<HTMLElement>("[data-drop-indicator]");
     if (!indicator) {
       indicator = document.createElement("div");
       indicator.dataset.dropIndicator = "true";
       document.body.appendChild(indicator);
     }
-    indicator.style.cssText = `
-      position: fixed;
-      left: ${event.clientX}px;
-      top: ${wrapperRect.top}px;
-      width: 2px;
-      height: ${wrapperRect.height}px;
-      background: #89b4fa;
-      z-index: 99999;
-      pointer-events: none;
-      box-shadow: 0 0 8px rgba(137,180,250,0.6);
-    `;
 
-    let label = document.querySelector<HTMLElement>("[data-drop-label]");
-    if (!label) {
-      label = document.createElement("div");
-      label.dataset.dropLabel = "true";
-      document.body.appendChild(label);
-    }
-    label.style.cssText = `
-      position: fixed;
-      left: ${event.clientX + 8}px;
-      top: ${event.clientY - 14}px;
-      background: rgba(137,180,250,0.9);
-      color: #1e1e2e;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-      z-index: 100000;
-      pointer-events: none;
-      white-space: nowrap;
+    // Show a highlighted row area + a clip ghost at the drop position
+    const ghostWidth = 80;
+    indicator.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;`;
+    indicator.innerHTML = `
+      <div style="position:fixed;left:${wrapperRect.left}px;top:${rowTop}px;width:${wrapperRect.width}px;height:${rowHeight}px;background:rgba(137,180,250,0.08);border:1px solid rgba(137,180,250,0.3);border-radius:4px;pointer-events:none;"></div>
+      <div style="position:fixed;left:${event.clientX}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
+      <div style="position:fixed;left:${event.clientX + 4}px;top:${rowTop + 4}px;width:${ghostWidth}px;height:${rowHeight - 8}px;background:rgba(137,180,250,0.18);border:1px dashed rgba(137,180,250,0.5);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:4px;">
+        <span style="font-size:9px;font-weight:600;color:rgba(137,180,250,0.9);">${time.toFixed(1)}s</span>
+      </div>
+      <div style="position:fixed;left:${event.clientX + 4}px;top:${rowTop - 18}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
     `;
-    label.textContent = `${time.toFixed(1)}s`;
   }, [scale, scaleWidth]);
 
   const onTimelineDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     delete event.currentTarget.dataset.dragOver;
     document.querySelector("[data-drop-indicator]")?.remove();
     document.querySelector("[data-drop-label]")?.remove();
+    document.querySelector("[data-drop-indicator]")?.remove();
   }, []);
 
   const onTimelineDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {
@@ -364,6 +359,7 @@ export function useTimelineEditing({
     delete event.currentTarget.dataset.dragOver;
     document.querySelector("[data-drop-indicator]")?.remove();
     document.querySelector("[data-drop-label]")?.remove();
+    document.querySelector("[data-drop-indicator]")?.remove();
 
     // Handle external file drops
     const files = Array.from(event.dataTransfer.files);
