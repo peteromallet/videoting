@@ -195,6 +195,15 @@
       "hold": 3
     },
     {
+      "id": "clip-18",
+      "at": 53.91,
+      "track": "V2",
+      "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
+      "clipType": "hold",
+      "hold": 5,
+      "opacity": 1
+    },
+    {
       "id": "clip-7",
       "at": 41.44,
       "track": "V3",
@@ -361,6 +370,19 @@
       "asset": "uploading:-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
       "clipType": "hold",
       "hold": 3
+    },
+    {
+      "id": "clip-17",
+      "at": 11.34,
+      "track": "V3",
+      "asset": "-qh1ks13cxdybuxaaevd3_okdupdhk",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
     },
     {
       "id": "clip-4",

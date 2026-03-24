@@ -334,16 +334,18 @@ export function useTimelineEditing({
       document.body.appendChild(indicator);
     }
 
-    // Show a highlighted row area + a clip ghost at the drop position
+    // Show a highlighted row area + a clip ghost centered on cursor
     const ghostWidth = 80;
+    const ghostLeft = event.clientX - ghostWidth / 2;
+    const lineX = event.clientX;
     indicator.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;`;
     indicator.innerHTML = `
       <div style="position:fixed;left:${wrapperRect.left}px;top:${rowTop}px;width:${wrapperRect.width}px;height:${rowHeight}px;background:rgba(137,180,250,0.08);border:1px solid rgba(137,180,250,0.3);border-radius:4px;pointer-events:none;"></div>
-      <div style="position:fixed;left:${event.clientX}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
-      <div style="position:fixed;left:${event.clientX + 4}px;top:${rowTop + 4}px;width:${ghostWidth}px;height:${rowHeight - 8}px;background:rgba(137,180,250,0.18);border:1px dashed rgba(137,180,250,0.5);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:4px;">
+      <div style="position:fixed;left:${lineX}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
+      <div style="position:fixed;left:${ghostLeft}px;top:${rowTop + 4}px;width:${ghostWidth}px;height:${rowHeight - 8}px;background:rgba(137,180,250,0.18);border:1px dashed rgba(137,180,250,0.5);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;">
         <span style="font-size:9px;font-weight:600;color:rgba(137,180,250,0.9);">${time.toFixed(1)}s</span>
       </div>
-      <div style="position:fixed;left:${event.clientX + 4}px;top:${rowTop - 18}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
+      <div style="position:fixed;left:${ghostLeft}px;top:${rowTop - 18}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
     `;
   }, [scale, scaleWidth]);
 
