@@ -62,9 +62,34 @@ describe("validateSerializedConfig", () => {
     expect(() => validateSerializedConfig(serialized)).not.toThrow();
   });
 
+  it("accepts config without tracks key", () => {
+    const config: TimelineConfig = {
+      output: { resolution: "1280x720", fps: 30, file: "out.mp4" },
+      clips: [{ id: "c", at: 0, track: "V1", asset: "x", from: 0, to: 5 }],
+    };
+    expect(() => validateSerializedConfig(config)).not.toThrow();
+  });
+
   it("throws for unexpected top-level keys", () => {
     const bad = { output: {}, clips: [], tracks: [], extra: true } as unknown as TimelineConfig;
-    expect(() => validateSerializedConfig(bad)).toThrow();
+    expect(() => validateSerializedConfig(bad)).toThrow("unexpected top-level keys");
+  });
+
+  it("throws for clips with unknown keys", () => {
+    const config: TimelineConfig = {
+      output: { resolution: "1280x720", fps: 30, file: "out.mp4" },
+      clips: [{ id: "c", at: 0, track: "V1", unknownKey: 42 } as any],
+    };
+    expect(() => validateSerializedConfig(config)).toThrow("unexpected keys");
+  });
+
+  it("throws for tracks with unknown keys", () => {
+    const config: TimelineConfig = {
+      output: { resolution: "1280x720", fps: 30, file: "out.mp4" },
+      tracks: [{ id: "V1", kind: "visual", label: "V1", badProp: true } as any],
+      clips: [],
+    };
+    expect(() => validateSerializedConfig(config)).toThrow("unexpected keys");
   });
 });
 
