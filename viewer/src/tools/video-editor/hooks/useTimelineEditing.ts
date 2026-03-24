@@ -315,22 +315,28 @@ export function useTimelineEditing({
       const dropX = event.clientX - rect.left;
       const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
 
-      // Upload files first, then add to timeline
+      const rowElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
+      const rowIndex = rowElements.findIndex((rowElement) => {
+        const rowRect = rowElement.getBoundingClientRect();
+        return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
+      });
+
+      // Upload files — this invalidates queries and waits for them to refresh
+      console.log("[drop] Uploading", files.length, "file(s)...");
       await uploadFiles(files);
-      // After upload, the asset registry will be refreshed
-      // For now, use the filename (without extension) as the asset key
+      console.log("[drop] Upload complete, waiting for registry refresh...");
+
+      // Small delay to let React Query refetch complete
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Now add clips for each file — dataRef should have the updated registry
       for (const file of files) {
         const assetKey = file.name.replace(/\.[^.]+$/, "").replace(/\s+/g, "-").toLowerCase();
         const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
         const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
-
-        const rowElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-        const rowIndex = rowElements.findIndex((rowElement) => {
-          const rowRect = rowElement.getBoundingClientRect();
-          return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
-        });
         const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
         const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
+        console.log("[drop] Adding clip:", assetKey, "to track:", compatibleTrackId, "at:", time.toFixed(2));
         handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
       }
       return;
