@@ -115,6 +115,7 @@ export interface UseTimelineDataResult {
     nextResolvedConfig: TimelineData["resolvedConfig"],
     options?: { selectedClipId?: string | null; selectedTrackId?: string | null },
   ) => void;
+  commitDataNoSave: (nextData: TimelineData) => void;
   queryClient: ReturnType<typeof useQueryClient>;
   uploadFiles: (files: File[]) => Promise<void>;
   startRender: () => Promise<void>;
@@ -264,6 +265,13 @@ export function useTimelineData(): UseTimelineDataResult {
       scheduleSave(nextData);
     }
   }, [scheduleSave]);
+
+  // Update local state without saving — used for temporary UI like upload skeletons.
+  // Increments editSeq to block polling from overwriting the skeleton.
+  const commitDataNoSave = useCallback((nextData: TimelineData) => {
+    editSeqRef.current += 1;
+    commitData(nextData, { save: false });
+  }, [commitData]);
 
   const applyTimelineEdit = useCallback((
     nextRows: TimelineRow[],
@@ -581,6 +589,7 @@ export function useTimelineData(): UseTimelineDataResult {
     setAssetPanelState,
     applyTimelineEdit,
     applyResolvedConfigEdit,
+    commitDataNoSave,
     queryClient,
     uploadFiles,
     startRender,

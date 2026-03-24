@@ -326,6 +326,21 @@
       "file": "inputs/-Qh1ks13CxDYbuXaaevD3_OKDupDhk.png",
       "type": "image",
       "resolution": "1200x896"
+    },
+    "qi9nsmbgr842-zvlcmvm6_5s5erizr": {
+      "file": "inputs/QI9NSMBgr842-zVlcmvM6_5S5erIzr.png",
+      "type": "image",
+      "resolution": "1024x1024"
+    },
+    "dizjaj9ucwfxymklmvgs0_tqnyt57n": {
+      "file": "inputs/DIZjAJ9UCwfXyMkLMVGs0_TqNyT57n.png",
+      "type": "image",
+      "resolution": "1200x896"
+    },
+    "test": {
+      "file": "inputs/test.png",
+      "type": "image",
+      "resolution": "1184x880"
     }
   }
 }

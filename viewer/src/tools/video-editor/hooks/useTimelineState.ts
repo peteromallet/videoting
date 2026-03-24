@@ -93,6 +93,7 @@ export function useTimelineState(): UseTimelineStateResult {
     applyTimelineEdit: dataHook.applyTimelineEdit,
     applyResolvedConfigEdit: dataHook.applyResolvedConfigEdit,
     uploadFiles: dataHook.uploadFiles,
+    commitDataNoSave: dataHook.commitDataNoSave,
   });
 
   const trackManagement = useTimelineTrackManagement({

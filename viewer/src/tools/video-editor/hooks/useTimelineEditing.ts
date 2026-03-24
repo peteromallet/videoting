@@ -40,6 +40,7 @@ export interface UseTimelineEditingArgs {
   applyTimelineEdit: UseTimelineDataResult["applyTimelineEdit"];
   applyResolvedConfigEdit: UseTimelineDataResult["applyResolvedConfigEdit"];
   uploadFiles: (files: File[]) => Promise<void>;
+  commitDataNoSave: (nextData: TimelineData) => void;
 }
 
 export interface UseTimelineEditingResult {
@@ -81,6 +82,7 @@ export function useTimelineEditing({
   applyTimelineEdit,
   applyResolvedConfigEdit,
   uploadFiles,
+  commitDataNoSave,
 }: UseTimelineEditingArgs): UseTimelineEditingResult {
   const clearActionDragState = useCallback((clipId: string) => {
     delete actionDragStateRef.current[clipId];
@@ -380,33 +382,42 @@ export function useTimelineEditing({
         return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
       });
 
-      // Add skeleton placeholder clips immediately
-      const skeletonIds: string[] = [];
-      for (const file of files) {
-        const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
-        const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
-        const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
-        const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
-        const skeletonId = `uploading-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-        skeletonIds.push(skeletonId);
+      // Add skeleton placeholder clips immediately (no save — visual only)
+      {
+        const current = dataRef.current!;
+        let nextRows = current.rows;
+        const nextMeta = { ...current.meta };
+        const nextEffects = { ...current.effects };
 
-        const targetRow = compatibleTrackId ?? dataRef.current!.rows[0]?.id;
-        if (targetRow) {
-          const placeholderMeta: ClipMeta = {
-            asset: `uploading:${file.name}`,
-            track: targetRow,
-            clipType: "hold",
-            hold: 3,
-          };
-          const nextRows = dataRef.current!.rows.map((row) => {
-            if (row.id !== targetRow) return row;
-            return {
-              ...row,
-              actions: [...row.actions, { id: skeletonId, start: time, end: time + 3, effectId: "" }],
+        for (const file of files) {
+          const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+          const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
+          const targetTrackId = rowIndex >= 0 ? current.rows[rowIndex]?.id : undefined;
+          const compatibleTrackId = getCompatibleTrackId(current.tracks, targetTrackId, kind, selectedTrackId);
+          const skeletonId = `uploading-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+          const targetRow = compatibleTrackId ?? current.rows[0]?.id;
+
+          if (targetRow) {
+            nextMeta[skeletonId] = {
+              asset: `uploading:${file.name}`,
+              track: targetRow,
+              clipType: "hold",
+              hold: 3,
             };
-          });
-          applyTimelineEdit(nextRows, { [skeletonId]: placeholderMeta }, undefined, undefined);
+            nextEffects[`effect-${skeletonId}`] = { id: `effect-${skeletonId}` };
+            nextRows = nextRows.map((row) => {
+              if (row.id !== targetRow) return row;
+              return { ...row, actions: [...row.actions, { id: skeletonId, start: time, end: time + 3, effectId: `effect-${skeletonId}` }] };
+            });
+          }
         }
+
+        commitDataNoSave({
+          ...current,
+          rows: nextRows,
+          meta: nextMeta,
+          effects: nextEffects,
+        });
       }
 
       // Upload files
