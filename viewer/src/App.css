@@ -920,8 +920,10 @@ body {
   border-radius: 6px;
   background: var(--bg-secondary);
   padding: 12px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
 }
 
 .clip-panel-header {
@@ -931,10 +933,39 @@ body {
   gap: 12px;
 }
 
+.clip-panel-header-copy {
+  min-width: 0;
+}
+
+.clip-panel-title {
+  display: block;
+  font-size: 14px;
+}
+
 .clip-panel-subtitle {
   margin-top: 4px;
   font-size: 11px;
   color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clip-panel-meta {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.clip-panel-meta span {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
 .clip-panel-close {
@@ -947,6 +978,46 @@ body {
   cursor: pointer;
 }
 
+.clip-panel-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 12px;
+}
+
+.clip-panel-section-header {
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.clip-panel-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.clip-panel-section-chevron {
+  color: var(--text-secondary);
+  transition: transform 0.15s ease;
+}
+
+.clip-panel-section-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.clip-panel-section-body {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
 .clip-panel-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -956,6 +1027,20 @@ body {
 .clip-panel-field {
   display: grid;
   gap: 6px;
+  min-width: 0;
+  padding-left: 0;
+  border-left: 2px solid transparent;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.clip-panel-field--overridden {
+  border-left-color: var(--accent);
+  padding-left: 8px;
+}
+
+.clip-panel-field--inherited {
+  padding-left: 8px;
+  opacity: 0.8;
 }
 
 .clip-panel-label {
@@ -978,6 +1063,10 @@ body {
   opacity: 0.6;
 }
 
+.clip-panel-input--inherited::placeholder {
+  color: var(--text-secondary);
+}
+
 .clip-panel-textarea {
   min-height: 90px;
   resize: vertical;
@@ -986,6 +1075,24 @@ body {
 .clip-panel-toggle {
   grid-template-columns: 1fr auto;
   align-items: center;
+}
+
+.clip-panel-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clip-panel-slider {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.clip-panel-slider-value {
+  min-width: 42px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-secondary);
 }
 
 .clip-panel-actions {
@@ -1001,6 +1108,11 @@ body {
   color: var(--text-primary);
   padding: 10px 12px;
   cursor: pointer;
+}
+
+.clip-panel-button-secondary {
+  color: var(--accent);
+  border-color: rgba(137, 180, 250, 0.45);
 }
 
 .clip-panel-button.split {

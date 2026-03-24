@@ -29,7 +29,7 @@ const renderVisualTrack = (
     >
       {sortedClips.map((clip, index) => {
         if (clip.clipType === "text") {
-          return <TextClipSequence key={clip.id} clip={clip} fps={fps} />;
+          return <TextClipSequence key={clip.id} clip={clip} track={track} fps={fps} />;
         }
 
         return (

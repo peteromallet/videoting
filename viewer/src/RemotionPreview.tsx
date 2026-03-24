@@ -9,7 +9,7 @@ import type { ResolvedTimelineConfig } from "@shared/types";
 // Set to true to use a minimal single-video debug player
 const DEBUG_MODE = false;
 
-const PREVIEW_SCALE = 0.5;
+const PREVIEW_SCALE = 1;
 
 export interface PreviewHandle {
   seek: (time: number) => void;

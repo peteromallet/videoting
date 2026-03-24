@@ -851,6 +851,19 @@ function App() {
     applyResolvedConfigEdit(nextResolvedConfig, { selectedClipId });
   }, [applyResolvedConfigEdit, resolvedConfig, selectedClipId]);
 
+  const handleResetClipPosition = useCallback(() => {
+    if (!resolvedConfig || !selectedClipId) {
+      return;
+    }
+
+    const nextResolvedConfig = updateClipInConfig(resolvedConfig, selectedClipId, (clip) => {
+      const { x, y, width, height, ...rest } = clip;
+      return rest;
+    });
+
+    applyResolvedConfigEdit(nextResolvedConfig, { selectedClipId });
+  }, [applyResolvedConfigEdit, resolvedConfig, selectedClipId]);
+
   const handleSplitSelectedClip = useCallback(() => {
     if (!resolvedConfig || !selectedClipId) {
       return;
@@ -1232,10 +1245,13 @@ function App() {
             track={selectedTrack}
             hasPredecessor={selectedClipHasPredecessor}
             onChange={handleSelectedClipChange}
+            onResetPosition={handleResetClipPosition}
             onClose={() => setSelectedClipId(null)}
             onSplit={handleSplitSelectedClip}
             onToggleMute={handleToggleMute}
             playheadSeconds={currentTime}
+            compositionWidth={compositionSize.width}
+            compositionHeight={compositionSize.height}
           />
         </div>
       </div>

@@ -113,8 +113,8 @@ export default function OverlayEditor({
     return overlays;
   }, [compositionHeight, compositionWidth, currentTime, meta, rows, selectedClipId]);
 
-  const getTrackProjection = useCallback((trackId: string, currentLayout: OverlayLayout) => {
-    const trackScale = trackScaleMap[trackId] ?? 1;
+  const getTrackProjection = useCallback((currentLayout: OverlayLayout, effectiveScale: number) => {
+    const trackScale = Math.max(effectiveScale, 0.01);
     const scaledWidth = currentLayout.width * trackScale;
     const scaledHeight = currentLayout.height * trackScale;
 
@@ -124,7 +124,7 @@ export default function OverlayEditor({
       scaleX: (currentLayout.width / compositionWidth) * trackScale,
       scaleY: (currentLayout.height / compositionHeight) * trackScale,
     };
-  }, [compositionHeight, compositionWidth, trackScaleMap]);
+  }, [compositionHeight, compositionWidth]);
 
   const computeLayout = useCallback((): OverlayLayout | null => {
     const player = playerContainerRef.current;
@@ -232,7 +232,10 @@ export default function OverlayEditor({
         return;
       }
 
-      const projection = getTrackProjection(state.trackId, currentLayout);
+      const clipMeta = meta[state.actionId];
+      const trackScale = trackScaleMap[state.trackId] ?? 1;
+      const effectiveScale = hasPositionOverride(clipMeta) ? 1 : trackScale;
+      const projection = getTrackProjection(currentLayout, effectiveScale);
       const dx = (event.clientX - state.startMouseX) / projection.scaleX;
       const dy = (event.clientY - state.startMouseY) / projection.scaleY;
 
@@ -285,7 +288,7 @@ export default function OverlayEditor({
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [getTrackProjection, onOverlayChange]);
+  }, [getTrackProjection, meta, onOverlayChange, trackScaleMap]);
 
   if (activeOverlays.length === 0 || !layout) {
     return null;
@@ -302,7 +305,10 @@ export default function OverlayEditor({
     <div className="overlay-editor" style={containerStyle}>
       {activeOverlays.map((overlay) => {
         const isSelected = selectedClipId === overlay.actionId;
-        const projection = getTrackProjection(overlay.track, layout);
+        const clipMeta = meta[overlay.actionId];
+        const trackScale = trackScaleMap[overlay.track] ?? 1;
+        const effectiveScale = hasPositionOverride(clipMeta) ? 1 : trackScale;
+        const projection = getTrackProjection(layout, effectiveScale);
         const style: CSSProperties = {
           left: projection.offsetX + overlay.x * projection.scaleX,
           top: projection.offsetY + overlay.y * projection.scaleY,

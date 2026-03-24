@@ -21,12 +21,14 @@ const getClipBoxStyle = (clip: ResolvedTimelineClip, track: TrackDefinition): CS
   );
   const fit = track.fit ?? "contain";
   if (fit === "manual" || hasPositionOverride) {
+    const trackScale = Math.max(track.scale ?? 1, 0.01);
+    const shouldBypassTrackScale = hasPositionOverride;
     return {
       position: "absolute",
-      left: clip.x ?? 0,
-      top: clip.y ?? 0,
-      width: clip.width ?? 320,
-      height: clip.height ?? 240,
+      left: (clip.x ?? 0) / (shouldBypassTrackScale ? trackScale : 1),
+      top: (clip.y ?? 0) / (shouldBypassTrackScale ? trackScale : 1),
+      width: (clip.width ?? 320) / (shouldBypassTrackScale ? trackScale : 1),
+      height: (clip.height ?? 240) / (shouldBypassTrackScale ? trackScale : 1),
       objectFit: "cover",
       opacity: clip.opacity ?? 1,
     };

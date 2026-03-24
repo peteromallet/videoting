@@ -21,9 +21,9 @@
       "kind": "visual",
       "label": "V2",
       "scale": 0.9,
-      "fit": "contain",
+      "fit": "cover",
       "opacity": 1,
-      "blendMode": "normal"
+      "blendMode": "multiply"
     },
     {
       "id": "V3",
@@ -52,6 +52,10 @@
       "asset": "reigh-bg-v17-titled-dust",
       "clipType": "hold",
       "hold": 118.61,
+      "x": 304,
+      "y": 5,
+      "width": 1280,
+      "height": 720,
       "opacity": 1,
       "continuous": {
         "type": "ken-burns",
@@ -65,9 +69,36 @@
       "asset": "demo-two",
       "clipType": "media",
       "from": 0,
+      "to": 12.79,
+      "speed": 4,
+      "volume": 0,
+      "x": 172,
+      "y": -23,
+      "width": 1280,
+      "height": 720,
+      "entrance": {
+        "type": "pulse",
+        "duration": 0.5
+      },
+      "exit": {
+        "type": "fade-out",
+        "duration": 0.6
+      }
+    },
+    {
+      "id": "clip-3b-1774315356591",
+      "at": 15.81,
+      "track": "V2",
+      "asset": "demo-two",
+      "clipType": "media",
+      "from": 12.79,
       "to": 22.63,
       "speed": 4,
       "volume": 0,
+      "x": -244,
+      "y": 251,
+      "width": 1280,
+      "height": 720,
       "entrance": {
         "type": "pulse",
         "duration": 0.5
@@ -88,16 +119,20 @@
     },
     {
       "id": "clip-3",
-      "at": 17.21,
-      "track": "V2",
+      "at": 13.54,
+      "track": "V3",
       "asset": "demo-two",
       "clipType": "media",
       "from": 1.7,
       "to": 23.14,
       "speed": 3,
       "volume": 0,
+      "x": 731,
+      "y": -94,
+      "width": 1071,
+      "height": 658,
       "entrance": {
-        "type": "pulse",
+        "type": "zoom-in",
         "duration": 0.5
       },
       "exit": {
