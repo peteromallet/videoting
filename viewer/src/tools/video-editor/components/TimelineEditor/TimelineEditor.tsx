@@ -1,9 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Timeline } from "@xzdarcy/react-timeline-editor";
 import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
 import { ROW_HEIGHT, TIMELINE_START_LEFT } from "@/tools/video-editor/lib/coordinate-utils";
 import { ClipAction } from "@/tools/video-editor/components/TimelineEditor/ClipAction";
 import { TrackLabel } from "@/tools/video-editor/components/TimelineEditor/TrackLabel";
+import { UploadSkeletonOverlay } from "@/tools/video-editor/components/TimelineEditor/UploadSkeletonOverlay";
 import { useCrossTrackDrag } from "@/tools/video-editor/hooks/useCrossTrackDrag";
 import "@xzdarcy/react-timeline-editor/dist/react-timeline-editor.css";
 import "@/tools/video-editor/components/TimelineEditor/timeline-editor-overrides.css";
@@ -23,6 +24,7 @@ export function TimelineEditor() {
     scaleWidth,
     actionDragStateRef,
     clearActionDragState,
+    uploads,
     selectedClipId,
     selectedTrackId,
     handleDeleteClip,
@@ -41,6 +43,7 @@ export function TimelineEditor() {
     onTimelineDragLeave,
     onTimelineDrop,
   } = useTimelineContext();
+  const [gridElement, setGridElement] = useState<HTMLElement | null>(null);
 
   useCrossTrackDrag({
     timelineWrapperRef,
@@ -74,6 +77,15 @@ export function TimelineEditor() {
 
     return Math.ceil((maxEnd + 20) / scale) + 1;
   }, [data, scale]);
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      setGridElement(timelineWrapperRef.current?.querySelector<HTMLElement>(".ReactVirtualized__Grid") ?? null);
+    });
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [data?.rows.length, scaleCount, scaleWidth, timelineWrapperRef]);
 
   if (!data) {
     return null;
@@ -148,6 +160,7 @@ export function TimelineEditor() {
             onActionResizeStart={onActionResizeStart}
             onActionResizeEnd={onActionResizeEnd}
           />
+          <UploadSkeletonOverlay uploads={uploads} scale={scale} scaleWidth={scaleWidth} gridRef={gridElement} />
       </div>
     </div>
   );

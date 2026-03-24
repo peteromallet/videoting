@@ -63,6 +63,7 @@ export default function AssetPanel({
   const [fileDragOver, setFileDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const dragCounter = useRef(0);
   const hiddenSet = useMemo(() => new Set(hidden), [hidden]);
 
@@ -148,12 +149,7 @@ export default function AssetPanel({
     }
   }, []);
 
-  const onFileDrop = useCallback(async (event: React.DragEvent) => {
-    event.preventDefault();
-    dragCounter.current = 0;
-    setFileDragOver(false);
-
-    const files = Array.from(event.dataTransfer.files).filter(isMediaFile);
+  const handleUploadSelection = useCallback(async (files: File[]) => {
     if (files.length === 0) {
       return;
     }
@@ -168,6 +164,18 @@ export default function AssetPanel({
     }
   }, [onUploadFiles]);
 
+  const onFileDrop = useCallback(async (event: React.DragEvent) => {
+    event.preventDefault();
+    dragCounter.current = 0;
+    setFileDragOver(false);
+    await handleUploadSelection(Array.from(event.dataTransfer.files).filter(isMediaFile));
+  }, [handleUploadSelection]);
+
+  const onFileInputChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    await handleUploadSelection(Array.from(event.target.files ?? []).filter(isMediaFile));
+    event.target.value = "";
+  }, [handleUploadSelection]);
+
   return (
     <Card
       className={`relative overflow-hidden ${fileDragOver ? "ring-2 ring-primary/70" : ""}`}
@@ -180,6 +188,17 @@ export default function AssetPanel({
         <div className="flex items-center justify-between gap-3">
           <CardTitle className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Assets</CardTitle>
           <div className="flex items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="video/*,audio/*,image/*"
+              className="hidden"
+              onChange={onFileInputChange}
+            />
+            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => fileInputRef.current?.click()} title="Upload assets">
+              <Upload className="h-4 w-4" />
+            </Button>
             {hiddenCount > 0 ? (
               <Button variant={showHidden ? "secondary" : "outline"} size="sm" onClick={() => setPanelState({ showHidden: !showHidden })}>
                 {hiddenCount} hidden

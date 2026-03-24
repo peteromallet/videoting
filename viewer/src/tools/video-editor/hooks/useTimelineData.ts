@@ -4,7 +4,7 @@ import type { TimelineRow } from "@xzdarcy/timeline-engine";
 import { getConfigSignature, parseResolution } from "@shared/config-utils";
 import { getTrackById } from "@shared/editor-utils";
 import { serializeForDisk } from "@shared/serialize";
-import type { TimelineConfig, TrackDefinition } from "@shared/types";
+import type { AssetRegistryEntry, TimelineConfig, TrackDefinition } from "@shared/types";
 import {
   buildTrackClipOrder,
   SCALE_SECONDS,
@@ -115,9 +115,11 @@ export interface UseTimelineDataResult {
     nextResolvedConfig: TimelineData["resolvedConfig"],
     options?: { selectedClipId?: string | null; selectedTrackId?: string | null },
   ) => void;
-  commitDataNoSave: (nextData: TimelineData) => void;
+  patchRegistry: (assetId: string, entry: AssetRegistryEntry) => void;
   queryClient: ReturnType<typeof useQueryClient>;
+  uploadAsset: (file: File) => Promise<{ assetId: string; entry: AssetRegistryEntry }>;
   uploadFiles: (files: File[]) => Promise<void>;
+  invalidateAssetRegistry: () => Promise<void>;
   startRender: () => Promise<void>;
 }
 
@@ -240,19 +242,24 @@ export function useTimelineData(): UseTimelineDataResult {
       updateLastSavedSignature?: boolean;
     },
   ) => {
+    dataRef.current = nextData;
     setData(nextData);
     if (options?.selectedClipId !== undefined) {
+      selectedClipIdRef.current = options.selectedClipId;
       setSelectedClipId(options.selectedClipId);
     } else if (selectedClipIdRef.current && !nextData.meta[selectedClipIdRef.current]) {
+      selectedClipIdRef.current = null;
       setSelectedClipId(null);
     }
 
     if (options?.selectedTrackId !== undefined) {
+      selectedTrackIdRef.current = options.selectedTrackId;
       setSelectedTrackId(options.selectedTrackId);
     } else {
       const fallbackTrackId = selectedTrackIdRef.current && nextData.tracks.some((track) => track.id === selectedTrackIdRef.current)
         ? selectedTrackIdRef.current
         : nextData.tracks[0]?.id ?? null;
+      selectedTrackIdRef.current = fallbackTrackId;
       setSelectedTrackId(fallbackTrackId);
     }
 
@@ -265,13 +272,6 @@ export function useTimelineData(): UseTimelineDataResult {
       scheduleSave(nextData);
     }
   }, [scheduleSave]);
-
-  // Update local state without saving — used for temporary UI like upload skeletons.
-  // Increments editSeq to block polling from overwriting the skeleton.
-  const commitDataNoSave = useCallback((nextData: TimelineData) => {
-    editSeqRef.current += 1;
-    commitData(nextData, { save: false });
-  }, [commitData]);
 
   const applyTimelineEdit = useCallback((
     nextRows: TimelineRow[],
@@ -315,6 +315,27 @@ export function useTimelineData(): UseTimelineDataResult {
     commitData(nextData, {
       selectedClipId: options?.selectedClipId,
       selectedTrackId: options?.selectedTrackId,
+    });
+  }, [commitData, provider]);
+
+  const patchRegistry = useCallback((assetId: string, entry: AssetRegistryEntry) => {
+    const current = dataRef.current;
+    if (!current) {
+      return;
+    }
+
+    const nextRegistry = {
+      ...current.registry,
+      assets: {
+        ...current.registry.assets,
+        [assetId]: entry,
+      },
+    };
+    const nextData = buildTimelineData(current.config, nextRegistry, (file) => provider.resolveAssetUrl(file));
+    commitData(nextData, {
+      save: false,
+      selectedClipId: selectedClipIdRef.current,
+      selectedTrackId: selectedTrackIdRef.current,
     });
   }, [commitData, provider]);
 
@@ -465,17 +486,35 @@ export function useTimelineData(): UseTimelineDataResult {
     }));
   }, [setPreferences]);
 
-  const uploadFiles = useCallback(async (files: File[]) => {
+  const uploadAsset = useCallback(async (file: File) => {
     if (provider.uploadAsset) {
-      await Promise.all(files.map((file) => provider.uploadAsset!(file)));
-    } else {
-      await Promise.all(files.map(uploadAssetFile));
+      return provider.uploadAsset(file);
     }
+
+    const result = await uploadAssetFile(file) as { assetId?: string; assetKey?: string; entry?: AssetRegistryEntry; path?: string };
+    const assetId = result.assetKey ?? result.assetId ?? file.name;
+    if (result.entry) {
+      return { assetId, entry: result.entry };
+    }
+
+    const registry = await provider.loadAssetRegistry();
+    return {
+      assetId,
+      entry: registry.assets[assetId] ?? { file: result.path ?? `inputs/${file.name}` },
+    };
+  }, [provider]);
+
+  const uploadFiles = useCallback(async (files: File[]) => {
+    await Promise.all(files.map(uploadAsset));
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: ["timeline-data"] }),
       queryClient.invalidateQueries({ queryKey: ["asset-registry"] }),
     ]);
-  }, [queryClient, provider]);
+  }, [queryClient, uploadAsset]);
+
+  const invalidateAssetRegistry = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: ["asset-registry"] });
+  }, [queryClient]);
 
   const startRender = useCallback(async () => {
     if (renderStatus === "rendering") {
@@ -589,9 +628,11 @@ export function useTimelineData(): UseTimelineDataResult {
     setAssetPanelState,
     applyTimelineEdit,
     applyResolvedConfigEdit,
-    commitDataNoSave,
+    patchRegistry,
     queryClient,
+    uploadAsset,
     uploadFiles,
+    invalidateAssetRegistry,
     startRender,
   };
 }

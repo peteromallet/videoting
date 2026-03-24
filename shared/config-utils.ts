@@ -92,7 +92,7 @@ export const resolveTimelineConfig = (
   }
 
   const clips = migratedConfig.clips.map((clip) => {
-    if (!clip.asset || clip.asset.startsWith("uploading:")) {
+    if (!clip.asset) {
       return {
         ...clip,
         assetEntry: undefined,

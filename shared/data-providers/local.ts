@@ -69,8 +69,10 @@ export class LocalDataProvider implements DataProvider {
     if (result.ingestError) {
       console.warn(`[upload] File saved but ingest had issues:`, result.ingestError.slice(0, 200));
     }
-    console.log(`[upload] Done:`, result.assetKey ?? result.assetId);
-    return { assetId: result.assetKey ?? result.assetId ?? file.name, entry: result.entry ?? { file: result.path ?? `inputs/${file.name}` } };
+    const assetId = result.assetKey ?? result.assetId ?? file.name;
+    const entry = result.entry ?? (await this.loadAssetRegistry()).assets[assetId] ?? { file: result.path ?? `inputs/${file.name}` };
+    console.log(`[upload] Done:`, assetId);
+    return { assetId, entry };
   }
 
   async loadWaveform(assetId: string): Promise<SilenceRegion[]> {

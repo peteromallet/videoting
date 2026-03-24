@@ -307,11 +307,17 @@ function timelineApiPlugin(): Plugin {
               console.warn(`[upload] Ingest failed (exit ${code}) for ${filename}, but file was saved. Error: ${stderr.slice(0, 200)}`);
             }
 
+            const assetKey = assetKeyFromFilename(filename);
+            const registryEntry = fs.existsSync(assetRegistryFile)
+              ? readJsonFile<{ assets?: Record<string, { file: string; type?: string; duration?: number; resolution?: string; fps?: number }> }>(assetRegistryFile).assets?.[assetKey]
+              : undefined;
+
             // Always succeed — the file is saved even if ingest (OpenAI transcription) fails
             sendJson(res, {
               ok: true,
-              assetKey: assetKeyFromFilename(filename),
+              assetKey,
               path: relativePath,
+              entry: registryEntry,
               ingestError: code !== 0 ? (stderr || stdout || `exit code ${code}`) : undefined,
             });
           });

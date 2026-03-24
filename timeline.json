@@ -198,6 +198,15 @@
       "opacity": 1
     },
     {
+      "id": "clip-28",
+      "at": 99.53,
+      "track": "V2",
+      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
+      "clipType": "hold",
+      "hold": 5,
+      "opacity": 1
+    },
+    {
       "id": "clip-11",
       "at": 54.72,
       "track": "V3",
@@ -268,6 +277,32 @@
     {
       "id": "clip-26",
       "at": 27.38,
+      "track": "V3",
+      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-27",
+      "at": 116.72,
+      "track": "V3",
+      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-29",
+      "at": 99.25,
       "track": "V3",
       "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
       "clipType": "hold",

@@ -2,6 +2,7 @@ import { useTimelineData } from "./useTimelineData";
 import { useTimelineEditing } from "./useTimelineEditing";
 import { useTimelinePlayback } from "./useTimelinePlayback";
 import { useTimelineTrackManagement } from "./useTimelineTrackManagement";
+import { useUploadTracker } from "./useUploadTracker";
 
 export type { SaveStatus, RenderStatus, EditorPreferences, ActionDragState } from "./useTimelineData";
 
@@ -65,6 +66,7 @@ export interface UseTimelineStateResult {
   moveClipToRow: ReturnType<typeof useTimelineTrackManagement>["moveClipToRow"];
   createTrackAndMoveClip: ReturnType<typeof useTimelineTrackManagement>["createTrackAndMoveClip"];
   clearActionDragState: ReturnType<typeof useTimelineEditing>["clearActionDragState"];
+  uploads: ReturnType<typeof useUploadTracker>["uploads"];
   uploadFiles: ReturnType<typeof useTimelineData>["uploadFiles"];
   startRender: ReturnType<typeof useTimelineData>["startRender"];
   formatTime: ReturnType<typeof useTimelinePlayback>["formatTime"];
@@ -74,6 +76,7 @@ export function useTimelineState(): UseTimelineStateResult {
   const playback = useTimelinePlayback();
 
   const dataHook = useTimelineData();
+  const uploadTracker = useUploadTracker();
 
   const editing = useTimelineEditing({
     dataRef: dataHook.dataRef,
@@ -92,8 +95,12 @@ export function useTimelineState(): UseTimelineStateResult {
     setSelectedTrackId: dataHook.setSelectedTrackId,
     applyTimelineEdit: dataHook.applyTimelineEdit,
     applyResolvedConfigEdit: dataHook.applyResolvedConfigEdit,
-    uploadFiles: dataHook.uploadFiles,
-    commitDataNoSave: dataHook.commitDataNoSave,
+    patchRegistry: dataHook.patchRegistry,
+    uploadAsset: dataHook.uploadAsset,
+    invalidateAssetRegistry: dataHook.invalidateAssetRegistry,
+    addUpload: uploadTracker.addUpload,
+    removeUpload: uploadTracker.removeUpload,
+    failUpload: uploadTracker.failUpload,
   });
 
   const trackManagement = useTimelineTrackManagement({
@@ -133,6 +140,7 @@ export function useTimelineState(): UseTimelineStateResult {
     setScaleWidth: dataHook.setScaleWidth,
     setClipSectionOpen: dataHook.setClipSectionOpen,
     setAssetPanelState: dataHook.setAssetPanelState,
+    uploads: uploadTracker.uploads,
     uploadFiles: dataHook.uploadFiles,
     startRender: dataHook.startRender,
 

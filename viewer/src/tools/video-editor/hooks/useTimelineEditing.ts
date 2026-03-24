@@ -21,6 +21,7 @@ import {
   type TimelineData,
 } from "@/tools/video-editor/lib/timeline-data";
 import type { ActionDragState, UseTimelineDataResult } from "./useTimelineData";
+import type { UseUploadTrackerResult } from "./useUploadTracker";
 
 export interface UseTimelineEditingArgs {
   dataRef: React.MutableRefObject<TimelineData | null>;
@@ -39,8 +40,12 @@ export interface UseTimelineEditingArgs {
   setSelectedTrackId: React.Dispatch<React.SetStateAction<string | null>>;
   applyTimelineEdit: UseTimelineDataResult["applyTimelineEdit"];
   applyResolvedConfigEdit: UseTimelineDataResult["applyResolvedConfigEdit"];
-  uploadFiles: (files: File[]) => Promise<void>;
-  commitDataNoSave: (nextData: TimelineData) => void;
+  patchRegistry: UseTimelineDataResult["patchRegistry"];
+  uploadAsset: UseTimelineDataResult["uploadAsset"];
+  invalidateAssetRegistry: UseTimelineDataResult["invalidateAssetRegistry"];
+  addUpload: UseUploadTrackerResult["addUpload"];
+  removeUpload: UseUploadTrackerResult["removeUpload"];
+  failUpload: UseUploadTrackerResult["failUpload"];
 }
 
 export interface UseTimelineEditingResult {
@@ -81,8 +86,12 @@ export function useTimelineEditing({
   setSelectedTrackId,
   applyTimelineEdit,
   applyResolvedConfigEdit,
-  uploadFiles,
-  commitDataNoSave,
+  patchRegistry,
+  uploadAsset,
+  invalidateAssetRegistry,
+  addUpload,
+  removeUpload,
+  failUpload,
 }: UseTimelineEditingArgs): UseTimelineEditingResult {
   const clearActionDragState = useCallback((clipId: string) => {
     delete actionDragStateRef.current[clipId];
@@ -306,7 +315,6 @@ export function useTimelineEditing({
     const wrapper = event.currentTarget;
     const wrapperRect = wrapper.getBoundingClientRect();
     const relX = event.clientX - wrapperRect.left;
-    const relY = event.clientY - wrapperRect.top;
 
     // Find target row
     const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
@@ -349,7 +357,7 @@ export function useTimelineEditing({
       </div>
       <div style="position:fixed;left:${ghostLeft}px;top:${rowTop - 18}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
     `;
-  }, [scale, scaleWidth]);
+  }, [dataRef, scale, scaleWidth]);
 
   const onTimelineDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     delete event.currentTarget.dataset.dragOver;
@@ -382,59 +390,36 @@ export function useTimelineEditing({
         return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
       });
 
-      // Add skeleton placeholder clips immediately (no save — visual only)
-      {
-        const current = dataRef.current!;
-        let nextRows = current.rows;
-        const nextMeta = { ...current.meta };
-        const nextEffects = { ...current.effects };
-
-        for (const file of files) {
-          const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
-          const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
-          const targetTrackId = rowIndex >= 0 ? current.rows[rowIndex]?.id : undefined;
-          const compatibleTrackId = getCompatibleTrackId(current.tracks, targetTrackId, kind, selectedTrackId);
-          const skeletonId = `uploading-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-          const targetRow = compatibleTrackId ?? current.rows[0]?.id;
-
-          if (targetRow) {
-            nextMeta[skeletonId] = {
-              asset: `uploading:${file.name}`,
-              track: targetRow,
-              clipType: "hold",
-              hold: 3,
-            };
-            nextEffects[`effect-${skeletonId}`] = { id: `effect-${skeletonId}` };
-            nextRows = nextRows.map((row) => {
-              if (row.id !== targetRow) return row;
-              return { ...row, actions: [...row.actions, { id: skeletonId, start: time, end: time + 3, effectId: `effect-${skeletonId}` }] };
-            });
-          }
-        }
-
-        commitDataNoSave({
-          ...current,
-          rows: nextRows,
-          meta: nextMeta,
-          effects: nextEffects,
-        });
-      }
-
-      // Upload files
-      console.log("[drop] Uploading", files.length, "file(s)...");
-      await uploadFiles(files);
-      console.log("[drop] Upload complete, waiting for registry refresh...");
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Add real clips (skeletons are filtered out during serialization automatically)
       for (const file of files) {
-        const assetKey = file.name.replace(/\.[^.]+$/, "").replace(/\s+/g, "-").toLowerCase();
         const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
         const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
         const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
         const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
-        console.log("[drop] Adding clip:", assetKey, "to track:", compatibleTrackId, "at:", time.toFixed(2));
-        handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
+        if (!compatibleTrackId) {
+          continue;
+        }
+
+        const trackIndex = dataRef.current!.rows.findIndex((row) => row.id === compatibleTrackId);
+        const uploadId = addUpload({
+          file,
+          trackId: compatibleTrackId,
+          trackIndex: trackIndex >= 0 ? trackIndex : 0,
+          time,
+          kind,
+        });
+
+        void (async () => {
+          try {
+            const result = await uploadAsset(file);
+            patchRegistry(result.assetId, result.entry);
+            handleAssetDrop(result.assetId, compatibleTrackId, time);
+            removeUpload(uploadId);
+            void invalidateAssetRegistry();
+          } catch (error) {
+            console.error("[drop] Upload failed:", error);
+            failUpload(uploadId);
+          }
+        })();
       }
       return;
     }
@@ -462,7 +447,19 @@ export function useTimelineEditing({
     const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
     const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, assetKind || "visual", selectedTrackId);
     handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
-  }, [dataRef, handleAssetDrop, scale, scaleWidth, selectedTrackId, uploadFiles]);
+  }, [
+    addUpload,
+    dataRef,
+    failUpload,
+    handleAssetDrop,
+    invalidateAssetRegistry,
+    patchRegistry,
+    removeUpload,
+    scale,
+    scaleWidth,
+    selectedTrackId,
+    uploadAsset,
+  ]);
 
   const handleDeleteClip = useCallback((clipId: string) => {
     const current = dataRef.current;
@@ -520,10 +517,13 @@ export function useTimelineEditing({
       return;
     }
 
-    const nextResolvedConfig = updateClipInConfig(resolvedConfig, selectedClipId, (clip) => {
-      const { x, y, width, height, ...rest } = clip;
-      return rest;
-    });
+    const nextResolvedConfig = updateClipInConfig(resolvedConfig, selectedClipId, (clip) => ({
+      ...clip,
+      x: undefined,
+      y: undefined,
+      width: undefined,
+      height: undefined,
+    }));
 
     applyResolvedConfigEdit(nextResolvedConfig, { selectedClipId });
   }, [applyResolvedConfigEdit, resolvedConfig, selectedClipId]);
