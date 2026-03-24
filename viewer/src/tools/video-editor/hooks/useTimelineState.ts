@@ -92,6 +92,7 @@ export function useTimelineState(): UseTimelineStateResult {
     setSelectedTrackId: dataHook.setSelectedTrackId,
     applyTimelineEdit: dataHook.applyTimelineEdit,
     applyResolvedConfigEdit: dataHook.applyResolvedConfigEdit,
+    uploadFiles: dataHook.uploadFiles,
   });
 
   const trackManagement = useTimelineTrackManagement({

@@ -39,6 +39,7 @@ export interface UseTimelineEditingArgs {
   setSelectedTrackId: React.Dispatch<React.SetStateAction<string | null>>;
   applyTimelineEdit: UseTimelineDataResult["applyTimelineEdit"];
   applyResolvedConfigEdit: UseTimelineDataResult["applyResolvedConfigEdit"];
+  uploadFiles: (files: File[]) => Promise<void>;
 }
 
 export interface UseTimelineEditingResult {
@@ -79,6 +80,7 @@ export function useTimelineEditing({
   setSelectedTrackId,
   applyTimelineEdit,
   applyResolvedConfigEdit,
+  uploadFiles,
 }: UseTimelineEditingArgs): UseTimelineEditingResult {
   const clearActionDragState = useCallback((clipId: string) => {
     delete actionDragStateRef.current[clipId];
@@ -290,7 +292,7 @@ export function useTimelineEditing({
   }, [applyTimelineEdit, dataRef, selectedTrackId, setSelectedClipId, setSelectedTrackId]);
 
   const onTimelineDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    if (event.dataTransfer.types.includes("asset-key")) {
+    if (event.dataTransfer.types.includes("asset-key") || event.dataTransfer.types.includes("Files")) {
       event.preventDefault();
       event.currentTarget.dataset.dragOver = "true";
     }
@@ -300,9 +302,41 @@ export function useTimelineEditing({
     delete event.currentTarget.dataset.dragOver;
   }, []);
 
-  const onTimelineDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+  const onTimelineDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     delete event.currentTarget.dataset.dragOver;
+
+    // Handle external file drops
+    const files = Array.from(event.dataTransfer.files);
+    if (files.length > 0 && dataRef.current) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const scrollLeft = event.currentTarget.scrollLeft;
+      const pixelsPerSecond = scaleWidth / scale;
+      const dropX = event.clientX - rect.left;
+      const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
+
+      // Upload files first, then add to timeline
+      await uploadFiles(files);
+      // After upload, the asset registry will be refreshed
+      // For now, use the filename (without extension) as the asset key
+      for (const file of files) {
+        const assetKey = file.name.replace(/\.[^.]+$/, "").replace(/\s+/g, "-").toLowerCase();
+        const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+        const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
+
+        const rowElements = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
+        const rowIndex = rowElements.findIndex((rowElement) => {
+          const rowRect = rowElement.getBoundingClientRect();
+          return event.clientY >= rowRect.top && event.clientY <= rowRect.bottom;
+        });
+        const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
+        const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
+        handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
+      }
+      return;
+    }
+
+    // Handle internal asset drag from AssetPanel
     const assetKey = event.dataTransfer.getData("asset-key");
     const assetKind = event.dataTransfer.getData("asset-kind") as TrackKind;
     if (!assetKey || !dataRef.current) {
@@ -323,7 +357,7 @@ export function useTimelineEditing({
     const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
     const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, assetKind || "visual", selectedTrackId);
     handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
-  }, [dataRef, handleAssetDrop, scale, scaleWidth, selectedTrackId]);
+  }, [dataRef, handleAssetDrop, scale, scaleWidth, selectedTrackId, uploadFiles]);
 
   const handleDeleteClip = useCallback((clipId: string) => {
     const current = dataRef.current;

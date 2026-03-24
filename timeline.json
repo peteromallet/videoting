@@ -36,15 +36,6 @@
       "opacity": 1
     },
     {
-      "id": "V4",
-      "kind": "visual",
-      "label": "V4",
-      "scale": 1,
-      "fit": "manual",
-      "opacity": 1,
-      "blendMode": "normal"
-    },
-    {
       "id": "V5",
       "kind": "visual",
       "label": "V5",
@@ -79,6 +70,15 @@
       "fit": "contain",
       "opacity": 1,
       "blendMode": "normal"
+    },
+    {
+      "id": "A4",
+      "kind": "audio",
+      "label": "A4",
+      "scale": 1,
+      "fit": "contain",
+      "opacity": 1,
+      "blendMode": "normal"
     }
   ],
   "clips": [
@@ -98,7 +98,11 @@
       "clipType": "media",
       "from": 0,
       "to": 6.91,
-      "volume": 0
+      "volume": 0,
+      "x": 32,
+      "y": 18,
+      "width": 1216,
+      "height": 684
     },
     {
       "id": "clip-1",
@@ -140,8 +144,38 @@
       }
     },
     {
+      "id": "clip-6",
+      "at": 28.56,
+      "track": "V2",
+      "asset": "bg-dark-abstract",
+      "clipType": "hold",
+      "hold": 5,
+      "opacity": 1
+    },
+    {
+      "id": "clip-5",
+      "at": 8.06,
+      "track": "V3",
+      "clipType": "text",
+      "hold": 4,
+      "x": 180,
+      "y": 140,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "New title",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
+    },
+    {
       "id": "clip-4",
-      "at": 2.89,
+      "at": 1.94,
       "track": "A1",
       "asset": "input",
       "clipType": "media",
