@@ -389,11 +389,15 @@
       "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
       "clipType": "hold",
       "hold": 5,
-      "x": 100,
-      "y": 100,
+      "x": 423,
+      "y": 425,
       "width": 320,
       "height": 240,
-      "opacity": 1
+      "opacity": 1,
+      "entrance": {
+        "type": "meteorite",
+        "duration": 0.5
+      }
     },
     {
       "id": "clip-27",
@@ -496,34 +500,61 @@
       "opacity": 1
     },
     {
+      "id": "clip-44",
+      "at": 170.13,
+      "track": "V3",
+      "asset": "qh1ks13cxdybuxaaevd3-okdupdhk",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-45",
+      "at": 160.81,
+      "track": "V3",
+      "asset": "rwdbkozhqgpr1hm9dhvel-nsdht776",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-46",
+      "at": 193.13,
+      "track": "V3",
+      "asset": "qh1ks13cxdybuxaaevd3-okdupdhk",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
       "id": "clip-4",
-      "at": 1.94,
+      "at": 1.88,
       "track": "A1",
       "asset": "input",
       "clipType": "media",
       "from": 0,
       "to": 113.77
-    },
-    {
-      "id": "clip-20",
-      "at": 0,
-      "track": "V9",
-      "clipType": "text",
-      "hold": 4,
-      "x": 219,
-      "y": 356,
-      "width": 920,
-      "height": 180,
-      "opacity": 1,
-      "text": {
-        "content": "New title",
-        "fontFamily": "Georgia, serif",
-        "fontSize": 64,
-        "color": "#ffffff",
-        "align": "center",
-        "bold": true,
-        "italic": false
-      }
     },
     {
       "id": "clip-21",

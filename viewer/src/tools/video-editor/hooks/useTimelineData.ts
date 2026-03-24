@@ -12,6 +12,7 @@ import {
 import {
   buildTimelineData,
   configToRows,
+  preserveUploadingClips,
   resolveTimelineConfig,
   rowsToConfig,
   loadTimelineJsonFromProvider,
@@ -110,6 +111,7 @@ export interface UseTimelineDataResult {
     metaUpdates?: Record<string, Partial<ClipMeta>>,
     metaDeletes?: string[],
     clipOrderOverride?: ClipOrderMap,
+    options?: { save?: boolean },
   ) => void;
   applyResolvedConfigEdit: (
     nextResolvedConfig: TimelineData["resolvedConfig"],
@@ -189,7 +191,7 @@ export function useTimelineData(): UseTimelineDataResult {
     const resolvedConfig = resolveTimelineConfig(config, current.registry, (file) => provider.resolveAssetUrl(file));
     const rowData = configToRows(config);
 
-    return {
+    let result: TimelineData = {
       ...current,
       config,
       resolvedConfig,
@@ -201,6 +203,10 @@ export function useTimelineData(): UseTimelineDataResult {
       output: { ...config.output },
       signature: getConfigSignature(resolvedConfig),
     };
+
+    // Re-inject uploading clips from INPUT (not dataRef)
+    result = preserveUploadingClips({ ...current, rows, meta } as TimelineData, result);
+    return result;
   }, [provider]);
 
   const saveTimeline = useCallback(async (nextData: TimelineData, seq: number) => {
@@ -278,6 +284,7 @@ export function useTimelineData(): UseTimelineDataResult {
     metaUpdates?: Record<string, Partial<ClipMeta>>,
     metaDeletes?: string[],
     clipOrderOverride?: ClipOrderMap,
+    options?: { save?: boolean },
   ) => {
     const current = dataRef.current;
     if (!current) {
@@ -299,7 +306,7 @@ export function useTimelineData(): UseTimelineDataResult {
 
     const clipOrder = clipOrderOverride ?? buildTrackClipOrder(current.tracks, current.clipOrder, metaDeletes);
     const nextData = materializeData(current, nextRows, nextMeta, clipOrder);
-    commitData(nextData);
+    commitData(nextData, { save: options?.save });
   }, [commitData, materializeData]);
 
   const applyResolvedConfigEdit = useCallback((
@@ -311,7 +318,8 @@ export function useTimelineData(): UseTimelineDataResult {
       return;
     }
 
-    const nextData = buildTimelineData(serializeForDisk(nextResolvedConfig), current.registry, (file) => provider.resolveAssetUrl(file));
+    let nextData = buildTimelineData(serializeForDisk(nextResolvedConfig), current.registry, (file) => provider.resolveAssetUrl(file));
+    nextData = preserveUploadingClips(current, nextData);
     commitData(nextData, {
       selectedClipId: options?.selectedClipId,
       selectedTrackId: options?.selectedTrackId,
@@ -369,7 +377,12 @@ export function useTimelineData(): UseTimelineDataResult {
         polledData.signature,
         lastSavedSignature.current,
       )) {
-        commitDataRef.current(polledData, { save: false, updateLastSavedSignature: true });
+        let accepted = polledData;
+        const prev = dataRef.current;
+        if (prev) {
+          accepted = preserveUploadingClips(prev, accepted);
+        }
+        commitDataRef.current(accepted, { save: false, updateLastSavedSignature: true });
       }
     }, 0);
 

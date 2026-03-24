@@ -203,6 +203,7 @@ export const rowsToConfig = (
 
   for (const row of rows) {
     for (const action of row.actions) {
+      if (action.id.startsWith("uploading-")) continue;
       const clipMeta = meta[action.id];
       if (!clipMeta) {
         continue;
@@ -377,6 +378,29 @@ export function inferTrackType(filePath: string): TrackKind {
   }
 
   return "visual";
+}
+
+export function preserveUploadingClips(source: TimelineData, target: TimelineData): TimelineData {
+  const uploadingMeta: Record<string, ClipMeta> = {};
+  const uploadingActions: Record<string, TimelineAction[]> = {};
+  let found = false;
+  for (const row of source.rows) {
+    for (const action of row.actions) {
+      if (action.id.startsWith("uploading-") && source.meta[action.id]) {
+        uploadingActions[row.id] ??= [];
+        uploadingActions[row.id].push(action);
+        uploadingMeta[action.id] = source.meta[action.id];
+        found = true;
+      }
+    }
+  }
+  if (!found) return target;
+
+  const nextRows = target.rows.map(row => {
+    const extras = uploadingActions[row.id];
+    return extras ? { ...row, actions: [...row.actions, ...extras] } : row;
+  });
+  return { ...target, rows: nextRows, meta: { ...target.meta, ...uploadingMeta } };
 }
 
 export function getNextClipId(meta: Record<string, ClipMeta>): string {

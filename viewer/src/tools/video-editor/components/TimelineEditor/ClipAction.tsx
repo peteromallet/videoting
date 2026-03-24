@@ -12,8 +12,11 @@ interface ClipActionProps {
 }
 
 export function ClipAction({ action, clipMeta, isSelected, onSelect, onDelete }: ClipActionProps) {
-  const label = clipMeta.clipType === "text" ? clipMeta.text?.content?.slice(0, 28) || "Text" : clipMeta.asset ?? "Clip";
-  const color = getAssetColor(clipMeta.asset ?? `${clipMeta.clipType ?? "clip"}-${clipMeta.track}`);
+  const isUploading = action.id.startsWith("uploading-");
+  const label = isUploading
+    ? (clipMeta.asset?.replace(/^uploading:/, "") ?? "File")
+    : clipMeta.clipType === "text" ? clipMeta.text?.content?.slice(0, 28) || "Text" : clipMeta.asset ?? "Clip";
+  const color = isUploading ? "#6c7086" : getAssetColor(clipMeta.asset ?? `${clipMeta.clipType ?? "clip"}-${clipMeta.track}`);
   const sourceEnd = typeof clipMeta.hold === "number"
     ? action.end - action.start
     : getSourceTime({ from: clipMeta.from ?? 0, start: action.start, speed: clipMeta.speed ?? 1 }, action.end);
@@ -21,6 +24,22 @@ export function ClipAction({ action, clipMeta, isSelected, onSelect, onDelete }:
   const transitionWidth = clipMeta.transition
     ? `${Math.min(50, ((clipMeta.transition.duration ?? 0.5) / Math.max(0.1, action.end - action.start)) * 100)}%`
     : undefined;
+
+  if (isUploading) {
+    return (
+      <div
+        className="clip-action relative flex h-full min-w-0 items-center gap-2 overflow-hidden rounded-md border px-2 text-[11px] text-white shadow-sm pointer-events-none animate-pulse"
+        data-clip-id={action.id}
+        data-row-id={clipMeta.track}
+        style={{ backgroundColor: color, borderColor: "rgba(255,255,255,0.12)", backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(255,255,255,0.06) 6px, rgba(255,255,255,0.06) 12px)" }}
+      >
+        <div className="relative z-10 min-w-0 flex-1">
+          <div className="truncate font-semibold">{label}</div>
+          <div className="truncate text-[10px] text-white/85">Uploading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
