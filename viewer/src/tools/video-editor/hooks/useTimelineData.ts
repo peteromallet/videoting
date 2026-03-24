@@ -88,6 +88,7 @@ export interface UseTimelineDataResult {
   renderStatus: RenderStatus;
   renderLog: string;
   renderDirty: boolean;
+  renderProgress: { current: number; total: number; percent: number; phase: string } | null;
   scale: number;
   scaleWidth: number;
   isLoading: boolean;
@@ -138,6 +139,7 @@ export function useTimelineData(): UseTimelineDataResult {
   const [renderStatus, setRenderStatus] = useState<RenderStatus>("idle");
   const [renderLog, setRenderLog] = useState("");
   const [renderDirty, setRenderDirty] = useState(false);
+  const [renderProgress, setRenderProgress] = useState<{ current: number; total: number; percent: number; phase: string } | null>(null);
   const [preferences, setPreferences] = useEditorSettings<EditorPreferences>("video-editor:preferences", defaultPreferences);
   const selectedClipIdRef = useRef<string | null>(selectedClipId);
   const selectedTrackIdRef = useRef<string | null>(selectedTrackId);
@@ -474,6 +476,7 @@ export function useTimelineData(): UseTimelineDataResult {
 
     setRenderStatus("rendering");
     setRenderLog("");
+    setRenderProgress({ current: 0, total: 0, percent: 0, phase: "Starting..." });
     console.log("[render] Starting render...");
     try {
       const response = await fetch("/api/render", { method: "POST" });
@@ -508,6 +511,7 @@ export function useTimelineData(): UseTimelineDataResult {
               console.log("[render] DONE! Triggering download...");
               setRenderStatus("done");
               setRenderDirty(false);
+              setRenderProgress(null);
               // Auto-download the rendered video
               const link = document.createElement("a");
               link.href = "/output/render.mp4";
@@ -519,9 +523,22 @@ export function useTimelineData(): UseTimelineDataResult {
             } else if (lastEvent === "error") {
               console.error("[render] ERROR:", data);
               setRenderStatus("error");
+              setRenderProgress(null);
               lastEvent = "";
             } else {
               setRenderLog((currentLog) => currentLog + data + "\n");
+              // Parse progress from Remotion output: "Encoded 1234/3600" or "Bundling 50%"
+              const encodedMatch = data.match(/Encoded\s+(\d+)\/(\d+)/);
+              if (encodedMatch) {
+                const current = parseInt(encodedMatch[1], 10);
+                const total = parseInt(encodedMatch[2], 10);
+                setRenderProgress({ current, total, percent: Math.round((current / total) * 100), phase: "Rendering" });
+              } else {
+                const bundlingMatch = data.match(/Bundling\s+(\d+)%/);
+                if (bundlingMatch) {
+                  setRenderProgress((prev) => ({ ...(prev ?? { current: 0, total: 100, percent: 0, phase: "Bundling" }), percent: parseInt(bundlingMatch[1], 10), phase: "Bundling" }));
+                }
+              }
             }
           }
         }
@@ -545,6 +562,7 @@ export function useTimelineData(): UseTimelineDataResult {
     renderStatus,
     renderLog,
     renderDirty,
+    renderProgress,
     scale,
     scaleWidth,
     isLoading: timelineQuery.isLoading && !data,

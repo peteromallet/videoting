@@ -19,6 +19,7 @@ function VideoEditorLayout() {
     renderStatus,
     renderDirty,
     renderLog,
+    renderProgress,
     startRender,
     saveStatus,
     currentTime,
@@ -51,13 +52,28 @@ function VideoEditorLayout() {
             </div>
             <Button
               size="sm"
-              className={`h-7 gap-1.5 px-3 text-[11px] ${renderDirty ? "shadow-[0_0_0_1px_rgba(137,180,250,0.35)]" : ""}`}
+              className={`relative h-7 gap-1.5 overflow-hidden px-3 text-[11px] ${renderDirty ? "shadow-[0_0_0_1px_rgba(137,180,250,0.35)]" : ""}`}
               onClick={() => void startRender()}
               disabled={renderStatus === "rendering"}
               title={renderLog || undefined}
             >
-              <Download className="h-3 w-3" />
-              {renderStatus === "rendering" ? "Rendering..." : "Render"}
+              {renderStatus === "rendering" && renderProgress ? (
+                <>
+                  <div
+                    className="absolute inset-0 bg-primary/20 transition-all duration-300"
+                    style={{ width: `${renderProgress.percent}%` }}
+                  />
+                  <span className="relative z-10">
+                    {renderProgress.phase} {renderProgress.percent}%
+                    {renderProgress.total > 0 && ` (${renderProgress.current}/${renderProgress.total})`}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Download className="h-3 w-3" />
+                  {renderStatus === "rendering" ? "Starting..." : "Render"}
+                </>
+              )}
             </Button>
           </div>
           <div className="min-h-0 flex-1">

@@ -20,6 +20,7 @@ export interface UseTimelineStateResult {
   renderStatus: ReturnType<typeof useTimelineData>["renderStatus"];
   renderLog: ReturnType<typeof useTimelineData>["renderLog"];
   renderDirty: ReturnType<typeof useTimelineData>["renderDirty"];
+  renderProgress: ReturnType<typeof useTimelineData>["renderProgress"];
   scale: number;
   scaleWidth: number;
   isLoading: boolean;
@@ -117,6 +118,7 @@ export function useTimelineState(): UseTimelineStateResult {
     renderStatus: dataHook.renderStatus,
     renderLog: dataHook.renderLog,
     renderDirty: dataHook.renderDirty,
+    renderProgress: dataHook.renderProgress,
     scale: dataHook.scale,
     scaleWidth: dataHook.scaleWidth,
     isLoading: dataHook.isLoading,
