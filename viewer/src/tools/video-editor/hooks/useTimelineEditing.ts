@@ -10,6 +10,7 @@ import type { ClipType, TrackKind } from "@shared/types";
 import {
   buildRowTrackPatches,
   getCompatibleTrackId,
+  ROW_HEIGHT,
   TIMELINE_START_LEFT,
   updateClipOrder,
 } from "@/tools/video-editor/lib/coordinate-utils";
@@ -93,19 +94,24 @@ export function useTimelineEditing({
     const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
     const rect = (editArea ?? wrapper).getBoundingClientRect();
     const scrollLeft = grid?.scrollLeft ?? 0;
+    const scrollTop = grid?.scrollTop ?? 0;
     const pixelsPerSecond = scaleWidth / scale;
     const defaultClipDuration = 5;
     const halfClipPx = (defaultClipDuration * pixelsPerSecond) / 2;
     const dropX = event.clientX - rect.left;
     const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT - halfClipPx) / pixelsPerSecond);
 
-    const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-    const rowIndex = rowElements.findIndex((el) => {
-      const r = el.getBoundingClientRect();
-      return event.clientY >= r.top && event.clientY <= r.bottom;
-    });
-    const rowElement = rowElements[rowIndex];
-    const rowRect = rowElement?.getBoundingClientRect();
+    // Calculate row index from Y position relative to the edit area grid
+    // The edit area has a time ruler at the top (~30px), then rows start
+    const gridRect = grid?.getBoundingClientRect() ?? rect;
+    const relativeY = event.clientY - gridRect.top + scrollTop;
+    const rowCount = dataRef.current?.rows.length ?? 0;
+    const rowIndex = Math.max(0, Math.min(rowCount - 1, Math.floor(relativeY / ROW_HEIGHT)));
+
+    // Get the actual row rect for the indicator
+    const rowScreenTop = gridRect.top + rowIndex * ROW_HEIGHT - scrollTop;
+    const rowRect = { top: rowScreenTop, height: ROW_HEIGHT, left: gridRect.left, width: gridRect.width } as DOMRect;
+
     const trackId = rowIndex >= 0 ? dataRef.current?.rows[rowIndex]?.id : undefined;
     const trackName = dataRef.current?.tracks[rowIndex]?.label ?? dataRef.current?.tracks[rowIndex]?.id ?? "";
 
@@ -356,15 +362,16 @@ export function useTimelineEditing({
 
     // Show indicator at the exact position where the clip will land
     const defaultDur = 5;
-    const ghostWidth = defaultDur * pixelsPerSecond;
+    const ghostWidth = Math.min(defaultDur * pixelsPerSecond, wrapperRect.right - clipScreenLeft);
+    const ghostCenter = clipScreenLeft + ghostWidth / 2;
     indicator.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;`;
     indicator.innerHTML = `
       <div style="position:fixed;left:${wrapperRect.left}px;top:${rowTop}px;width:${wrapperRect.width}px;height:${rowHeight}px;background:rgba(137,180,250,0.08);border:1px solid rgba(137,180,250,0.3);border-radius:4px;pointer-events:none;"></div>
-      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
-      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop + 2}px;width:${Math.min(ghostWidth, wrapperRect.right - clipScreenLeft)}px;height:${rowHeight - 4}px;background:rgba(137,180,250,0.15);border:1px dashed rgba(137,180,250,0.4);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;">
+      <div style="position:fixed;left:${ghostCenter}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
+      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop + 2}px;width:${ghostWidth}px;height:${rowHeight - 4}px;background:rgba(137,180,250,0.15);border:1px dashed rgba(137,180,250,0.4);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;">
         <span style="font-size:9px;font-weight:600;color:rgba(137,180,250,0.9);">${time.toFixed(1)}s</span>
       </div>
-      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop - 16}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
+      <div style="position:fixed;left:${ghostCenter - 30}px;top:${rowTop - 16}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
     `;
   }, [dataRef, scale, scaleWidth]);
 

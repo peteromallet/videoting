@@ -356,6 +356,11 @@
       "file": "inputs/02_a_few_small_candles_scattered_across_a_dim_stone_floor_1.webp",
       "type": "image",
       "resolution": "1024x368"
+    },
+    "rage_2_2": {
+      "file": "inputs/rage_2_2.webp",
+      "type": "image",
+      "resolution": "1024x368"
     }
   }
 }

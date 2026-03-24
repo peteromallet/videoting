@@ -187,6 +187,18 @@
       "opacity": 1
     },
     {
+      "id": "clip-55",
+      "at": 138.5,
+      "track": "V1",
+      "asset": "02-a-few-small-candles-scattered-across-a-dim-stone-floor-1",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
       "id": "clip-0",
       "at": 0,
       "track": "V2",
@@ -315,18 +327,6 @@
       "opacity": 1
     },
     {
-      "id": "clip-38",
-      "at": 58.22,
-      "track": "V2",
-      "asset": "dizjaj9ucwfxymklmvgs0-tqnyt57n",
-      "clipType": "media",
-      "from": 0,
-      "to": 5,
-      "speed": 1,
-      "volume": 1,
-      "opacity": 1
-    },
-    {
       "id": "clip-39",
       "at": 48.22,
       "track": "V2",
@@ -361,6 +361,42 @@
       "y": 77,
       "width": 320,
       "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-54",
+      "at": 137.34,
+      "track": "V2",
+      "asset": "02-a-few-small-candles-scattered-across-a-dim-stone-floor-1",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
+      "id": "clip-56",
+      "at": 145.03,
+      "track": "V2",
+      "asset": "02-a-few-small-candles-scattered-across-a-dim-stone-floor-1",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
+      "id": "clip-57",
+      "at": 138,
+      "track": "V2",
+      "asset": "02-a-few-small-candles-scattered-across-a-dim-stone-floor-1",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
       "opacity": 1
     },
     {
@@ -626,6 +662,18 @@
       "y": 100,
       "width": 320,
       "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-38",
+      "at": 60.34,
+      "track": "V3",
+      "asset": "dizjaj9ucwfxymklmvgs0-tqnyt57n",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
       "opacity": 1
     },
     {
