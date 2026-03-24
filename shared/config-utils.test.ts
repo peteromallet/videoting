@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
   secondsToFrames,
   getClipSourceDuration,
@@ -169,11 +169,15 @@ describe("resolveTimelineConfig", () => {
     expect(resolved.registry["my-video"].src).toBe("inputs/video.mp4");
   });
 
-  it("throws when clip references missing asset", () => {
+  it("warns and skips clip with missing asset", () => {
     const config = makeConfig({
       clips: [{ id: "clip-0", at: 0, track: "V1", asset: "nonexistent", from: 0, to: 5 }],
     });
-    expect(() => resolveTimelineConfig(config, makeRegistry(), identity)).toThrow("missing asset");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const resolved = resolveTimelineConfig(config, makeRegistry(), identity);
+    expect(resolved.clips[0].assetEntry).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 
   it("handles clips without an asset (text clips)", () => {

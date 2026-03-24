@@ -10,6 +10,7 @@ import type { ClipType, TrackKind } from "@shared/types";
 import {
   buildRowTrackPatches,
   getCompatibleTrackId,
+  rawRowIndexFromY,
   ROW_HEIGHT,
   TIMELINE_START_LEFT,
   updateClipOrder,
@@ -101,16 +102,17 @@ export function useTimelineEditing({
     const dropX = event.clientX - rect.left;
     const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT - halfClipPx) / pixelsPerSecond);
 
-    // Calculate row index from Y position relative to the edit area grid
-    // The edit area has a time ruler at the top (~30px), then rows start
-    const gridRect = grid?.getBoundingClientRect() ?? rect;
-    const relativeY = event.clientY - gridRect.top + scrollTop;
+    // Calculate row index from Y position relative to the edit area
+    // Use editArea rect for Y (matches upstream library and cross-track drag)
+    // Use grid for scrollTop (grid owns scroll state)
+    const editAreaRect = (editArea ?? wrapper).getBoundingClientRect();
     const rowCount = dataRef.current?.rows.length ?? 0;
-    const rowIndex = Math.max(0, Math.min(rowCount - 1, Math.floor(relativeY / ROW_HEIGHT)));
+    const raw = rawRowIndexFromY(event.clientY, editAreaRect.top, scrollTop, ROW_HEIGHT);
+    const rowIndex = Math.min(raw, rowCount - 1);
 
     // Get the actual row rect for the indicator
-    const rowScreenTop = gridRect.top + rowIndex * ROW_HEIGHT - scrollTop;
-    const rowRect = { top: rowScreenTop, height: ROW_HEIGHT, left: gridRect.left, width: gridRect.width } as DOMRect;
+    const rowScreenTop = editAreaRect.top + rowIndex * ROW_HEIGHT - scrollTop;
+    const rowRect = { top: rowScreenTop, height: ROW_HEIGHT, left: editAreaRect.left, width: editAreaRect.width } as DOMRect;
 
     const trackId = rowIndex >= 0 ? dataRef.current?.rows[rowIndex]?.id : undefined;
     const trackName = dataRef.current?.tracks[rowIndex]?.label ?? dataRef.current?.tracks[rowIndex]?.id ?? "";
@@ -472,7 +474,8 @@ export function useTimelineEditing({
     const { time, rowIndex } = getDropPosition(event);
     const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
     const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, assetKind || "visual", selectedTrackId);
-    handleAssetDrop(assetKey, compatibleTrackId ?? undefined, time);
+    if (!compatibleTrackId) return;
+    handleAssetDrop(assetKey, compatibleTrackId, time);
   }, [
     applyTimelineEdit,
     dataRef,

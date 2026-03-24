@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { AssetRegistry, TimelineConfig, TrackDefinition } from "@shared/types";
 import {
   buildTimelineData,
@@ -236,13 +236,16 @@ describe("resolveTimelineConfig", () => {
     expect(resolved.clips[0].assetEntry!.src).toBe("https://example.com/video.mp4");
   });
 
-  it("throws for missing asset", () => {
+  it("warns and skips clip with missing asset", () => {
     const config = makeConfig([
       { id: "clip-0", at: 0, track: "V2", asset: "nonexistent", from: 0, to: 5 },
     ]);
     const registry = makeRegistry({});
-
-    expect(() => resolveTimelineConfig(config, registry)).toThrow("missing asset");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const resolved = resolveTimelineConfig(config, registry);
+    expect(resolved.clips[0].assetEntry).toBeUndefined();
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });
 

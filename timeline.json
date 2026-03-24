@@ -90,15 +90,6 @@
       "blendMode": "normal"
     },
     {
-      "id": "V7",
-      "kind": "visual",
-      "label": "V7",
-      "scale": 1,
-      "fit": "manual",
-      "opacity": 1,
-      "blendMode": "normal"
-    },
-    {
       "id": "V8",
       "kind": "visual",
       "label": "V8",
@@ -400,6 +391,15 @@
       "opacity": 1
     },
     {
+      "id": "clip-59",
+      "at": 14.94,
+      "track": "V2",
+      "asset": "bg-dark-abstract",
+      "clipType": "hold",
+      "hold": 5,
+      "opacity": 1
+    },
+    {
       "id": "clip-11",
       "at": 54.72,
       "track": "V3",
@@ -674,6 +674,38 @@
       "to": 5,
       "speed": 1,
       "volume": 1,
+      "opacity": 1
+    },
+    {
+      "id": "clip-58",
+      "at": 11.59,
+      "track": "V3",
+      "asset": "rage-2-2",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-60",
+      "at": 63.06,
+      "track": "V3",
+      "asset": "example-video",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
       "opacity": 1
     },
     {

@@ -72,13 +72,13 @@ export const getCompatibleTrackId = (
     return null;
   }
 
+  // Explicit target: honor if compatible, reject if not
   if (desiredTrackId) {
     const exact = compatibleTracks.find((track) => track.id === desiredTrackId);
-    if (exact) {
-      return exact.id;
-    }
+    return exact?.id ?? null;
   }
 
+  // No explicit target: try selected track, then first compatible
   if (selectedTrackId) {
     const selected = compatibleTracks.find((track) => track.id === selectedTrackId);
     if (selected) {
@@ -86,11 +86,7 @@ export const getCompatibleTrackId = (
     }
   }
 
-  if (assetKind === "visual") {
-    return compatibleTracks.find((track) => track.id === "V2")?.id ?? compatibleTracks[0].id;
-  }
-
-  return compatibleTracks.find((track) => track.id === "A1")?.id ?? compatibleTracks[0].id;
+  return compatibleTracks[0].id;
 };
 
 export const buildRowTrackPatches = (
@@ -104,4 +100,36 @@ export const buildRowTrackPatches = (
   }
 
   return patches;
+};
+
+/** Returns the raw (unclamped) row index for a given Y coordinate. May be >= rowCount. */
+export const rawRowIndexFromY = (
+  clientY: number,
+  containerTop: number,
+  scrollTop: number,
+  rowHeight: number,
+): number => {
+  const relativeY = clientY - containerTop + scrollTop;
+  return Math.floor(Math.max(0, relativeY) / rowHeight);
+};
+
+export interface DropTargetResult {
+  kind: "track" | "create" | "reject";
+  trackId?: string;
+}
+
+export const resolveDropTarget = (
+  tracks: TrackDefinition[],
+  rowIndex: number,
+  rowCount: number,
+  sourceKind: TrackKind,
+): DropTargetResult => {
+  if (rowIndex >= rowCount) {
+    return { kind: "create" };
+  }
+  const targetTrack = tracks[rowIndex];
+  if (!targetTrack || targetTrack.kind !== sourceKind) {
+    return { kind: "reject" };
+  }
+  return { kind: "track", trackId: targetTrack.id };
 };

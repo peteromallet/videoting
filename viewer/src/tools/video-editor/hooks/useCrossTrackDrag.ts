@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react";
 import type { TrackKind } from "@shared/types";
+import { rawRowIndexFromY } from "@/tools/video-editor/lib/coordinate-utils";
 import type { TimelineData } from "@/tools/video-editor/lib/timeline-data";
 
 const DRAG_THRESHOLD_PX = 10;
@@ -74,7 +75,10 @@ export const useCrossTrackDrag = ({
     }
 
     const clearDropIndicators = (session: DragSession | null) => {
-      session?.highlightedRowEl?.classList.remove("drop-target");
+      if (session?.highlightedRowEl) {
+        session.highlightedRowEl.remove();
+        session.highlightedRowEl = null;
+      }
       session?.editAreaEl?.classList.remove("drop-target-new-track");
     };
 
@@ -164,8 +168,7 @@ export const useCrossTrackDrag = ({
       }
 
       const editAreaRect = editAreaEl.getBoundingClientRect();
-      const viewportTop = clientY - editAreaRect.top + gridEl.scrollTop;
-      const rowIndex = Math.floor(Math.max(0, viewportTop) / rowHeight);
+      const rowIndex = rawRowIndexFromY(clientY, editAreaRect.top, gridEl.scrollTop, rowHeight);
 
       if (rowIndex >= current.rows.length) {
         session.createTrackOnDrop = true;
@@ -178,10 +181,22 @@ export const useCrossTrackDrag = ({
         return;
       }
 
-      const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
-      const highlightedRowEl = rowElements[rowIndex] ?? null;
-      highlightedRowEl?.classList.add("drop-target");
-      session.highlightedRowEl = highlightedRowEl;
+      // Use mathematical positioning for the highlight overlay
+      // instead of indexing into querySelectorAll (which breaks with virtualized rows)
+      const rowScreenTop = editAreaRect.top + rowIndex * rowHeight - gridEl.scrollTop;
+      const highlightEl = session.highlightedRowEl ?? (() => {
+        const el = document.createElement("div");
+        el.className = "cross-track-drop-highlight";
+        el.style.cssText = `position:fixed;pointer-events:none;z-index:99998;`;
+        document.body.appendChild(el);
+        return el;
+      })();
+      highlightEl.style.top = `${rowScreenTop}px`;
+      highlightEl.style.left = `${editAreaRect.left}px`;
+      highlightEl.style.width = `${editAreaRect.width}px`;
+      highlightEl.style.height = `${rowHeight}px`;
+      highlightEl.style.background = `rgb(137 180 250 / 0.12)`;
+      session.highlightedRowEl = highlightEl;
       session.targetRowId = targetTrack.id;
     };
 

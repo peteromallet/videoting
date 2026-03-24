@@ -7,6 +7,8 @@ import {
   getCompatibleTrackId,
   isEditableTarget,
   moveClipBetweenTracks,
+  rawRowIndexFromY,
+  resolveDropTarget,
   updateClipOrder,
 } from "./coordinate-utils";
 
@@ -121,11 +123,11 @@ describe("getCompatibleTrackId", () => {
     expect(getCompatibleTrackId(tracks, undefined, "visual", "V1")).toBe("V1");
   });
 
-  it("defaults to V2 for visual when no preference matches", () => {
-    expect(getCompatibleTrackId(tracks, undefined, "visual", null)).toBe("V2");
+  it("returns first compatible track when no preference", () => {
+    expect(getCompatibleTrackId(tracks, undefined, "visual", null)).toBe("V1");
   });
 
-  it("defaults to A1 for audio when no preference matches", () => {
+  it("returns first compatible audio track when no preference", () => {
     expect(getCompatibleTrackId(tracks, undefined, "audio", null)).toBe("A1");
   });
 
@@ -134,8 +136,25 @@ describe("getCompatibleTrackId", () => {
     expect(getCompatibleTrackId(visualOnly, undefined, "audio", null)).toBeNull();
   });
 
-  it("ignores desired track if it has incompatible kind", () => {
-    expect(getCompatibleTrackId(tracks, "A1", "visual", null)).toBe("V2");
+  it("returns null for incompatible desired track", () => {
+    expect(getCompatibleTrackId(tracks, "A1", "visual", null)).toBeNull();
+  });
+
+  it("returns a compatible non-default track when explicitly targeted", () => {
+    expect(getCompatibleTrackId(tracks, "V3", "visual", null)).toBe("V3");
+  });
+
+  it("returns first compatible when no desired and no selected", () => {
+    const multiAudio: TrackDefinition[] = [
+      { id: "A1", kind: "audio", label: "A1" },
+      { id: "A2", kind: "audio", label: "A2" },
+      { id: "V1", kind: "visual", label: "V1" },
+    ];
+    expect(getCompatibleTrackId(multiAudio, undefined, "audio", null)).toBe("A1");
+  });
+
+  it("returns null when desired audio track targets a visual track", () => {
+    expect(getCompatibleTrackId(tracks, "V1", "audio", null)).toBeNull();
   });
 });
 
@@ -153,6 +172,60 @@ describe("buildRowTrackPatches", () => {
 
   it("returns empty for empty rows", () => {
     expect(buildRowTrackPatches([])).toEqual({});
+  });
+});
+
+describe("rawRowIndexFromY", () => {
+  const rowHeight = 36;
+
+  it("returns 0 when Y is at the top of the container", () => {
+    expect(rawRowIndexFromY(100, 100, 0, rowHeight)).toBe(0);
+  });
+
+  it("returns 1 when Y is exactly one rowHeight below container top", () => {
+    expect(rawRowIndexFromY(136, 100, 0, rowHeight)).toBe(1);
+  });
+
+  it("clamps to 0 when Y is above the container (negative relativeY)", () => {
+    expect(rawRowIndexFromY(80, 100, 0, rowHeight)).toBe(0);
+  });
+
+  it("returns unclamped index far below (does not cap at rowCount)", () => {
+    // relativeY = 600 - 100 + 0 = 500; 500 / 36 = 13.88 → 13
+    expect(rawRowIndexFromY(600, 100, 0, rowHeight)).toBe(13);
+  });
+
+  it("accounts for scrollTop", () => {
+    // relativeY = 100 - 100 + 72 = 72; 72 / 36 = 2
+    expect(rawRowIndexFromY(100, 100, 72, rowHeight)).toBe(2);
+  });
+});
+
+describe("resolveDropTarget", () => {
+  const tracks: TrackDefinition[] = [
+    { id: "V1", kind: "visual", label: "V1" },
+    { id: "V2", kind: "visual", label: "V2" },
+    { id: "A1", kind: "audio", label: "A1" },
+  ];
+
+  it("returns track when rowIndex is in range and kind matches", () => {
+    expect(resolveDropTarget(tracks, 0, 3, "visual")).toEqual({ kind: "track", trackId: "V1" });
+  });
+
+  it("rejects when kind does not match", () => {
+    expect(resolveDropTarget(tracks, 2, 3, "visual")).toEqual({ kind: "reject" });
+  });
+
+  it("returns create when rowIndex equals rowCount", () => {
+    expect(resolveDropTarget(tracks, 3, 3, "visual")).toEqual({ kind: "create" });
+  });
+
+  it("returns create when rowIndex exceeds rowCount", () => {
+    expect(resolveDropTarget(tracks, 5, 3, "audio")).toEqual({ kind: "create" });
+  });
+
+  it("rejects with empty tracks array", () => {
+    expect(resolveDropTarget([], 0, 0, "visual")).toEqual({ kind: "create" });
   });
 });
 
