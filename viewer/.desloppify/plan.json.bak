@@ -1,11 +1,8 @@
 {
   "version": 8,
   "created": "2026-03-24T04:42:31+00:00",
-  "updated": "2026-03-24T05:33:01+00:00",
+  "updated": "2026-03-24T05:36:27+00:00",
   "queue_order": [
-    "subjective::design_coherence",
-    "subjective::error_consistency",
-    "subjective::logic_clarity",
     "review::.::holistic::high_level_elegance::monolithic_timeline_state_hook",
     "review::.::holistic::abstraction_fitness::clip_meta_duplication",
     "review::.::holistic::abstraction_fitness::cn_passthrough",
@@ -50,6 +47,8 @@
     "subjective::convention_outlier",
     "subjective::cross_module_architecture",
     "subjective::dependency_health",
+    "subjective::design_coherence",
+    "subjective::error_consistency",
     "subjective::high_level_elegance",
     "subjective::incomplete_migration",
     "subjective::initialization_coupling",
@@ -1072,14 +1071,14 @@
   "plan_start_scores": {
     "strict": 74.6,
     "overall": 74.6,
-    "objective": 65.6,
-    "verified": 65.6
+    "objective": 65.8,
+    "verified": 65.8
   },
   "refresh_state": {
     "_subjective_migration_pruned": true,
     "lifecycle_phase": "plan",
-    "subjective_review_completed_at_scan_count": 5,
-    "postflight_scan_completed_at_scan_count": 7
+    "subjective_review_completed_at_scan_count": 8,
+    "postflight_scan_completed_at_scan_count": 9
   },
   "execution_log": [
     {
@@ -1768,13 +1767,160 @@
       "detail": {
         "scan_count": 7
       }
+    },
+    {
+      "timestamp": "2026-03-24T05:34:05+00:00",
+      "action": "review_import_sync",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "trigger": "review_import",
+        "new_ids": [
+          "review::.::holistic::abstraction_fitness::clip_meta_duplication",
+          "review::.::holistic::abstraction_fitness::cn_passthrough",
+          "review::.::holistic::abstraction_fitness::wide_context_value",
+          "review::.::holistic::ai_generated_debt::formulaic_clip_spread",
+          "review::.::holistic::api_surface_coherence::timeline_data_mixed_sync_async",
+          "review::.::holistic::contract_coherence::misleading_config_signature_name",
+          "review::.::holistic::contract_coherence::silent_profile_load_error",
+          "review::.::holistic::convention_outlier::duplicate_format_time",
+          "review::.::holistic::convention_outlier::duplicate_round_timeline_value",
+          "review::.::holistic::convention_outlier::mixed_export_preview",
+          "review::.::holistic::convention_outlier::mixed_export_properties",
+          "review::.::holistic::cross_module_architecture::double_migration_call",
+          "review::.::holistic::cross_module_architecture::duplicate_migration_constants",
+          "review::.::holistic::cross_module_architecture::wide_context_interface",
+          "review::.::holistic::dependency_health::fragile_file_references",
+          "review::.::holistic::dependency_health::phantom_clsx_dependency",
+          "review::.::holistic::dependency_health::unused_dnd_kit_deps",
+          "review::.::holistic::design_coherence::orphaned_component_files",
+          "review::.::holistic::design_coherence::useTimelineData_mixed_responsibilities",
+          "review::.::holistic::error_consistency::render_error_no_context",
+          "review::.::holistic::error_consistency::save_error_swallowed",
+          "review::.::holistic::error_consistency::silent_profile_parse",
+          "review::.::holistic::high_level_elegance::monolithic_timeline_state_hook",
+          "review::.::holistic::incomplete_migration::dual_effects_format",
+          "review::.::holistic::incomplete_migration::legacy_constants_duplication",
+          "review::.::holistic::initialization_coupling::import_time_env_loading",
+          "review::.::holistic::initialization_coupling::mutable_module_level_cache",
+          "review::.::holistic::logic_clarity::duplicated_formatTime",
+          "review::.::holistic::low_level_elegance::format_time_duplication",
+          "review::.::holistic::low_level_elegance::manual_field_clamping",
+          "review::.::holistic::mid_level_elegance::dual_edit_paths",
+          "review::.::holistic::mid_level_elegance::redundant_migrate_calls",
+          "review::.::holistic::naming_quality::call_llm_summary_misleading",
+          "review::.::holistic::package_organization::orphaned_ui_components",
+          "review::.::holistic::test_strategy::no_integration_tests",
+          "review::.::holistic::test_strategy::untested_hooks",
+          "review::.::holistic::type_safety::duplicate_action_drag_state",
+          "review::.::holistic::type_safety::unsafe_as_never_cast"
+        ],
+        "added_to_queue": [],
+        "workflow_injected_ids": [],
+        "triage_injected": false,
+        "triage_injected_ids": [],
+        "triage_deferred": false,
+        "diff_new": 0,
+        "diff_reopened": 0,
+        "diff_auto_resolved": 20,
+        "stale_pruned_from_queue": [],
+        "covered_subjective_pruned_from_queue": [
+          "subjective::design_coherence",
+          "subjective::error_consistency",
+          "subjective::logic_clarity",
+          "subjective::abstraction_fitness",
+          "subjective::api_surface_coherence",
+          "subjective::contract_coherence",
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::incomplete_migration",
+          "subjective::initialization_coupling",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::naming_quality",
+          "subjective::package_organization",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "covered_subjective": [
+          "subjective::abstraction_fitness",
+          "subjective::ai_generated_debt",
+          "subjective::api_surface_coherence",
+          "subjective::authorization_consistency",
+          "subjective::contract_coherence",
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::design_coherence",
+          "subjective::error_consistency",
+          "subjective::incomplete_migration",
+          "subjective::initialization_coupling",
+          "subjective::logic_clarity",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::naming_quality",
+          "subjective::package_organization",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "stale_sync_injected": [],
+        "stale_sync_pruned": [],
+        "auto_cluster_changes": 0,
+        "import_scores_injected": [],
+        "import_scores_pruned": [],
+        "sync_status": "synced",
+        "sync_message": null
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:36:27+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:36:27+00:00",
+      "action": "sync_triage",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "injected": true
+      }
+    },
+    {
+      "timestamp": "2026-03-24T05:36:27+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-03-24T05:36:27+00:00",
+      "action": "complete_postflight_scan",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "scan_count": 9
+      }
     }
   ],
   "epic_triage_meta": {},
   "commit_log": [],
   "uncommitted_issues": [],
   "commit_tracking_branch": null,
-  "scan_count_at_plan_start": 7,
+  "scan_count_at_plan_start": 9,
   "previous_plan_start_scores": {
     "strict": 74.6,
     "overall": 74.6,

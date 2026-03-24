@@ -1,36 +1,48 @@
 {
-  "command": "review",
-  "action": "import",
-  "mode": "holistic",
-  "diff": {
-    "new": 0,
-    "auto_resolved": 20,
-    "reopened": 0,
-    "total_current": 34,
-    "suspect_detectors": [
-      "boilerplate_duplication",
-      "logs",
-      "orphaned",
-      "props",
-      "review",
-      "smells",
-      "test_coverage"
-    ],
-    "chronic_reopeners": [],
-    "skipped_other_lang": 0,
-    "resolved_out_of_scope": 0,
-    "ignored": 0,
-    "ignore_patterns": 0,
-    "raw_issues": 34,
-    "suppressed_pct": 0.0
+  "command": "show",
+  "query": "test_coverage::src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
+  "status_filter": "open",
+  "total": 2,
+  "summary": {
+    "by_tier": {
+      "T3": 2
+    },
+    "by_detector": {
+      "test_coverage": 2
+    },
+    "files": 1
   },
-  "next_command": "desloppify show review --status open",
-  "subjective_at_target": [],
-  "assessment_import": {
-    "mode": "trusted_internal",
-    "trusted": true,
-    "reason": "trusted import-run replay from 20260324_052228"
+  "by_file": {
+    "src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx": [
+      {
+        "id": "test_coverage::src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (376 LOC, 0 importers) \u2014 no test files found",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 376,
+          "importer_count": 0,
+          "loc_weight": 19.390719429665317
+        }
+      },
+      {
+        "id": "test_coverage::src/tools/video-editor/components/PreviewPanel/OverlayEditor.tsx::untested_module",
+        "tier": 3,
+        "confidence": "high",
+        "summary": "Untested module (376 LOC, 0 importers)",
+        "detail": {
+          "kind": "untested_module",
+          "loc": 376,
+          "importer_count": 0,
+          "loc_weight": 19.390719429665317
+        }
+      }
+    ]
   },
+  "total_matching": 2,
+  "noise_budget": 10,
+  "noise_global_budget": 0,
   "narrative": {
     "phase": "stagnation",
     "headline": "Score plateaued at 74.6 for 5 scans. Test health (0.1%) is where the breakthrough is. 9 wontfix items may also be worth revisiting. (38 review work items \u2014 run `desloppify show review --status open`)",
@@ -62,11 +74,6 @@
       "biggest_gap_dimensions": [],
       "stagnant_dimensions": [
         {
-          "name": "Code quality",
-          "strict": 89.4,
-          "stuck_scans": 5
-        },
-        {
           "name": "Security",
           "strict": 100.0,
           "stuck_scans": 5
@@ -87,8 +94,33 @@
           "stuck_scans": 5
         },
         {
+          "name": "Abstraction fit",
+          "strict": 68.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "AI generated debt",
+          "strict": 87.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "API coherence",
+          "strict": 82.5,
+          "stuck_scans": 5
+        },
+        {
           "name": "Auth consistency",
           "strict": 92.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Contracts",
+          "strict": 84.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Convention drift",
+          "strict": 70.0,
           "stuck_scans": 5
         },
         {
@@ -102,8 +134,28 @@
           "stuck_scans": 5
         },
         {
+          "name": "Design coherence",
+          "strict": 79.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Error consistency",
+          "strict": 62.0,
+          "stuck_scans": 5
+        },
+        {
           "name": "High elegance",
           "strict": 82.5,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Stale migration",
+          "strict": 78.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Init coupling",
+          "strict": 76.0,
           "stuck_scans": 5
         },
         {
@@ -112,8 +164,33 @@
           "stuck_scans": 5
         },
         {
+          "name": "Low elegance",
+          "strict": 71.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Mid elegance",
+          "strict": 73.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Naming quality",
+          "strict": 74.0,
+          "stuck_scans": 5
+        },
+        {
           "name": "Structure nav",
           "strict": 82.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Test strategy",
+          "strict": 52.0,
+          "stuck_scans": 5
+        },
+        {
+          "name": "Type safety",
+          "strict": 81.5,
           "stuck_scans": 5
         }
       ]
@@ -347,7 +424,7 @@
       "auto_fixers_available": 3,
       "zone_classification": 3,
       "dry_run_first": 3,
-      "report_scores": 5,
+      "report_scores": 6,
       "review_issues_pending": 3,
       "stagnant_nudge": 5,
       "feedback_nudge": 3

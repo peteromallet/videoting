@@ -28,7 +28,21 @@ export function PreviewPanel() {
         <CardTitle className="text-xs uppercase tracking-[0.18em] text-muted-foreground">Preview</CardTitle>
       </CardHeader>
       <CardContent className="relative flex min-h-0 flex-1 p-3">
-        <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-xl bg-editor-crust">
+        <div
+          className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-xl bg-editor-crust"
+          onMouseDownCapture={(event) => {
+            const target = event.target;
+            if (!(target instanceof Element)) {
+              return;
+            }
+
+            if (target.closest("[data-overlay-hit='true'], [data-inline-text-editor='true']")) {
+              return;
+            }
+
+            setSelectedClipId(null);
+          }}
+        >
           <RemotionPreview
             ref={previewRef}
             config={resolvedConfig}

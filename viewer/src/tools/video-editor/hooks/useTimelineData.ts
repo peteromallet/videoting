@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { TimelineRow } from "@xzdarcy/timeline-engine";
 import { getConfigSignature, parseResolution } from "@shared/config-utils";
@@ -51,6 +51,19 @@ const defaultPreferences: EditorPreferences = {
     hidden: [],
   },
 };
+
+export function shouldAcceptPolledData(
+  editSeq: number,
+  savedSeq: number,
+  polledSig: string,
+  lastSavedSig: string,
+): boolean {
+  if (savedSeq < editSeq) {
+    return false;
+  }
+
+  return polledSig !== lastSavedSig;
+}
 
 export interface ActionDragState {
   rowId: string;
@@ -109,6 +122,8 @@ export function useTimelineData(): UseTimelineDataResult {
   const queryClient = useQueryClient();
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedSignature = useRef("");
+  const editSeqRef = useRef(0);
+  const savedSeqRef = useRef(0);
   const dataRef = useRef<TimelineData | null>(null);
   const resizeStartRef = useRef<Record<string, { start: number; from: number }>>({});
   const crossTrackActive = useRef(false);
@@ -122,10 +137,17 @@ export function useTimelineData(): UseTimelineDataResult {
   const [renderLog, setRenderLog] = useState("");
   const [renderDirty, setRenderDirty] = useState(false);
   const [preferences, setPreferences] = useEditorSettings<EditorPreferences>("video-editor:preferences", defaultPreferences);
+  const selectedClipIdRef = useRef<string | null>(selectedClipId);
+  const selectedTrackIdRef = useRef<string | null>(selectedTrackId);
 
   const scale = SCALE_SECONDS;
   const scaleWidth = preferences.scaleWidth;
-  dataRef.current = data;
+
+  useLayoutEffect(() => {
+    dataRef.current = data;
+    selectedClipIdRef.current = selectedClipId;
+    selectedTrackIdRef.current = selectedTrackId;
+  }, [data, selectedClipId, selectedTrackId]);
 
   const timelineQuery = useQuery({
     queryKey: ["timeline-data"],
@@ -141,18 +163,12 @@ export function useTimelineData(): UseTimelineDataResult {
 
   const saveMutation = useMutation({
     mutationFn: saveTimelineConfig,
-    onSuccess: (_value, savedConfig) => {
-      const current = dataRef.current;
-      if (!current) {
-        return;
-      }
-
-      setSaveStatus("saved");
-      setRenderDirty(true);
-      lastSavedSignature.current = getConfigSignature(resolveTimelineConfig(savedConfig, current.registry));
-    },
     onError: () => {
       setSaveStatus("error");
+      const current = dataRef.current;
+      if (current) {
+        scheduleSave(current, { preserveStatus: true });
+      }
     },
   });
 
@@ -180,20 +196,33 @@ export function useTimelineData(): UseTimelineDataResult {
     };
   }, []);
 
-  const saveTimeline = useCallback(async (nextData: TimelineData) => {
+  const saveTimeline = useCallback(async (nextData: TimelineData, seq: number) => {
     setSaveStatus("saving");
-    await saveMutation.mutateAsync(nextData.config);
+    await saveMutation.mutateAsync(nextData.config, {
+      onSuccess: () => {
+        if (seq > savedSeqRef.current) {
+          savedSeqRef.current = seq;
+          lastSavedSignature.current = nextData.signature;
+        }
+
+        setSaveStatus(seq >= editSeqRef.current ? "saved" : "dirty");
+        setRenderDirty(true);
+      },
+    });
   }, [saveMutation]);
 
-  const scheduleSave = useCallback((nextData: TimelineData) => {
-    setSaveStatus("dirty");
+  const scheduleSave = useCallback((nextData: TimelineData, options?: { preserveStatus?: boolean }) => {
+    if (!options?.preserveStatus) {
+      setSaveStatus("dirty");
+    }
     if (saveTimer.current) {
       clearTimeout(saveTimer.current);
     }
 
     saveTimer.current = setTimeout(() => {
       saveTimer.current = null;
-      void saveTimeline(nextData);
+      const seq = editSeqRef.current;
+      void saveTimeline(nextData, seq);
     }, 500);
   }, [saveTimeline]);
 
@@ -209,15 +238,15 @@ export function useTimelineData(): UseTimelineDataResult {
     setData(nextData);
     if (options?.selectedClipId !== undefined) {
       setSelectedClipId(options.selectedClipId);
-    } else if (selectedClipId && !nextData.meta[selectedClipId]) {
+    } else if (selectedClipIdRef.current && !nextData.meta[selectedClipIdRef.current]) {
       setSelectedClipId(null);
     }
 
     if (options?.selectedTrackId !== undefined) {
       setSelectedTrackId(options.selectedTrackId);
     } else {
-      const fallbackTrackId = selectedTrackId && nextData.tracks.some((track) => track.id === selectedTrackId)
-        ? selectedTrackId
+      const fallbackTrackId = selectedTrackIdRef.current && nextData.tracks.some((track) => track.id === selectedTrackIdRef.current)
+        ? selectedTrackIdRef.current
         : nextData.tracks[0]?.id ?? null;
       setSelectedTrackId(fallbackTrackId);
     }
@@ -227,9 +256,10 @@ export function useTimelineData(): UseTimelineDataResult {
     }
 
     if (options?.save ?? true) {
+      editSeqRef.current += 1;
       scheduleSave(nextData);
     }
-  }, [scheduleSave, selectedClipId, selectedTrackId]);
+  }, [scheduleSave]);
 
   const applyTimelineEdit = useCallback((
     nextRows: TimelineRow[],
@@ -277,8 +307,22 @@ export function useTimelineData(): UseTimelineDataResult {
   }, [commitData]);
 
   useEffect(() => {
-    if (timelineQuery.data && timelineQuery.data.signature !== lastSavedSignature.current) {
-      commitData(timelineQuery.data, { save: false, updateLastSavedSignature: true });
+    if (
+      timelineQuery.data
+      && shouldAcceptPolledData(
+        editSeqRef.current,
+        savedSeqRef.current,
+        timelineQuery.data.signature,
+        lastSavedSignature.current,
+      )
+    ) {
+      const syncHandle = window.setTimeout(() => {
+        commitData(timelineQuery.data, { save: false, updateLastSavedSignature: true });
+      }, 0);
+
+      return () => {
+        window.clearTimeout(syncHandle);
+      };
     }
   }, [commitData, timelineQuery.data]);
 
@@ -289,17 +333,27 @@ export function useTimelineData(): UseTimelineDataResult {
       return;
     }
 
+    if (savedSeqRef.current < editSeqRef.current) {
+      return;
+    }
+
     const nextData = buildTimelineData(current.config, registry);
     if (nextData.signature === current.signature && Object.keys(nextData.assetMap).length === Object.keys(current.assetMap).length) {
       return;
     }
 
-    commitData(nextData, {
-      save: false,
-      selectedClipId,
-      selectedTrackId,
-    });
-  }, [assetRegistryQuery.data, commitData, selectedClipId, selectedTrackId]);
+    const syncHandle = window.setTimeout(() => {
+      commitData(nextData, {
+        save: false,
+        selectedClipId: selectedClipIdRef.current,
+        selectedTrackId: selectedTrackIdRef.current,
+      });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(syncHandle);
+    };
+  }, [assetRegistryQuery.data, commitData]);
 
   useEffect(() => {
     return () => {

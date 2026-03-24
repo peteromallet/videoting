@@ -57,6 +57,8 @@ export default function OverlayEditor({
   onOverlayChange,
 }: Props) {
   const [layout, setLayout] = useState<OverlayLayout | null>(null);
+  const [editingClipId, setEditingClipId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
   const dragState = useRef<{
     mode: DragMode;
     actionId: string;
@@ -69,6 +71,7 @@ export default function OverlayEditor({
     effectiveScale: number;
   } | null>(null);
   const layoutRef = useRef<OverlayLayout | null>(null);
+  const editorRef = useRef<HTMLTextAreaElement | null>(null);
 
   const getTrackDefaultBounds = useCallback((trackId: string) => {
     const trackScale = Math.max(trackScaleMap[trackId] ?? 1, 0.01);
@@ -210,7 +213,41 @@ export default function OverlayEditor({
     };
   }, [computeLayout, playerContainerRef]);
 
+  useEffect(() => {
+    if (!editingClipId) {
+      return;
+    }
+
+    const clipMeta = meta[editingClipId];
+    if (clipMeta?.clipType === "text" && activeOverlays.some((overlay) => overlay.actionId === editingClipId)) {
+      return;
+    }
+
+    const clearEditor = window.setTimeout(() => {
+      setEditingClipId(null);
+      setEditText("");
+    }, 0);
+
+    return () => {
+      window.clearTimeout(clearEditor);
+    };
+  }, [activeOverlays, editingClipId, meta]);
+
+  useEffect(() => {
+    if (!editingClipId) {
+      return;
+    }
+
+    editorRef.current?.focus();
+    const cursorPosition = editorRef.current?.value.length ?? 0;
+    editorRef.current?.setSelectionRange(cursorPosition, cursorPosition);
+  }, [editingClipId]);
+
   const onMouseDown = useCallback((event: ReactMouseEvent, actionId: string, mode: DragMode) => {
+    if (editingClipId === actionId) {
+      return;
+    }
+
     event.stopPropagation();
     event.preventDefault();
 
@@ -221,10 +258,10 @@ export default function OverlayEditor({
 
     const needsInitialization = clipMeta.clipType !== "text" && !hasPositionOverride(clipMeta);
     const bounds = getClipBounds(clipMeta, clipMeta.track);
-    let startX = bounds.x;
-    let startY = bounds.y;
-    let startW = bounds.width;
-    let startH = bounds.height;
+    const startX = bounds.x;
+    const startY = bounds.y;
+    const startW = bounds.width;
+    const startH = bounds.height;
     let effectiveScale = usesAbsoluteCompositionSpace(clipMeta) ? 1 : (trackScaleMap[clipMeta.track] ?? 1);
 
     if (needsInitialization) {
@@ -244,7 +281,7 @@ export default function OverlayEditor({
       effectiveScale,
     };
     onSelectClip(actionId);
-  }, [getClipBounds, meta, onOverlayChange, onSelectClip, trackScaleMap]);
+  }, [editingClipId, getClipBounds, meta, onOverlayChange, onSelectClip, trackScaleMap]);
 
   useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
@@ -328,12 +365,7 @@ export default function OverlayEditor({
   return (
     <div
       className="pointer-events-none absolute z-10"
-      style={{ ...containerStyle, pointerEvents: selectedClipId ? "auto" : "none" }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) {
-          onSelectClip(null);
-        }
-      }}
+      style={{ ...containerStyle, pointerEvents: "none" }}
     >
       {activeOverlays.map((overlay) => {
         const isSelected = selectedClipId === overlay.actionId;
@@ -341,6 +373,20 @@ export default function OverlayEditor({
         const trackScale = trackScaleMap[overlay.track] ?? 1;
         const effectiveScale = usesAbsoluteCompositionSpace(clipMeta) ? 1 : trackScale;
         const projection = getTrackProjection(layout, effectiveScale);
+        const isEditing = editingClipId === overlay.actionId;
+        const textStyle: CSSProperties | null = clipMeta?.clipType === "text"
+          ? {
+            color: clipMeta.text?.color ?? "#ffffff",
+            fontFamily: clipMeta.text?.fontFamily ?? "Georgia, serif",
+            fontSize: Math.max((clipMeta.text?.fontSize ?? 64) * projection.scaleX, 12),
+            fontWeight: clipMeta.text?.bold ? 700 : 400,
+            fontStyle: clipMeta.text?.italic ? "italic" : "normal",
+            textAlign: clipMeta.text?.align ?? "center",
+            lineHeight: 1.1,
+            opacity: clipMeta.opacity ?? 1,
+            textShadow: "0 2px 18px rgba(0, 0, 0, 0.35)",
+          }
+          : null;
         const style: CSSProperties = {
           left: projection.offsetX + overlay.x * projection.scaleX,
           top: projection.offsetY + overlay.y * projection.scaleY,
@@ -351,15 +397,58 @@ export default function OverlayEditor({
         return (
           <div
             key={overlay.actionId}
-            className={`absolute border ${isSelected ? "border-editor-blue bg-editor-blue/10 shadow-[0_0_0_1px_rgba(137,180,250,0.4)]" : "border-white/45 bg-white/5"} cursor-move rounded-md`}
+            data-overlay-hit="true"
+            className={`pointer-events-auto absolute border ${isSelected ? "border-editor-blue bg-editor-blue/10 shadow-[0_0_0_1px_rgba(137,180,250,0.4)]" : "border-white/45 bg-white/5"} cursor-move rounded-md`}
             style={style}
             onMouseDown={(event) => onMouseDown(event, overlay.actionId, "move")}
+            onDoubleClick={(event) => {
+              if (clipMeta?.clipType !== "text") {
+                return;
+              }
+
+              event.stopPropagation();
+              onSelectClip(overlay.actionId);
+              setEditingClipId(overlay.actionId);
+              setEditText(clipMeta.text?.content ?? "");
+            }}
             onClick={(event) => {
               event.stopPropagation();
               onSelectClip(overlay.actionId);
             }}
           >
-            <span className="absolute -top-6 left-0 rounded-md bg-black/70 px-2 py-0.5 text-[10px] text-white">{overlay.label}</span>
+            <span className="pointer-events-none absolute -top-6 left-0 rounded-md bg-black/70 px-2 py-0.5 text-[10px] text-white">{overlay.label}</span>
+            {isEditing && textStyle ? (
+              <textarea
+                ref={editorRef}
+                data-inline-text-editor="true"
+                className="absolute inset-0 h-full w-full resize-none overflow-hidden rounded-md border-0 bg-transparent p-0 focus:outline-none"
+                style={textStyle}
+                value={editText}
+                onChange={(event) => {
+                  const nextValue = event.currentTarget.value;
+                  setEditText(nextValue);
+                  onOverlayChange(overlay.actionId, {
+                    text: {
+                      ...(clipMeta?.text ?? { content: "" }),
+                      content: nextValue,
+                    },
+                  });
+                }}
+                onBlur={() => {
+                  setEditingClipId(null);
+                }}
+                onMouseDown={(event) => {
+                  event.stopPropagation();
+                }}
+                onKeyDown={(event) => {
+                  event.stopPropagation();
+                  if (event.key === "Escape") {
+                    event.preventDefault();
+                    setEditingClipId(null);
+                  }
+                }}
+              />
+            ) : null}
             {isSelected ? (
               <>
                 <div className="absolute -left-1 -top-1 h-2 w-2 rounded-full border border-editor-blue bg-editor-base" onMouseDown={(event) => onMouseDown(event, overlay.actionId, "resize-nw")} />

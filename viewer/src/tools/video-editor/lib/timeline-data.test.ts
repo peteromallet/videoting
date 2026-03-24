@@ -173,6 +173,40 @@ describe("rowsToConfig", () => {
     expect(config.clips[0].from).toBeUndefined();
     expect(config.clips[0].to).toBeUndefined();
   });
+
+  it("preserves text clip hold and text metadata through a round-trip", () => {
+    const tracks = makeTracks();
+    const config = makeConfig([
+      {
+        id: "clip-0",
+        at: 2,
+        track: "V2",
+        clipType: "text",
+        hold: 4,
+        x: 120,
+        y: 80,
+        width: 480,
+        height: 160,
+        text: {
+          content: "Inline edit me",
+          fontFamily: "Georgia, serif",
+          fontSize: 64,
+          color: "#ffffff",
+          align: "center",
+          bold: true,
+          italic: false,
+        },
+      },
+    ]);
+
+    const rowData = configToRows(config);
+    const nextConfig = rowsToConfig(rowData.rows, rowData.meta, makeOutput(), rowData.clipOrder, tracks);
+
+    expect(nextConfig.clips[0].hold).toBe(4);
+    expect(nextConfig.clips[0].text).toEqual(config.clips[0].text);
+    expect(nextConfig.clips[0].from).toBeUndefined();
+    expect(nextConfig.clips[0].to).toBeUndefined();
+  });
 });
 
 describe("resolveTimelineConfig", () => {

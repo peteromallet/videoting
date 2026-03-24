@@ -1,23 +1,30 @@
-import { describe, it, expect } from "vitest";
-import * as mod from "./useTimelineData";
+import { describe, expect, it } from "vitest";
+import { shouldAcceptPolledData, useTimelineData } from "./useTimelineData";
 
 describe("useTimelineData", () => {
   it("exports the hook function", () => {
-    expect(mod).toBeDefined();
-    expect(typeof mod.useTimelineData).toBe("function");
+    expect(typeof useTimelineData).toBe("function");
+  });
+});
+
+describe("shouldAcceptPolledData", () => {
+  it("rejects polled data while local edits are ahead of saved state", () => {
+    expect(shouldAcceptPolledData(2, 1, "polled-next", "saved-prev")).toBe(false);
   });
 
-  it("exports the SaveStatus and RenderStatus types implicitly via defaults", () => {
-    // defaultPreferences is not exported, but EditorPreferences type is accessible
-    // Just verify the module shape
-    expect(mod.useTimelineData).toBeDefined();
+  it("accepts polled data when edit and saved sequences match but signatures differ", () => {
+    expect(shouldAcceptPolledData(3, 3, "polled-next", "saved-prev")).toBe(true);
   });
 
-  describe("EditorPreferences defaults", () => {
-    // We can't access defaultPreferences directly since it's not exported,
-    // but we can verify the exported types exist by checking the module
-    it("exports EditorPreferences type (verified by module having useTimelineData)", () => {
-      expect(typeof mod.useTimelineData).toBe("function");
-    });
+  it("rejects polled data when edit and saved sequences match and signatures are unchanged", () => {
+    expect(shouldAcceptPolledData(3, 3, "saved-prev", "saved-prev")).toBe(false);
+  });
+
+  it("keeps polling blocked after an out-of-order save if newer edits still exist", () => {
+    expect(shouldAcceptPolledData(5, 4, "polled-next", "saved-seq-4")).toBe(false);
+  });
+
+  it("keeps polling blocked after save errors leave saved sequence behind", () => {
+    expect(shouldAcceptPolledData(7, 6, "disk-state", "last-good-save")).toBe(false);
   });
 });
