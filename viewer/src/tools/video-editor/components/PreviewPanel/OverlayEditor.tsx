@@ -421,8 +421,8 @@ export default function OverlayEditor({
               <textarea
                 ref={editorRef}
                 data-inline-text-editor="true"
-                className="absolute inset-0 h-full w-full resize-none overflow-hidden rounded-md border-0 bg-transparent p-0 focus:outline-none"
-                style={textStyle}
+                className="absolute inset-0 h-full w-full resize-none overflow-hidden rounded-md border-0 p-0 focus:outline-none"
+                style={{ ...textStyle, background: clipMeta?.text?.backgroundColor || "rgba(0,0,0,0.85)" }}
                 value={editText}
                 onChange={(event) => {
                   const nextValue = event.currentTarget.value;

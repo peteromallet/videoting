@@ -64,13 +64,13 @@
       "track": "V1",
       "clipType": "text",
       "hold": 4,
-      "x": 181,
-      "y": 140,
+      "x": 157,
+      "y": 357,
       "width": 920,
       "height": 180,
       "opacity": 1,
       "text": {
-        "content": "fdsfsdfgdgdsf",
+        "content": "fsdfdsa",
         "fontFamily": "Georgia, serif",
         "fontSize": 64,
         "color": "#ffffff",
@@ -81,7 +81,7 @@
     },
     {
       "id": "clip-2",
-      "at": 10.59,
+      "at": 19.13,
       "track": "V2",
       "asset": "demo-one",
       "clipType": "media",
@@ -92,19 +92,6 @@
       "y": 22,
       "width": 1280,
       "height": 720
-    },
-    {
-      "id": "clip-3",
-      "at": 26.19,
-      "track": "V2",
-      "asset": "demo-two",
-      "clipType": "media",
-      "from": 2,
-      "to": 10.16,
-      "x": 32,
-      "y": 18,
-      "width": 1216,
-      "height": 684
     },
     {
       "id": "clip-6",
@@ -128,8 +115,42 @@
       }
     },
     {
+      "id": "clip-7",
+      "at": 26.94,
+      "track": "V2",
+      "clipType": "text",
+      "hold": 4,
+      "x": 168,
+      "y": 253,
+      "width": 920,
+      "height": 180,
+      "opacity": 1,
+      "text": {
+        "content": "12312321",
+        "fontFamily": "Georgia, serif",
+        "fontSize": 64,
+        "color": "#ffffff",
+        "align": "center",
+        "bold": true,
+        "italic": false
+      }
+    },
+    {
+      "id": "clip-3",
+      "at": 23.98,
+      "track": "V3",
+      "asset": "demo-two",
+      "clipType": "media",
+      "from": 2,
+      "to": 5.21,
+      "x": 32,
+      "y": 18,
+      "width": 1216,
+      "height": 684
+    },
+    {
       "id": "clip-4",
-      "at": 4.84,
+      "at": 0,
       "track": "A1",
       "asset": "input",
       "clipType": "media",

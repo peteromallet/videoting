@@ -306,25 +306,45 @@ export function useTimelineData(): UseTimelineDataResult {
     });
   }, [commitData]);
 
+  // Use a ref for commitData to avoid the polling effect re-firing
+  // when commitData's identity changes due to dependency cascades.
+  const commitDataRef = useRef(commitData);
+  useLayoutEffect(() => {
+    commitDataRef.current = commitData;
+  }, [commitData]);
+
   useEffect(() => {
-    if (
-      timelineQuery.data
-      && shouldAcceptPolledData(
+    const polledData = timelineQuery.data;
+    if (!polledData) return;
+
+    if (!shouldAcceptPolledData(
+      editSeqRef.current,
+      savedSeqRef.current,
+      polledData.signature,
+      lastSavedSignature.current,
+    )) {
+      return;
+    }
+
+    // Use setTimeout(0) to batch with React's state updates
+    const syncHandle = window.setTimeout(() => {
+      // Re-check the guard inside the timeout in case an edit happened
+      // between scheduling and executing
+      if (shouldAcceptPolledData(
         editSeqRef.current,
         savedSeqRef.current,
-        timelineQuery.data.signature,
+        polledData.signature,
         lastSavedSignature.current,
-      )
-    ) {
-      const syncHandle = window.setTimeout(() => {
-        commitData(timelineQuery.data, { save: false, updateLastSavedSignature: true });
-      }, 0);
+      )) {
+        commitDataRef.current(polledData, { save: false, updateLastSavedSignature: true });
+      }
+    }, 0);
 
-      return () => {
-        window.clearTimeout(syncHandle);
-      };
-    }
-  }, [commitData, timelineQuery.data]);
+    return () => {
+      window.clearTimeout(syncHandle);
+    };
+    // Only re-run when timelineQuery.data actually changes — NOT when commitData changes
+  }, [timelineQuery.data]);
 
   useEffect(() => {
     const current = dataRef.current;
@@ -343,7 +363,9 @@ export function useTimelineData(): UseTimelineDataResult {
     }
 
     const syncHandle = window.setTimeout(() => {
-      commitData(nextData, {
+      // Re-check guard inside timeout
+      if (savedSeqRef.current < editSeqRef.current) return;
+      commitDataRef.current(nextData, {
         save: false,
         selectedClipId: selectedClipIdRef.current,
         selectedTrackId: selectedTrackIdRef.current,
@@ -353,7 +375,7 @@ export function useTimelineData(): UseTimelineDataResult {
     return () => {
       window.clearTimeout(syncHandle);
     };
-  }, [assetRegistryQuery.data, commitData]);
+  }, [assetRegistryQuery.data]);
 
   useEffect(() => {
     return () => {
