@@ -400,6 +400,52 @@
       "opacity": 1
     },
     {
+      "id": "clip-25",
+      "at": 14.76,
+      "track": "V2",
+      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
+      "clipType": "hold",
+      "hold": 5,
+      "x": 100,
+      "y": 100,
+      "width": 320,
+      "height": 240,
+      "opacity": 1
+    },
+    {
+      "id": "clip-61",
+      "at": 17.81,
+      "track": "V2",
+      "asset": "rage-2-2",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
+      "id": "clip-62",
+      "at": 25.41,
+      "track": "V2",
+      "asset": "example-image1",
+      "clipType": "hold",
+      "hold": 5,
+      "opacity": 1
+    },
+    {
+      "id": "clip-63",
+      "at": 8.84,
+      "track": "V2",
+      "asset": "rage-2-2",
+      "clipType": "media",
+      "from": 0,
+      "to": 5,
+      "speed": 1,
+      "volume": 1,
+      "opacity": 1
+    },
+    {
       "id": "clip-11",
       "at": 54.72,
       "track": "V3",
@@ -435,19 +481,6 @@
       "to": 5,
       "speed": 1,
       "volume": 1,
-      "x": 100,
-      "y": 100,
-      "width": 320,
-      "height": 240,
-      "opacity": 1
-    },
-    {
-      "id": "clip-25",
-      "at": 14.63,
-      "track": "V3",
-      "asset": "dizjaj9ucwfxymklmvgs0_tqnyt57n",
-      "clipType": "hold",
-      "hold": 5,
       "x": 100,
       "y": 100,
       "width": 320,

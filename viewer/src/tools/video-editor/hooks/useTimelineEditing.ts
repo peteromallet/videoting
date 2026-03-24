@@ -115,6 +115,16 @@ export function useTimelineEditing({
     const rowRect = { top: rowScreenTop, height: ROW_HEIGHT, left: editAreaRect.left, width: editAreaRect.width } as DOMRect;
 
     const trackId = rowIndex >= 0 ? dataRef.current?.rows[rowIndex]?.id : undefined;
+    console.log("[getDropPosition]", {
+      clientY: event.clientY,
+      editAreaTop: editAreaRect.top,
+      scrollTop,
+      rawRowIndex: raw,
+      clampedRowIndex: rowIndex,
+      rowCount,
+      trackId,
+      tracks: dataRef.current?.rows.map(r => r.id),
+    });
     const trackName = dataRef.current?.tracks[rowIndex]?.label ?? dataRef.current?.tracks[rowIndex]?.id ?? "";
 
     return { time, rowIndex, rowRect, trackId, trackName, pixelsPerSecond, wrapperRect: wrapper.getBoundingClientRect() };
@@ -259,6 +269,7 @@ export function useTimelineEditing({
     const assetEntry = current.registry.assets[assetKey];
     const assetKind = inferTrackType(assetEntry?.file ?? assetKey);
     const resolvedTrackId = getCompatibleTrackId(current.tracks, trackId, assetKind, selectedTrackId);
+    console.log("[handleAssetDrop] assetKey:", assetKey, "trackId:", trackId, "assetKind:", assetKind, "selectedTrackId:", selectedTrackId, "-> resolvedTrackId:", resolvedTrackId);
     if (!resolvedTrackId) {
       return;
     }
@@ -404,6 +415,7 @@ export function useTimelineEditing({
         const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
         const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
         const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
+        console.log("[file drop] targetTrackId:", targetTrackId, "kind:", kind, "selectedTrackId:", selectedTrackId, "-> compatibleTrackId:", compatibleTrackId);
         if (!compatibleTrackId) {
           continue;
         }
@@ -474,6 +486,7 @@ export function useTimelineEditing({
     const { time, rowIndex } = getDropPosition(event);
     const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
     const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, assetKind || "visual", selectedTrackId);
+    console.log("[asset drop] targetTrackId:", targetTrackId, "assetKind:", assetKind, "selectedTrackId:", selectedTrackId, "-> compatibleTrackId:", compatibleTrackId);
     if (!compatibleTrackId) return;
     handleAssetDrop(assetKey, compatibleTrackId, time);
   }, [
