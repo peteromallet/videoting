@@ -9840,7 +9840,7 @@
     "auto_fixers_available": 3,
     "zone_classification": 3,
     "dry_run_first": 3,
-    "report_scores": 4,
+    "report_scores": 5,
     "review_issues_pending": 3,
     "stagnant_nudge": 5,
     "feedback_nudge": 3

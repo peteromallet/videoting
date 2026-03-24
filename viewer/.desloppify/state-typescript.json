@@ -1,8 +1,8 @@
 {
   "version": 3,
   "created": "2026-03-24T04:42:28+00:00",
-  "last_scan": "2026-03-24T05:33:01+00:00",
-  "scan_count": 7,
+  "last_scan": "2026-03-24T05:34:05+00:00",
+  "scan_count": 8,
   "overall_score": 74.6,
   "objective_score": 65.6,
   "strict_score": 74.6,
@@ -2547,7 +2547,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2581,7 +2581,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2615,7 +2615,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2649,7 +2649,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2683,7 +2683,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2717,7 +2717,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2751,7 +2751,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2785,7 +2785,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2819,7 +2819,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2853,7 +2853,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2887,7 +2887,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2921,7 +2921,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2955,7 +2955,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -2989,7 +2989,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -3023,7 +3023,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -3057,7 +3057,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -3091,7 +3091,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -3125,7 +3125,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -3159,7 +3159,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -3193,7 +3193,7 @@
         "text": "Dimension assessment imported; coverage marker superseded",
         "attested_at": "2026-03-24T04:42:39+00:00",
         "scan_verified": true,
-        "scan_verified_at": "2026-03-24T05:33:01+00:00",
+        "scan_verified_at": "2026-03-24T05:34:05+00:00",
         "scan_verification_text": "Absent from detector output in latest scan"
       }
     },
@@ -5499,7 +5499,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5534,7 +5534,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5569,7 +5569,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5605,7 +5605,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5641,7 +5641,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5676,7 +5676,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5711,7 +5711,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5745,7 +5745,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5779,7 +5779,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5813,7 +5813,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5847,7 +5847,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5882,7 +5882,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5917,7 +5917,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5951,7 +5951,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -5985,7 +5985,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6020,7 +6020,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6055,7 +6055,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6090,7 +6090,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6127,7 +6127,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6162,7 +6162,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6198,7 +6198,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6232,7 +6232,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6270,7 +6270,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6307,7 +6307,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6349,7 +6349,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6385,7 +6385,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6421,7 +6421,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6456,7 +6456,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6497,7 +6497,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6533,7 +6533,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6569,7 +6569,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6606,7 +6606,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6643,7 +6643,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -6678,7 +6678,7 @@
       "status": "open",
       "note": null,
       "first_seen": "2026-03-24T05:30:25+00:00",
-      "last_seen": "2026-03-24T05:30:25+00:00",
+      "last_seen": "2026-03-24T05:34:05+00:00",
       "resolved_at": null,
       "reopen_count": 0,
       "work_item_kind": "review_defect",
@@ -7709,7 +7709,7 @@
   },
   "subjective_integrity": {
     "status": "disabled",
-    "target_score": 85.0,
+    "target_score": null,
     "matched_count": 0,
     "matched_dimensions": [],
     "reset_dimensions": []
@@ -7718,7 +7718,7 @@
     "abstraction_fitness": {
       "score": 68.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00",
+      "assessed_at": "2026-03-24T05:34:05+00:00",
       "components": [
         "Abstraction Leverage",
         "Indirection Cost",
@@ -7739,32 +7739,32 @@
     "ai_generated_debt": {
       "score": 87.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "api_surface_coherence": {
       "score": 82.5,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "authorization_consistency": {
       "score": 92.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "contract_coherence": {
       "score": 84.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "convention_outlier": {
       "score": 70.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "cross_module_architecture": {
       "score": 72.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "dependency_health": {
       "score": 78.0,
@@ -7774,18 +7774,12 @@
     "design_coherence": {
       "score": 79.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00",
-      "needs_review_refresh": true,
-      "refresh_reason": "mechanical_issues_changed",
-      "stale_since": "2026-03-24T05:32:06+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "error_consistency": {
       "score": 62.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00",
-      "needs_review_refresh": true,
-      "refresh_reason": "mechanical_issues_changed",
-      "stale_since": "2026-03-24T05:32:06+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "high_level_elegance": {
       "score": 82.5,
@@ -7795,50 +7789,47 @@
     "incomplete_migration": {
       "score": 78.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "initialization_coupling": {
       "score": 76.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "logic_clarity": {
       "score": 86.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00",
-      "needs_review_refresh": true,
-      "refresh_reason": "mechanical_issues_changed",
-      "stale_since": "2026-03-24T05:32:06+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "low_level_elegance": {
       "score": 71.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "mid_level_elegance": {
       "score": 73.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "naming_quality": {
       "score": 74.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "package_organization": {
       "score": 82.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "test_strategy": {
       "score": 52.0,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     },
     "type_safety": {
       "score": 81.5,
       "source": "holistic",
-      "assessed_at": "2026-03-24T05:30:25+00:00"
+      "assessed_at": "2026-03-24T05:34:05+00:00"
     }
   },
   "scan_history": [
@@ -8744,6 +8735,135 @@
           "strict": 81.5
         }
       }
+    },
+    {
+      "timestamp": "2026-03-24T05:34:05+00:00",
+      "lang": "typescript",
+      "strict_score": 74.6,
+      "verified_strict_score": 65.6,
+      "objective_score": 65.6,
+      "overall_score": 74.6,
+      "open": 150,
+      "diff_new": 0,
+      "diff_resolved": 20,
+      "ignored": 0,
+      "raw_issues": 34,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "disabled",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": null
+      },
+      "score_confidence": {
+        "status": "full",
+        "confidence": 1.0,
+        "detector_count": 0,
+        "dimension_count": 0
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 89.4,
+          "strict": 89.4
+        },
+        "Security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "File health": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Duplication": {
+          "score": 97.7,
+          "strict": 97.7
+        },
+        "Test health": {
+          "score": 0.1,
+          "strict": 0.1
+        },
+        "Abstraction fit": {
+          "score": 68.0,
+          "strict": 68.0
+        },
+        "AI generated debt": {
+          "score": 87.0,
+          "strict": 87.0
+        },
+        "API coherence": {
+          "score": 82.5,
+          "strict": 82.5
+        },
+        "Auth consistency": {
+          "score": 92.0,
+          "strict": 92.0
+        },
+        "Contracts": {
+          "score": 84.0,
+          "strict": 84.0
+        },
+        "Convention drift": {
+          "score": 70.0,
+          "strict": 70.0
+        },
+        "Cross-module arch": {
+          "score": 72.0,
+          "strict": 72.0
+        },
+        "Dep health": {
+          "score": 78.0,
+          "strict": 78.0
+        },
+        "Design coherence": {
+          "score": 79.0,
+          "strict": 79.0
+        },
+        "Error consistency": {
+          "score": 62.0,
+          "strict": 62.0
+        },
+        "High elegance": {
+          "score": 82.5,
+          "strict": 82.5
+        },
+        "Stale migration": {
+          "score": 78.0,
+          "strict": 78.0
+        },
+        "Init coupling": {
+          "score": 76.0,
+          "strict": 76.0
+        },
+        "Logic clarity": {
+          "score": 86.0,
+          "strict": 86.0
+        },
+        "Low elegance": {
+          "score": 71.0,
+          "strict": 71.0
+        },
+        "Mid elegance": {
+          "score": 73.0,
+          "strict": 73.0
+        },
+        "Naming quality": {
+          "score": 74.0,
+          "strict": 74.0
+        },
+        "Structure nav": {
+          "score": 82.0,
+          "strict": 82.0
+        },
+        "Test strategy": {
+          "score": 52.0,
+          "strict": 52.0
+        },
+        "Type safety": {
+          "score": 81.5,
+          "strict": 81.5
+        }
+      }
     }
   ],
   "review_cache": {
@@ -9178,7 +9298,7 @@
     },
     "files": {},
     "holistic": {
-      "reviewed_at": "2026-03-24T05:30:25+00:00",
+      "reviewed_at": "2026-03-24T05:34:05+00:00",
       "file_count_at_review": 59,
       "issue_count": 34,
       "reviewed_files_count": 0,
@@ -9204,7 +9324,7 @@
     "test": 2
   },
   "tool_hash": "ab097af7227e",
-  "scan_path": ".",
+  "scan_path": null,
   "scan_completeness": {
     "typescript": "full"
   },
@@ -9231,7 +9351,8 @@
       "subjective_review": 20,
       "boilerplate_duplication": 6,
       "dupes": 86,
-      "stale_wontfix": 0
+      "stale_wontfix": 0,
+      "review": 10
     }
   },
   "codebase_metrics": {
@@ -9861,6 +9982,19 @@
     },
     {
       "timestamp": "2026-03-24T05:30:25+00:00",
+      "mode": "trusted_internal",
+      "trusted": true,
+      "reason": "trusted import-run replay from 20260324_052228",
+      "override_used": false,
+      "attested_external": false,
+      "provisional": false,
+      "provisional_count": 0,
+      "attest": "",
+      "import_file": "/Users/peteromalley/Documents/announcement-video/.desloppify/subagents/runs/20260324_052228/holistic_issues_merged.json",
+      "packet_sha256": "6f56fd1dc716d2b67bda2817f4aaeaf3b020fca06a6d9adde27054f3612dc0d7"
+    },
+    {
+      "timestamp": "2026-03-24T05:34:05+00:00",
       "mode": "trusted_internal",
       "trusted": true,
       "reason": "trusted import-run replay from 20260324_052228",
