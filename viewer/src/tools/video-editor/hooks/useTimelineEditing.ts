@@ -94,8 +94,10 @@ export function useTimelineEditing({
     const rect = (editArea ?? wrapper).getBoundingClientRect();
     const scrollLeft = grid?.scrollLeft ?? 0;
     const pixelsPerSecond = scaleWidth / scale;
+    const defaultClipDuration = 5;
+    const halfClipPx = (defaultClipDuration * pixelsPerSecond) / 2;
     const dropX = event.clientX - rect.left;
-    const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT) / pixelsPerSecond);
+    const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT - halfClipPx) / pixelsPerSecond);
 
     const rowElements = Array.from(wrapper.querySelectorAll<HTMLElement>(".timeline-editor-edit-row"));
     const rowIndex = rowElements.findIndex((el) => {
