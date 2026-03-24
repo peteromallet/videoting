@@ -213,6 +213,14 @@ export default function OverlayEditor({
     };
   }, [computeLayout, playerContainerRef]);
 
+  // Close inline editor when selection changes away from the editing clip
+  useEffect(() => {
+    if (editingClipId && selectedClipId !== editingClipId) {
+      setEditingClipId(null);
+      setEditText("");
+    }
+  }, [editingClipId, selectedClipId]);
+
   useEffect(() => {
     if (!editingClipId) {
       return;
@@ -421,8 +429,15 @@ export default function OverlayEditor({
               <textarea
                 ref={editorRef}
                 data-inline-text-editor="true"
-                className="absolute inset-0 h-full w-full resize-none overflow-hidden rounded-md border-0 p-0 focus:outline-none"
-                style={{ ...textStyle, background: clipMeta?.text?.backgroundColor || "rgba(0,0,0,0.85)" }}
+                className="absolute inset-0 flex h-full w-full resize-none items-center overflow-hidden rounded-md border-0 p-0 focus:outline-none"
+                style={{
+                  ...textStyle,
+                  background: clipMeta?.text?.backgroundColor || "rgba(0,0,0,0.85)",
+                  display: "flex",
+                  alignItems: "center",
+                  whiteSpace: "pre-wrap",
+                  paddingTop: `${Math.max(0, ((overlay.height * projection.scaleY) - (textStyle.fontSize as number) * 1.1) / 2)}px`,
+                }}
                 value={editText}
                 onChange={(event) => {
                   const nextValue = event.currentTarget.value;
