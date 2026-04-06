@@ -361,6 +361,11 @@
       "file": "inputs/rage_2_2.webp",
       "type": "image",
       "resolution": "1024x368"
+    },
+    "hd6hl_bbuaallku": {
+      "file": "inputs/HD6Hl_BbUAAlLKU.png",
+      "type": "image",
+      "resolution": "665x358"
     }
   }
 }

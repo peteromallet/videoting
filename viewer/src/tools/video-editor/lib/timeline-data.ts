@@ -299,12 +299,21 @@ export const rowsToConfig = (
   return config;
 };
 
+/** Stable-sort tracks: visual first, audio second (preserves relative order within each kind). */
+const sortTracksByKind = (tracks: TrackDefinition[]): TrackDefinition[] => {
+  const visual = tracks.filter((t) => t.kind === "visual");
+  const audio = tracks.filter((t) => t.kind === "audio");
+  return [...visual, ...audio];
+};
+
 export const buildTimelineData = (
   config: TimelineConfig,
   registry: AssetRegistry,
   urlResolver?: UrlResolver,
 ): TimelineData => {
   const migratedConfig = migrateToFlatTracks(config);
+  // Enforce visual-first, audio-second track order
+  migratedConfig.tracks = sortTracksByKind(migratedConfig.tracks ?? []);
   const resolvedConfig = resolveTimelineConfig(migratedConfig, registry, urlResolver);
   const rowData = configToRows(migratedConfig);
 

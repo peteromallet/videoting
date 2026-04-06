@@ -6,21 +6,21 @@ interface UseTimelineSyncOptions {
   timelineRef: React.RefObject<TimelineState | null>;
   previewRef: React.RefObject<PreviewHandle | null>;
   setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
-  isSyncingFromPreview: React.MutableRefObject<boolean>;
-  isSyncingFromTimeline: React.MutableRefObject<boolean>;
+  isSyncingFromPreviewRef: React.MutableRefObject<boolean>;
+  isSyncingFromTimelineRef: React.MutableRefObject<boolean>;
 }
 
 export function useTimelineSync({
   timelineRef,
   previewRef,
   setCurrentTime,
-  isSyncingFromPreview,
-  isSyncingFromTimeline,
+  isSyncingFromPreviewRef,
+  isSyncingFromTimelineRef,
 }: UseTimelineSyncOptions) {
   const lastTimeUpdateRef = useRef(0);
 
   const onPreviewTimeUpdate = useCallback((time: number) => {
-    if (isSyncingFromTimeline.current) {
+    if (isSyncingFromTimelineRef.current) {
       return;
     }
 
@@ -29,26 +29,26 @@ export function useTimelineSync({
     const now = performance.now();
     if (now - lastTimeUpdateRef.current > 250) {
       lastTimeUpdateRef.current = now;
-      isSyncingFromPreview.current = true;
+      isSyncingFromPreviewRef.current = true;
       setCurrentTime(time);
       requestAnimationFrame(() => {
-        isSyncingFromPreview.current = false;
+        isSyncingFromPreviewRef.current = false;
       });
     }
-  }, [isSyncingFromPreview, isSyncingFromTimeline, setCurrentTime, timelineRef]);
+  }, [isSyncingFromPreviewRef, isSyncingFromTimelineRef, setCurrentTime, timelineRef]);
 
   const onCursorDrag = useCallback((time: number) => {
-    if (isSyncingFromPreview.current) {
+    if (isSyncingFromPreviewRef.current) {
       return;
     }
 
-    isSyncingFromTimeline.current = true;
+    isSyncingFromTimelineRef.current = true;
     previewRef.current?.seek(time);
     setCurrentTime(time);
     requestAnimationFrame(() => {
-      isSyncingFromTimeline.current = false;
+      isSyncingFromTimelineRef.current = false;
     });
-  }, [isSyncingFromPreview, isSyncingFromTimeline, previewRef, setCurrentTime]);
+  }, [isSyncingFromPreviewRef, isSyncingFromTimelineRef, previewRef, setCurrentTime]);
 
   const onClickTimeArea = useCallback((time: number) => {
     previewRef.current?.seek(time);

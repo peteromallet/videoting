@@ -4,6 +4,7 @@ import { getClipDurationInFrames, secondsToFrames } from "../config-utils";
 import { wrapWithClipEffects } from "../effects";
 import { transitions } from "../transitions";
 import type { ResolvedTimelineClip, TrackDefinition } from "../types";
+import { GlobalFrameProvider } from "./GlobalFrameContext";
 
 type VisualClipProps = {
   clip: ResolvedTimelineClip;
@@ -116,6 +117,18 @@ export const VisualClip: FC<VisualClipProps> = ({ clip, track, fps }) => {
   return <>{wrapWithClipEffects(content, clip, durationInFrames, fps)}</>;
 };
 
+const LazyGuard: FC<{ durationInFrames: number; children: ReactNode }> = ({ durationInFrames, children }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const bufferFrames = Math.max(1, Math.round(fps));
+
+  if (frame < -bufferFrames || frame > durationInFrames + bufferFrames) {
+    return null;
+  }
+
+  return <>{children}</>;
+};
+
 export const VisualClipSequence: FC<VisualClipProps> = ({ clip, track, fps, predecessor }) => {
   const durationInFrames = getClipDurationInFrames(clip, fps);
   const transitionFrames = predecessor && clip.transition
@@ -125,7 +138,11 @@ export const VisualClipSequence: FC<VisualClipProps> = ({ clip, track, fps, pred
 
   return (
     <Sequence key={clip.id} from={from} durationInFrames={durationInFrames}>
-      <VisualClip clip={clip} track={track} fps={fps} predecessor={predecessor} />
+      <GlobalFrameProvider clipStartFrame={from}>
+        <LazyGuard durationInFrames={durationInFrames}>
+          <VisualClip clip={clip} track={track} fps={fps} predecessor={predecessor} />
+        </LazyGuard>
+      </GlobalFrameProvider>
     </Sequence>
   );
 };

@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
+import { memo, useEffect, useRef, useState } from "react";
+import { getAudioTracks } from "@shared/editor-utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import AssetPanel from "@/tools/video-editor/components/PropertiesPanel/AssetPanel";
 import { ClipPanel } from "@/tools/video-editor/components/PropertiesPanel/ClipPanel";
-import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
+import { useEditorContext } from "@/tools/video-editor/contexts/TimelineContext";
 
-export function PropertiesPanel() {
+function PropertiesPanelComponent() {
   const {
     data,
     selectedClip,
     selectedTrack,
     selectedClipHasPredecessor,
-    currentTime,
     compositionSize,
     setSelectedClipId,
     handleSelectedClipChange,
@@ -18,24 +18,30 @@ export function PropertiesPanel() {
     handleSplitSelectedClip,
     handleToggleMute,
     preferences,
-    setClipSectionOpen,
+    setActiveClipTab,
     setAssetPanelState,
     uploadFiles,
-  } = useTimelineContext();
+  } = useEditorContext();
 
-  const [assetsExpanded, setAssetsExpanded] = useState(true);
+  const [assetsExpanded, setAssetsExpanded] = useState(false);
+  const prevClipIdRef = useRef(selectedClip?.id);
 
-  // Auto-collapse assets when a clip is selected, auto-expand when deselected
+  // Auto-switch to "text" tab when selecting a text clip
   useEffect(() => {
-    setAssetsExpanded(!selectedClip);
-  }, [selectedClip]);
+    if (selectedClip && selectedClip.id !== prevClipIdRef.current && selectedClip.clipType === "text") {
+      setActiveClipTab("text");
+    }
+    prevClipIdRef.current = selectedClip?.id;
+  }, [selectedClip, setActiveClipTab]);
 
   if (!data) {
     return null;
   }
 
+  const audioTrackIds = getAudioTracks({ tracks: data.config.tracks ?? [] }).map((track) => track.id);
+
   return (
-    <div className="flex h-full min-h-0 flex-col gap-1">
+    <div className="flex h-full min-h-0 flex-col gap-1 pt-2">
       <div className="flex flex-col overflow-hidden rounded-lg border border-border/70 bg-editor-surface0/50">
         <button
           type="button"
@@ -61,7 +67,7 @@ export function PropertiesPanel() {
           </div>
         )}
       </div>
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div className="min-h-0 flex-1 overflow-auto px-2 pt-2">
         <ClipPanel
           clip={selectedClip}
           track={selectedTrack}
@@ -71,13 +77,19 @@ export function PropertiesPanel() {
           onClose={() => setSelectedClipId(null)}
           onSplit={handleSplitSelectedClip}
           onToggleMute={handleToggleMute}
-          playheadSeconds={currentTime}
           compositionWidth={compositionSize.width}
           compositionHeight={compositionSize.height}
-          sectionState={preferences.clipSections}
-          setSectionOpen={setClipSectionOpen}
+          audioTrackIds={audioTrackIds}
+          activeTab={preferences.activeClipTab}
+          setActiveTab={setActiveClipTab}
         />
       </div>
     </div>
   );
+}
+
+const MemoizedPropertiesPanel = memo(PropertiesPanelComponent);
+
+export function PropertiesPanel() {
+  return <MemoizedPropertiesPanel />;
 }

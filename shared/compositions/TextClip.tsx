@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { AbsoluteFill, Sequence } from "remotion";
 import { getClipDurationInFrames, secondsToFrames } from "../config-utils";
+import { GlobalFrameProvider } from "./GlobalFrameContext";
 import { wrapWithClipEffects } from "../effects";
 import type { ResolvedTimelineClip, TrackDefinition } from "../types";
 
@@ -52,7 +53,9 @@ export const TextClipSequence: FC<TextClipProps> = ({ clip, track, fps }) => {
       from={secondsToFrames(clip.at, fps)}
       durationInFrames={getClipDurationInFrames(clip, fps)}
     >
-      <TextClip clip={clip} track={track} fps={fps} />
+      <GlobalFrameProvider clipStartFrame={secondsToFrames(clip.at, fps)}>
+        <TextClip clip={clip} track={track} fps={fps} />
+      </GlobalFrameProvider>
     </Sequence>
   );
 };

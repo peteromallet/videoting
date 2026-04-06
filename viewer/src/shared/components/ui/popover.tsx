@@ -6,6 +6,7 @@ type PopoverContextValue = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   triggerRef: React.MutableRefObject<HTMLElement | null>;
+  setTriggerNode: (node: HTMLElement | null) => void;
 };
 
 const PopoverContext = React.createContext<PopoverContextValue | null>(null);
@@ -27,8 +28,11 @@ export function Popover({ children, open, onOpenChange }: PopoverProps) {
     }
     onOpenChange?.(nextValue);
   }, [onOpenChange, open, resolvedOpen]);
+  const setTriggerNode = React.useCallback((node: HTMLElement | null) => {
+    triggerRef.current = node;
+  }, []);
 
-  return <PopoverContext.Provider value={{ open: resolvedOpen, setOpen, triggerRef }}>{children}</PopoverContext.Provider>;
+  return <PopoverContext.Provider value={{ open: resolvedOpen, setOpen, triggerRef, setTriggerNode }}>{children}</PopoverContext.Provider>;
 }
 
 export const PopoverTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }>(
@@ -39,7 +43,7 @@ export const PopoverTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHT
     }
 
     const setRefs = (node: HTMLElement | null) => {
-      context.triggerRef.current = node;
+      context.setTriggerNode(node);
       if (typeof ref === "function") {
         ref(node as HTMLButtonElement | null);
       } else if (ref) {

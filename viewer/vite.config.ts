@@ -57,10 +57,12 @@ const readAssetProfile = (profilePath: string): Record<string, unknown> => {
 };
 
 const assetKeyFromFilename = (filename: string): string => {
+  // Must match Python ingest.py key generation: stem.lower().replace(" ", "-").replace(".", "-")
+  // Underscores are preserved (they're valid in asset keys).
   return filename
     .replace(/\.[^.]+$/, "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/[^a-z0-9_]+/g, "-")
     .replace(/^-|-$/g, "");
 };
 

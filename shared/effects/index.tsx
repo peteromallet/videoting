@@ -1,14 +1,54 @@
 import { secondsToFrames } from "../config-utils";
 import type { ResolvedTimelineClip } from "../types";
-import type { FC, ReactNode } from "react";
-import { BounceEntrance, FadeEntrance, FlipEntrance, MeteoriteEntrance, PulseEntrance, SlideDownEntrance, SlideLeftEntrance, SlideRightEntrance, SlideUpEntrance, ZoomInEntrance, ZoomSpinEntrance } from "./entrances";
-import { DriftEffect, FloatEffect, GlitchEffect, KenBurnsEffect, SlowZoomEffect } from "./continuous";
+import type { ReactNode } from "react";
+import { AbsoluteFill } from "remotion";
 import type { EffectComponentProps } from "./entrances";
-import { DissolveExit, FadeOutExit, FlipExit, ShrinkExit, SlideDownExit, ZoomOutExit } from "./exits";
+import {
+  BounceEntrance,
+  FadeEntrance,
+  FlipEntrance,
+  MeteoriteEntrance,
+  PulseEntrance,
+  SlideDownEntrance,
+  SlideLeftEntrance,
+  SlideRightEntrance,
+  SlideUpEntrance,
+  ZoomInEntrance,
+  ZoomSpinEntrance,
+} from "./entrances";
+import {
+  DissolveExit,
+  FadeOutExit,
+  FlipExit,
+  ShrinkExit,
+  SlideDownExit,
+  ZoomOutExit,
+} from "./exits";
+import {
+  DriftEffect,
+  FloatEffect,
+  GlitchEffect,
+  KenBurnsEffect,
+  SlowZoomEffect,
+} from "./continuous";
+import {
+  AudioGlowEffect,
+  AudioMaskBarsEffect,
+  AudioMaskCircleEffect,
+  AudioMaskWaveEffect,
+  AudioPulseEffect,
+} from "./audio-reactive";
 import { DynamicEffectRegistry } from "./dynamic-registry";
+import {
+  getEntry,
+  renderEffect,
+} from "./unified-registry";
 
-export type ClipEffectComponent = FC<EffectComponentProps>;
+export type ClipEffectComponent = React.FC<EffectComponentProps>;
+export type { EffectComponentProps };
 
+// Backward-compatible Record exports used by tests and other consumers.
+// These map effect names to their legacy component implementations.
 export const entranceEffects: Record<string, ClipEffectComponent> = {
   "slide-up": SlideUpEntrance,
   "slide-down": SlideDownEntrance,
@@ -38,21 +78,25 @@ export const continuousEffects: Record<string, ClipEffectComponent> = {
   glitch: GlitchEffect,
   "slow-zoom": SlowZoomEffect,
   drift: DriftEffect,
+  "audio-pulse": AudioPulseEffect,
+  "audio-mask-circle": AudioMaskCircleEffect,
+  "audio-mask-bars": AudioMaskBarsEffect,
+  "audio-mask-wave": AudioMaskWaveEffect,
+  "audio-glow": AudioGlowEffect,
 };
 
-export const entranceEffectTypes = Object.keys(entranceEffects);
-export const exitEffectTypes = Object.keys(exitEffects);
-export const continuousEffectTypes = Object.keys(continuousEffects);
+// Type lists now come from the unified registry so they include progress-based
+// effects alongside legacy components.
+export { entranceEffectTypes, exitEffectTypes, continuousEffectTypes } from "./unified-registry";
 
-// Merge all built-in effects into a single registry for the dynamic fallback path
+// Build a flat map of all built-in effects for the dynamic registry fallback.
 const allBuiltInEffects: Record<string, ClipEffectComponent> = {
   ...entranceEffects,
   ...exitEffects,
   ...continuousEffects,
 };
 
-// Module-level singleton registry. Initialized with all built-in effects.
-// Dynamic effects can be registered at runtime via getEffectRegistry().register().
+// Module-level singleton registry for dynamic effects.
 let _effectRegistry: DynamicEffectRegistry | null = null;
 
 export function getEffectRegistry(): DynamicEffectRegistry {
@@ -64,28 +108,30 @@ export function getEffectRegistry(): DynamicEffectRegistry {
 
 /**
  * Strip the "custom:" prefix from an effect type name, if present.
- * Custom effects use "custom:effect-name" in clip definitions to disambiguate
- * from built-in effects.
  */
 const resolveEffectName = (type: string): string => {
   return type.startsWith("custom:") ? type.slice(7) : type;
 };
 
 /**
- * Look up an effect component by name, checking both built-in maps
- * and the dynamic registry.
+ * Look up an effect. First checks the unified registry, then falls back
+ * to the dynamic registry for custom effects.
  */
-const lookupEffect = (
-  builtInMap: Record<string, ClipEffectComponent>,
+const lookupEffectForRole = (
   type: string,
-): ClipEffectComponent | null => {
+  role: "entrance" | "exit" | "continuous",
+): { unified: true; name: string } | { unified: false; legacy: ClipEffectComponent } | null => {
   const name = resolveEffectName(type);
-  // Built-in map first (fast path)
-  if (builtInMap[name]) {
-    return builtInMap[name];
+  const entry = getEntry(name);
+  if (entry && entry.metadata.roles.includes(role)) {
+    return { unified: true, name };
   }
   // Fall back to dynamic registry
-  return getEffectRegistry().get(name) ?? null;
+  const dynamic = getEffectRegistry().get(name);
+  if (dynamic) {
+    return { unified: false, legacy: dynamic };
+  }
+  return null;
 };
 
 export const wrapWithClipEffects = (
@@ -95,45 +141,88 @@ export const wrapWithClipEffects = (
   fps: number,
 ): ReactNode => {
   let wrapped = content;
+  let hasEffect = false;
 
-  const continuous = clip.continuous ? lookupEffect(continuousEffects, clip.continuous.type) : null;
-  if (continuous) {
-    const Continuous = continuous;
-    wrapped = (
-      <Continuous
-        durationInFrames={durationInFrames}
-        intensity={clip.continuous?.intensity ?? 0.5}
-      >
-        {wrapped}
-      </Continuous>
-    );
+  // Continuous effect
+  if (clip.continuous) {
+    const result = lookupEffectForRole(clip.continuous.type, "continuous");
+    if (result) {
+      hasEffect = true;
+      if (result.unified) {
+        wrapped = renderEffect(result.name, "continuous", {
+          children: wrapped,
+          durationInFrames,
+          intensity: clip.continuous.intensity ?? 0.5,
+          audioTrack: clip.continuous.audioTrack,
+          loop: clip.continuous.loop,
+          loopDuration: clip.continuous.loopDuration,
+        });
+      } else {
+        const Legacy = result.legacy;
+        wrapped = (
+          <Legacy
+            durationInFrames={durationInFrames}
+            intensity={clip.continuous.intensity ?? 0.5}
+            audioTrack={clip.continuous.audioTrack}
+            loop={clip.continuous.loop}
+            loopDuration={clip.continuous.loopDuration}
+          >
+            {wrapped}
+          </Legacy>
+        );
+      }
+    }
   }
 
-  const entrance = clip.entrance ? lookupEffect(entranceEffects, clip.entrance.type) : null;
-  if (entrance) {
-    const Entrance = entrance;
-    wrapped = (
-      <Entrance
-        durationInFrames={durationInFrames}
-        effectFrames={secondsToFrames(clip.entrance?.duration ?? 0.4, fps)}
-      >
-        {wrapped}
-      </Entrance>
-    );
+  // Entrance effect
+  if (clip.entrance) {
+    const result = lookupEffectForRole(clip.entrance.type, "entrance");
+    if (result) {
+      hasEffect = true;
+      const effectFrames = secondsToFrames(clip.entrance.duration ?? 0.4, fps);
+      if (result.unified) {
+        wrapped = renderEffect(result.name, "entrance", {
+          children: wrapped,
+          durationInFrames,
+          effectFrames,
+        });
+      } else {
+        const Legacy = result.legacy;
+        wrapped = (
+          <Legacy durationInFrames={durationInFrames} effectFrames={effectFrames}>
+            {wrapped}
+          </Legacy>
+        );
+      }
+    }
   }
 
-  const exit = clip.exit ? lookupEffect(exitEffects, clip.exit.type) : null;
-  if (exit) {
-    const Exit = exit;
-    wrapped = (
-      <Exit
-        durationInFrames={durationInFrames}
-        effectFrames={secondsToFrames(clip.exit?.duration ?? 0.4, fps)}
-      >
-        {wrapped}
-      </Exit>
-    );
+  // Exit effect
+  if (clip.exit) {
+    const result = lookupEffectForRole(clip.exit.type, "exit");
+    if (result) {
+      hasEffect = true;
+      const effectFrames = secondsToFrames(clip.exit.duration ?? 0.4, fps);
+      if (result.unified) {
+        wrapped = renderEffect(result.name, "exit", {
+          children: wrapped,
+          durationInFrames,
+          effectFrames,
+        });
+      } else {
+        const Legacy = result.legacy;
+        wrapped = (
+          <Legacy durationInFrames={durationInFrames} effectFrames={effectFrames}>
+            {wrapped}
+          </Legacy>
+        );
+      }
+    }
   }
 
-  return wrapped;
+  if (!hasEffect) {
+    return wrapped;
+  }
+
+  return <AbsoluteFill style={{ isolation: "isolate" }}>{wrapped}</AbsoluteFill>;
 };

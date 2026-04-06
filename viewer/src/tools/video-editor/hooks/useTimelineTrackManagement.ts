@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { addTrack } from "@shared/editor-utils";
 import type { TrackDefinition, TrackKind } from "@shared/types";
 import { moveClipBetweenTracks } from "@/tools/video-editor/lib/coordinate-utils";
@@ -19,6 +19,8 @@ export interface UseTimelineTrackManagementResult {
   handleTrackPopoverChange: (trackId: string, patch: Partial<TrackDefinition>) => void;
   handleReorderTrack: (trackId: string, direction: -1 | 1) => void;
   handleRemoveTrack: (trackId: string) => void;
+  handleClearUnusedTracks: () => void;
+  unusedTrackCount: number;
   moveClipToRow: (clipId: string, targetRowId: string, newStartTime?: number) => void;
   createTrackAndMoveClip: (clipId: string, kind: TrackKind, newStartTime?: number) => void;
   moveSelectedClipToTrack: (direction: "up" | "down") => void;
@@ -187,6 +189,11 @@ export function useTimelineTrackManagement({
       return;
     }
 
+    // Only allow reordering within the same kind (visual ↔ visual, audio ↔ audio)
+    if (resolvedConfig.tracks[index].kind !== resolvedConfig.tracks[targetIndex].kind) {
+      return;
+    }
+
     const nextTracks = [...resolvedConfig.tracks];
     [nextTracks[index], nextTracks[targetIndex]] = [nextTracks[targetIndex], nextTracks[index]];
     applyResolvedConfigEdit({ ...resolvedConfig, tracks: nextTracks }, { selectedTrackId: trackId });
@@ -215,11 +222,55 @@ export function useTimelineTrackManagement({
     applyResolvedConfigEdit(nextConfig, { selectedTrackId: null });
   }, [applyResolvedConfigEdit, resolvedConfig]);
 
+  const unusedTrackCount = useMemo(() => {
+    if (!resolvedConfig) {
+      return 0;
+    }
+
+    const tracksWithClips = new Set(resolvedConfig.clips.map((clip) => clip.track));
+    return resolvedConfig.tracks.filter((track) => !tracksWithClips.has(track.id)).length;
+  }, [resolvedConfig]);
+
+  const handleClearUnusedTracks = useCallback(() => {
+    if (!resolvedConfig || unusedTrackCount === 0) {
+      return;
+    }
+
+    const tracksWithClips = new Set(resolvedConfig.clips.map((clip) => clip.track));
+    // Keep at least one visual and one audio track
+    const visualWithClips = resolvedConfig.tracks.filter((t) => t.kind === "visual" && tracksWithClips.has(t.id));
+    const audioWithClips = resolvedConfig.tracks.filter((t) => t.kind === "audio" && tracksWithClips.has(t.id));
+
+    const nextTracks = resolvedConfig.tracks.filter((track) => {
+      if (tracksWithClips.has(track.id)) {
+        return true;
+      }
+
+      // Keep one empty visual track if no visual tracks have clips
+      if (track.kind === "visual" && visualWithClips.length === 0) {
+        visualWithClips.push(track); // mark as kept
+        return true;
+      }
+
+      // Keep one empty audio track if no audio tracks have clips
+      if (track.kind === "audio" && audioWithClips.length === 0) {
+        audioWithClips.push(track);
+        return true;
+      }
+
+      return false;
+    });
+
+    applyResolvedConfigEdit({ ...resolvedConfig, tracks: nextTracks }, { selectedTrackId: null });
+  }, [applyResolvedConfigEdit, resolvedConfig, unusedTrackCount]);
+
   return {
     handleAddTrack,
     handleTrackPopoverChange,
     handleReorderTrack,
     handleRemoveTrack,
+    handleClearUnusedTracks,
+    unusedTrackCount,
     moveClipToRow,
     createTrackAndMoveClip,
     moveSelectedClipToTrack,

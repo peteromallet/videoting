@@ -1,21 +1,24 @@
-import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
+import { memo } from "react";
+import { useEditorContext, usePlaybackContext } from "@/tools/video-editor/contexts/TimelineContext";
 import OverlayEditor from "@/tools/video-editor/components/PreviewPanel/OverlayEditor";
 import RemotionPreview from "@/tools/video-editor/components/PreviewPanel/RemotionPreview";
 
-export function PreviewPanel() {
+function PreviewPanelComponent() {
   const {
     data,
     resolvedConfig,
-    previewRef,
-    playerContainerRef,
-    currentTime,
     trackScaleMap,
     compositionSize,
     selectedClipId,
     setSelectedClipId,
-    onPreviewTimeUpdate,
     onOverlayChange,
-  } = useTimelineContext();
+  } = useEditorContext();
+  const {
+    previewRef,
+    playerContainerRef,
+    currentTime,
+    onPreviewTimeUpdate,
+  } = usePlaybackContext();
 
   if (!data || !resolvedConfig) {
     return null;
@@ -61,4 +64,10 @@ export function PreviewPanel() {
       </div>
     </div>
   );
+}
+
+const MemoizedPreviewPanel = memo(PreviewPanelComponent);
+
+export function PreviewPanel() {
+  return <MemoizedPreviewPanel />;
 }

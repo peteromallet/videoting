@@ -19,7 +19,7 @@ interface AssetPanelProps {
   onUploadFiles: (files: File[]) => Promise<void>;
 }
 
-const ACCEPTED_EXTENSIONS = [".mp4", ".webm", ".mov", ".mp3", ".wav", ".aac", ".m4a", ".jpg", ".jpeg", ".png", ".gif", ".svg"];
+const ACCEPTED_EXTENSIONS = [".mp4", ".webm", ".mov", ".mp3", ".wav", ".aac", ".m4a", ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp"];
 
 function isMediaFile(file: File): boolean {
   const ext = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();

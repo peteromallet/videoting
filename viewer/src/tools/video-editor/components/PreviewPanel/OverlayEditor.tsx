@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent as ReactMouseEvent, RefObject } from "react";
 import type { TimelineRow } from "@xzdarcy/timeline-engine";
 import type { ClipMeta } from "@/tools/video-editor/lib/timeline-data";
@@ -33,6 +33,11 @@ type OverlayLayout = {
   width: number;
   height: number;
 };
+type OverlayBounds = Pick<ActiveOverlay, "x" | "y" | "width" | "height">;
+type ActiveClipEntry = {
+  actionId: string;
+  track: string;
+};
 
 const MIN_CLIP_SIZE = 20;
 
@@ -44,7 +49,7 @@ const usesAbsoluteCompositionSpace = (clipMeta: ClipMeta | undefined): boolean =
   return Boolean(clipMeta && (clipMeta.clipType === "text" || hasPositionOverride(clipMeta)));
 };
 
-export default function OverlayEditor({
+function OverlayEditorComponent({
   rows,
   meta,
   currentTime,
@@ -59,6 +64,7 @@ export default function OverlayEditor({
   const [layout, setLayout] = useState<OverlayLayout | null>(null);
   const [editingClipId, setEditingClipId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  const [dragOverride, setDragOverride] = useState<{ actionId: string; bounds: OverlayBounds } | null>(null);
   const dragState = useRef<{
     mode: DragMode;
     actionId: string;
@@ -69,9 +75,13 @@ export default function OverlayEditor({
     startW: number;
     startH: number;
     effectiveScale: number;
+    latestBounds: OverlayBounds;
+    hasChanges: boolean;
   } | null>(null);
   const layoutRef = useRef<OverlayLayout | null>(null);
   const editorRef = useRef<HTMLTextAreaElement | null>(null);
+  const textCommitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingTextCommitRef = useRef<{ actionId: string; value: string } | null>(null);
 
   const getTrackDefaultBounds = useCallback((trackId: string) => {
     const trackScale = Math.max(trackScaleMap[trackId] ?? 1, 0.01);
@@ -105,44 +115,68 @@ export default function OverlayEditor({
     return getTrackDefaultBounds(trackId);
   }, [compositionHeight, compositionWidth, getTrackDefaultBounds]);
 
-  const activeOverlays = useMemo(() => {
-    const overlays: ActiveOverlay[] = [];
+  const activeClipEntries = useMemo<ActiveClipEntry[]>(() => {
+    const entries: ActiveClipEntry[] = [];
     for (const row of rows) {
       if (!row.id.startsWith("V")) {
         continue;
       }
 
       for (const action of row.actions) {
-        if (currentTime < action.start || currentTime >= action.end) {
-          continue;
+        if (currentTime >= action.start && currentTime < action.end) {
+          entries.push({ actionId: action.id, track: row.id });
         }
-
-        const clipMeta = meta[action.id];
-        if (!clipMeta || clipMeta.track !== row.id) {
-          continue;
-        }
-
-        const isSelected = selectedClipId === action.id;
-        const isPositioned = usesAbsoluteCompositionSpace(clipMeta);
-        if (!isPositioned && !isSelected) {
-          continue;
-        }
-
-        const bounds = getClipBounds(clipMeta, row.id);
-        overlays.push({
-          actionId: action.id,
-          label: clipMeta.asset ?? clipMeta.text?.content ?? action.id,
-          track: row.id,
-          x: bounds.x,
-          y: bounds.y,
-          width: bounds.width,
-          height: bounds.height,
-        });
       }
     }
 
+    return entries;
+  }, [currentTime, rows]);
+
+  const activeOverlays = useMemo(() => {
+    const overlays: ActiveOverlay[] = [];
+    for (const { actionId, track } of activeClipEntries) {
+      const clipMeta = meta[actionId];
+      if (!clipMeta || clipMeta.track !== track) {
+        continue;
+      }
+
+      const isSelected = selectedClipId === actionId;
+      const isPositioned = usesAbsoluteCompositionSpace(clipMeta);
+      if (!isPositioned && !isSelected) {
+        continue;
+      }
+
+      const bounds = getClipBounds(clipMeta, track);
+      overlays.push({
+        actionId,
+        label: clipMeta.asset ?? clipMeta.text?.content ?? actionId,
+        track,
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        height: bounds.height,
+      });
+    }
+
     return overlays;
-  }, [currentTime, getClipBounds, meta, rows, selectedClipId]);
+  }, [activeClipEntries, getClipBounds, meta, selectedClipId]);
+
+  const effectiveOverlays = useMemo(() => {
+    if (!dragOverride) {
+      return activeOverlays;
+    }
+
+    return activeOverlays.map((overlay) => {
+      if (overlay.actionId !== dragOverride.actionId) {
+        return overlay;
+      }
+
+      return {
+        ...overlay,
+        ...dragOverride.bounds,
+      };
+    });
+  }, [activeOverlays, dragOverride]);
 
   const getTrackProjection = useCallback((currentLayout: OverlayLayout, effectiveScale: number) => {
     const trackScale = Math.max(effectiveScale, 0.01);
@@ -187,6 +221,54 @@ export default function OverlayEditor({
     };
   }, [compositionHeight, compositionWidth, playerContainerRef]);
 
+  const flushPendingTextCommit = useCallback(() => {
+    if (textCommitTimerRef.current) {
+      window.clearTimeout(textCommitTimerRef.current);
+      textCommitTimerRef.current = null;
+    }
+
+    const pendingCommit = pendingTextCommitRef.current;
+    if (!pendingCommit) {
+      return;
+    }
+
+    const clipMeta = meta[pendingCommit.actionId];
+    if (!clipMeta || clipMeta.text?.content === pendingCommit.value) {
+      pendingTextCommitRef.current = null;
+      return;
+    }
+
+    onOverlayChange(pendingCommit.actionId, {
+      text: {
+        ...(clipMeta.text ?? { content: "" }),
+        content: pendingCommit.value,
+      },
+    });
+    pendingTextCommitRef.current = null;
+  }, [meta, onOverlayChange]);
+
+  const closeInlineEditor = useCallback(() => {
+    flushPendingTextCommit();
+    setEditingClipId(null);
+  }, [flushPendingTextCommit]);
+
+  const commitDragChange = useCallback(() => {
+    const state = dragState.current;
+    dragState.current = null;
+    setDragOverride(null);
+
+    if (!state || !state.hasChanges) {
+      return;
+    }
+
+    onOverlayChange(state.actionId, {
+      x: state.latestBounds.x,
+      y: state.latestBounds.y,
+      width: state.latestBounds.width,
+      height: state.latestBounds.height,
+    });
+  }, [onOverlayChange]);
+
   useEffect(() => {
     const updateLayout = () => {
       const nextLayout = computeLayout();
@@ -213,13 +295,20 @@ export default function OverlayEditor({
     };
   }, [computeLayout, playerContainerRef]);
 
-  // Close inline editor when selection changes away from the editing clip
   useEffect(() => {
-    if (editingClipId && selectedClipId !== editingClipId) {
-      setEditingClipId(null);
-      setEditText("");
+    if (!editingClipId || selectedClipId === editingClipId) {
+      return;
     }
-  }, [editingClipId, selectedClipId]);
+
+    const clearEditor = window.setTimeout(() => {
+      closeInlineEditor();
+      setEditText("");
+    }, 0);
+
+    return () => {
+      window.clearTimeout(clearEditor);
+    };
+  }, [closeInlineEditor, editingClipId, selectedClipId]);
 
   useEffect(() => {
     if (!editingClipId) {
@@ -227,19 +316,19 @@ export default function OverlayEditor({
     }
 
     const clipMeta = meta[editingClipId];
-    if (clipMeta?.clipType === "text" && activeOverlays.some((overlay) => overlay.actionId === editingClipId)) {
+    if (clipMeta?.clipType === "text" && effectiveOverlays.some((overlay) => overlay.actionId === editingClipId)) {
       return;
     }
 
     const clearEditor = window.setTimeout(() => {
-      setEditingClipId(null);
+      closeInlineEditor();
       setEditText("");
     }, 0);
 
     return () => {
       window.clearTimeout(clearEditor);
     };
-  }, [activeOverlays, editingClipId, meta]);
+  }, [closeInlineEditor, editingClipId, effectiveOverlays, meta]);
 
   useEffect(() => {
     if (!editingClipId) {
@@ -250,6 +339,39 @@ export default function OverlayEditor({
     const cursorPosition = editorRef.current?.value.length ?? 0;
     editorRef.current?.setSelectionRange(cursorPosition, cursorPosition);
   }, [editingClipId]);
+
+  useEffect(() => {
+    if (!editingClipId) {
+      pendingTextCommitRef.current = null;
+      if (textCommitTimerRef.current) {
+        window.clearTimeout(textCommitTimerRef.current);
+        textCommitTimerRef.current = null;
+      }
+      return;
+    }
+
+    const clipMeta = meta[editingClipId];
+    if (clipMeta?.clipType !== "text" || clipMeta.text?.content === editText) {
+      pendingTextCommitRef.current = null;
+      return;
+    }
+
+    pendingTextCommitRef.current = { actionId: editingClipId, value: editText };
+    if (textCommitTimerRef.current) {
+      window.clearTimeout(textCommitTimerRef.current);
+    }
+    textCommitTimerRef.current = window.setTimeout(() => {
+      flushPendingTextCommit();
+    }, 300);
+  }, [editText, editingClipId, flushPendingTextCommit, meta]);
+
+  useEffect(() => {
+    return () => {
+      if (textCommitTimerRef.current) {
+        window.clearTimeout(textCommitTimerRef.current);
+      }
+    };
+  }, []);
 
   const onMouseDown = useCallback((event: ReactMouseEvent, actionId: string, mode: DragMode) => {
     if (editingClipId === actionId) {
@@ -264,32 +386,31 @@ export default function OverlayEditor({
       return;
     }
 
-    const needsInitialization = clipMeta.clipType !== "text" && !hasPositionOverride(clipMeta);
     const bounds = getClipBounds(clipMeta, clipMeta.track);
-    const startX = bounds.x;
-    const startY = bounds.y;
-    const startW = bounds.width;
-    const startH = bounds.height;
-    let effectiveScale = usesAbsoluteCompositionSpace(clipMeta) ? 1 : (trackScaleMap[clipMeta.track] ?? 1);
-
-    if (needsInitialization) {
-      effectiveScale = 1;
-      onOverlayChange(actionId, { x: startX, y: startY, width: startW, height: startH });
-    }
+    const effectiveScale = usesAbsoluteCompositionSpace(clipMeta) ? 1 : (trackScaleMap[clipMeta.track] ?? 1);
+    const latestBounds = {
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height,
+    };
 
     dragState.current = {
       mode,
       actionId,
       startMouseX: event.clientX,
       startMouseY: event.clientY,
-      startX,
-      startY,
-      startW,
-      startH,
+      startX: bounds.x,
+      startY: bounds.y,
+      startW: bounds.width,
+      startH: bounds.height,
       effectiveScale,
+      latestBounds,
+      hasChanges: false,
     };
+    setDragOverride({ actionId, bounds: latestBounds });
     onSelectClip(actionId);
-  }, [editingClipId, getClipBounds, meta, onOverlayChange, onSelectClip, trackScaleMap]);
+  }, [editingClipId, getClipBounds, meta, onSelectClip, trackScaleMap]);
 
   useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
@@ -299,29 +420,19 @@ export default function OverlayEditor({
         return;
       }
 
-      const clipMeta = meta[state.actionId];
-      if (!clipMeta) {
-        return;
-      }
-
       const projection = getTrackProjection(currentLayout, state.effectiveScale);
       const dx = (event.clientX - state.startMouseX) / projection.scaleX;
       const dy = (event.clientY - state.startMouseY) / projection.scaleY;
-
-      if (state.mode === "move") {
-        onOverlayChange(state.actionId, {
-          x: Math.round(state.startX + dx),
-          y: Math.round(state.startY + dy),
-        });
-        return;
-      }
 
       let nextX = state.startX;
       let nextY = state.startY;
       let nextWidth = state.startW;
       let nextHeight = state.startH;
 
-      if (state.mode === "resize-se") {
+      if (state.mode === "move") {
+        nextX = state.startX + dx;
+        nextY = state.startY + dy;
+      } else if (state.mode === "resize-se") {
         nextWidth = Math.max(MIN_CLIP_SIZE, state.startW + dx);
         nextHeight = Math.max(MIN_CLIP_SIZE, state.startH + dy);
       } else if (state.mode === "resize-sw") {
@@ -339,16 +450,24 @@ export default function OverlayEditor({
         nextY = state.startY + (state.startH - nextHeight);
       }
 
-      onOverlayChange(state.actionId, {
+      const nextBounds = {
         x: Math.round(nextX),
         y: Math.round(nextY),
         width: Math.round(nextWidth),
         height: Math.round(nextHeight),
-      });
+      };
+      state.latestBounds = nextBounds;
+      state.hasChanges = (
+        nextBounds.x !== state.startX
+        || nextBounds.y !== state.startY
+        || nextBounds.width !== state.startW
+        || nextBounds.height !== state.startH
+      );
+      setDragOverride({ actionId: state.actionId, bounds: nextBounds });
     };
 
     const onMouseUp = () => {
-      dragState.current = null;
+      commitDragChange();
     };
 
     window.addEventListener("mousemove", onMouseMove);
@@ -357,9 +476,9 @@ export default function OverlayEditor({
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [getTrackProjection, meta, onOverlayChange]);
+  }, [commitDragChange, getTrackProjection]);
 
-  if (activeOverlays.length === 0 || !layout) {
+  if (effectiveOverlays.length === 0 || !layout) {
     return null;
   }
 
@@ -375,7 +494,7 @@ export default function OverlayEditor({
       className="pointer-events-none absolute z-10"
       style={{ ...containerStyle, pointerEvents: "none" }}
     >
-      {activeOverlays.map((overlay) => {
+      {effectiveOverlays.map((overlay) => {
         const isSelected = selectedClipId === overlay.actionId;
         const clipMeta = meta[overlay.actionId];
         const trackScale = trackScaleMap[overlay.track] ?? 1;
@@ -415,6 +534,7 @@ export default function OverlayEditor({
               }
 
               event.stopPropagation();
+              flushPendingTextCommit();
               onSelectClip(overlay.actionId);
               setEditingClipId(overlay.actionId);
               setEditText(clipMeta.text?.content ?? "");
@@ -432,7 +552,7 @@ export default function OverlayEditor({
                 className="absolute inset-0 flex h-full w-full resize-none items-center overflow-hidden rounded-md border-0 p-0 focus:outline-none"
                 style={{
                   ...textStyle,
-                  background: clipMeta?.text?.backgroundColor || "rgba(0,0,0,0.85)",
+                  background: "rgba(0,0,0,0.85)",
                   display: "flex",
                   alignItems: "center",
                   whiteSpace: "pre-wrap",
@@ -440,17 +560,10 @@ export default function OverlayEditor({
                 }}
                 value={editText}
                 onChange={(event) => {
-                  const nextValue = event.currentTarget.value;
-                  setEditText(nextValue);
-                  onOverlayChange(overlay.actionId, {
-                    text: {
-                      ...(clipMeta?.text ?? { content: "" }),
-                      content: nextValue,
-                    },
-                  });
+                  setEditText(event.currentTarget.value);
                 }}
                 onBlur={() => {
-                  setEditingClipId(null);
+                  closeInlineEditor();
                 }}
                 onMouseDown={(event) => {
                   event.stopPropagation();
@@ -459,7 +572,7 @@ export default function OverlayEditor({
                   event.stopPropagation();
                   if (event.key === "Escape") {
                     event.preventDefault();
-                    setEditingClipId(null);
+                    closeInlineEditor();
                   }
                 }}
               />
@@ -477,4 +590,10 @@ export default function OverlayEditor({
       })}
     </div>
   );
+}
+
+const MemoizedOverlayEditor = memo(OverlayEditorComponent);
+
+export default function OverlayEditor(props: Props) {
+  return <MemoizedOverlayEditor {...props} />;
 }

@@ -2,6 +2,7 @@ import type { FC } from "react";
 import type { EffectComponentProps } from "./entrances";
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig, AbsoluteFill } from "remotion";
+import { useAudioReactivity } from "./useAudioReactivity";
 
 // Sucrase is loaded lazily to avoid bundling issues in environments (e.g. Remotion CLI)
 // that don't have it installed. It's only needed when compileEffect() is actually called.
@@ -40,7 +41,7 @@ export async function preloadSucrase(): Promise<void> {
  *
  * The source string should export a default component conforming to `EffectComponentProps`.
  * Available globals inside the code: React, useCurrentFrame, useVideoConfig, interpolate,
- * spring, AbsoluteFill.
+ * spring, AbsoluteFill, useAudioReactivity.
  *
  * Security note: This executes arbitrary code in the browser with full DOM access.
  * Acceptable for local/trusted editor use. For production deployments, consider
@@ -84,7 +85,7 @@ function _compileWithTransform(code: string, transform: typeof import("sucrase")
 
   let factory: (...args: unknown[]) => unknown;
   try {
-    factory = new Function("React", "useCurrentFrame", "useVideoConfig", "interpolate", "spring", "AbsoluteFill", wrappedCode) as (
+    factory = new Function("React", "useCurrentFrame", "useVideoConfig", "interpolate", "spring", "AbsoluteFill", "useAudioReactivity", wrappedCode) as (
       ...args: unknown[]
     ) => unknown;
   } catch (err) {
@@ -93,7 +94,7 @@ function _compileWithTransform(code: string, transform: typeof import("sucrase")
 
   let component: unknown;
   try {
-    component = factory(React, useCurrentFrame, useVideoConfig, interpolate, spring, AbsoluteFill);
+    component = factory(React, useCurrentFrame, useVideoConfig, interpolate, spring, AbsoluteFill, useAudioReactivity);
   } catch (err) {
     throw new Error(`Effect compilation failed during execution: ${err instanceof Error ? err.message : String(err)}`);
   }

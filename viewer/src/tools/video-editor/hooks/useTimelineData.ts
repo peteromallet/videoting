@@ -27,9 +27,11 @@ import { useDataProvider } from "@/tools/video-editor/contexts/DataProviderConte
 export type SaveStatus = "saved" | "saving" | "dirty" | "error";
 export type RenderStatus = "idle" | "rendering" | "done" | "error";
 
+export type ClipTab = "effects" | "timing" | "position" | "audio" | "text";
+
 export interface EditorPreferences {
   scaleWidth: number;
-  clipSections: Record<string, boolean>;
+  activeClipTab: ClipTab;
   assetPanel: {
     showAll: boolean;
     showHidden: boolean;
@@ -39,14 +41,7 @@ export interface EditorPreferences {
 
 const defaultPreferences: EditorPreferences = {
   scaleWidth: 160,
-  clipSections: {
-    timing: true,
-    position: true,
-    effects: true,
-    audio: false,
-    transitions: true,
-    text: true,
-  },
+  activeClipTab: "effects",
   assetPanel: {
     showAll: false,
     showHidden: false,
@@ -104,7 +99,7 @@ export interface UseTimelineDataResult {
   setRenderLog: React.Dispatch<React.SetStateAction<string>>;
   setRenderDirty: React.Dispatch<React.SetStateAction<boolean>>;
   setScaleWidth: (updater: number | ((value: number) => number)) => void;
-  setClipSectionOpen: (section: keyof EditorPreferences["clipSections"], open: boolean) => void;
+  setActiveClipTab: (tab: ClipTab) => void;
   setAssetPanelState: (patch: Partial<EditorPreferences["assetPanel"]>) => void;
   applyTimelineEdit: (
     nextRows: TimelineRow[],
@@ -479,13 +474,10 @@ export function useTimelineData(): UseTimelineDataResult {
     }));
   }, [setPreferences]);
 
-  const setClipSectionOpen = useCallback((section: keyof EditorPreferences["clipSections"], open: boolean) => {
+  const setActiveClipTab = useCallback((tab: ClipTab) => {
     setPreferences((current) => ({
       ...current,
-      clipSections: {
-        ...current.clipSections,
-        [section]: open,
-      },
+      activeClipTab: tab,
     }));
   }, [setPreferences]);
 
@@ -637,7 +629,7 @@ export function useTimelineData(): UseTimelineDataResult {
     setRenderLog,
     setRenderDirty,
     setScaleWidth,
-    setClipSectionOpen,
+    setActiveClipTab,
     setAssetPanelState,
     applyTimelineEdit,
     applyResolvedConfigEdit,

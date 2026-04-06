@@ -39,6 +39,9 @@ export type ClipExit = {
 export type ClipContinuous = {
   type: string;
   intensity?: number;
+  audioTrack?: string;
+  loop?: boolean;
+  loopDuration?: number;
 };
 
 export type ClipTransition = {
@@ -93,6 +96,23 @@ export type TimelineOutput = {
 export type CustomEffectEntry = {
   code: string;
   category?: "entrance" | "exit" | "continuous";
+};
+
+export type EffectRole = "entrance" | "exit" | "continuous";
+
+export type EffectTiming =
+  | { type: "linear" }
+  | {
+      type: "spring";
+      damping?: number;
+      stiffness?: number;
+      mass?: number;
+    };
+
+export type EffectMetadata = {
+  roles: EffectRole[];
+  timing?: Partial<Record<EffectRole, EffectTiming>>;
+  loop?: "none" | "optional" | "inherent";
 };
 
 export type TimelineConfig = {

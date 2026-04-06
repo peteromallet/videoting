@@ -1,10 +1,18 @@
 import type { FC } from "react";
-import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
 import type { EffectComponentProps } from "./entrances";
 
-export const KenBurnsEffect: FC<EffectComponentProps> = ({ children, durationInFrames, intensity = 0.5 }) => {
+export const KenBurnsEffect: FC<EffectComponentProps> = ({ children, durationInFrames, intensity = 0.5, loop, loopDuration }) => {
   const frame = useCurrentFrame();
-  const progress = durationInFrames <= 1 ? 1 : frame / durationInFrames;
+  const { fps } = useVideoConfig();
+  let progress: number;
+  if (loop) {
+    const loopPeriodFrames = loopDuration ? Math.round(loopDuration * fps) : durationInFrames;
+    const rawProgress = (frame % loopPeriodFrames) / loopPeriodFrames;
+    progress = 1 - Math.abs(2 * rawProgress - 1); // ping-pong
+  } else {
+    progress = durationInFrames <= 1 ? 1 : frame / durationInFrames;
+  }
   const scale = interpolate(progress, [0, 1], [1, 1 + intensity * 0.18]);
   const translateX = interpolate(progress, [0, 1], [0, -20 * intensity]);
   const translateY = interpolate(progress, [0, 1], [0, -10 * intensity]);
@@ -28,16 +36,32 @@ export const GlitchEffect: FC<EffectComponentProps> = ({ children, intensity = 0
   return <AbsoluteFill style={{ width: "100%", height: "100%", transform: `translate(${offsetX}px, ${offsetY}px) skewX(${skew}deg)` }}>{children}</AbsoluteFill>;
 };
 
-export const SlowZoomEffect: FC<EffectComponentProps> = ({ children, durationInFrames, intensity = 0.5 }) => {
+export const SlowZoomEffect: FC<EffectComponentProps> = ({ children, durationInFrames, intensity = 0.5, loop, loopDuration }) => {
   const frame = useCurrentFrame();
-  const progress = durationInFrames <= 1 ? 1 : frame / durationInFrames;
+  const { fps } = useVideoConfig();
+  let progress: number;
+  if (loop) {
+    const loopPeriodFrames = loopDuration ? Math.round(loopDuration * fps) : durationInFrames;
+    const rawProgress = (frame % loopPeriodFrames) / loopPeriodFrames;
+    progress = 1 - Math.abs(2 * rawProgress - 1); // ping-pong
+  } else {
+    progress = durationInFrames <= 1 ? 1 : frame / durationInFrames;
+  }
   const scale = interpolate(progress, [0, 1], [1, 1 + intensity * 0.1]);
   return <AbsoluteFill style={{ width: "100%", height: "100%", transform: `scale(${scale})` }}>{children}</AbsoluteFill>;
 };
 
-export const DriftEffect: FC<EffectComponentProps> = ({ children, durationInFrames, intensity = 0.5 }) => {
+export const DriftEffect: FC<EffectComponentProps> = ({ children, durationInFrames, intensity = 0.5, loop, loopDuration }) => {
   const frame = useCurrentFrame();
-  const progress = durationInFrames <= 1 ? 1 : frame / durationInFrames;
+  const { fps } = useVideoConfig();
+  let progress: number;
+  if (loop) {
+    const loopPeriodFrames = loopDuration ? Math.round(loopDuration * fps) : durationInFrames;
+    const rawProgress = (frame % loopPeriodFrames) / loopPeriodFrames;
+    progress = 1 - Math.abs(2 * rawProgress - 1); // ping-pong
+  } else {
+    progress = durationInFrames <= 1 ? 1 : frame / durationInFrames;
+  }
   const driftX = interpolate(progress, [0, 1], [0, 40 * intensity]);
   const driftY = Math.sin(frame * 0.025) * 10 * intensity;
   return <AbsoluteFill style={{ width: "100%", height: "100%", transform: `translate(${driftX}px, ${driftY}px)` }}>{children}</AbsoluteFill>;

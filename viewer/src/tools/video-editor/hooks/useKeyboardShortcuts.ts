@@ -7,6 +7,7 @@ interface UseKeyboardShortcutsOptions {
   togglePlayPause: () => void;
   toggleMute: () => void;
   splitSelectedClip: () => void;
+  deleteSelectedClip: () => void;
   clearSelection: () => void;
 }
 
@@ -16,6 +17,7 @@ export function useKeyboardShortcuts({
   togglePlayPause,
   toggleMute,
   splitSelectedClip,
+  deleteSelectedClip,
   clearSelection,
 }: UseKeyboardShortcutsOptions) {
   useEffect(() => {
@@ -54,6 +56,12 @@ export function useKeyboardShortcuts({
         return;
       }
 
+      if ((event.key === "Backspace" || event.key === "Delete") && hasSelectedClip) {
+        event.preventDefault();
+        deleteSelectedClip();
+        return;
+      }
+
       if (event.key === "Escape") {
         event.preventDefault();
         clearSelection();
@@ -62,5 +70,5 @@ export function useKeyboardShortcuts({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [clearSelection, hasSelectedClip, moveSelectedClipToTrack, splitSelectedClip, toggleMute, togglePlayPause]);
+  }, [clearSelection, deleteSelectedClip, hasSelectedClip, moveSelectedClipToTrack, splitSelectedClip, toggleMute, togglePlayPause]);
 }

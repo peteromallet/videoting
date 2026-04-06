@@ -130,9 +130,12 @@ export const useCrossTrackDrag = ({
         return { editAreaEl: null, gridEl: null };
       }
 
+      const editAreaEl = nextWrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
       return {
-        editAreaEl: nextWrapper.querySelector<HTMLElement>(".timeline-editor-edit-area"),
-        gridEl: nextWrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid"),
+        editAreaEl,
+        // IMPORTANT: find the grid INSIDE the edit area, not the time-ruler grid
+        gridEl: editAreaEl?.querySelector<HTMLElement>(".ReactVirtualized__Grid")
+          ?? nextWrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid"),
       };
     };
 
@@ -238,9 +241,6 @@ export const useCrossTrackDrag = ({
 
       const clipRect = clipTarget.getBoundingClientRect();
       const initialStart = actionDragStateRef.current[clipId]?.latestStart ?? sourceAction.start;
-      setSelectedClipId(clipId);
-      setSelectedTrackId(rowId);
-      clipTarget.setPointerCapture(event.pointerId);
 
       const handlePointerMove = (moveEvent: PointerEvent) => {
         const session = dragSessionRef.current;
@@ -259,6 +259,11 @@ export const useCrossTrackDrag = ({
 
         if (!crossTrackActive.current && Math.abs(moveEvent.clientY - session.startClientY) >= DRAG_THRESHOLD_PX) {
           crossTrackActive.current = true;
+          try {
+            session.clipEl.setPointerCapture(session.pointerId);
+          } catch {
+            // Pointer capture may fail if pointer was already released.
+          }
           session.ghostEl = createGhost(session.clipEl);
           updateGhostPosition(session, moveEvent);
           updateDropTarget(session, moveEvent.clientY);
@@ -297,6 +302,9 @@ export const useCrossTrackDrag = ({
           return;
         }
 
+        // Select after drag ends (not during) to avoid re-render disrupting interact.js
+        setSelectedClipId(session.clipId);
+        setSelectedTrackId(session.sourceRowId);
         clearActionDragState(session.clipId);
         clearSession(session);
       };

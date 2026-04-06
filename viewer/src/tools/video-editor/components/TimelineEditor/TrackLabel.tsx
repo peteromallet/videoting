@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { TrackDefinition } from "@shared/types";
 import { ROW_HEIGHT } from "@/tools/video-editor/lib/coordinate-utils";
 import { TrackSettingsPopover } from "@/tools/video-editor/components/PropertiesPanel/TrackSettingsPopover";
@@ -14,7 +15,7 @@ interface TrackLabelProps {
   onRemove: (trackId: string) => void;
 }
 
-export function TrackLabel({
+function TrackLabelComponent({
   track,
   isSelected,
   trackCount,
@@ -49,4 +50,10 @@ export function TrackLabel({
       </div>
     </div>
   );
+}
+
+const MemoizedTrackLabel = memo(TrackLabelComponent);
+
+export function TrackLabel(props: TrackLabelProps) {
+  return <MemoizedTrackLabel {...props} />;
 }

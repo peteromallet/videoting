@@ -1,8 +1,9 @@
 import { AbsoluteFill } from "remotion";
-import type { FC } from "react";
+import { memo, useMemo, type FC } from "react";
 import { getAudioTracks, getVisualTracks } from "../editor-utils";
 import type { ResolvedTimelineClip, ResolvedTimelineConfig, TrackDefinition } from "../types";
 import { AudioTrack } from "./AudioTrack";
+import { AudioDataProvider } from "./AudioDataProvider";
 import { TextClipSequence } from "./TextClip";
 import { VisualClipSequence } from "./VisualClip";
 
@@ -16,6 +17,17 @@ const renderVisualTrack = (
   fps: number,
 ) => {
   const sortedClips = sortClipsByAt(clips);
+  const scale = track.scale ?? 1;
+  const clipWrapperStyle = scale !== 1
+    ? {
+      transform: `scale(${scale})`,
+      transformOrigin: "center center",
+      overflow: "hidden" as const,
+    }
+    : {
+      overflow: "hidden" as const,
+    };
+
   return (
     <AbsoluteFill
       key={track.id}
@@ -51,11 +63,7 @@ const renderVisualTrack = (
         return (
           <AbsoluteFill
             key={clip.id}
-            style={{
-              transform: `scale(${track.scale ?? 1})`,
-              transformOrigin: "center center",
-              overflow: "hidden",
-            }}
+            style={clipWrapperStyle}
           >
             <VisualClipSequence
               clip={clip}
@@ -70,29 +78,39 @@ const renderVisualTrack = (
   );
 };
 
-export const TimelineRenderer: FC<{ config: ResolvedTimelineConfig }> = ({ config }) => {
+export const TimelineRenderer: FC<{ config: ResolvedTimelineConfig }> = memo(({ config }) => {
   const fps = config.output.fps;
-  const visualTracks = getVisualTracks(config);
-  const audioTracks = getAudioTracks(config);
+  const visualTracks = useMemo(() => [...getVisualTracks(config)].reverse(), [config]);
+  const audioTracks = useMemo(() => getAudioTracks(config), [config]);
+  const clipsByTrack = useMemo(() => {
+    return config.clips.reduce<Record<string, ResolvedTimelineClip[]>>((groups, clip) => {
+      groups[clip.track] ??= [];
+      groups[clip.track].push(clip);
+      return groups;
+    }, {});
+  }, [config]);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "black", overflow: "hidden" }}>
-      <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
-        <AbsoluteFill style={{ position: "relative", overflow: "hidden" }}>
-          {visualTracks.map((track) => {
-            const trackClips = config.clips.filter((clip) => clip.track === track.id);
-            return renderVisualTrack(track, trackClips, fps);
-          })}
+    <AudioDataProvider config={config} fps={fps}>
+      <AbsoluteFill style={{ backgroundColor: "black", overflow: "hidden" }}>
+        <AbsoluteFill style={{ justifyContent: "center", alignItems: "center" }}>
+          <AbsoluteFill style={{ position: "relative", overflow: "hidden" }}>
+            {/* Render in reverse so the first track (top of timeline UI) is visually in front */}
+            {visualTracks.map((track) => {
+              const trackClips = clipsByTrack[track.id] ?? [];
+              return renderVisualTrack(track, trackClips, fps);
+            })}
+          </AbsoluteFill>
         </AbsoluteFill>
+        {audioTracks.map((track) => (
+          <AudioTrack
+            key={track.id}
+            trackId={track.id}
+            clips={clipsByTrack[track.id] ?? []}
+            fps={fps}
+          />
+        ))}
       </AbsoluteFill>
-      {audioTracks.map((track) => (
-        <AudioTrack
-          key={track.id}
-          trackId={track.id}
-          clips={config.clips.filter((clip) => clip.track === track.id)}
-          fps={fps}
-        />
-      ))}
-    </AbsoluteFill>
+    </AudioDataProvider>
   );
-};
+});

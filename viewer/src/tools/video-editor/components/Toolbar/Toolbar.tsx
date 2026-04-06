@@ -1,7 +1,7 @@
 import { Type, Video, Volume2, ZoomIn, ZoomOut } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { useTimelineContext } from "@/tools/video-editor/contexts/TimelineContext";
+import { useChromeContext, usePlaybackContext } from "@/tools/video-editor/contexts/TimelineContext";
 
 const statusVariant = {
   saved: "default",
@@ -12,7 +12,6 @@ const statusVariant = {
 
 export function Toolbar() {
   const {
-    currentTime,
     saveStatus,
     renderStatus,
     renderDirty,
@@ -21,8 +20,11 @@ export function Toolbar() {
     startRender,
     handleAddTrack,
     handleAddText,
+  } = useChromeContext();
+  const {
+    currentTime,
     formatTime,
-  } = useTimelineContext();
+  } = usePlaybackContext();
 
   return (
     <div className="flex h-9 items-center justify-between border-b border-border/70 bg-editor-mantle px-3">

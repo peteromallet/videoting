@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import type { TimelineAction, TimelineRow } from "@xzdarcy/timeline-engine";
 import {
   getVisualTracks,
@@ -88,18 +88,141 @@ export function useTimelineEditing({
   uploadAsset,
   invalidateAssetRegistry,
 }: UseTimelineEditingArgs): UseTimelineEditingResult {
+  const currentTimeRef = useRef(currentTime);
+  const timelineDomCacheRef = useRef<{
+    wrapper: HTMLDivElement | null;
+    editArea: HTMLElement | null;
+    grid: HTMLElement | null;
+  }>({
+    wrapper: null,
+    editArea: null,
+    grid: null,
+  });
+  const dragPreviewFrameRef = useRef<number | null>(null);
+  const latestDragPreviewRef = useRef<{
+    wrapper: HTMLDivElement;
+    time: number;
+    rowRect: { top: number; height: number };
+    trackName: string;
+    wrapperRect: DOMRect;
+    pixelsPerSecond: number;
+  } | null>(null);
+  const dropIndicatorRef = useRef<{
+    root: HTMLDivElement;
+    row: HTMLDivElement;
+    line: HTMLDivElement;
+    ghost: HTMLDivElement;
+    ghostLabel: HTMLSpanElement;
+    label: HTMLDivElement;
+  } | null>(null);
+
+  useLayoutEffect(() => {
+    currentTimeRef.current = currentTime;
+  }, [currentTime]);
+
+  const getTimelineDomNodes = useCallback((wrapper: HTMLDivElement) => {
+    const cached = timelineDomCacheRef.current;
+    if (
+      cached.wrapper !== wrapper
+      || !cached.editArea?.isConnected
+      || !cached.grid?.isConnected
+    ) {
+      const editArea = wrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
+      const grid = editArea?.querySelector<HTMLElement>(".ReactVirtualized__Grid")
+        ?? wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+      timelineDomCacheRef.current = { wrapper, editArea, grid };
+      return timelineDomCacheRef.current;
+    }
+
+    return cached;
+  }, []);
+
+  const ensureDropIndicator = useCallback(() => {
+    if (dropIndicatorRef.current) {
+      return dropIndicatorRef.current;
+    }
+
+    const root = document.createElement("div");
+    root.dataset.dropIndicator = "true";
+    root.style.position = "fixed";
+    root.style.top = "0";
+    root.style.left = "0";
+    root.style.width = "100%";
+    root.style.height = "100%";
+    root.style.pointerEvents = "none";
+    root.style.zIndex = "99999";
+
+    const row = document.createElement("div");
+    row.style.position = "fixed";
+    row.style.background = "rgba(137,180,250,0.08)";
+    row.style.border = "1px solid rgba(137,180,250,0.3)";
+    row.style.borderRadius = "4px";
+    row.style.pointerEvents = "none";
+
+    const line = document.createElement("div");
+    line.style.position = "fixed";
+    line.style.width = "2px";
+    line.style.background = "#89b4fa";
+    line.style.pointerEvents = "none";
+    line.style.boxShadow = "0 0 6px rgba(137,180,250,0.5)";
+
+    const ghost = document.createElement("div");
+    ghost.style.position = "fixed";
+    ghost.style.background = "rgba(137,180,250,0.15)";
+    ghost.style.border = "1px dashed rgba(137,180,250,0.4)";
+    ghost.style.borderRadius = "4px";
+    ghost.style.pointerEvents = "none";
+    ghost.style.display = "flex";
+    ghost.style.alignItems = "center";
+    ghost.style.justifyContent = "center";
+
+    const ghostLabel = document.createElement("span");
+    ghostLabel.style.fontSize = "9px";
+    ghostLabel.style.fontWeight = "600";
+    ghostLabel.style.color = "rgba(137,180,250,0.9)";
+    ghost.appendChild(ghostLabel);
+
+    const label = document.createElement("div");
+    label.style.position = "fixed";
+    label.style.background = "rgba(137,180,250,0.9)";
+    label.style.color = "#1e1e2e";
+    label.style.fontSize = "9px";
+    label.style.fontWeight = "600";
+    label.style.padding = "2px 6px";
+    label.style.borderRadius = "3px";
+    label.style.pointerEvents = "none";
+    label.style.whiteSpace = "nowrap";
+
+    root.appendChild(row);
+    root.appendChild(line);
+    root.appendChild(ghost);
+    root.appendChild(label);
+    document.body.appendChild(root);
+
+    dropIndicatorRef.current = { root, row, line, ghost, ghostLabel, label };
+    return dropIndicatorRef.current;
+  }, []);
+
+  const clearDropIndicator = useCallback(() => {
+    if (dragPreviewFrameRef.current !== null) {
+      window.cancelAnimationFrame(dragPreviewFrameRef.current);
+      dragPreviewFrameRef.current = null;
+    }
+    latestDragPreviewRef.current = null;
+    dropIndicatorRef.current?.root.remove();
+    dropIndicatorRef.current = null;
+  }, []);
+
   // Shared drop position calculation — used by indicator, file drop, and asset drop
-  const getDropPosition = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    const wrapper = event.currentTarget;
-    const editArea = wrapper.querySelector<HTMLElement>(".timeline-editor-edit-area");
-    const grid = wrapper.querySelector<HTMLElement>(".ReactVirtualized__Grid");
+  const getDropPosition = useCallback((wrapper: HTMLDivElement, clientX: number, clientY: number) => {
+    const { editArea, grid } = getTimelineDomNodes(wrapper);
     const rect = (editArea ?? wrapper).getBoundingClientRect();
     const scrollLeft = grid?.scrollLeft ?? 0;
     const scrollTop = grid?.scrollTop ?? 0;
     const pixelsPerSecond = scaleWidth / scale;
     const defaultClipDuration = 5;
     const halfClipPx = (defaultClipDuration * pixelsPerSecond) / 2;
-    const dropX = event.clientX - rect.left;
+    const dropX = clientX - rect.left;
     const time = Math.max(0, (dropX + scrollLeft - TIMELINE_START_LEFT - halfClipPx) / pixelsPerSecond);
 
     // Calculate row index from Y position relative to the edit area
@@ -107,7 +230,7 @@ export function useTimelineEditing({
     // Use grid for scrollTop (grid owns scroll state)
     const editAreaRect = (editArea ?? wrapper).getBoundingClientRect();
     const rowCount = dataRef.current?.rows.length ?? 0;
-    const raw = rawRowIndexFromY(event.clientY, editAreaRect.top, scrollTop, ROW_HEIGHT);
+    const raw = rawRowIndexFromY(clientY, editAreaRect.top, scrollTop, ROW_HEIGHT);
     const rowIndex = Math.min(raw, rowCount - 1);
 
     // Get the actual row rect for the indicator
@@ -115,20 +238,16 @@ export function useTimelineEditing({
     const rowRect = { top: rowScreenTop, height: ROW_HEIGHT, left: editAreaRect.left, width: editAreaRect.width } as DOMRect;
 
     const trackId = rowIndex >= 0 ? dataRef.current?.rows[rowIndex]?.id : undefined;
-    console.log("[getDropPosition]", {
-      clientY: event.clientY,
-      editAreaTop: editAreaRect.top,
-      scrollTop,
-      rawRowIndex: raw,
-      clampedRowIndex: rowIndex,
-      rowCount,
-      trackId,
-      tracks: dataRef.current?.rows.map(r => r.id),
-    });
     const trackName = dataRef.current?.tracks[rowIndex]?.label ?? dataRef.current?.tracks[rowIndex]?.id ?? "";
 
     return { time, rowIndex, rowRect, trackId, trackName, pixelsPerSecond, wrapperRect: wrapper.getBoundingClientRect() };
-  }, [dataRef, scale, scaleWidth]);
+  }, [dataRef, getTimelineDomNodes, scale, scaleWidth]);
+
+  useEffect(() => {
+    return () => {
+      clearDropIndicator();
+    };
+  }, [clearDropIndicator]);
 
   const clearActionDragState = useCallback((clipId: string) => {
     delete actionDragStateRef.current[clipId];
@@ -269,7 +388,6 @@ export function useTimelineEditing({
     const assetEntry = current.registry.assets[assetKey];
     const assetKind = inferTrackType(assetEntry?.file ?? assetKey);
     const resolvedTrackId = getCompatibleTrackId(current.tracks, trackId, assetKind, selectedTrackId);
-    console.log("[handleAssetDrop] assetKey:", assetKey, "trackId:", trackId, "assetKind:", assetKind, "selectedTrackId:", selectedTrackId, "-> resolvedTrackId:", resolvedTrackId);
     if (!resolvedTrackId) {
       return;
     }
@@ -351,61 +469,77 @@ export function useTimelineEditing({
     }
     event.preventDefault();
     event.stopPropagation();
-    event.currentTarget.dataset.dragOver = "true";
+    const wrapper = event.currentTarget;
+    wrapper.dataset.dragOver = "true";
 
-    // Use shared position calculation
-    const { time, rowRect, trackName, wrapperRect, pixelsPerSecond } = getDropPosition(event);
-    const rowTop = rowRect?.top ?? wrapperRect.top;
-    const rowHeight = rowRect?.height ?? 36;
+    const preview = getDropPosition(wrapper, event.clientX, event.clientY);
+    latestDragPreviewRef.current = {
+      wrapper,
+      time: preview.time,
+      rowRect: {
+        top: preview.rowRect?.top ?? preview.wrapperRect.top,
+        height: preview.rowRect?.height ?? 36,
+      },
+      trackName: preview.trackName,
+      wrapperRect: preview.wrapperRect,
+      pixelsPerSecond: preview.pixelsPerSecond,
+    };
 
-    // Calculate where the clip's left edge would be on screen
-    const editArea = event.currentTarget.querySelector<HTMLElement>(".timeline-editor-edit-area");
-    const grid = event.currentTarget.querySelector<HTMLElement>(".ReactVirtualized__Grid");
-    const editRect = (editArea ?? event.currentTarget).getBoundingClientRect();
-    const scrollLeft = grid?.scrollLeft ?? 0;
-    const clipScreenLeft = editRect.left + TIMELINE_START_LEFT + time * pixelsPerSecond - scrollLeft;
-
-    // Create or update the drop indicator (fixed on body)
-    let indicator = document.querySelector<HTMLElement>("[data-drop-indicator]");
-    if (!indicator) {
-      indicator = document.createElement("div");
-      indicator.dataset.dropIndicator = "true";
-      document.body.appendChild(indicator);
+    if (dragPreviewFrameRef.current !== null) {
+      return;
     }
 
-    // Show indicator at the exact position where the clip will land
-    const defaultDur = 5;
-    const ghostWidth = Math.min(defaultDur * pixelsPerSecond, wrapperRect.right - clipScreenLeft);
-    const ghostCenter = clipScreenLeft + ghostWidth / 2;
-    indicator.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;`;
-    indicator.innerHTML = `
-      <div style="position:fixed;left:${wrapperRect.left}px;top:${rowTop}px;width:${wrapperRect.width}px;height:${rowHeight}px;background:rgba(137,180,250,0.08);border:1px solid rgba(137,180,250,0.3);border-radius:4px;pointer-events:none;"></div>
-      <div style="position:fixed;left:${ghostCenter}px;top:${rowTop}px;width:2px;height:${rowHeight}px;background:#89b4fa;pointer-events:none;box-shadow:0 0 6px rgba(137,180,250,0.5);"></div>
-      <div style="position:fixed;left:${clipScreenLeft}px;top:${rowTop + 2}px;width:${ghostWidth}px;height:${rowHeight - 4}px;background:rgba(137,180,250,0.15);border:1px dashed rgba(137,180,250,0.4);border-radius:4px;pointer-events:none;display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:9px;font-weight:600;color:rgba(137,180,250,0.9);">${time.toFixed(1)}s</span>
-      </div>
-      <div style="position:fixed;left:${ghostCenter - 30}px;top:${rowTop - 16}px;background:rgba(137,180,250,0.9);color:#1e1e2e;font-size:9px;font-weight:600;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;">${trackName} · ${time.toFixed(1)}s</div>
-    `;
-  }, [dataRef, scale, scaleWidth]);
+    dragPreviewFrameRef.current = window.requestAnimationFrame(() => {
+      dragPreviewFrameRef.current = null;
+      const currentPreview = latestDragPreviewRef.current;
+      if (!currentPreview) {
+        return;
+      }
+
+      const { editArea, grid } = getTimelineDomNodes(currentPreview.wrapper);
+      const indicator = ensureDropIndicator();
+      const editRect = (editArea ?? currentPreview.wrapper).getBoundingClientRect();
+      const scrollLeft = grid?.scrollLeft ?? 0;
+      const clipScreenLeft = editRect.left + TIMELINE_START_LEFT + currentPreview.time * currentPreview.pixelsPerSecond - scrollLeft;
+      const defaultDur = 5;
+      const ghostWidth = Math.max(0, Math.min(defaultDur * currentPreview.pixelsPerSecond, currentPreview.wrapperRect.right - clipScreenLeft));
+      const ghostCenter = clipScreenLeft + ghostWidth / 2;
+
+      indicator.row.style.left = `${currentPreview.wrapperRect.left}px`;
+      indicator.row.style.top = `${currentPreview.rowRect.top}px`;
+      indicator.row.style.width = `${currentPreview.wrapperRect.width}px`;
+      indicator.row.style.height = `${currentPreview.rowRect.height}px`;
+
+      indicator.line.style.left = `${ghostCenter}px`;
+      indicator.line.style.top = `${currentPreview.rowRect.top}px`;
+      indicator.line.style.height = `${currentPreview.rowRect.height}px`;
+
+      indicator.ghost.style.left = `${clipScreenLeft}px`;
+      indicator.ghost.style.top = `${currentPreview.rowRect.top + 2}px`;
+      indicator.ghost.style.width = `${ghostWidth}px`;
+      indicator.ghost.style.height = `${Math.max(0, currentPreview.rowRect.height - 4)}px`;
+      indicator.ghostLabel.textContent = `${currentPreview.time.toFixed(1)}s`;
+
+      indicator.label.style.left = `${ghostCenter - 30}px`;
+      indicator.label.style.top = `${currentPreview.rowRect.top - 16}px`;
+      indicator.label.textContent = `${currentPreview.trackName} · ${currentPreview.time.toFixed(1)}s`;
+    });
+  }, [ensureDropIndicator, getDropPosition, getTimelineDomNodes]);
 
   const onTimelineDragLeave = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     delete event.currentTarget.dataset.dragOver;
-    document.querySelector("[data-drop-indicator]")?.remove();
-    document.querySelector("[data-drop-label]")?.remove();
-    document.querySelector("[data-drop-indicator]")?.remove();
-  }, []);
+    clearDropIndicator();
+  }, [clearDropIndicator]);
 
   const onTimelineDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     delete event.currentTarget.dataset.dragOver;
-    document.querySelector("[data-drop-indicator]")?.remove();
-    document.querySelector("[data-drop-label]")?.remove();
-    document.querySelector("[data-drop-indicator]")?.remove();
+    clearDropIndicator();
 
     // Handle external file drops
     const files = Array.from(event.dataTransfer.files);
     if (files.length > 0 && dataRef.current) {
-      const { time, rowIndex } = getDropPosition(event);
+      const { time, rowIndex } = getDropPosition(event.currentTarget, event.clientX, event.clientY);
 
       const defaultClipDuration = 5; // seconds — used for offset calculation
       let timeOffset = 0;
@@ -415,7 +549,6 @@ export function useTimelineEditing({
         const kind: TrackKind = [".mp3", ".wav", ".aac", ".m4a"].includes(ext) ? "audio" : "visual";
         const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
         const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, kind, selectedTrackId);
-        console.log("[file drop] targetTrackId:", targetTrackId, "kind:", kind, "selectedTrackId:", selectedTrackId, "-> compatibleTrackId:", compatibleTrackId);
         if (!compatibleTrackId) {
           continue;
         }
@@ -483,10 +616,9 @@ export function useTimelineEditing({
       return;
     }
 
-    const { time, rowIndex } = getDropPosition(event);
+    const { time, rowIndex } = getDropPosition(event.currentTarget, event.clientX, event.clientY);
     const targetTrackId = rowIndex >= 0 ? dataRef.current!.rows[rowIndex]?.id : undefined;
     const compatibleTrackId = getCompatibleTrackId(dataRef.current!.tracks, targetTrackId, assetKind || "visual", selectedTrackId);
-    console.log("[asset drop] targetTrackId:", targetTrackId, "assetKind:", assetKind, "selectedTrackId:", selectedTrackId, "-> compatibleTrackId:", compatibleTrackId);
     if (!compatibleTrackId) return;
     handleAssetDrop(assetKey, compatibleTrackId, time);
   }, [
@@ -495,8 +627,8 @@ export function useTimelineEditing({
     handleAssetDrop,
     invalidateAssetRegistry,
     patchRegistry,
-    scale,
-    scaleWidth,
+    clearDropIndicator,
+    getDropPosition,
     selectedTrackId,
     uploadAsset,
   ]);
@@ -574,11 +706,11 @@ export function useTimelineEditing({
       return;
     }
 
-    const result = splitClipAtPlayhead(resolvedConfig, selectedClipId, currentTime);
+    const result = splitClipAtPlayhead(resolvedConfig, selectedClipId, currentTimeRef.current);
     if (result.nextSelectedClipId) {
       applyResolvedConfigEdit(result.config, { selectedClipId: result.nextSelectedClipId });
     }
-  }, [applyResolvedConfigEdit, currentTime, resolvedConfig, selectedClipId]);
+  }, [applyResolvedConfigEdit, resolvedConfig, selectedClipId]);
 
   const handleToggleMute = useCallback(() => {
     if (!resolvedConfig || !selectedClipId) {
@@ -602,10 +734,11 @@ export function useTimelineEditing({
 
     const clipId = getNextClipId(data.meta);
     const duration = 4;
+    const currentPlayhead = currentTimeRef.current;
     const action: TimelineAction = {
       id: clipId,
-      start: currentTime,
-      end: currentTime + duration,
+      start: currentPlayhead,
+      end: currentPlayhead + duration,
       effectId: `effect-${clipId}`,
     };
     const nextRows = data.rows.map((row) => (row.id === visualTrack.id ? { ...row, actions: [...row.actions, action] } : row));
@@ -634,7 +767,7 @@ export function useTimelineEditing({
     }, undefined, nextClipOrder);
     setSelectedClipId(clipId);
     setSelectedTrackId(visualTrack.id);
-  }, [applyTimelineEdit, currentTime, data, selectedTrack, setSelectedClipId, setSelectedTrackId]);
+  }, [applyTimelineEdit, data, selectedTrack, setSelectedClipId, setSelectedTrackId]);
 
   return {
     onActionMoveStart,

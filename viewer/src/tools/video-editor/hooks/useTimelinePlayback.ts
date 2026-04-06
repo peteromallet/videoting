@@ -30,8 +30,8 @@ export function useTimelinePlayback(): UseTimelinePlaybackResult {
     timelineRef,
     previewRef,
     setCurrentTime,
-    isSyncingFromPreview,
-    isSyncingFromTimeline,
+    isSyncingFromPreviewRef: isSyncingFromPreview,
+    isSyncingFromTimelineRef: isSyncingFromTimeline,
   });
 
   const formatTime = useCallback((time: number) => {
